@@ -1,0 +1,281 @@
+package com.jcwhatever.bukkit.pvs;
+
+
+import com.jcwhatever.bukkit.generic.performance.SingleCache;
+import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayerGroup;
+import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
+import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import com.jcwhatever.bukkit.pvs.api.exceptions.PlayerGroupExpectedException;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * {@code ArenaPlayerGroup} collection.
+ */
+public class ArenaPlayersCollection {
+
+    private Arena _arena;
+    private Set<ArenaPlayerGroup> _groups = new HashSet<>(5);
+    private Set<ArenaPlayer> _players = new HashSet<>(30);
+
+    private SingleCache<Integer, List<ArenaPlayer>> _cachedNextGroup = new SingleCache<>();
+    private List<ArenaPlayer> _cachedReadyGroup;
+
+    /*
+     * Constructor.
+     */
+    public ArenaPlayersCollection(Arena arena) {
+        _arena = arena;
+    }
+
+    /*
+     * Get the total number of players in the collection.
+     */
+    public int size() {
+        return _players.size();
+    }
+
+
+    /*
+     * Add player as well as the players group, if any.
+     *
+     * If the player is not in a group, the player is added to one
+     * or a new one is created.
+     */
+    public void addPlayer(ArenaPlayer player) {
+        PreCon.notNull(player);
+
+        _cachedNextGroup.reset();
+        _cachedReadyGroup = null;
+        _players.add(player);
+
+        if (player.getPlayerGroup() != null) {
+
+            // add existing player group
+            _groups.add(player.getPlayerGroup());
+        }
+        else {
+
+            // Add new player to an existing group if available
+            for (ArenaPlayerGroup group : _groups) {
+                if (group.size() < _arena.getSettings().getMaxPlayers()) {
+                    group.addPlayer(player);
+                    return;
+                }
+            }
+
+            // add new player to new group
+            ArenaPlayerGroup group = new PVArenaPlayerGroup();
+            group.addPlayer(player);
+            _groups.add(group);
+        }
+    }
+
+    /*
+     * Remove a player from the collection.
+     *
+     * If no more player from the removed players group are present, the players
+     * group is also removed.
+     */
+    public void removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+        PreCon.notNull(player);
+
+        _cachedNextGroup.reset();
+        _cachedReadyGroup = null;
+
+        _players.remove(player);
+
+        ArenaPlayerGroup group = player.getPlayerGroup();
+        if (group == null) {
+            throw new PlayerGroupExpectedException();
+        }
+
+        if (reason != RemovePlayerReason.FORWARDING &&
+                reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+            group.removePlayer(player);
+        }
+
+        List<ArenaPlayer> groupPlayers = group.getPlayers();
+
+        // check to see if any other players are in the group
+        for (ArenaPlayer groupPlayer : groupPlayers) {
+            if (_players.contains(groupPlayer)) {
+                return; // finished
+            }
+        }
+
+        // no players in group are in the collection so remove group
+        _groups.remove(group);
+    }
+
+    /*
+     * Determine if a player is in the collection.
+     */
+    public boolean hasPlayer(ArenaPlayer player) {
+        PreCon.notNull(player);
+
+        return _players.contains(player);
+    }
+
+    /*
+     * Tell all players in the collection a message.
+     */
+    public void tell(String message, Object... params) {
+        PreCon.notNullOrEmpty(message);
+
+        for (ArenaPlayer player : _players) {
+            Msg.tell(player.getHandle(), message, params);
+        }
+    }
+
+    /*
+     * Get all player groups in the collection.
+     */
+    public Set<ArenaPlayerGroup> getGroups() {
+        return new HashSet<>(_groups);
+    }
+
+    /*
+     * Get all players in the collection.
+     */
+    public List<ArenaPlayer> getPlayers() {
+        return new ArrayList<>(_players);
+    }
+
+    /*
+     * Get all players in the group collection who are
+     * in the PlayerGroups arena and who are on the specified
+     * team.
+     */
+    public List<ArenaPlayer> getTeam(ArenaTeam team) {
+        PreCon.notNull(team);
+
+        List<ArenaPlayer> results = new ArrayList<>(20);
+
+        for (ArenaPlayer player : _players) {
+            if (player.getTeam() == team) {
+                results.add(player);
+            }
+        }
+        return results;
+    }
+
+
+    /*
+     * Get all teams in the group collection who are
+     * in the PlayerGroups arena.
+     */
+    public Set<ArenaTeam> getTeams() {
+        Set<ArenaTeam> results = EnumSet.noneOf(ArenaTeam.class);
+
+        for (ArenaPlayer player : _players) {
+            results.add(player.getTeam());
+        }
+        return results;
+    }
+
+
+
+    /*
+     * Get a group from the group collection whose players
+     * that are in the PlayerGroups arena are all ready.
+     */
+    @Nullable
+    public List<ArenaPlayer> getReadyGroup() {
+
+        if (_cachedReadyGroup != null)
+            return _cachedReadyGroup;
+
+        for (ArenaPlayerGroup group : _groups) {
+            if (group.isReady(_players)) {
+                _cachedReadyGroup = group.filterPlayers(_players);
+                return _cachedReadyGroup;
+            }
+        }
+
+        return null;
+    }
+
+    /*
+     * Get a group from the group collection whose players
+     * that are in the PlayerGroups arena are all ready and
+     * the number of ready players meets a minimum amount.
+     */
+    @Nullable
+    public List<ArenaPlayer> getReadyGroup(int minGroupSize) {
+
+        if (_cachedReadyGroup != null)
+            return _cachedReadyGroup;
+
+        for (ArenaPlayerGroup group : _groups) {
+            if (group.isReady(_players) && group.size(_arena) >= minGroupSize) {
+
+                _cachedReadyGroup = group.filterPlayers(_players);
+                return _cachedReadyGroup;
+
+            }
+
+        }
+        return null;
+    }
+
+    /*
+     * Determine if there is a group that is ready to
+     * play in the PlayerGroups arena.
+     */
+    public boolean hasReadyGroup() {
+        return getReadyGroup() != null;
+    }
+
+    /*
+     * Determine if there is a group that is ready to
+     * play in the PlayerGroups arena who meets the minimum
+     * size specified.
+     */
+    public boolean hasReadyGroup(int minGroupSize) {
+        return getReadyGroup(minGroupSize) != null;
+    }
+
+
+    /*
+     * Get the next group to play in the PlayerGroups arena who has players in the lobby
+     * and meets the minimum number specified.
+     *
+     * If no valid group is found, a ready group that does not meet the minimum amount is selected.
+     */
+    @Nullable
+    public List<ArenaPlayer> getNextGroup(int minSize) {
+
+        if (_cachedNextGroup.keyEquals(minSize))
+            return _cachedNextGroup.getValue();
+
+        for (ArenaPlayerGroup group : _groups) {
+
+            // find a group with  players who meet the minimum group size
+            List<ArenaPlayer> players = group.filterPlayers(_players);
+            if (players.size() >= minSize) {
+                _cachedNextGroup.set(minSize, players);
+                return new ArrayList<>(players);
+            }
+        }
+
+        // return a ready group regardless of size
+        // to ensure groups that get split into smaller
+        // groups across multiple arenas can still play.
+        List<ArenaPlayer> result = getReadyGroup();
+        _cachedNextGroup.set(minSize, result);
+        return result;
+    }
+
+
+
+}

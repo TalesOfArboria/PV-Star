@@ -1,0 +1,205 @@
+package com.jcwhatever.bukkit.pvs.events;
+
+import com.jcwhatever.bukkit.generic.language.Localizable;
+import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaMoveEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
+import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
+import com.jcwhatever.bukkit.pvs.api.utils.Lang;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.Set;
+import java.util.regex.Matcher;
+
+public class PlayerEventListener implements Listener {
+
+    @Localizable static final String _COMMAND_NOT_IN_ARENA = "{RED}You can't use that command in the arena!";
+
+
+    /**
+     * Ensure player data disposal on join.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onPlayerJoin(PlayerJoinEvent event) {
+
+        ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        if (player.getArena() != null) {
+            player.getArena().remove(player, RemovePlayerReason.LOGOUT);
+        }
+
+        // dispose player in case connection issues cause
+        // player to disconnect without throwing a player leave event.
+        PVArenaPlayer.dispose(player);
+    }
+
+    @EventHandler
+    private void onPlayerKick(PlayerKickEvent event) {
+
+        final ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        final Arena arena = player.getArena();
+
+        if (arena != null) {
+            arena.remove(player, RemovePlayerReason.LOGOUT);
+        }
+
+        PVArenaPlayer.dispose(player);
+    }
+
+    @EventHandler
+    private void onPlayerQuit(PlayerQuitEvent event) {
+
+        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+
+        Arena arena = player.getArena();
+        if (arena == null)
+            return;
+
+        arena.remove(player, RemovePlayerReason.LOGOUT);
+
+        PVArenaPlayer.dispose(player);
+    }
+
+    /*
+        Handle arena respawning
+     */
+    @EventHandler(priority=EventPriority.HIGHEST)
+    private void onPlayerRespawn(PlayerRespawnEvent event) {
+
+        ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        Arena arena = player.getArena();
+
+        // respawn player in appropriate arena area.
+        if (arena != null) {
+            Spawnpoint spawn = arena.getSpawnManager().getRandomSpawn(player);
+            if (spawn == null)
+                return;
+
+            PlayerArenaRespawnEvent respawnEvent = new PlayerArenaRespawnEvent(arena, player, spawn.getLocation());
+
+            arena.getEventManager().call(respawnEvent);
+
+            event.setRespawnLocation(respawnEvent.getRespawnLocation());
+        }
+    }
+
+    /*
+      Prevent commands inside the arena
+     */
+    @EventHandler(priority=EventPriority.LOWEST)
+    private void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+
+        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        Arena arena = player.getArena();
+
+        if (arena == null)
+            return;
+
+        Set<String> pvStarCommands = PVStarAPI.getPlugin().getDescription().getCommands().keySet();
+
+        String[] comp = TextUtils.PATTERN_SPACE.split(event.getMessage());
+
+        Matcher matcher = TextUtils.PATTERN_FILEPATH_SLASH.matcher(comp[0]);
+
+        String command = matcher.replaceFirst("").toLowerCase();
+
+        if (!pvStarCommands.contains(command)) {
+            event.setMessage("/");
+            event.setCancelled(true);
+            Msg.tell(event.getPlayer(), Lang.get(_COMMAND_NOT_IN_ARENA));
+        }
+    }
+
+
+    /*
+      Handle player hunger
+     */
+    @EventHandler
+    private void onPlayerHunger(FoodLevelChangeEvent event) {
+
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        Player p = (Player)event.getEntity();
+        ArenaPlayer player =PVArenaPlayer.get(p);
+
+        Arena arena = player.getArena();
+        if (arena == null)
+            return;
+
+        // get settings
+        PlayerManagerSettings settings = player.getRelatedSettings();
+        if (settings == null)
+            return;
+
+        // prevent hunger
+        if (!settings.isHungerEnabled()) {
+            event.setFoodLevel(20);
+            event.setCancelled(true);
+        }
+    }
+
+    /*
+      Handle player fall damage
+     */
+    @EventHandler
+    private void onPlayerFall(EntityDamageEvent event) {
+        if (event.getCause() != DamageCause.FALL)
+            return;
+
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        ArenaPlayer player =PVArenaPlayer.get((Player)event.getEntity());
+
+        Arena arena = player.getArena();
+        if (arena == null)
+            return;
+
+        PlayerManagerSettings settings = player.getRelatedSettings();
+        if (settings == null)
+            return;
+
+        if (!settings.hasFallDamage()) {
+            event.setDamage(0.0D);
+            event.setCancelled(true);
+        }
+    }
+
+
+    @EventHandler
+    private void onPlayerMove(PlayerMoveEvent event) {
+
+        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+
+        if (player.getArena() == null)
+            return;
+
+        PlayerArenaMoveEvent moveEvent = new PlayerArenaMoveEvent(player.getArena(), player, event);
+
+        player.getArena().getEventManager().call(moveEvent);
+
+        if (moveEvent.isCancelled()) {
+            event.setCancelled(true);
+        }
+    }
+
+}

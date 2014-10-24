@@ -1,0 +1,211 @@
+package com.jcwhatever.bukkit.pvs.arenas.managers;
+
+import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.pvs.ArenaPlayersCollection;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
+import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
+import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerAddedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreAddEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreRemoveEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
+import org.bukkit.Location;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+public abstract class AbstractPlayerManager implements PlayerManager {
+
+    private Arena _arena;
+    protected final ArenaPlayersCollection _players;
+
+    /*
+     * Constructor.
+     */
+    public AbstractPlayerManager(Arena arena) {
+        _arena = arena;
+        _players = new ArenaPlayersCollection(arena);
+    }
+
+    /*
+     * Get the managers owning arena.
+     */
+    @Override
+    public final Arena getArena() {
+        return _arena;
+    }
+
+    /*
+     * Tell all players being managed.
+     */
+    @Override
+    public final void tell(String message, Object... params) {
+        _players.tell(message, params);
+    }
+
+    /*
+     * Get the players being managed.
+     */
+    @Override
+    public final List<ArenaPlayer> getPlayers() {
+        return _players.getPlayers();
+    }
+
+    /*
+     * Get the number of players being managed.
+     */
+    @Override
+    public final int getPlayerCount() {
+        return _players.size();
+    }
+
+    /*
+     * Determine if the manager is managing the specified player.
+     */
+    @Override
+    public final boolean hasPlayer(ArenaPlayer player) {
+        return _players.hasPlayer(player);
+    }
+
+    /*
+     * Respawn the specified player if the player is being managed
+     * by the manager instance.
+     */
+    @Override
+    public final boolean respawnPlayer(ArenaPlayer player) {
+        if (!_players.hasPlayer(player))
+            return false;
+
+        Location respawnLocation = onRespawnPlayer(player);
+        if (respawnLocation == null)
+            return false;
+
+        player.getHandle().teleport(respawnLocation);
+        return true;
+    }
+
+    /*
+     * Add a player to the manager instance to be managed.
+     */
+    @Override
+    public final boolean addPlayer(ArenaPlayer player, AddPlayerReason reason) {
+        PreCon.notNull(player);
+        PreCon.notNull(reason);
+
+        if (_players.hasPlayer(player))
+            return false;
+
+        if (reason != AddPlayerReason.ARENA_RELATION_CHANGE) {
+
+            if (_arena.getEventManager().call(new PlayerPreAddEvent(_arena, player, reason)).isCancelled())
+                return false;
+        }
+
+        _players.addPlayer(player);
+
+        player.setCurrentArena(_arena);
+
+        Location spawnPoint = onAddPlayer(player, reason);
+
+        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, reason, spawnPoint);
+
+        _arena.getEventManager().call(event);
+
+        if (event.getSpawnLocation() != null) {
+
+            player.getHandle().teleport(event.getSpawnLocation());
+
+            // reserve spawnpoint
+            if (event.getSpawnLocation() instanceof Spawnpoint) {
+                PlayerManagerSettings settings = player.getRelatedSettings();
+                if (settings != null && settings.isPlayerSpawnsReserved()) {
+
+                    getArena().getSpawnManager().reserveSpawn(player, (Spawnpoint)event.getSpawnLocation());
+
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * Remove a player from the manager instance.
+     */
+    @Override
+    public final boolean removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+        PreCon.notNull(player);
+        PreCon.notNull(reason);
+
+        // make sure the manager has the player
+        if (!_players.hasPlayer(player))
+            return false;
+
+        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+
+            // call pre remove event to see if the remove event is cancelled
+            if (_arena.getEventManager().call(new PlayerPreRemoveEvent(_arena, player, reason)).isCancelled())
+                return false;
+        }
+
+        onPreRemovePlayer(player, reason);
+
+        getArena().getSpawnManager().unreserveSpawn(player);
+
+        // remove player from collection
+        _players.removePlayer(player, reason);
+
+        // clear arena if leaving
+        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE &&
+                reason != RemovePlayerReason.FORWARDING) {
+
+                player.clearArena();
+        }
+
+        Location restoreLocation = onRemovePlayer(player, reason);
+
+        // call player removed event
+        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+            PlayerRemovedEvent removedEvent = new PlayerRemovedEvent(_arena, player, reason, restoreLocation);
+            _arena.getEventManager().call(removedEvent);
+
+            if (removedEvent.isRestoring() &&
+                removedEvent.getRestoreLocation() != null) {
+
+                player.getHandle().teleport(removedEvent.getRestoreLocation());
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * Called when a player is respawned.
+     * Returns the location the player should be respawned at.
+     */
+    @Nullable
+    protected abstract Location onRespawnPlayer(ArenaPlayer player);
+
+    /*
+     * Called when a player is added.
+     * Returns the location the player should be spawned at.
+     */
+    @Nullable
+    protected abstract Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason);
+
+    /*
+     * Called before a player is removed.
+     */
+    protected abstract void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);
+
+    /*
+     * Called after a player is removed.
+     * Returns the location the player should be teleported after removed.
+     */
+    @Nullable
+    protected abstract Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);
+}

@@ -1,0 +1,75 @@
+package com.jcwhatever.bukkit.pvs;
+
+import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;
+import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionInfo;
+import com.jcwhatever.bukkit.pvs.api.arena.extensions.ExtensionTypeManager;
+import com.jcwhatever.bukkit.pvs.api.exceptions.InvalidNameException;
+import com.jcwhatever.bukkit.pvs.api.exceptions.MissingExtensionAnnotationException;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Repository of arena extension types.
+ */
+public class PVExtensionTypeManager implements ExtensionTypeManager {
+
+    private static final Map<String, Class<? extends ArenaExtension>> _extensionMap = new HashMap<>(25);
+
+    /*
+     * Get the names of available arena extensions
+     */
+    @Override
+    public Set<String> getExensionNames() {
+        return _extensionMap.keySet();
+    }
+
+    /*
+     * Get available arena extensions
+     */
+    @Override
+    public List<Class<? extends ArenaExtension>> getExtensionClasses() {
+        return new ArrayList<>( _extensionMap.values());
+    }
+
+    /*
+     * Get a specific arena extension by name.
+     */
+    @Nullable
+    @Override
+    public Class<? extends ArenaExtension> getExtensionClass(String name) {
+        return _extensionMap.get(name.toLowerCase());
+    }
+
+    /*
+     * Register an arena extension into the repository.
+     */
+    @Override
+    public void registerType(Class<? extends ArenaExtension> extension) {
+        PreCon.notNull(extension);
+
+        ArenaExtensionInfo info = extension.getAnnotation(ArenaExtensionInfo.class);
+        if (info == null)
+            throw new MissingExtensionAnnotationException(extension);
+
+        if (!TextUtils.isValidName(info.name(), 32)) {
+            throw new InvalidNameException("Arena Extension with an invalid name was detected: " + info.name());
+        }
+
+        String key = info.name().toLowerCase();
+
+        if (_extensionMap.containsKey(key)) {
+            Msg.warning("An Arena Extension was registered that overwrites another extension. Extension name: {0}.", info.name());
+        }
+
+        _extensionMap.put(key, extension);
+    }
+
+}

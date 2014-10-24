@@ -1,0 +1,26 @@
+name: PV-Star
+author: JC The Pants
+main: com.jcwhatever.bukkit.pvs.PVStar
+version: 0.29
+depend: [TagAPI, jcGenerics]
+commands:
+    pv:
+        description: Base command for PV-Star
+        usage: |
+            ERROR!
+    pvs:
+        description: Base command for PV-Star
+        usage: |
+            ERROR!
+    pvp:
+        description: Base command for PV-Star
+        usage: |
+            ERROR!
+    pve:
+        description: Base command for PV-Star
+        usage: |
+            ERROR!
+    pvstar:
+        description: Base command for PV-Star
+        usage: |
+            ERROR!

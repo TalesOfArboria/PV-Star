@@ -1,0 +1,133 @@
+package com.jcwhatever.bukkit.pvs;
+
+import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
+import com.jcwhatever.bukkit.pvs.api.spawns.SpawnTypeManager;
+import com.jcwhatever.bukkit.pvs.spawns.GameSpawnType;
+import com.jcwhatever.bukkit.pvs.spawns.LobbySpawnType;
+import com.jcwhatever.bukkit.pvs.spawns.LocationSpawnType;
+import com.jcwhatever.bukkit.pvs.spawns.SpectatorSpawnType;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import org.bukkit.entity.EntityType;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Manages types of spawns
+ */
+public class PVSpawnTypeManager implements SpawnTypeManager {
+
+    public final LobbySpawnType _lobbySpawn = new LobbySpawnType();
+    public final GameSpawnType _gameSpawn = new GameSpawnType();
+    public final SpectatorSpawnType _spectatorSpawn = new SpectatorSpawnType();
+
+    private Map<String, SpawnType> _typeMap = new HashMap<>(40);
+    private Map<EntityType, Set<SpawnType>> _entityMap = new EnumMap<>(EntityType.class);
+
+    /*
+     * Constructor.
+     */
+    public PVSpawnTypeManager() {
+        registerType(_gameSpawn);
+        registerType(_lobbySpawn);
+        registerType(_spectatorSpawn);
+        registerType(new LocationSpawnType());
+    }
+
+    /*
+     * Get spawn type used for arena lobby spawns.
+     */
+    @Override
+    public SpawnType getLobbySpawnType() {
+        return _lobbySpawn;
+    }
+
+    /*
+     * Get spawn type used for arena game spawns.
+     */
+    @Override
+    public SpawnType getGameSpawnType() {
+        return _gameSpawn;
+    }
+
+    /*
+     * Get spawn type used for arena spectator spawns.
+     */
+    @Override
+    public SpawnType getSpectatorSpawnType() {
+        return _spectatorSpawn;
+    }
+
+    /*
+     * Get all registered spawn types.
+     */
+    @Override
+    public List<SpawnType> getSpawnTypes() {
+        return new ArrayList<SpawnType>(_typeMap.values());
+    }
+
+    /*
+     * Get spawn types that can spawn the specified entity type.
+     */
+    @Override
+    public List<SpawnType> getSpawnTypes(EntityType entityType) {
+        Set<SpawnType> types = _entityMap.get(entityType);
+        if (types == null)
+            return new ArrayList<>(0);
+
+        return new ArrayList<>(types);
+    }
+
+    /*
+     * Get a spawn type by type name.
+     */
+    @Nullable
+    @Override
+    public SpawnType getType(String typeName) {
+        return _typeMap.get(typeName.toLowerCase());
+    }
+
+    /*
+     * Register a spawn type
+     */
+    @Override
+    public boolean registerType(SpawnType spawnType) {
+
+        if (_typeMap.containsKey(spawnType.getSearchName())) {
+            Msg.debug("SpawnType '{0}' could not be registered because a type with that name is already registered", spawnType.getName());
+            return false;
+        }
+
+        if (spawnType.getName() == null || spawnType.getName().isEmpty()) {
+            throw new RuntimeException("Failed to register spawn type because it has no name.");
+        }
+
+        if (!TextUtils.isValidName(spawnType.getName())) {
+            throw new RuntimeException("Failed to register spawn type because it has an invalid name.");
+        }
+
+        EntityType[] entities = spawnType.getEntityTypes();
+        if (entities != null) {
+
+            for (EntityType type : entities) {
+
+                Set<SpawnType> types = _entityMap.get(type);
+                if (types == null) {
+                    types = new HashSet<>(5);
+                    _entityMap.put(type, types);
+                }
+
+                types.add(spawnType);
+            }
+        }
+
+        return _typeMap.put(spawnType.getSearchName(), spawnType) != null;
+    }
+}
