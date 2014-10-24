@@ -15,28 +15,19 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="jdk" jdkName="JavaSE-1.7" jdkType="JavaSDK" />
-    <orderEntry type="module" module-name="GenericsLib" />
-    <orderEntry type="module-library">
-      <library name="bukkit-1.7.2-R0.3.jar">
+    <orderEntry type="module" module-name="GenericsLib" scope="PROVIDED" />
+    <orderEntry type="module" module-name="PV-StarAPI" scope="PROVIDED" />
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Eclipse/Libs/bukkit-1.7.2-R0.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../depends/bukkit-1.7.9-R0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../depends/bukkit-1.7.9-R0.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="MusicalRegions" />
-    <orderEntry type="module" module-name="PV-StarAPI" />
-    <orderEntry type="module-library">
-      <library name="TagAPI.jar">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Eclipse/Libs/TagAPI.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="jdk1.7" level="application" />
   </component>
 </module>
 
