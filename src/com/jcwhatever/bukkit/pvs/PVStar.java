@@ -163,11 +163,11 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         PVStarAPI.setImplementation(this);
 
         _languageManager = new LanguageManager();
-        _signManager = new PVSignManager(this, getSettings().getNode("signs"));
+        _signManager = new PVSignManager(this, getDataNode().getNode("signs"));
         _pointsManager = new PVPointsManager();
         _statsManager = new PVStatsManager();
         _eventManager = new GenericsEventManager();
-        _kitManager = new KitManager(this, getSettings().getNode("kits"));
+        _kitManager = new KitManager(this, getDataNode().getNode("kits"));
         _extensionManager = new PVExtensionTypeManager();
         _spawnTypeManager = new PVSpawnTypeManager();
 
@@ -189,7 +189,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
             public void run() {
 
                 // load arenas
-                _arenaManager = new PVArenaManager(getSettings().getNode("arenas"));
+                _arenaManager = new PVArenaManager(getDataNode().getNode("arenas"));
 
                 // register built in arenas
                 _arenaManager.registerType(PVArena.class);
