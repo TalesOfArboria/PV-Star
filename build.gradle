@@ -10,7 +10,8 @@ def compileDepends = [
         'PV-StarAPI.jar'
 ]
 def includeFiles = [
-        'plugin.yml'
+        'plugin.yml',
+        'LICENSE.txt'
 ]
 
 // Set version number
