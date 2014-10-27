@@ -1,8 +1,8 @@
 name: PV-Star
 author: JC The Pants
 main: com.jcwhatever.bukkit.pvs.PVStar
-version: 0.29
-depend: [TagAPI, jcGenerics]
+version: 0.0-beta
+depend: [TagAPI, GenericsLib]
 commands:
     pv:
         description: Base command for PV-Star
