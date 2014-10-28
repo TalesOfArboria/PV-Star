@@ -43,7 +43,7 @@ import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownPreStartEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownStartedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.bukkit.pvs.api.utils.Lang;
+import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVLobbySettings;
 import org.bukkit.Location;

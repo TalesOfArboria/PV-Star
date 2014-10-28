@@ -31,7 +31,7 @@ import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.OutsidersAction;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.bukkit.pvs.api.utils.Lang;
+import com.jcwhatever.bukkit.pvs.Lang;
 import org.bukkit.command.CommandSender;
 
 @ICommandInfo(

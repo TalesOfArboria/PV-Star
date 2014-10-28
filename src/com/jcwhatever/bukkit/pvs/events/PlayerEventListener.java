@@ -35,7 +35,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaMoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.bukkit.pvs.api.utils.Lang;
+import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

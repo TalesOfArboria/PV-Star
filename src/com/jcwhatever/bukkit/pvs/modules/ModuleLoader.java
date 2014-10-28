@@ -203,10 +203,6 @@ public class ModuleLoader {
 
                 if (container.isBukkitDependsLoaded() && container.isModuleDependsLoaded()) {
 
-                    // Merge module language manager with Pv-Star's
-                    _pvStar.getLanguageManager().mergeFrom(
-                            container.getModule().getLanguageManager());
-
                     // Pre-enable module
                     container.getModule().preEnable();
 
