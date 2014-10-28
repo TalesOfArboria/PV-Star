@@ -189,7 +189,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         _dataNode.runBatchOperation(new BatchOperation() {
 
             @Override
-            public void run(IDataNode config) {
+            public void run(IDataNode dataNode) {
                 for (Spawnpoint spawn : spawns) {
                     addSpawn(spawn);
                 }
@@ -228,7 +228,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         _dataNode.runBatchOperation(new BatchOperation() {
 
             @Override
-            public void run(IDataNode config) {
+            public void run(IDataNode dataNode) {
                 for (Spawnpoint spawn : spawns)
                     removeSpawn(spawn);
             }

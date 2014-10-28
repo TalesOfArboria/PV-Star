@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.scripting.api;
 
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.bukkit.generic.utils.EnumUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -299,14 +300,15 @@ public class SpawnApi extends ScriptApi {
 
         // convert enum constant name into enum constant
         private <T extends Enum<T>> T getEnum(String constantName, Class<T> enumClass) {
-            constantName = constantName.toUpperCase();
 
-            for (T constant : enumClass.getEnumConstants()) {
-                if (constant.name().equals(constantName))
-                    return constant;
+            T e = EnumUtils.searchEnum(constantName, enumClass);
+            if (e == null) {
+                throw new RuntimeException(
+                        "Could not find enum constant named '" + constantName +
+                                "' in enum type " + enumClass.getSimpleName());
             }
 
-            throw new RuntimeException("Could not find enum constant named '" + constantName + "' in enum type " + enumClass.getSimpleName());
+            return e;
         }
     }
 }
