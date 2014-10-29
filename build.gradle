@@ -31,14 +31,14 @@ if (hasProperty("teamcity")) {
     }
 
 }else {
-    version = majorVerion + '.000.git-unknown'
+    version = majorVersion + '.000.git-unknown'
 }
 
 if (buildBy == null) {
     buildBy = System.properties['user.name']
 }
 
-defaultTasks 'build'
+defaultTasks 'clean', 'build'
 
 apply plugin: 'java'
 
