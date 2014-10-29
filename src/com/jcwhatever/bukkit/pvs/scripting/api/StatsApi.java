@@ -32,6 +32,7 @@ import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 import com.jcwhatever.bukkit.pvs.api.stats.ArenaStats;
 import com.jcwhatever.bukkit.pvs.api.stats.StatType;
+import javax.annotation.Nullable;
 
 /**
  * Provide scripts with access to arena statistics.
@@ -74,6 +75,7 @@ public class StatsApi extends ScriptApi {
          *
          * @param typeName  The name of the statistic.
          */
+        @Nullable
         public StatType getType(String typeName) {
             PreCon.notNullOrEmpty(typeName);
 

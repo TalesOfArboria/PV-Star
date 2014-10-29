@@ -120,6 +120,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
      * Invoke a script function in the evaluated script.
      */
     @Override
+    @Nullable
     public Object invokeFunction(String functionName, Object... parameters) {
         Invocable inv = (Invocable)_engine;
 
@@ -140,6 +141,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
      * Evaluate another script into this scripts engine.
      */
     @Override
+    @Nullable
     public Object evaluate(IScript script) {
 
         try {

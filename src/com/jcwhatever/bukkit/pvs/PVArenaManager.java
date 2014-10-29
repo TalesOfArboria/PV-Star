@@ -315,6 +315,7 @@ public class PVArenaManager implements ArenaManager {
     }
 
 
+    @Nullable
     private Arena loadArena(String typeName) {
 
         Class<? extends Arena> arenaClass = _arenaTypes.get(typeName.toLowerCase());

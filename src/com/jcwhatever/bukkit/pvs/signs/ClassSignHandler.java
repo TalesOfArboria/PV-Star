@@ -112,6 +112,7 @@ public class ClassSignHandler extends SignHandler {
 
                 kit.give(p);
 
+                //noinspection ConstantConditions
                 player.getRelatedManager().tell(ChatColor.GREEN + p.getName() + " is a " + className + '.');
             }
         }

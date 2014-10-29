@@ -252,8 +252,16 @@ public class PVArenaSettings implements ArenaSettings {
      * they are removed from the arena.
      */
     @Override
+    @Nullable
     public Location getRemoveLocation() {
-        return _removeLocation != null ? _removeLocation : _arena.getRegion().getWorld().getSpawnLocation();
+
+        if (_removeLocation != null)
+            return _removeLocation;
+
+        if (_arena.getRegion().getWorld() != null)
+            return _arena.getRegion().getWorld().getSpawnLocation();
+
+        return null;
     }
 
     /*
@@ -290,7 +298,7 @@ public class PVArenaSettings implements ArenaSettings {
     /*
      * Save a setting.
      */
-    protected void save(String nodeName, Object value) {
+    protected void save(String nodeName, @Nullable Object value) {
         _dataNode.set(nodeName, value);
         _dataNode.saveAsync(null);
     }

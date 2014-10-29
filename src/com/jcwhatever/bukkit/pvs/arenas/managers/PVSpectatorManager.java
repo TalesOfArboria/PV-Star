@@ -97,6 +97,7 @@ public class PVSpectatorManager extends AbstractPlayerManager implements Spectat
     /*
      * Get a spectator spawn
      */
+    @Nullable
     private Location getSpawnLocation(ArenaPlayer player) {
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomSpectatorSpawn(player.getTeam());
         if (spawnpoint == null) {

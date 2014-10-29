@@ -178,6 +178,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     }
 
     @Override
+    @Nullable
     public ModuleInfo getModuleInfo(PVStarModule module) {
         return _moduleLoader.getModuleInfo(module);
     }

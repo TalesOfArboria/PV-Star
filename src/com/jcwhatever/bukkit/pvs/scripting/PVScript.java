@@ -112,6 +112,7 @@ public class PVScript implements Script {
      * Evaluate the script for an arena if provided, or
      * as a GenericsEvaluatedScript if no arena provided.
      */
+    @Nullable
     private IEvaluatedScript eval(@Nullable Arena arena, @Nullable Collection<? extends IScriptApi> apiCollection) {
 
         // get a script engine using the script type

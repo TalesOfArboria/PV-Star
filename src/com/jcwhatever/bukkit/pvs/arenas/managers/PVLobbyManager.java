@@ -319,6 +319,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
     /*
      * Get a lobby spawn location for a player.
      */
+    @Nullable
     private Location getSpawnLocation(ArenaPlayer player) {
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomLobbySpawn(player.getTeam());
         if (spawnpoint == null) {

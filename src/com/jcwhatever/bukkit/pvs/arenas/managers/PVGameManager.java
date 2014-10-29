@@ -356,6 +356,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
      * Checks to see if a player should be declared the winner
      * after the specified player is removed.
      */
+    @Nullable
     private ArenaPlayer checkForWinnerOnRemove(ArenaPlayer removedPlayer) {
         PreCon.notNull(removedPlayer);
 
