@@ -33,7 +33,7 @@ import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.pvs.ArenaProvider;
+import com.jcwhatever.bukkit.pvs.PVArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -54,6 +54,13 @@ import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import com.jcwhatever.bukkit.pvs.arenas.managers.PVGameManager;
+import com.jcwhatever.bukkit.pvs.arenas.managers.PVLobbyManager;
+import com.jcwhatever.bukkit.pvs.arenas.managers.PVSpawnManager;
+import com.jcwhatever.bukkit.pvs.arenas.managers.PVSpectatorManager;
+import com.jcwhatever.bukkit.pvs.arenas.managers.PVTeamManager;
+import com.jcwhatever.bukkit.pvs.arenas.settings.PVArenaSettings;
+import com.jcwhatever.bukkit.pvs.scripting.PVArenaScriptManager;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
@@ -84,12 +91,21 @@ public abstract class AbstractArena implements Arena {
     private IDataNode _dataNode;
     private File _dataFolder;
 
-    private ArenaProvider _arenaProvider;
     private GenericsEventManager _eventManager;
     private ArenaRegion _region;
     private IPermission _permission;
 
     private Map<String, IDataNode> _nodeMap = new WeakValueMap<>(20);
+
+    private GameManager _gameManager;
+    private LobbyManager _lobbyManager;
+    private SpectatorManager _spectatorManager;
+    private SpawnManager _spawnManager;
+    private TeamManager _teamManager;
+    private ArenaExtensionManager _extensionManager;
+    private ArenaScriptManager _scriptManager;
+    private ArenaSettings _arenaSettings;
+
 
     /*
      * Initialize an arenas typeInfo after it is instantiated.
@@ -109,8 +125,6 @@ public abstract class AbstractArena implements Arena {
         _searchName = name.toLowerCase();
         _typeInfo = getClass().getAnnotation(ArenaTypeInfo.class);
 
-        _arenaProvider = getArenaProvider();
-
         _eventManager = new GenericsEventManager(PVStarAPI.getEventManager());
 
         _dataNode = DataStorage.getStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
@@ -126,33 +140,18 @@ public abstract class AbstractArena implements Arena {
             Msg.severe("Failed to create data folder '{0}' for arena '{1}'.", _dataFolder.getAbsolutePath(), name);
         }
 
-        _permission = Permissions.register("pvstar.arena." + _name, PermissionDefault.TRUE);
+        _permission = Permissions.register("pvstar.arena." + _id.toString(), PermissionDefault.TRUE);
+
+        _arenaSettings = new PVArenaSettings(this);
+        _lobbyManager = new PVLobbyManager(this);
+        _gameManager = new PVGameManager(this);
+        _spectatorManager = new PVSpectatorManager(this);
+        _spawnManager = new PVSpawnManager(this);
+        _teamManager = new PVTeamManager(this);
+        _scriptManager = new PVArenaScriptManager(this);
+        _extensionManager = new PVArenaExtensionManager(this);
 
         onInit();
-
-        // ensure game manager is loaded
-        getGameManager();
-
-        // ensure lobby manager is loaded
-        getLobbyManager();
-
-        // ensure spectator manager is loaded
-        getSpectatorManager();
-
-        // ensure spawn manager is loaded
-        getSpawnManager();
-
-        // ensure team manager is loaded
-        getTeamManager();
-
-        // ensure extension manager is loaded
-        getExtensionManager();
-
-        // ensure script manager is loaded
-        getScriptManager();
-
-        // ensure settings are loaded
-        getSettings();
     }
 
     /*
@@ -168,7 +167,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final LobbyManager getLobbyManager() {
-        return _arenaProvider.getLobbyManager();
+        return _lobbyManager;
     }
 
     /*
@@ -176,7 +175,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final GameManager getGameManager() {
-        return _arenaProvider.getGameManager();
+        return _gameManager;
     }
 
     /*
@@ -184,7 +183,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final SpectatorManager getSpectatorManager() {
-        return _arenaProvider.getSpectatorManager();
+        return _spectatorManager;
     }
 
     /*
@@ -192,7 +191,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final TeamManager getTeamManager() {
-        return _arenaProvider.getTeamManager();
+        return _teamManager;
     }
 
     /*
@@ -200,7 +199,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final SpawnManager getSpawnManager() {
-        return _arenaProvider.getSpawnManager();
+        return _spawnManager;
     }
 
     /*
@@ -208,7 +207,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final ArenaExtensionManager getExtensionManager() {
-        return _arenaProvider.getExtensionManager();
+        return _extensionManager;
     }
 
     /*
@@ -216,7 +215,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final ArenaScriptManager getScriptManager() {
-        return _arenaProvider.getScriptManager();
+        return _scriptManager;
     }
 
     /*
@@ -224,7 +223,7 @@ public abstract class AbstractArena implements Arena {
      */
     @Override
     public final ArenaSettings getSettings() {
-        return _arenaProvider.getSettings();
+        return _arenaSettings;
     }
 
     /*
@@ -478,7 +477,7 @@ public abstract class AbstractArena implements Arena {
 
         onDispose();
 
-        Permissions.unregister("pvstar.arena." + _name);
+        Permissions.unregister("pvstar.arena." + _id.toString());
 
         getEventManager().call(new ArenaDisposeEvent(this));
 
@@ -499,13 +498,6 @@ public abstract class AbstractArena implements Arena {
     @Override
     public String toString() {
         return _name;
-    }
-
-    /*
-     * Get the arena provider.
-     */
-    protected ArenaProvider getArenaProvider() {
-        return new ArenaProvider(this);
     }
 
     /*
