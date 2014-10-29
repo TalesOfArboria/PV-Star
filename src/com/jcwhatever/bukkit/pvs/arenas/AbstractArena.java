@@ -478,7 +478,7 @@ public abstract class AbstractArena implements Arena {
 
         onDispose();
 
-        Permissions.unregister(PVStarAPI.getPlugin(), "pvstar.arena." + _name);
+        Permissions.unregister("pvstar.arena." + _name);
 
         getEventManager().call(new ArenaDisposeEvent(this));
 
