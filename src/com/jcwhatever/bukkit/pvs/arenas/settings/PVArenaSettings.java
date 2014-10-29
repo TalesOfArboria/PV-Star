@@ -49,7 +49,6 @@ public class PVArenaSettings implements ArenaSettings {
     private boolean _isVisible = true;
     private boolean _isEnabled = true;
     private boolean _isMobSpawnEnabled = false;
-    private boolean _isArenaDamageEnabled = false;
     private boolean _isAutoRestoreEnabled = false;
     private Location _removeLocation;
     private OutsidersAction _outsidersAction = OutsidersAction.NONE;
@@ -67,14 +66,11 @@ public class PVArenaSettings implements ArenaSettings {
         _minPlayers = _dataNode.getInteger("min-players", _minPlayers);
         _maxPlayers = _dataNode.getInteger("max-players", _maxPlayers);
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
-        _isArenaDamageEnabled = _dataNode.getBoolean("arena-damage", _isArenaDamageEnabled);
         _isMobSpawnEnabled = _dataNode.getBoolean("mob-spawn", _isMobSpawnEnabled);
         _isAutoRestoreEnabled = _dataNode.getBoolean("auto-restore", _isAutoRestoreEnabled);
         _removeLocation = _dataNode.getLocation("remove-location", _removeLocation);
         _outsidersAction = _dataNode.getEnum("outsiders-action", _outsidersAction, OutsidersAction.class);
         _typeDisplayName = _dataNode.getString("type-display");
-
-
     }
 
     /*
@@ -207,25 +203,6 @@ public class PVArenaSettings implements ArenaSettings {
         _isMobSpawnEnabled = isEnabled;
 
         save("mob-spawn", isEnabled);
-    }
-
-    /*
-     * Determine if player can break blocks in the
-     * arena.
-     */
-    @Override
-    public boolean isArenaDamageEnabled() {
-        return _isArenaDamageEnabled;
-    }
-
-    /*
-     * Set if player can break blocks in the arena.
-     */
-    @Override
-    public void setArenaDamageEnabled(boolean isEnabled) {
-        _isArenaDamageEnabled = isEnabled;
-
-        save("arena-damage", isEnabled);
     }
 
     /*

@@ -49,7 +49,6 @@ import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.PVArena;
 import com.jcwhatever.bukkit.pvs.commands.CommandHandler;
 import com.jcwhatever.bukkit.pvs.commands.PVCommandHelper;
-import com.jcwhatever.bukkit.pvs.events.ArenaProtectListener;
 import com.jcwhatever.bukkit.pvs.events.MobEventListener;
 import com.jcwhatever.bukkit.pvs.events.PlayerEventListener;
 import com.jcwhatever.bukkit.pvs.events.PvpListener;
@@ -231,7 +230,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
                 // register event listeners
                 registerEventListeners(
-                        new ArenaProtectListener(),
                         new MobEventListener(),
                         new PlayerEventListener(),
                         new PvpListener(),
