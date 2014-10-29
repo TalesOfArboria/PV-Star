@@ -49,7 +49,6 @@ public class PVArenaSettings implements ArenaSettings {
     private boolean _isVisible = true;
     private boolean _isEnabled = true;
     private boolean _isMobSpawnEnabled = false;
-    private boolean _isAutoRestoreEnabled = false;
     private Location _removeLocation;
     private OutsidersAction _outsidersAction = OutsidersAction.NONE;
     private String _typeDisplayName;
@@ -67,7 +66,6 @@ public class PVArenaSettings implements ArenaSettings {
         _maxPlayers = _dataNode.getInteger("max-players", _maxPlayers);
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
         _isMobSpawnEnabled = _dataNode.getBoolean("mob-spawn", _isMobSpawnEnabled);
-        _isAutoRestoreEnabled = _dataNode.getBoolean("auto-restore", _isAutoRestoreEnabled);
         _removeLocation = _dataNode.getLocation("remove-location", _removeLocation);
         _outsidersAction = _dataNode.getEnum("outsiders-action", _outsidersAction, OutsidersAction.class);
         _typeDisplayName = _dataNode.getString("type-display");
@@ -203,25 +201,6 @@ public class PVArenaSettings implements ArenaSettings {
         _isMobSpawnEnabled = isEnabled;
 
         save("mob-spawn", isEnabled);
-    }
-
-    /*
-     * Determine if arena auto restores when the arena
-     * ends.
-     */
-    @Override
-    public boolean isAutoRestoreEnabled() {
-        return _isAutoRestoreEnabled;
-    }
-
-    /*
-     * Set arena auto restore.
-     */
-    @Override
-    public void setAutoRestoreEnabled(boolean isEnabled) {
-        _isAutoRestoreEnabled = isEnabled;
-
-        save("auto-restore", isEnabled);
     }
 
     /*
