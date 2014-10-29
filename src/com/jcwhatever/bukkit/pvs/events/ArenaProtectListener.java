@@ -38,6 +38,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -67,6 +68,10 @@ public class ArenaProtectListener implements Listener {
      */
     @EventHandler(priority=EventPriority.HIGHEST)
     private void onItemFrameBreak(HangingBreakEvent event) {
+
+        // do not prevent physics break
+        if (event.getCause() == RemoveCause.PHYSICS)
+            return;
 
         Hanging damagee = event.getEntity();
 
