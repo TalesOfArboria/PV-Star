@@ -25,7 +25,10 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.jcwhatever.bukkit.generic.collections.WeakValueMap;
+import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
+import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.permissions.IPermission;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
@@ -33,9 +36,9 @@ import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
-import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaRegion;
@@ -51,8 +54,9 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinEvent;
+import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
-import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVGameManager;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVLobbyManager;
@@ -71,7 +75,7 @@ import java.util.UUID;
 /**
  * Abstract arena implementation.
  */
-public abstract class AbstractArena implements Arena {
+public abstract class AbstractArena implements Arena, GenericsEventListener {
 
     @Localizable static final String _JOIN_LEAVE_CURRENT_FIRST = "You must leave the current arena before you can join another.";
     @Localizable static final String _ARENA_BUSY = "Arena '{0}' is busy at the moment. Try again later.";
@@ -150,6 +154,8 @@ public abstract class AbstractArena implements Arena {
         _teamManager = new PVTeamManager(this);
         _scriptManager = new PVArenaScriptManager(this);
         _extensionManager = new PVArenaExtensionManager(this);
+
+        getEventManager().register(this);
 
         onInit();
     }
@@ -431,16 +437,21 @@ public abstract class AbstractArena implements Arena {
             return false; // finish
         }
 
-        // make sure game isn't already running
-        if (getGameManager().isRunning()) {
-            Msg.tellError(player, Lang.get(_ARENA_RUNNING, getName()));
-            return false; // finish
-        }
-
         // make sure there are enough join slots available
         if (getAvailableSlots() <= 0) {
             Msg.tellError(player, Lang.get(_JOIN_LIMIT_REACHED, getName()));
             return false; // finish
+        }
+
+        PlayerJoinEvent joinEvent = new PlayerJoinEvent(this, player, reason);
+
+        if (getEventManager().call(joinEvent).isCancelled()) {
+
+            if (joinEvent.getRejectionMessage() != null) {
+                Msg.tellError(player, joinEvent.getRejectionMessage());
+            }
+
+            return false;
         }
 
         // add player to lobby
@@ -524,5 +535,22 @@ public abstract class AbstractArena implements Arena {
      * Called when determining if players can join.
      */
     protected abstract boolean onCanJoin();
+
+
+    /*
+     *  Handle player join event
+     */
+    @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
+    private void onPlayerJoin(PlayerJoinEvent event) {
+
+        // make sure game isn't already running, placed here
+        // so the functionality can be changed/replaced/removed.
+        if (getGameManager().isRunning()) {
+            event.setRejectionMessage(Lang.get(_ARENA_RUNNING, getName()));
+            event.setCancelled(true);
+
+        }
+    }
+
 
 }

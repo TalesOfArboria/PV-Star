@@ -58,6 +58,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -134,15 +135,32 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
 
         _startTime = new Date();
 
-        if (getArena().getEventManager().call(new ArenaPreStartEvent(getArena(), reason)).isCancelled())
+        LobbyManager lobbyManager = getArena().getLobbyManager();
+
+        // get default next group of players from lobby
+        List<ArenaPlayer> players = reason == ArenaStartReason.AUTO
+                ? lobbyManager.getNextGroup()
+                : lobbyManager.getReadyGroup();
+
+        // create pre-start event
+        ArenaPreStartEvent preStartEvent = new ArenaPreStartEvent(getArena(), new HashSet<>(players), reason);
+
+        // call pre-start event
+        if (getArena().getEventManager().call(preStartEvent).isCancelled())
             return false;
 
-        if (!transferPlayersFromLobby(reason))
+        // determine if there are players joining
+        if (preStartEvent.getJoiningPlayers().isEmpty())
+            return false;
+
+        // transfer players from lobby
+        if (!transferPlayersFromLobby(preStartEvent.getJoiningPlayers()))
             return false;
 
         _isRunning = true;
         _isGameOver = false;
 
+        // call arena started event
         getArena().getEventManager().call(
                 new ArenaStartedEvent(getArena(), reason));
 
@@ -388,16 +406,9 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
     /*
      *  Transfer the next group of players from the lobby to here.
      */
-    private boolean transferPlayersFromLobby(ArenaStartReason reason) {
+    private boolean transferPlayersFromLobby(Collection<ArenaPlayer> players) {
 
         LobbyManager lobbyManager = getArena().getLobbyManager();
-
-        Collection<ArenaPlayer> players = reason == ArenaStartReason.AUTO
-                ? lobbyManager.getNextGroup()
-                : lobbyManager.getReadyGroup();
-
-        if (players == null || players.isEmpty())
-            return false;
 
         // transfer players from lobby
         for (ArenaPlayer player : players) {

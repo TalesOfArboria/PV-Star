@@ -68,7 +68,6 @@ public class ArenaPlayersCollection {
         return _players.size();
     }
 
-
     /*
      * Add player as well as the players group, if any.
      *
@@ -193,7 +192,6 @@ public class ArenaPlayersCollection {
         return results;
     }
 
-
     /*
      * Get all teams in the group collection who are
      * in the PlayerGroups arena.
@@ -207,13 +205,10 @@ public class ArenaPlayersCollection {
         return results;
     }
 
-
-
     /*
      * Get a group from the group collection whose players
      * that are in the PlayerGroups arena are all ready.
      */
-    @Nullable
     public List<ArenaPlayer> getReadyGroup() {
 
         if (_cachedReadyGroup != null)
@@ -226,7 +221,7 @@ public class ArenaPlayersCollection {
             }
         }
 
-        return null;
+        return new ArrayList<>(0);
     }
 
     /*
@@ -234,7 +229,6 @@ public class ArenaPlayersCollection {
      * that are in the PlayerGroups arena are all ready and
      * the number of ready players meets a minimum amount.
      */
-    @Nullable
     public List<ArenaPlayer> getReadyGroup(int minGroupSize) {
 
         if (_cachedReadyGroup != null)
@@ -249,7 +243,7 @@ public class ArenaPlayersCollection {
             }
 
         }
-        return null;
+        return new ArrayList<>(0);
     }
 
     /*
@@ -268,7 +262,6 @@ public class ArenaPlayersCollection {
     public boolean hasReadyGroup(int minGroupSize) {
         return getReadyGroup(minGroupSize) != null;
     }
-
 
     /*
      * Get the next group to play in the PlayerGroups arena who has players in the lobby
@@ -299,7 +292,4 @@ public class ArenaPlayersCollection {
         _cachedNextGroup.set(minSize, result);
         return result;
     }
-
-
-
 }
