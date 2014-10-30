@@ -24,7 +24,7 @@ that were removed are currently being developed as separate modules in the [PV-S
   
   * Uses GenericsLib event manager. This allows each arena to have its own event manager. Registering event handlers with the arenas event manager ensures the handler will only be called if the event is called on the arena. The arena event managers are children of the PV-Star event manager, which receives calls from the arena event managers. An event handler registered with PV-Star's event manager will receive events from all arenas.
   
-  * Uses GenericsLib scripting and scripting api. Scripts can be loaded and evaluated for a specific arena. Script API's can be registered via modules which gives scripts access to the modules features. The scripts also have access to the GenericsLib script repository so they can get access to scripts registered by other Bukkit plugins that utilize GenericsLib.
+  * Uses GenericsLib scripting and scripting api. Scripts can be loaded and evaluated for a specific arena. Script API's can be registered via modules which gives scripts access to the modules features. The scripts also have access to the GenericsLib script API repository so they can get access to scripts API's registered by other Bukkit plugins.
   
   * Handles core statistics recording. New statistics types can be registered.
    
