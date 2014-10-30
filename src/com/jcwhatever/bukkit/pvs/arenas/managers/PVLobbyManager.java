@@ -27,10 +27,7 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.utils.Scheduler;
-import com.jcwhatever.bukkit.generic.utils.Scheduler.ScheduledTask;
-import com.jcwhatever.bukkit.generic.utils.Scheduler.TaskHandler;
-import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
+import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.GameManager;
@@ -39,11 +36,8 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.LobbyManagerSettings;
-import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownPreStartEvent;
-import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownStartedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVLobbySettings;
 import org.bukkit.Location;
@@ -54,17 +48,12 @@ import java.util.List;
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, GenericsEventListener {
 
     @Localizable static final String _JOINED = "{0} has joined.";
-    @Localizable static final String _STARTING_COUNTDOWN = "Starting in {0} seconds...";
-    @Localizable static final String _MOD_10_SECONDS = "{0} seconds...";
-    @Localizable static final String _SECONDS = "{0}...";
-    @Localizable static final String _GO = "{GREEN}Go!";
     @Localizable static final String _AUTO_START_INFO =
             "{YELLOW}Countdown to start will begin once {0} or more players " +
                     "have joined. Type '/pv vote' if you would like to start the countdown now. All players " +
                     "must vote in order to start the countdown early.";
 
 
-    private ScheduledTask _countdownTask;
     private LobbyManagerSettings _settings;
 
     /*
@@ -75,25 +64,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
         _settings = new PVLobbySettings(arena);
         arena.getEventManager().register(this);
-    }
-
-    /*
-     * Determine if the countdown till the next game is running.
-     */
-    @Override
-    public boolean isCountdownRunning() {
-        return _countdownTask != null && !_countdownTask.isCancelled();
-    }
-
-    /*
-     * Cancel the countdown.
-     */
-    @Override
-    public void cancelCountdown() {
-        if (!isCountdownRunning())
-            return;
-
-        _countdownTask.cancel();
     }
 
     /*
@@ -146,9 +116,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
         tell(Lang.get(_JOINED), player.getName());
 
-        if (getSettings().hasAutoStart() &&
-                !isCountdownRunning() &&
-                !tryAutoStart()) {
+        if (getSettings().hasAutoStart() && !tryAutoStart()) {
 
             Msg.tell(player, Lang.get(_AUTO_START_INFO, getSettings().getMinAutoStartPlayers()));
         }
@@ -190,8 +158,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
         // make sure arena has auto start enabled
         // and count down isn't already running.
-        if (getSettings().hasAutoStart() && !isCountdownRunning()) {
-
+        if (getSettings().hasAutoStart()) {
 
             // get the next group
             List<ArenaPlayer> nextGroup = getNextGroup();
@@ -204,9 +171,8 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
             if (nextGroup.size() < getSettings().getMinAutoStartPlayers())
                 return false;
 
-            // start the countdown
-            startCountdown(ArenaStartReason.AUTO);
-            return true;
+            // start
+            return getArena().getGameManager().start(ArenaStartReason.AUTO);
         }
 
         return false;
@@ -225,10 +191,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         if (getArena().isBusy())
             return false;
 
-        // make sure the countdown isn't already running
-        if (isCountdownRunning())
-            return false;
-
         // check to see if there is a group that is ready
         List<ArenaPlayer> ready = getArena().getLobbyManager().getReadyGroup();
         if (ready == null || ready.isEmpty())
@@ -236,85 +198,11 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
         // make sure the size of the group meets the min
         // players requirement
-        if (ready.size() < getArena().getSettings().getMinPlayers())
-            return false;
+        return ready.size() >= getArena().getSettings().getMinPlayers() &&
+                // start
+                getArena().getGameManager().start(ArenaStartReason.PLAYERS_READY);
 
-        startCountdown(ArenaStartReason.PLAYERS_READY);
-        return true;
     }
-
-    /*
-     * Begin the game start countdown.
-     */
-    private void startCountdown(final ArenaStartReason reason) {
-
-        final GameManager gameManager = getArena().getGameManager();
-
-        // make sure countdown isn't already running and
-        // the game isn't in progress.
-        if (isCountdownRunning() || gameManager.isRunning())
-            return;
-
-        if (getArena().getEventManager().call(new ArenaCountdownPreStartEvent(getArena())).isCancelled())
-            return;
-
-        // get players to send to the game.
-        List<ArenaPlayer> players = reason == ArenaStartReason.AUTO
-                ? getNextGroup()
-                : getReadyGroup();
-
-        // don't start if there are no players
-        if (players == null || players.isEmpty())
-            return;
-
-        // tell players the countdown is starting.
-        Msg.tell(players, Lang.get(_STARTING_COUNTDOWN, getSettings().getStartCountdownSeconds()));
-
-        // schedule countdown task
-        _countdownTask = Scheduler.runTaskRepeat(PVStarAPI.getPlugin(), 20, 20, new TaskHandler() {
-
-            private int elapsedSeconds = 0;
-
-            @Override
-            public void run() {
-
-                elapsedSeconds++;
-
-                long remaining = getSettings().getStartCountdownSeconds() - elapsedSeconds;
-                List<ArenaPlayer> group = reason == ArenaStartReason.AUTO
-                        ? getNextGroup()
-                        : getReadyGroup();
-
-                // cancel countdown if there is no longer a group of players to start the game
-                if (group == null || group.isEmpty()) {
-                    cancelTask();
-                }
-                // cancel countdown task once countdown is completed.
-                else if (remaining <= 0) {
-                    cancelTask();
-                    getArena().getGameManager().start(reason);
-                    Msg.tell(group, Lang.get(_GO));
-                }
-                // tell current time left at 10 seconds intervals
-                else if (remaining > 5) {
-
-                    if (remaining % 10 == 0) {
-                        Msg.tell(group, Lang.get(_MOD_10_SECONDS, remaining));
-                    }
-
-                }
-                // tell current time left at 1 seconds intervals
-                else {
-                    Msg.tell(group, Lang.get(_SECONDS, remaining));
-                }
-            }
-
-        });
-
-        // call countdown started event
-        getArena().getEventManager().call(new ArenaCountdownStartedEvent(getArena()));
-    }
-
 
     /*
      * Get a lobby spawn location for a player.

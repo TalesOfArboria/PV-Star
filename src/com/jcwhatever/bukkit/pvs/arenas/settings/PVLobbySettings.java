@@ -33,7 +33,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.LobbyManagerSettings;
 public class PVLobbySettings extends AbstractPlayerSettings implements LobbyManagerSettings {
 
     private boolean _isImmobilized = false;
-    private int _startCountdown = 10;
     private int _minAutoStartPlayers = 4;
     private boolean _hasAutoStart;
 
@@ -84,26 +83,6 @@ public class PVLobbySettings extends AbstractPlayerSettings implements LobbyMana
     }
 
     /*
-     * Get the number of seconds to countdown from
-     * before the game starts.
-     */
-    @Override
-    public int getStartCountdownSeconds() {
-        return _startCountdown;
-    }
-
-    /*
-     * Set the number of seconds to countdown from
-     * before the game starts.
-     */
-    @Override
-    public void setStartCountdownSeconds(int seconds) {
-        _startCountdown = seconds;
-
-        save("start-countdown", seconds);
-    }
-
-    /*
      * Get the minimum number of players required
      * to auto start.
      */
@@ -128,7 +107,6 @@ public class PVLobbySettings extends AbstractPlayerSettings implements LobbyMana
      */
     private void loadSettings() {
         _isImmobilized = getDataNode().getBoolean("immobilized", _isImmobilized);
-        _startCountdown = getDataNode().getInteger("start-countdown", _startCountdown);
         _minAutoStartPlayers = getDataNode().getInteger("min-auto-start-players", _minAutoStartPlayers);
         _hasAutoStart = getDataNode().getBoolean("auto-start", _hasAutoStart);
     }

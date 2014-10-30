@@ -26,8 +26,6 @@ package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
-import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownPreStartEvent;
-import com.jcwhatever.bukkit.pvs.api.events.ArenaCountdownStartedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEndedEvent;
@@ -134,8 +132,6 @@ public class ApiEventRegistrationHelper {
 
     private void registerArenaEvents() {
 
-        register(ArenaCountdownPreStartEvent.class);
-        register(ArenaCountdownStartedEvent.class);
         register(ArenaDisabledEvent.class);
         register(ArenaEnabledEvent.class);
         register(ArenaEndedEvent.class);
