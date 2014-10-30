@@ -26,17 +26,17 @@ that were removed are currently being developed as separate modules in the [PV-S
   
   * Uses GenericsLib scripting and scripting api. Scripts can be loaded and evaluated for a specific arena. Script API's can be registered via modules which gives scripts access to the modules features. The scripts also have access to the GenericsLib script API repository so they can get access to scripts API's registered by other Bukkit plugins.
   
-  * Handles core statistics recording. New statistics types can be registered.
-   
-  * Allows adding new types of spawns, which are primarily used to mark locations, but can also spawn entities depending on the spawn types implementation.
+  * Handles core statistics but leaves adding statistics types and incrementing to modules/extensions.
   
-  * Handles core points. New point types can be registered.
+  * Handles core points system but leaves adding new points types and incrementing to modules/extensions.
+   
+  * Uses 3 integrated spawn types: Lobby, Game, and Spectator. Allows adding new types of spawns, which are primarily used to mark locations, but can also spawn entities depending on the spawn types implementation. The spawns can be used by scripts.
   
   * New commands can be added and sub commands can be added to existing commands.
   
   * Built in team support.
   
-  * Built in localization support.
+  * Built in localization support via GenericsLib.
 
 
 *Dependencies*
