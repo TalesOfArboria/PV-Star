@@ -42,6 +42,10 @@ import org.bukkit.Location;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Abstract implementation for player managers
+ * (Lobby, Game and Spectator Manager)
+ */
 public abstract class AbstractPlayerManager implements PlayerManager {
 
     private Arena _arena;
