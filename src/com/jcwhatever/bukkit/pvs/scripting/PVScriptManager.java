@@ -26,6 +26,7 @@ package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.scripting.GenericsScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.IScript;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.scripting.ScriptHelper.ScriptConstructor;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiEconomy;
@@ -43,6 +44,7 @@ import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptManager;
+import com.jcwhatever.bukkit.pvs.scripting.api.ArenaRepoApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.EventsApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.PlayerApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.SchedulerApi;
@@ -110,6 +112,9 @@ public class PVScriptManager implements ScriptManager {
         registerApiType(new SchedulerApi());
         registerApiType(new SpawnApi());
         registerApiType(new StatsApi());
+
+        // Register scripts in global script api repository
+        ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), ArenaRepoApi.class);
     }
 
 
