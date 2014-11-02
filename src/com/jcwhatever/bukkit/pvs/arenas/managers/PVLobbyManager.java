@@ -48,11 +48,6 @@ import java.util.List;
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, GenericsEventListener {
 
     @Localizable static final String _JOINED = "{0} has joined.";
-    @Localizable static final String _AUTO_START_INFO =
-            "{YELLOW}Countdown to start will begin once {0} or more players " +
-                    "have joined. Type '/pv vote' if you would like to start the countdown now. All players " +
-                    "must vote in order to start the countdown early.";
-
 
     private LobbyManagerSettings _settings;
 
@@ -115,11 +110,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
     protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
 
         tell(Lang.get(_JOINED), player.getName());
-
-        if (getSettings().hasAutoStart() && !tryAutoStart()) {
-
-            Msg.tell(player, Lang.get(_AUTO_START_INFO, getSettings().getMinAutoStartPlayers()));
-        }
 
         return getSpawnLocation(player);
     }
