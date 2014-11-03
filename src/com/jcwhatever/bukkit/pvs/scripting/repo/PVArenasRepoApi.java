@@ -42,13 +42,13 @@ import java.util.List;
 import java.util.UUID;
 
 @IScriptApiInfo(
-        variableName = "pvarena",
+        variableName = "pvArenas",
         description = "Access arenas through scripts.")
-public class ArenaRepoApi extends ScriptApi {
+public class PVArenasRepoApi extends ScriptApi {
 
     private static ApiObject _apiObject;
 
-    public ArenaRepoApi(Plugin plugin) {
+    public PVArenasRepoApi(Plugin plugin) {
         PreCon.notNull(plugin);
 
         // plugin constructor is for ScriptApiRepo
