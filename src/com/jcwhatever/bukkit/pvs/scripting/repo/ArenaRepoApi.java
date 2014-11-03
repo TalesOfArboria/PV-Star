@@ -22,8 +22,9 @@
  */
 
 
-package com.jcwhatever.bukkit.pvs.scripting.api;
+package com.jcwhatever.bukkit.pvs.scripting.repo;
 
+import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -40,6 +41,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+@IScriptApiInfo(
+        variableName = "pvarena",
+        description = "Access arenas through scripts.")
 public class ArenaRepoApi extends ScriptApi {
 
     private static ApiObject _apiObject;

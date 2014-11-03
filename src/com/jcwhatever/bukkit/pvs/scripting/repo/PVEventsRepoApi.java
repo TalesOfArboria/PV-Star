@@ -1,17 +1,17 @@
-/* This file is part of PV-Star for Bukkit, licensed under the MIT License (MIT).
- *
+/* This file is part of ${MODULE_NAME}, licensed under the MIT License (MIT).
+ * 
  * Copyright (c) JCThePants (www.jcwhatever.com)
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,49 +22,67 @@
  */
 
 
-package com.jcwhatever.bukkit.pvs.scripting.api;
+package com.jcwhatever.bukkit.pvs.scripting.repo;
 
 import com.jcwhatever.bukkit.generic.collections.MultiValueMap;
 import com.jcwhatever.bukkit.generic.events.AbstractGenericsEvent;
 import com.jcwhatever.bukkit.generic.events.EventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
+import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
+import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
-import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
-import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
+import org.bukkit.plugin.Plugin;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Provide scripts with ability to register and unregister PV-Star
- * events with the owning arena.
- */
-public class EventsApi extends ScriptApi {
+@IScriptApiInfo(
+        variableName = "pvEvents",
+        description = "register PV-Star events."
+)
+public class PVEventsRepoApi extends GenericsScriptApi {
 
-    @Override
-    public String getVariableName() {
-        return "events";
+    private LinkedList<ApiObject> _objects = new LinkedList<>();
+
+    /**
+     * Constructor.
+     *
+     * @param plugin The owning plugin
+     */
+    public PVEventsRepoApi(Plugin plugin) {
+        super(plugin);
     }
 
     @Override
-    protected IScriptApiObject onCreateApiObject(Arena arena, EvaluatedScript script) {
-        PreCon.notNull(arena);
-
-        return new ApiObject(arena);
+    public IScriptApiObject getApiObject(IEvaluatedScript script) {
+        ApiObject object = new ApiObject();
+        _objects.add(object);
+        return object;
     }
 
-    public class ApiObject implements IScriptApiObject {
+    @Override
+    public void reset() {
 
-        private final Arena _arena;
-        private final MultiValueMap<Class<? extends AbstractGenericsEvent>, EventHandler> _registeredHandlers = new MultiValueMap<>(30);
-
-        ApiObject(Arena arena) {
-            _arena = arena;
+        while (!_objects.isEmpty()) {
+             ApiObject object = _objects.remove();
+            object.reset();
         }
+    }
+
+    public static class ApiObject implements IScriptApiObject {
+
+        private final MultiValueMap<Class<? extends AbstractGenericsEvent>, EventWrapper> _registeredHandlers =
+                new MultiValueMap<>(30);
+
+
+        ApiObject() {}
 
         /**
          * Reset api and release resources.
@@ -76,12 +94,12 @@ public class EventsApi extends ScriptApi {
 
             for (Class<? extends AbstractGenericsEvent> event : events) {
 
-                List<EventHandler> handlers = _registeredHandlers.getValues(event);
+                List<EventWrapper> handlers = _registeredHandlers.getValues(event);
                 if (handlers == null)
                     continue;
 
-                for (EventHandler handler : handlers) {
-                    _arena.getEventManager().unregister(event, handler);
+                for (EventWrapper handler : handlers) {
+                   handler.getArena().getEventManager().unregister(event, handler);
                 }
             }
 
@@ -95,7 +113,8 @@ public class EventsApi extends ScriptApi {
          * @param priority   The event priority.
          * @param handler    The event handler.
          */
-        public void on(String eventName, String priority, final ArenaEventHandler handler) {
+        public void on(String arenaName, String eventName, String priority, ArenaEventHandler handler) {
+            PreCon.notNullOrEmpty(arenaName);
             PreCon.notNullOrEmpty(eventName);
             PreCon.notNullOrEmpty(priority);
             PreCon.notNull(handler);
@@ -108,17 +127,17 @@ public class EventsApi extends ScriptApi {
                 e.printStackTrace();
             }
 
-            EventHandler eventHandler = new EventHandler() {
-                @Override
-                public void call(AbstractGenericsEvent event) {
-                    handler.onCall(event);
-                }
-            };
+            List<Arena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
+            PreCon.isValid(arenas.size() == 1);
 
-            Class<? extends AbstractArenaEvent> eventClass = PVStarAPI.getScriptManager().getEventType(eventName.toLowerCase());
+            EventWrapper eventHandler = new EventWrapper(arenas.get(0), handler);
+
+            Class<? extends AbstractArenaEvent> eventClass =
+                    PVStarAPI.getScriptManager().getEventType(eventName.toLowerCase());
+
             PreCon.notNull(eventClass);
 
-            _arena.getEventManager().register(eventClass, eventPriority, eventHandler);
+            arenas.get(0).getEventManager().register(eventClass, eventPriority, eventHandler);
 
             _registeredHandlers.put(eventClass, eventHandler);
         }
@@ -127,5 +146,25 @@ public class EventsApi extends ScriptApi {
     public static interface ArenaEventHandler {
 
         public abstract void onCall(Object event);
+    }
+
+    private static class EventWrapper implements EventHandler {
+
+        private final Arena _arena;
+        private final ArenaEventHandler _handler;
+
+        EventWrapper(Arena arena, ArenaEventHandler handler) {
+            _arena = arena;
+            _handler = handler;
+        }
+
+        public Arena getArena() {
+            return _arena;
+        }
+
+        @Override
+        public void call(AbstractGenericsEvent event) {
+            _handler.onCall(event);
+        }
     }
 }

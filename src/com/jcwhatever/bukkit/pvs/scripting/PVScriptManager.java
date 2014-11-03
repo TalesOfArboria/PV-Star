@@ -44,12 +44,13 @@ import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptManager;
-import com.jcwhatever.bukkit.pvs.scripting.api.ArenaRepoApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.EventsApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.PlayerApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.SchedulerApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.SpawnApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.StatsApi;
+import com.jcwhatever.bukkit.pvs.scripting.repo.ArenaRepoApi;
+import com.jcwhatever.bukkit.pvs.scripting.repo.PVEventsRepoApi;
 import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
@@ -65,6 +66,7 @@ import java.util.Map;
  */
 public class PVScriptManager implements ScriptManager {
 
+    private Map<String, Class<? extends AbstractArenaEvent>> _registeredEvents = new HashMap<>(250);
     private final GenericsScriptManager _scriptRepository;
     private final Map<String, IScriptApi> _apiMap = new HashMap<>(30);
     private final File _scriptFolder;
@@ -115,6 +117,7 @@ public class PVScriptManager implements ScriptManager {
 
         // Register scripts in global script api repository
         ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), ArenaRepoApi.class);
+        ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVEventsRepoApi.class);
     }
 
 
@@ -134,7 +137,7 @@ public class PVScriptManager implements ScriptManager {
     public void registerEventType(Class<? extends AbstractArenaEvent> eventClass) {
         PreCon.notNull(eventClass);
 
-        _eventsApi.registerEventType("", eventClass);
+        registerEventType("", eventClass);
     }
 
     /*
@@ -146,7 +149,20 @@ public class PVScriptManager implements ScriptManager {
         PreCon.notNull(module);
         PreCon.notNull(eventClass);
 
-        _eventsApi.registerEventType(module.getName().toLowerCase() + ':', eventClass);
+        registerEventType(module.getName().toLowerCase() + ':', eventClass);
+    }
+
+    /**
+     * Get a registered event type.
+     *
+     * @param name  The name of the event type. The name is the name of the registering module
+     *              followed by a period and the name of the event class. If the event is a PV-Star
+     *              event, then the name is simply the event class name.
+     */
+    @Nullable
+    @Override
+    public Class<? extends AbstractArenaEvent> getEventType(String name) {
+        return _registeredEvents.get(name.toLowerCase());
     }
 
     /*
@@ -245,4 +261,8 @@ public class PVScriptManager implements ScriptManager {
         _scriptRepository.loadScripts(_scriptFolder, DirectoryTraversal.RECURSIVE);
     }
 
+
+    private void registerEventType(String context, Class<? extends AbstractArenaEvent> eventClass) {
+        _registeredEvents.put(context.toLowerCase() + eventClass.getSimpleName().toLowerCase(), eventClass);
+    }
 }
