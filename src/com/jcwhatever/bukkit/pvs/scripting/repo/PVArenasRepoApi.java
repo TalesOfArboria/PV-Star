@@ -30,8 +30,10 @@ import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
+import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 import org.bukkit.Location;
@@ -126,6 +128,53 @@ public class PVArenasRepoApi extends ScriptApi {
             ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
             return arena.join(p, AddPlayerReason.PLAYER_JOIN);
+        }
+
+        /**
+         * Remove a player from the specified arena.
+         *
+         * @param arena   The arena.
+         * @param player  The player.
+         *
+         * @return  True if player was removed.
+         */
+        public boolean leave(Arena arena, Object player) {
+            PreCon.notNull(arena);
+            PreCon.notNull(player);
+
+            ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+
+            return arena.remove(p, RemovePlayerReason.PLAYER_LEAVE);
+        }
+
+        /**
+         * Forward the player from their current arena to the specified
+         * arena.
+         *
+         * @param toArena  The arena to forward to.
+         * @param player   The player to forward.
+         *
+         * @return  True if the player was forwarded.
+         */
+        public boolean forward(Arena toArena, Object player) {
+            PreCon.notNull(toArena);
+            PreCon.notNull(player);
+
+            ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+            if (p.getArena() == null)
+                return false;
+
+            PlayerManager manager = p.getRelatedManager();
+            if (manager == null)
+                return false;
+
+            if (!manager.removePlayer(p, RemovePlayerReason.FORWARDING))
+                return false;
+
+            if (!toArena.getLobbyManager().addPlayer(p, AddPlayerReason.FORWARDING))
+                return false;
+
+            return true;
         }
 
     }
