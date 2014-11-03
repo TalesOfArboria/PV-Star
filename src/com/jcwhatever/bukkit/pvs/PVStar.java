@@ -84,6 +84,12 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     private PVScriptManager _scriptManager;
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
+    private boolean _isLoaded;
+
+    @Override
+    public boolean isLoaded() {
+        return _isLoaded;
+    }
 
     @Override
     public String getChatPrefix() {
@@ -182,7 +188,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         return _moduleLoader.getModuleInfo(module);
     }
 
-
     @Override
     protected void onEnablePlugin() {
         PVStarAPI.setImplementation(this);
@@ -236,6 +241,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
                         new SharingListener());
 
                 Msg.info("Modules loaded.");
+                _isLoaded = true;
             }
         });
     }
@@ -248,6 +254,8 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         for (PVStarModule module : modules) {
             module.dispose();
         }
+
+        _isLoaded = false;
     }
 
     private void loadScripts() {
