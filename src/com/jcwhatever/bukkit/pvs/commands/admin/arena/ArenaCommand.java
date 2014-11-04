@@ -44,7 +44,6 @@ public class ArenaCommand extends AbstractPVCommand {
         registerSubCommand(MaxPlayersSubCommand.class);
         registerSubCommand(MinPlayersSubCommand.class);
         registerSubCommand(MobSpawnSubCommand.class);
-        registerSubCommand(OutsidersSubCommand.class);
         registerSubCommand(SelectSubCommand.class);
         registerSubCommand(SetRegionSubCommand.class);
         registerSubCommand(TypeNameSubCommand.class);

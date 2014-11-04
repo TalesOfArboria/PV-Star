@@ -24,10 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.settings;
 
-import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.LivesBehavior;
-import com.jcwhatever.bukkit.pvs.api.arena.options.OutOfBoundsAction;
 import com.jcwhatever.bukkit.pvs.api.arena.options.PointsBehavior;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.GameManagerSettings;
 
@@ -39,7 +37,6 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
     private int _lives = 1;
     private int _points = 0;
     private boolean _postGameCleanup = true;
-    private OutOfBoundsAction _outOfBoundsAction = OutOfBoundsAction.NONE;
     private LivesBehavior _livesBehavior = LivesBehavior.ADDITIVE;
     private PointsBehavior _pointsBehavior = PointsBehavior.STATIC;
 
@@ -52,29 +49,8 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         _lives = getDataNode().getInteger("lives", _lives);
         _points = getDataNode().getInteger("points", _points);
         _postGameCleanup = getDataNode().getBoolean("post-game-cleanup", _postGameCleanup);
-        _outOfBoundsAction = getDataNode().getEnum("out-of-bounds", _outOfBoundsAction, OutOfBoundsAction.class);
         _livesBehavior = getDataNode().getEnum("lives-behavior", _livesBehavior, LivesBehavior.class);
         _pointsBehavior = getDataNode().getEnum("points-behavior", _pointsBehavior, PointsBehavior.class);
-    }
-
-    /*
-     * Get action to take when player leaves the arena region.
-     */
-    @Override
-    public OutOfBoundsAction getOutOfBoundsAction() {
-        return _outOfBoundsAction;
-    }
-
-    /*
-     * Set out of bounds action.
-     */
-    @Override
-    public void setOutOfBoundsAction(OutOfBoundsAction action) {
-        PreCon.notNull(action);
-
-        _outOfBoundsAction = action;
-
-        save("out-of-bounds", action);
     }
 
     /*

@@ -27,7 +27,6 @@ package com.jcwhatever.bukkit.pvs.arenas.settings;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
-import com.jcwhatever.bukkit.pvs.api.arena.options.OutsidersAction;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
@@ -50,7 +49,6 @@ public class PVArenaSettings implements ArenaSettings {
     private boolean _isEnabled = true;
     private boolean _isMobSpawnEnabled = false;
     private Location _removeLocation;
-    private OutsidersAction _outsidersAction = OutsidersAction.NONE;
     private String _typeDisplayName;
 
     /*
@@ -67,7 +65,6 @@ public class PVArenaSettings implements ArenaSettings {
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
         _isMobSpawnEnabled = _dataNode.getBoolean("mob-spawn", _isMobSpawnEnabled);
         _removeLocation = _dataNode.getLocation("remove-location", _removeLocation);
-        _outsidersAction = _dataNode.getEnum("outsiders-action", _outsidersAction, OutsidersAction.class);
         _typeDisplayName = _dataNode.getString("type-display");
     }
 
@@ -229,26 +226,6 @@ public class PVArenaSettings implements ArenaSettings {
         _removeLocation = location;
 
         save("remove-location", location);
-    }
-
-    /*
-     * Get the action to take when an outsider enters the
-     * arena region.
-     */
-    @Override
-    public OutsidersAction getOutsidersAction() {
-        return _outsidersAction;
-    }
-
-    /*
-     * Set the action to take when an outsider enters the
-     * arena region.
-     */
-    @Override
-    public void setOutsidersAction(OutsidersAction action) {
-        PreCon.notNull(action);
-
-        save("outsiders-action", action);
     }
 
     /*
