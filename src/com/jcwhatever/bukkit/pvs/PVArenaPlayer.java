@@ -273,8 +273,18 @@ public class PVArenaPlayer implements ArenaPlayer {
 
         _isReady = isReady;
 
-        if (_isReady)
-            _arena.getEventManager().call(new PlayerReadyEvent(_arena, this));
+        if (_isReady) {
+
+            PlayerReadyEvent event = new PlayerReadyEvent(_arena, this, null);
+            _arena.getEventManager().call(event);
+
+            if (event.getMessage() != null) {
+                PlayerManager manager = getRelatedManager();
+                if (manager != null) {
+                    manager.tell(event.getMessage());
+                }
+            }
+        }
     }
 
     /*
