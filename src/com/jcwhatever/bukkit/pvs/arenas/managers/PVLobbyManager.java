@@ -26,8 +26,6 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
-import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.GameManager;
@@ -46,8 +44,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, GenericsEventListener {
-
-    @Localizable static final String _JOINED = "{0} has joined.";
 
     private LobbyManagerSettings _settings;
 
@@ -108,8 +104,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
      */
     @Override
     protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
-
-        tell(Lang.get(_JOINED), player.getName());
 
         return getSpawnLocation(player);
     }
