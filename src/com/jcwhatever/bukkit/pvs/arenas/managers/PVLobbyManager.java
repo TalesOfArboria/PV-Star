@@ -211,9 +211,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
     // try ready start when a player is ready
     @GenericsEventHandler
     private void onPlayerReady(PlayerReadyEvent event) {
-
-        tell(event.getPlayer().getTeam().getTextColor() + event.getPlayer().getName() + "{WHITE} is ready to start.");
-
         tryReadyStart();
     }
 }
