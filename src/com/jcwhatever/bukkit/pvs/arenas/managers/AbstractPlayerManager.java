@@ -139,10 +139,11 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
         Location spawnPoint = onAddPlayer(player, reason);
 
-        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, reason, spawnPoint);
+        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, reason, spawnPoint, null);
 
         _arena.getEventManager().call(event);
 
+        // teleport player to spawn location from event
         if (event.getSpawnLocation() != null) {
 
             player.getHandle().teleport(event.getSpawnLocation());
@@ -156,6 +157,11 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
                 }
             }
+        }
+
+        // display message from event
+        if (event.getMessage() != null) {
+            tell(event.getMessage());
         }
 
         return true;
