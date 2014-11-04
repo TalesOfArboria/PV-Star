@@ -24,7 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.scripting.repo;
 
+import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -34,8 +36,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
-import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
@@ -46,27 +46,24 @@ import java.util.UUID;
 @IScriptApiInfo(
         variableName = "pvArenas",
         description = "Access arenas through scripts.")
-public class PVArenasRepoApi extends ScriptApi {
+public class PVArenasRepoApi extends GenericsScriptApi {
 
     private static ApiObject _apiObject;
 
     public PVArenasRepoApi(Plugin plugin) {
-        PreCon.notNull(plugin);
+        super(plugin);
 
-        // plugin constructor is for ScriptApiRepo
+        _apiObject = new ApiObject();
     }
 
     @Override
-    public String getVariableName() {
-        return "pvarena";
-    }
-
-    @Override
-    protected IScriptApiObject onCreateApiObject(Arena arena, EvaluatedScript script) {
-        if (_apiObject == null)
-            _apiObject = new ApiObject();
-
+    public IScriptApiObject getApiObject(IEvaluatedScript script) {
         return _apiObject;
+    }
+
+    @Override
+    public void reset() {
+        // do nothing
     }
 
     public static class ApiObject implements IScriptApiObject {
