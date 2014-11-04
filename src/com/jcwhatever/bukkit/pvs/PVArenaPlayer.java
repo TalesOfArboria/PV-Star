@@ -30,8 +30,8 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayerGroup;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.bukkit.pvs.api.arena.PlayerMeta;
+import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.bukkit.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.bukkit.pvs.api.arena.options.PointsBehavior;
@@ -42,6 +42,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaDeathEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaKillEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerDamagedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamPreChangeEvent;
@@ -493,21 +494,21 @@ public class PVArenaPlayer implements ArenaPlayer {
             case STATIC:
                 // only use arena lives setting if lives have not been changed
                 if (_lives == 0)
-                    _lives = settings.getStartLives();
+                    setLives(settings.getStartLives());
                 break;
 
             case RESET:
                 // always reset lives to current arena setting.
-                _lives = settings.getStartLives();
+                setLives(settings.getStartLives());
                 break;
 
             case ADDITIVE:
                 // Add arena lives to current lives.
-                _lives += settings.getStartLives();
+                setLives(_lives + settings.getStartLives());
                 break;
 
             default:
-                _lives = 1;
+                setLives(1);
                 break;
         }
 
@@ -560,6 +561,25 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
 
         _playerGroup = playerGroup;
+    }
+
+
+    /*
+     *  Set the player lives and run event
+     */
+    private void setLives(int lives) {
+
+        if (_lives == lives || _arena == null)
+            return;
+
+        PlayerLivesChangeEvent event = new PlayerLivesChangeEvent(_arena, this, _lives, lives);
+
+        _arena.getEventManager().call(event);
+
+        if (event.isCancelled())
+            return;
+
+        _lives = event.getNewLives();
     }
 
     /*
