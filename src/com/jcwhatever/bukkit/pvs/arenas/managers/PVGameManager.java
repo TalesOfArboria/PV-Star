@@ -218,14 +218,14 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
         if (player.getTeam() == ArenaTeam.NONE) {
             for (ArenaPlayer otherPlayer : getPlayers()) {
                 if (!player.equals(otherPlayer)) {
-                    callLoseEvent(player, null);
+                    callLoseEvent(player);
                 }
             }
         } else {
             return setWinner(player.getTeam());
         }
 
-        callWinEvent(player, player.getTeam().getTextColor() + player.getName() + " wins!");
+        callWinEvent(player);
 
         end();
         return true;
@@ -246,15 +246,14 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
         for (ArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
                 winningTeam.add(player);
-                callWinEvent(player, null);
+                callWinEvent(player);
             }
             else {
-                callLoseEvent(player, null);
+                callLoseEvent(player);
             }
         }
 
-        TeamWinEvent winEvent = new TeamWinEvent(getArena(), team, winningTeam,
-                team.getTextColor() + team.getDisplay() + " wins!");
+        TeamWinEvent winEvent = new TeamWinEvent(getArena(), team, winningTeam, null);
 
         getArena().getEventManager().call(winEvent);
 
@@ -335,9 +334,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
                 reason == RemovePlayerReason.KICK ||
                 reason == RemovePlayerReason.LOGOUT) {
 
-            String message = player.getTeam().getTextColor() + player.getName() + "{RED} is dead.";
-
-            callLoseEvent(player, message);
+            callLoseEvent(player);
         }
     }
 
@@ -425,8 +422,8 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
     /*
      * Call PlayerWinEvent and display message if any
      */
-    private void callWinEvent(ArenaPlayer player, @Nullable String message) {
-        PlayerWinEvent event = new PlayerWinEvent(getArena(), player, message);
+    private void callWinEvent(ArenaPlayer player) {
+        PlayerWinEvent event = new PlayerWinEvent(getArena(), player, null);
         getArena().getEventManager().call(event);
 
         if (event.getWinMessage() != null)
@@ -437,8 +434,8 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
     /*
      * Call PlayerLoseEvent and display message if any
      */
-    private void callLoseEvent(ArenaPlayer player, @Nullable String message) {
-        PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, message);
+    private void callLoseEvent(ArenaPlayer player) {
+        PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, null);
         getArena().getEventManager().call(event);
 
         if (event.getLoseMessage() != null)
