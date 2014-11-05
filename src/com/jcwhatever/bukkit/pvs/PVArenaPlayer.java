@@ -39,7 +39,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.GameManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerDamagedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
@@ -644,9 +643,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             if (player.getArena() == null)
                 return;
 
-            PlayerDamagedEvent pde = new PlayerDamagedEvent(player.getArena(), player, event);
-
-            if (player.getArena().getEventManager().call(pde).isCancelled() || player.isInvulnerable()) {
+            if (player.isInvulnerable()) {
                 event.setDamage(0.0D);
                 event.setCancelled(true);
             }
