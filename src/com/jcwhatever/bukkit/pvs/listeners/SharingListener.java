@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.bukkit.pvs.events;
+package com.jcwhatever.bukkit.pvs.listeners;
 
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;

@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.bukkit.pvs.events;
+package com.jcwhatever.bukkit.pvs.listeners;
 
 import com.jcwhatever.bukkit.generic.extended.MaterialExt;
 import com.jcwhatever.bukkit.generic.items.ItemStackHelper;
