@@ -33,7 +33,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaMoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
@@ -47,7 +46,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -204,24 +202,6 @@ public class PlayerEventListener implements Listener {
 
         if (!settings.hasFallDamage()) {
             event.setDamage(0.0D);
-            event.setCancelled(true);
-        }
-    }
-
-
-    @EventHandler
-    private void onPlayerMove(PlayerMoveEvent event) {
-
-        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
-
-        if (player.getArena() == null)
-            return;
-
-        PlayerArenaMoveEvent moveEvent = new PlayerArenaMoveEvent(player.getArena(), player, event);
-
-        player.getArena().getEventManager().call(moveEvent);
-
-        if (moveEvent.isCancelled()) {
             event.setCancelled(true);
         }
     }
