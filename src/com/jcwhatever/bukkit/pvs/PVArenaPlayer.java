@@ -625,8 +625,10 @@ public class PVArenaPlayer implements ArenaPlayer {
             if (player.isImmobilized()) {
                 Location fr = event.getFrom();
                 Location to = event.getTo();
-                Location reset = new Location(fr.getWorld(), fr.getX(), fr.getY(), fr.getZ(), to.getYaw(), to.getPitch());
-                event.setTo(reset);
+                to.setX(fr.getX());
+                to.setY(fr.getY());
+                to.setZ(fr.getZ());
+                event.setTo(to);
             }
         }
 
