@@ -111,6 +111,8 @@ public class PVArenaPlayer implements ArenaPlayer {
     // the player starts a new game.
     private PlayerMeta _sessionMeta = new PVPlayerMeta();
 
+    private PlayerMeta _globalMeta = new PVPlayerMeta();
+
     // private constructor
     private PVArenaPlayer(Player p) {
         _player = p;
@@ -412,6 +414,15 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
 
         return meta;
+    }
+
+    /**
+     * Get the players global meta data object
+     * which is used until the {@code ArenaPlayer} instance is disposed.
+     */
+    @Override
+    public PlayerMeta getMeta() {
+        return _globalMeta;
     }
 
     /*
