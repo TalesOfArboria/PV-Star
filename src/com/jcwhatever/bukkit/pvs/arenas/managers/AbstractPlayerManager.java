@@ -128,6 +128,9 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         if (_players.hasPlayer(player))
             return false;
 
+        if (!getArena().getSettings().isEnabled())
+            return false;
+
         if (reason != AddPlayerReason.ARENA_RELATION_CHANGE) {
 
             if (_arena.getEventManager().call(new PlayerPreAddEvent(_arena, player, reason)).isCancelled())
