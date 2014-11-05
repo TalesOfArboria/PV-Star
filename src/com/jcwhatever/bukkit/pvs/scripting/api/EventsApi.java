@@ -25,7 +25,6 @@
 package com.jcwhatever.bukkit.pvs.scripting.api;
 
 import com.jcwhatever.bukkit.generic.collections.MultiValueMap;
-import com.jcwhatever.bukkit.generic.events.AbstractGenericsEvent;
 import com.jcwhatever.bukkit.generic.events.EventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
@@ -60,7 +59,7 @@ public class EventsApi extends ScriptApi {
     public class ApiObject implements IScriptApiObject {
 
         private final Arena _arena;
-        private final MultiValueMap<Class<? extends AbstractGenericsEvent>, EventHandler> _registeredHandlers = new MultiValueMap<>(30);
+        private final MultiValueMap<Class<?>, EventHandler> _registeredHandlers = new MultiValueMap<>(30);
 
         ApiObject(Arena arena) {
             _arena = arena;
@@ -72,9 +71,9 @@ public class EventsApi extends ScriptApi {
         @Override
         public void reset() {
 
-            Set<Class<? extends AbstractGenericsEvent>> events = _registeredHandlers.keySet();
+            Set<Class<?>> events = _registeredHandlers.keySet();
 
-            for (Class<? extends AbstractGenericsEvent> event : events) {
+            for (Class<?> event : events) {
 
                 List<EventHandler> handlers = _registeredHandlers.getValues(event);
                 if (handlers == null)
@@ -110,7 +109,7 @@ public class EventsApi extends ScriptApi {
 
             EventHandler eventHandler = new EventHandler() {
                 @Override
-                public void call(AbstractGenericsEvent event) {
+                public void call(Object event) {
                     handler.onCall(event);
                 }
             };
