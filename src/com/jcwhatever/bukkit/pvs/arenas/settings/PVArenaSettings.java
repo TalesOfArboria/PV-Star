@@ -60,6 +60,7 @@ public class PVArenaSettings implements ArenaSettings {
         _arena = arena;
         _dataNode = arena.getDataNode("settings.arena");
 
+        _isEnabled = _dataNode.getBoolean("enabled", _isEnabled);
         _minPlayers = _dataNode.getInteger("min-players", _minPlayers);
         _maxPlayers = _dataNode.getInteger("max-players", _maxPlayers);
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
@@ -101,6 +102,9 @@ public class PVArenaSettings implements ArenaSettings {
 
             _arena.getEventManager().call(new ArenaDisabledEvent(_arena));
         }
+
+        _dataNode.set("enabled", _isEnabled);
+        _dataNode.saveAsync(null);
     }
 
     /*
