@@ -26,6 +26,7 @@ package com.jcwhatever.bukkit.pvs.modules;
 
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 

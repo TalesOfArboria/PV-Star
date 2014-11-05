@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;

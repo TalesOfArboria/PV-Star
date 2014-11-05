@@ -45,15 +45,16 @@ import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.SpawnFilter;
 import com.jcwhatever.bukkit.pvs.spawns.SpawnpointsCollection;
+
 import org.bukkit.Location;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 /**
  * Spawn manager implementation.

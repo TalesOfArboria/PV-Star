@@ -26,12 +26,13 @@ package com.jcwhatever.bukkit.pvs.spawns;
 
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 
 public class SpectatorSpawnType extends SpawnType {

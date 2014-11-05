@@ -37,10 +37,11 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreAddEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreRemoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
+
 import org.bukkit.Location;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * Abstract implementation for player managers

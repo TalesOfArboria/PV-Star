@@ -60,13 +60,14 @@ import com.jcwhatever.bukkit.pvs.scripting.ApiEventRegistrationHelper;
 import com.jcwhatever.bukkit.pvs.scripting.PVScriptManager;
 import com.jcwhatever.bukkit.pvs.signs.PVSignManager;
 import com.jcwhatever.bukkit.pvs.stats.PVStatsManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * PV-Star plugin implementation.

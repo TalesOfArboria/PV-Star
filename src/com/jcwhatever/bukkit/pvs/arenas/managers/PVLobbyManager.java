@@ -38,10 +38,11 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVLobbySettings;
+
 import org.bukkit.Location;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, GenericsEventListener {
 

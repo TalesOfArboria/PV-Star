@@ -35,6 +35,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

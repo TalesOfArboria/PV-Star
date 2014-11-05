@@ -50,15 +50,16 @@ import com.jcwhatever.bukkit.pvs.scripting.api.SpawnApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.StatsApi;
 import com.jcwhatever.bukkit.pvs.scripting.repo.PVArenasRepoApi;
 import com.jcwhatever.bukkit.pvs.scripting.repo.PVEventsRepoApi;
+
 import org.bukkit.plugin.Plugin;
 
-import javax.annotation.Nullable;
-import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
+import javax.script.ScriptEngineManager;
 
 /**
  * A central repository of unevaluated scripts which can be used for one or more arenas.

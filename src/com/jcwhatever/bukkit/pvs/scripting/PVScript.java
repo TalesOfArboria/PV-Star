@@ -34,10 +34,10 @@ import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 
+import java.util.Collection;
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import java.util.Collection;
 
 /**
  * An unevaluated script which is used to produce

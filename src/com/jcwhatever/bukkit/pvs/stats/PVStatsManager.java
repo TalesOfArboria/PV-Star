@@ -29,12 +29,12 @@ import com.jcwhatever.bukkit.pvs.api.stats.ArenaStats;
 import com.jcwhatever.bukkit.pvs.api.stats.StatType;
 import com.jcwhatever.bukkit.pvs.api.stats.StatsManager;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class PVStatsManager implements StatsManager {
 

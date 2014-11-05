@@ -36,6 +36,7 @@ import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
+
 import org.bukkit.plugin.Plugin;
 
 import java.util.LinkedList;

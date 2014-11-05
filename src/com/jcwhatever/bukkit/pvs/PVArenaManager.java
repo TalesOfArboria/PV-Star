@@ -37,17 +37,18 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.ArenaTypeInfo;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 /**
  * Arena Manager implementation.

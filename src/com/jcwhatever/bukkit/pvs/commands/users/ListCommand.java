@@ -31,12 +31,13 @@ import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.FormatTemplate;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
+import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 

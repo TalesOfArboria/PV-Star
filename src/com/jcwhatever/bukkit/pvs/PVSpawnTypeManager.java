@@ -27,14 +27,14 @@ package com.jcwhatever.bukkit.pvs;
 import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnTypeManager;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.spawns.GameSpawnType;
 import com.jcwhatever.bukkit.pvs.spawns.LobbySpawnType;
 import com.jcwhatever.bukkit.pvs.spawns.LocationSpawnType;
 import com.jcwhatever.bukkit.pvs.spawns.SpectatorSpawnType;
-import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+
 import org.bukkit.entity.EntityType;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -42,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Manages types of spawns

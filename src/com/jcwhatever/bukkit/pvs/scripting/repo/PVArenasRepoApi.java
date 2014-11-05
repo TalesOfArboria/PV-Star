@@ -36,12 +36,13 @@ import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
+
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 @IScriptApiInfo(
         variableName = "pvArenas",

@@ -65,6 +65,7 @@ import com.jcwhatever.bukkit.pvs.arenas.managers.PVSpectatorManager;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVTeamManager;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVArenaSettings;
 import com.jcwhatever.bukkit.pvs.scripting.PVArenaScriptManager;
+
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;

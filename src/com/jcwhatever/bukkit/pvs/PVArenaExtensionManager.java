@@ -33,11 +33,11 @@ import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingExtensionAnnotationException;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 
 public class PVArenaExtensionManager extends ArenaExtensionManager {

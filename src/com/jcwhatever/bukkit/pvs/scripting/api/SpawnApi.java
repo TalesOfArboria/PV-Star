@@ -36,9 +36,9 @@ import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * Provides scripts with Api support to the arena spawn manager.

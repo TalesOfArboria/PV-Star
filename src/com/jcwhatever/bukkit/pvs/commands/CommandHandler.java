@@ -40,6 +40,7 @@ import com.jcwhatever.bukkit.pvs.commands.users.JoinCommand;
 import com.jcwhatever.bukkit.pvs.commands.users.LeaveCommand;
 import com.jcwhatever.bukkit.pvs.commands.users.ListCommand;
 import com.jcwhatever.bukkit.pvs.commands.users.VoteCommand;
+
 import org.bukkit.plugin.Plugin;
 
 public class CommandHandler extends AbstractCommandHandler {

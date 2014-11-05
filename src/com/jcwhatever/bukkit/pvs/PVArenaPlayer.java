@@ -43,6 +43,7 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamPreChangeEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -54,10 +55,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class PVArenaPlayer implements ArenaPlayer {
 

@@ -33,12 +33,12 @@ import com.jcwhatever.bukkit.pvs.api.exceptions.InvalidNameException;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingExtensionAnnotationException;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Repository of arena extension types.
