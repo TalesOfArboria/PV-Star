@@ -40,7 +40,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.GameManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaDeathEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaKillEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerDamagedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
@@ -49,13 +48,11 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamPreChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -624,25 +621,6 @@ public class PVArenaPlayer implements ArenaPlayer {
                 // remove player from arena if no more lives
                 if (player.getLives() < 1) {
                     arena.remove(player, RemovePlayerReason.LOSE);
-                }
-            }
-        }
-
-        /*
-         * Handle player kills within arenas.
-         */
-        @EventHandler
-        private void onPlayerKill(EntityDeathEvent event) {
-
-            LivingEntity deadEntity = event.getEntity();
-
-            Player p = deadEntity.getKiller();
-
-            if (p != null) {
-                ArenaPlayer player = PVArenaPlayer.get(p);
-                if (player.getArena() != null) {
-                    player.getArena().getEventManager().call(
-                            new PlayerArenaKillEvent(player.getArena(), player, event, deadEntity));
                 }
             }
         }
