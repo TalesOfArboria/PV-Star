@@ -37,7 +37,6 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerAddedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaDeathEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaKillEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerBlockInteractEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerDamagedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinQueryEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLoseEvent;
@@ -92,7 +91,6 @@ public class ApiEventRegistrationHelper {
         register(PlayerArenaDeathEvent.class);
         register(PlayerArenaKillEvent.class);
         register(PlayerArenaRespawnEvent.class);
-        register(PlayerBlockInteractEvent.class);
         register(PlayerDamagedEvent.class);
         register(PlayerJoinQueryEvent.class);
         register(PlayerLoseEvent.class);

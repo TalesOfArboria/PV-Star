@@ -35,7 +35,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaMoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerBlockInteractEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import org.bukkit.entity.Player;
@@ -46,7 +45,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -228,25 +226,4 @@ public class PlayerEventListener implements Listener {
         }
     }
 
-    /*
-       Handle arena damage (Blocks)
-     */
-    @EventHandler
-    private void onPlayerInteract(PlayerInteractEvent event) {
-
-        if (!event.hasBlock())
-            return;
-
-        ArenaPlayer player = PVStarAPI.getArenaPlayer(event.getPlayer());
-        Arena arena = player.getArena();
-        if (arena == null)
-            return;
-
-        PlayerBlockInteractEvent interactEvent = new PlayerBlockInteractEvent(arena, player, event);
-        arena.getEventManager().call(interactEvent);
-
-        if (interactEvent.isCancelled()) {
-            event.setCancelled(true);
-        }
-    }
 }
