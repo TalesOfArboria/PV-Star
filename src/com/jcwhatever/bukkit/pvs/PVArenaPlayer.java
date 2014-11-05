@@ -39,7 +39,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.GameManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaDeathEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerDamagedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
@@ -437,7 +436,7 @@ public class PVArenaPlayer implements ArenaPlayer {
      * Blame only works with PV-Star events.
      */
     @Override
-    public void kill(ArenaPlayer blame) {
+    public void kill(@Nullable ArenaPlayer blame) {
         _deathBlamePlayer = blame;
         _player.damage(_player.getMaxHealth());
     }
@@ -587,31 +586,18 @@ public class PVArenaPlayer implements ArenaPlayer {
         /*
          * Handle player deaths within arenas.
          */
-        @EventHandler(priority = EventPriority.HIGHEST)
+        @EventHandler(priority = EventPriority.LOWEST)
         private void onPlayerDeath(PlayerDeathEvent event) {
 
             PVArenaPlayer player = PVArenaPlayer.get(event.getEntity());
 
             Arena arena = player.getArena();
-
             if (arena == null)
                 return;
 
-            // check for pvp killer
-            ArenaPlayer killer;
-            killer = event.getEntity() != null
-                    ? PVArenaPlayer.get(event.getEntity())
-                    : player._deathBlamePlayer;
+            double health = event.getEntity().getHealth();
 
-            PlayerArenaDeathEvent deathEvent = new PlayerArenaDeathEvent(arena, player, killer, event);
-
-            if (arena.getEventManager().call(deathEvent).isCancelled()) {
-                double health = player.getHandle().getHealth();
-
-                if (Double.compare(health, 0.0D) == 0 || health < 0.0D)
-                    player.getHandle().setHealth(1.0D);
-            }
-            else {
+            if (Double.compare(health, 0.0D) == 0 || health < 0.0D) {
 
                 // decrement player lives
                 player.setLives(player._lives - 1);
