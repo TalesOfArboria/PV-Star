@@ -49,6 +49,7 @@ import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.PVArena;
 import com.jcwhatever.bukkit.pvs.commands.CommandHandler;
 import com.jcwhatever.bukkit.pvs.commands.PVCommandHelper;
+import com.jcwhatever.bukkit.pvs.listeners.BukkitEventForwarder;
 import com.jcwhatever.bukkit.pvs.listeners.MobEventListener;
 import com.jcwhatever.bukkit.pvs.listeners.PlayerEventListener;
 import com.jcwhatever.bukkit.pvs.listeners.PvpListener;
@@ -84,6 +85,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     private PVScriptManager _scriptManager;
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
+    private BukkitEventForwarder _eventForwarder;
     private boolean _isLoaded;
 
     @Override
@@ -240,6 +242,11 @@ public class PVStar extends GenericsPlugin implements IPVStar {
                         new PvpListener(),
                         new SharingListener());
 
+                // forward global Bukkit events to the appropriate
+                // arena event manager.
+                _eventForwarder = new BukkitEventForwarder();
+                GenericsEventManager.getGlobal().addCallHandler(_eventForwarder);
+
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
             }
@@ -253,6 +260,11 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
         for (PVStarModule module : modules) {
             module.dispose();
+        }
+
+        if (_eventForwarder != null) {
+            GenericsEventManager.getGlobal().removeCallHandler(_eventForwarder);
+            _eventForwarder = null;
         }
 
         _isLoaded = false;
