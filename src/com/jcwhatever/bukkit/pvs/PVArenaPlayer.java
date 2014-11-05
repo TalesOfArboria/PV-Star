@@ -617,7 +617,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             else {
 
                 // decrement player lives
-                player._lives -= 1;
+                player.setLives(player._lives - 1);
 
                 player._deathBlamePlayer = null;
 
