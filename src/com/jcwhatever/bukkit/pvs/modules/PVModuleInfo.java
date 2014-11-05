@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.modules;
 
 import com.jcwhatever.bukkit.generic.storage.YamlDataStorage;
+import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.ModuleInfo;
 
@@ -45,6 +46,7 @@ public class PVModuleInfo implements ModuleInfo {
     private String _version;
     private String _description;
     private long _logicalVersion;
+    private List<String> _authors;
     private Set<String> _bukkitDepends;
     private Set<String> _bukkitSoftDepends;
     private Set<String> _moduleDepends;
@@ -96,6 +98,14 @@ public class PVModuleInfo implements ModuleInfo {
     @Override
     public String getDescription() {
         return _description;
+    }
+
+    /**
+     * Get the modules author names.
+     */
+    @Override
+    public List<String> getAuthors() {
+        return _authors;
     }
 
     /*
@@ -171,6 +181,23 @@ public class PVModuleInfo implements ModuleInfo {
 
         // get the optional description
         _description = moduleNode.getString("description", "");
+
+        // get module authors
+        String rawAuthors = moduleNode.getString("authors");
+
+        if (rawAuthors == null) {
+            _authors = Collections.unmodifiableList(new ArrayList<String>(0));
+        }
+        else {
+            String[] authorArray = TextUtils.PATTERN_COMMA.split(rawAuthors);
+            ArrayList<String> authors = new ArrayList<>(authorArray.length);
+
+            for (String author : authorArray) {
+                authors.add(author.trim());
+            }
+
+            _authors = Collections.unmodifiableList(authors);
+        }
 
         // get Bukkit dependencies
         List<String> bukkitDepends = moduleNode.getStringList("bukkit-depends",
