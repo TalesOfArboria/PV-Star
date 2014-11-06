@@ -60,7 +60,7 @@ public class LivesSubCommand extends AbstractPVCommand {
         }
         else {
 
-            int lives = args.getInt("amount");
+            int lives = args.getInteger("amount");
 
             arena.getGameManager().getSettings().setStartLives(lives);
 

@@ -57,7 +57,7 @@ public class MinPlayersSubCommand extends AbstractPVCommand {
             tell(sender, Lang.get(_VIEW_MIN, arena.getName(), arena.getSettings().getMinPlayers()));
         }
         else {
-            int min = args.getInt("min");
+            int min = args.getInteger("min");
 
             arena.getSettings().setMinPlayers(min);
 

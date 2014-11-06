@@ -80,7 +80,7 @@ public class SetSubCommand extends AbstractPVCommand {
         }
         else {
 
-            int points = args.getInt("amount");
+            int points = args.getInteger("amount");
 
             handler.setPoints(points);
 

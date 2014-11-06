@@ -58,7 +58,7 @@ public class ListSubCommand extends AbstractPVCommand {
         if (arena == null)
             return; // finished
 
-        int page = args.getInt("page");
+        int page = args.getInteger("page");
         List<String> scriptNames = arena.getScriptManager().getScriptNames();
         Collections.sort(scriptNames);
 

@@ -60,7 +60,7 @@ public class ListCommand extends AbstractPVCommand {
     public void execute(CommandSender sender, CommandArguments args) throws InvalidValueException {
 
 
-        int page = args.getInt("page");
+        int page = args.getInteger("page");
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 

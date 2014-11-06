@@ -57,7 +57,7 @@ public class MaxPlayersSubCommand extends AbstractPVCommand {
             tell(sender, Lang.get(_VIEW_MAX, arena.getName(), arena.getSettings().getMinPlayers()));
         }
         else {
-            int max = args.getInt("max");
+            int max = args.getInteger("max");
 
             arena.getSettings().setMaxPlayers(max);
 

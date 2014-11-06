@@ -60,7 +60,7 @@ public class MinPlayersSubCommand extends AbstractPVCommand {
         }
         else {
 
-            int min = args.getInt("amount");
+            int min = args.getInteger("amount");
 
             arena.getLobbyManager().getSettings().setMinAutoStartPlayers(min);
 

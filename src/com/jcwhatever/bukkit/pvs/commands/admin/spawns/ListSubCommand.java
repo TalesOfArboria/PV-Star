@@ -65,7 +65,7 @@ public class ListSubCommand extends AbstractPVCommand {
         if (arena == null)
             return; // finish
 
-        int page = args.getInt("page");
+        int page = args.getInteger("page");
 
         String typeName = args.getString("type");
 
