@@ -211,7 +211,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
     // try ready start when a player is ready
     @GenericsEventHandler
-    private void onPlayerReady(PlayerReadyEvent event) {
+    private void onPlayerReady(@SuppressWarnings("UnusedParameters") PlayerReadyEvent event) {
         tryReadyStart();
     }
 }
