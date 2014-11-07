@@ -163,7 +163,8 @@ public class PvpListener implements Listener {
                     event.setCancelled(true);
                 }
                 // check for team pvp
-                else if (!settings.isTeamPvpEnabled()) {
+                else //noinspection ConstantConditions
+                    if (!settings.isTeamPvpEnabled()) {  // always true, statement is for readability
                     ArenaPlayer damagerPlayer =PVArenaPlayer.get(p);
 
                     // prevent team pvp
