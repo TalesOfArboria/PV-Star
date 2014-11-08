@@ -133,7 +133,8 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
         if (reason != AddPlayerReason.ARENA_RELATION_CHANGE) {
 
-            if (_arena.getEventManager().call(new PlayerPreAddEvent(_arena, player, reason)).isCancelled())
+            if (_arena.getEventManager().call(
+                    new PlayerPreAddEvent(_arena, player, this, reason)).isCancelled())
                 return false;
         }
 
@@ -143,7 +144,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
         Location spawnPoint = onAddPlayer(player, reason);
 
-        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, reason, spawnPoint, null);
+        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, this, reason, spawnPoint, null);
 
         _arena.getEventManager().call(event);
 
@@ -186,7 +187,8 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
 
             // call pre remove event to see if the remove event is cancelled
-            if (_arena.getEventManager().call(new PlayerPreRemoveEvent(_arena, player, reason)).isCancelled())
+            if (_arena.getEventManager().call(
+                    new PlayerPreRemoveEvent(_arena, player, this, reason)).isCancelled())
                 return false;
         }
 
@@ -208,7 +210,8 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
         // call player removed event
         if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
-            PlayerRemovedEvent removedEvent = new PlayerRemovedEvent(_arena, player, reason, restoreLocation);
+            PlayerRemovedEvent removedEvent =
+                    new PlayerRemovedEvent(_arena, player, this, reason, restoreLocation);
             _arena.getEventManager().call(removedEvent);
 
             if (removedEvent.isRestoring() &&
