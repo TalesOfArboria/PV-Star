@@ -444,7 +444,7 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
             return false; // finish
         }
 
-        PlayerJoinEvent joinEvent = new PlayerJoinEvent(this, player, reason);
+        PlayerJoinEvent joinEvent = new PlayerJoinEvent(this, player, null, reason);
 
         if (getEventManager().call(joinEvent).isCancelled()) {
 

@@ -376,7 +376,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
      * Call PlayerWinEvent and display message if any
      */
     private void callWinEvent(ArenaPlayer player) {
-        PlayerWinEvent event = new PlayerWinEvent(getArena(), player, null);
+        PlayerWinEvent event = new PlayerWinEvent(getArena(), player, this, null);
         getArena().getEventManager().call(event);
 
         if (event.getWinMessage() != null)
@@ -388,7 +388,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
      * Call PlayerLoseEvent and display message if any
      */
     private void callLoseEvent(ArenaPlayer player) {
-        PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, null);
+        PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, this, null);
         getArena().getEventManager().call(event);
 
         if (event.getLoseMessage() != null)

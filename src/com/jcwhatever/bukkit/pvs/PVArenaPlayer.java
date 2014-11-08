@@ -194,7 +194,11 @@ public class PVArenaPlayer implements ArenaPlayer {
         if (_arena == null)
             throw new RuntimeException("Cannot set team on a player that isn't in an arena.");
 
-        PlayerTeamPreChangeEvent preEvent = new PlayerTeamPreChangeEvent(_arena, this, team, reason);
+        PlayerManager manager = getRelatedManager();
+        if (manager == null)
+            return;
+
+        PlayerTeamPreChangeEvent preEvent = new PlayerTeamPreChangeEvent(_arena, this, manager, team, reason);
         _arena.getEventManager().call(preEvent);
 
         if (preEvent.isCancelled())
@@ -203,7 +207,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         ArenaTeam previousTeam = _team;
         _team = preEvent.getNewTeam();
 
-        PlayerTeamChangedEvent postEvent = new PlayerTeamChangedEvent(_arena, this, previousTeam, reason);
+        PlayerTeamChangedEvent postEvent = new PlayerTeamChangedEvent(_arena, this, manager, previousTeam, reason);
         _arena.getEventManager().call(postEvent);
     }
 
@@ -274,7 +278,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
         if (_isReady) {
 
-            PlayerReadyEvent event = new PlayerReadyEvent(_arena, this, null);
+            PlayerReadyEvent event = new PlayerReadyEvent(_arena, this, _arena.getLobbyManager(), null);
             _arena.getEventManager().call(event);
 
             if (event.getMessage() != null) {
@@ -579,7 +583,11 @@ public class PVArenaPlayer implements ArenaPlayer {
         if (_lives == lives || _arena == null)
             return;
 
-        PlayerLivesChangeEvent event = new PlayerLivesChangeEvent(_arena, this, _lives, lives);
+        PlayerManager manager = getRelatedManager();
+        if (manager == null)
+            return;
+
+        PlayerLivesChangeEvent event = new PlayerLivesChangeEvent(_arena, this, manager, _lives, lives);
 
         _arena.getEventManager().call(event);
 
