@@ -50,10 +50,12 @@ import com.jcwhatever.bukkit.pvs.api.events.region.ArenaRegionRestoredEvent;
 import com.jcwhatever.bukkit.pvs.api.events.region.ArenaRegionSavedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.region.PlayerEnterArenaRegionEvent;
 import com.jcwhatever.bukkit.pvs.api.events.region.PlayerLeaveArenaRegionEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.AddSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ClearReservedSpawnsEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.RemoveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ReserveSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnAddedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreAddEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreRemoveEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.UnreserveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamLoseEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamWinEvent;
@@ -109,9 +111,11 @@ public class ApiEventRegistrationHelper {
 
     private void registerSpawnEvents() {
 
-        register(AddSpawnEvent.class);
+        register(SpawnPreAddEvent.class);
+        register(SpawnAddedEvent.class);
         register(ClearReservedSpawnsEvent.class);
-        register(RemoveSpawnEvent.class);
+        register(SpawnPreRemoveEvent.class);
+        register(SpawnRemovedEvent.class);
         register(ReserveSpawnEvent.class);
         register(UnreserveSpawnEvent.class);
     }

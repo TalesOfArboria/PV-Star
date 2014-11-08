@@ -36,10 +36,12 @@ import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.SpawnManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.AddSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ClearReservedSpawnsEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.RemoveSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreRemoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ReserveSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnAddedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreAddEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.UnreserveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
@@ -163,7 +165,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public boolean addSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isSpawnAdded = !getArena().getEventManager().call(new AddSpawnEvent(getArena(), spawn)).isCancelled()
+        boolean isSpawnAdded = !getArena().getEventManager().call(new SpawnPreAddEvent(getArena(), spawn)).isCancelled()
                 && super.addSpawn(spawn);
 
         if (!isSpawnAdded)
@@ -176,6 +178,8 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         node.set("location", spawn.getLocation());
 
         node.saveAsync(null);
+
+        getArena().getEventManager().call(new SpawnAddedEvent(getArena(), spawn));
 
         return true;
     }
@@ -205,7 +209,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public boolean removeSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isRemoved = !getArena().getEventManager().call(new RemoveSpawnEvent(getArena(), spawn)).isCancelled()
+        boolean isRemoved = !getArena().getEventManager().call(new SpawnPreRemoveEvent(getArena(), spawn)).isCancelled()
                 && super.removeSpawn(spawn);
 
         if (!isRemoved)
@@ -214,6 +218,8 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         IDataNode node = _dataNode.getNode(spawn.getName());
         node.remove();
         node.saveAsync(null);
+
+        getArena().getEventManager().call(new SpawnRemovedEvent(getArena(), spawn));
 
         return true;
 

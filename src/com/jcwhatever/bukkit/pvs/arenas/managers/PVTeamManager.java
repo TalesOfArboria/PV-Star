@@ -39,8 +39,8 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreAddEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.AddSpawnEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.RemoveSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnAddedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 
 import java.util.List;
@@ -196,7 +196,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      * Add spawn team.
      */
     @GenericsEventHandler(priority = GenericsEventPriority.LAST)
-    private void onAddSpawn(AddSpawnEvent event) {
+    private void onAddSpawn(SpawnAddedEvent event) {
 
         if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)
             return;
@@ -208,7 +208,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      * Remove team when spawn is removed.
      */
     @GenericsEventHandler(priority = GenericsEventPriority.LAST)
-    private void onRemoveSpawn(RemoveSpawnEvent event) {
+    private void onRemoveSpawn(SpawnRemovedEvent event) {
 
         if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)
             return;
