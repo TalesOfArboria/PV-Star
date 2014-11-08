@@ -95,7 +95,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
 
     @Override
     public int totalTeams() {
-        return _teams.getTypeSize();
+        return _teams.getEntrySize();
     }
 
     /**
@@ -103,7 +103,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      */
     @Override
     public int totalCurrentTeams() {
-        return _currentTeams.getTypeSize();
+        return _currentTeams.getEntrySize();
     }
 
     /*
