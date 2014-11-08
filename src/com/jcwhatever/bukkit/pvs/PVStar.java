@@ -35,6 +35,7 @@ import com.jcwhatever.bukkit.generic.signs.SignManager;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ExtensionTypeManager;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.ArenaManager;
@@ -257,6 +258,14 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     @Override
     protected void onDisablePlugin() {
 
+        _isLoaded = false;
+
+        // end arenas
+       List<Arena> arenas = _arenaManager.getArenas();
+       for (Arena arena : arenas) {
+           arena.getGameManager().end();
+       }
+
         Collection<PVStarModule> modules = _moduleLoader.getModules();
 
         for (PVStarModule module : modules) {
@@ -267,8 +276,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
             GenericsEventManager.getGlobal().removeCallHandler(_eventForwarder);
             _eventForwarder = null;
         }
-
-        _isLoaded = false;
     }
 
     private void loadScripts() {
