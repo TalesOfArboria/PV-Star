@@ -50,6 +50,7 @@ import com.jcwhatever.bukkit.pvs.scripting.api.SpawnApi;
 import com.jcwhatever.bukkit.pvs.scripting.api.StatsApi;
 import com.jcwhatever.bukkit.pvs.scripting.repo.PVArenasRepoApi;
 import com.jcwhatever.bukkit.pvs.scripting.repo.PVEventsRepoApi;
+import com.jcwhatever.bukkit.pvs.scripting.repo.PVPlayersRepoApi;
 
 import org.bukkit.plugin.Plugin;
 
@@ -114,6 +115,7 @@ public class PVScriptManager implements ScriptManager {
         // Register scripts in global script api repository
         ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVArenasRepoApi.class);
         ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVEventsRepoApi.class);
+        ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVPlayersRepoApi.class);
     }
 
 
