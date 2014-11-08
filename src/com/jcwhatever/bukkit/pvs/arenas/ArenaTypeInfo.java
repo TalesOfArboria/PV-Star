@@ -35,13 +35,11 @@ public @interface ArenaTypeInfo {
 
     /**
      * The name of the arena type
-     * @return
      */
     public String typeName();
 
     /**
      * Description of the arena type
-     * @return
      */
     public String description();
 
