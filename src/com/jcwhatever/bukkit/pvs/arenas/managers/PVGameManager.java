@@ -83,7 +83,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
     }
 
     /*
-     * Get the start time of the last game.
+     * Get the start time of the most recent game.
      */
     @Override
     @Nullable
