@@ -45,6 +45,7 @@ import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Team manager implementation.
@@ -109,6 +110,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
     /*
      * Get the next available team from the team distributor.
      */
+    @Nullable
     protected ArenaTeam nextTeam() {
         return getTeamDistributor().next();
     }
@@ -142,8 +144,12 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
                 event.getReason() != AddPlayerReason.ARENA_RELATION_CHANGE) {
 
             ArenaTeam team = nextTeam();
-
-            _currentTeams.add(team);
+            if (team != null) {
+                _currentTeams.add(team);
+            }
+            else {
+                team = ArenaTeam.NONE;
+            }
 
             event.getPlayer().setTeam(team, TeamChangeReason.JOIN_ARENA);
         }
