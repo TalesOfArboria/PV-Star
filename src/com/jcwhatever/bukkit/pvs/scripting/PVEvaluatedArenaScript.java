@@ -26,6 +26,7 @@ package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.scripting.IScript;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
+import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
@@ -50,6 +51,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
     private final ScriptEngine _engine;
     private final Script _parentScript;
     private final Map<String, IScriptApi> _scriptApis;
+    private final List<IScriptApiObject> _apiObjects;
 
     /*
      * Constructor.
@@ -63,6 +65,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
         _engine = engine;
         _parentScript = parentScript;
         _scriptApis = new HashMap<>(apiCollection == null ? 10 : apiCollection.size());
+        _apiObjects = new ArrayList<>(apiCollection == null ? 10 : apiCollection.size());
 
         if (apiCollection != null) {
             for (IScriptApi api : apiCollection) {
@@ -113,7 +116,10 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
 
         _scriptApis.put(scriptApi.getVariableName(), scriptApi);
 
-        _engine.put(scriptApi.getVariableName(), scriptApi.getApiObject(this));
+        IScriptApiObject apiObject = scriptApi.getApiObject(this);
+
+        _engine.put(scriptApi.getVariableName(), apiObject);
+        _apiObjects.add(apiObject);
     }
 
     /*
@@ -159,10 +165,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
     @Override
     public void resetApi() {
 
-        if (_scriptApis == null)
-            return;
-
-        for (IScriptApi api : _scriptApis.values()) {
+        for (IScriptApiObject api : _apiObjects) {
             api.reset();
         }
     }
