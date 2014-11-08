@@ -39,7 +39,6 @@ import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
 
 import org.bukkit.plugin.Plugin;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ import java.util.Set;
 )
 public class PVEventsRepoApi extends GenericsScriptApi {
 
-    private LinkedList<ApiObject> _objects = new LinkedList<>();
+    private static ApiObject _api;
 
     /**
      * Constructor.
@@ -58,22 +57,18 @@ public class PVEventsRepoApi extends GenericsScriptApi {
      */
     public PVEventsRepoApi(Plugin plugin) {
         super(plugin);
+
+        _api = new ApiObject();
     }
 
     @Override
     public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        ApiObject object = new ApiObject();
-        _objects.add(object);
-        return object;
+        return _api;
     }
 
     @Override
     public void reset() {
-
-        while (!_objects.isEmpty()) {
-             ApiObject object = _objects.remove();
-            object.reset();
-        }
+        _api.reset();
     }
 
     public static class ApiObject implements IScriptApiObject {
