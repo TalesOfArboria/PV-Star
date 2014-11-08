@@ -24,8 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Scheduler;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -42,7 +40,6 @@ import com.jcwhatever.bukkit.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaStartedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLoseEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerWinEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamLoseEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamWinEvent;
@@ -65,7 +62,7 @@ import javax.annotation.Nullable;
 /**
  * Game manager implementation
  */
-public class PVGameManager extends AbstractPlayerManager implements GameManager, GenericsEventListener {
+public class PVGameManager extends AbstractPlayerManager implements GameManager {
 
     private final GameManagerSettings _settings;
     private boolean _isRunning = false;
@@ -79,7 +76,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
         super(arena);
 
         _settings = new PVGameSettings(arena);
-        getArena().getEventManager().register(this);
     }
 
     /*
@@ -355,50 +351,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager,
         });
 
         return getArena().getSettings().getRemoveLocation();
-    }
-
-
-    /*
-     * Checks to see if a player should be declared the winner
-     * after the specified player is removed.
-     */
-    @Nullable
-    private ArenaPlayer checkForWinnerOnRemove(ArenaPlayer removedPlayer) {
-        PreCon.notNull(removedPlayer);
-
-        if (getPlayers().size() == 1) {
-            ArenaPlayer winner = getPlayers().get(0);
-            if (!winner.equals(removedPlayer)) {
-                return winner;
-            }
-        }
-        return null;
-    }
-
-    /*
-     * Check for a winner when a player is removed.
-     */
-    @GenericsEventHandler // TODO : Not all game types will declare a winner with only 1 player left.
-    private void onCheckForWinner(PlayerRemovedEvent event) {
-
-        if (event.getReason() == RemovePlayerReason.ARENA_RELATION_CHANGE ||
-                event.getReason() == RemovePlayerReason.FORWARDING)
-            return;
-
-        if (isRunning() && !isGameOver()) {
-
-            // Check for winner
-            ArenaPlayer winner = checkForWinnerOnRemove(event.getPlayer());
-            if (winner != null) {
-                setWinner(winner);
-                end();
-                return; // finish
-            }
-        }
-
-        if (getPlayers().size() == 0) {
-            end();
-        }
     }
 
     /*
