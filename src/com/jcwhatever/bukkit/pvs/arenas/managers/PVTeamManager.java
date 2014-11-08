@@ -24,6 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
+import com.jcwhatever.bukkit.generic.collections.EntryCounter;
+import com.jcwhatever.bukkit.generic.collections.EntryCounter.RemovalPolicy;
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
@@ -36,8 +38,12 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreAddEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreRemoveEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.AddSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.RemoveSpawnEvent;
+import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,12 +53,18 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
 
     private Arena _arena;
     private TeamDistributor _teamDistributor;
+    private EntryCounter<ArenaTeam> _teams = new EntryCounter<>(RemovalPolicy.REMOVE);
+    private EntryCounter<ArenaTeam> _currentTeams = new EntryCounter<>(RemovalPolicy.REMOVE);
 
     /*
      * Constructor.
      */
     public PVTeamManager (Arena arena) {
         _arena = arena;
+
+        arena.getEventManager().register(this);
+
+        loadSettings();
     }
 
     /*
@@ -70,7 +82,28 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      */
     @Override
     public Set<ArenaTeam> getTeams() {
-        return _arena.getSpawnManager().getTeams();
+        return _teams.getTypesCounted();
+    }
+
+    /**
+     * Get the teams currently in the arena.
+     */
+    @Override
+    public Set<ArenaTeam> getCurrentTeams() {
+        return _currentTeams.getTypesCounted();
+    }
+
+    @Override
+    public int totalTeams() {
+        return _teams.getTypeSize();
+    }
+
+    /**
+     * Get the number of teams currently in the arena.
+     */
+    @Override
+    public int totalCurrentTeams() {
+        return _currentTeams.getTypeSize();
     }
 
     /*
@@ -103,7 +136,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      * Set a players team when they are added to an arena.
      */
     @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
-    private void onPlayerPreAdd(PlayerPreAddEvent event) {
+    private void onPlayerAdd(PlayerPreAddEvent event) {
 
         if (!(event.getPlayer() instanceof PVArenaPlayer))
             return;
@@ -111,23 +144,66 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
         if (event.getReason() != AddPlayerReason.FORWARDING &&
                 event.getReason() != AddPlayerReason.ARENA_RELATION_CHANGE) {
 
-            event.getPlayer().setTeam(nextTeam(), TeamChangeReason.JOIN_ARENA);
+            ArenaTeam team = nextTeam();
+
+            _currentTeams.add(team);
+
+            event.getPlayer().setTeam(team, TeamChangeReason.JOIN_ARENA);
         }
     }
 
-    /**
+    /*
      * Recycle the a players team when they are removed from the arena.
      * Ensures an even distribution of teams.
      */
     @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
-    private void onPlayerPreRemove(PlayerPreRemoveEvent event) {
+    private void onPlayerRemove(PlayerRemovedEvent event) {
 
         if (event.getReason() != RemovePlayerReason.FORWARDING &&
                 event.getReason() != RemovePlayerReason.ARENA_RELATION_CHANGE) {
 
-            recycleTeam(event.getPlayer().getTeam());
+            ArenaTeam team = event.getPlayer().getTeam();
+
+            _currentTeams.subtract(team);
+
+            recycleTeam(team);
         }
     }
 
+    /*
+     * Add spawn team.
+     */
+    @GenericsEventHandler(priority = GenericsEventPriority.LAST)
+    private void onAddSpawn(AddSpawnEvent event) {
 
+        if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)
+            return;
+
+        _teams.add(event.getSpawnpoint().getTeam());
+    }
+
+    /*
+     * Remove team when spawn is removed.
+     */
+    @GenericsEventHandler(priority = GenericsEventPriority.LAST)
+    private void onRemoveSpawn(RemoveSpawnEvent event) {
+
+        if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)
+            return;
+
+        _teams.subtract(event.getSpawnpoint().getTeam());
+    }
+
+    // load settings
+    private void loadSettings() {
+
+        List<Spawnpoint> spawnpoints = getArena().getSpawnManager().getGameSpawns();
+
+        for (Spawnpoint spawn : spawnpoints) {
+            if (spawn.getTeam() == ArenaTeam.NONE)
+                continue;
+
+            _teams.add(spawn.getTeam());
+        }
+    }
 }
