@@ -29,7 +29,6 @@ import com.jcwhatever.bukkit.generic.collections.EntryCounter.RemovalPolicy;
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
-import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam.TeamDistributor;
@@ -39,6 +38,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreAddEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.AddSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.RemoveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
@@ -138,9 +138,6 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
     @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
     private void onPlayerAdd(PlayerPreAddEvent event) {
 
-        if (!(event.getPlayer() instanceof PVArenaPlayer))
-            return;
-
         if (event.getReason() != AddPlayerReason.FORWARDING &&
                 event.getReason() != AddPlayerReason.ARENA_RELATION_CHANGE) {
 
@@ -167,6 +164,31 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
             _currentTeams.subtract(team);
 
             recycleTeam(team);
+        }
+    }
+
+    /*
+     * Make sure teams updated if players team is changed.
+     */
+    @GenericsEventHandler(priority = GenericsEventPriority.LAST)
+    private void onTeamChange(PlayerTeamChangedEvent event) {
+
+        if (event.getReason() == TeamChangeReason.JOIN_ARENA)
+            return;
+
+        ArenaTeam previous = event.getPreviousTeam();
+        ArenaTeam current = event.getTeam();
+
+        if (previous != ArenaTeam.NONE &&
+                previous != null) {
+
+            _currentTeams.subtract(previous);
+        }
+
+        if (current != ArenaTeam.NONE &&
+                current != null) {
+
+            _currentTeams.add(current);
         }
     }
 
