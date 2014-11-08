@@ -82,7 +82,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      */
     @Override
     public Set<ArenaTeam> getTeams() {
-        return _teams.getTypesCounted();
+        return _teams.getEntries();
     }
 
     /**
@@ -90,7 +90,7 @@ public class PVTeamManager implements TeamManager, GenericsEventListener {
      */
     @Override
     public Set<ArenaTeam> getCurrentTeams() {
-        return _currentTeams.getTypesCounted();
+        return _currentTeams.getEntries();
     }
 
     @Override
