@@ -45,6 +45,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -149,7 +150,7 @@ public class ModuleLoader {
             for (PVStarModule module : modules) {
 
                 // get "module.yml" file from module
-                String moduleInfoString = FileUtils.scanTextFile(module.getClass(), "/module.yml", FileUtils.CHARSET_UTF8);
+                String moduleInfoString = FileUtils.scanTextFile(module.getClass(), "/module.yml", StandardCharsets.UTF_8);
                 if (moduleInfoString == null) {
 
                     Msg.warning("Failed to load module '{0}' because its missing its module.yml file.",
