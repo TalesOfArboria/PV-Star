@@ -150,7 +150,7 @@ public class PVArenaManager implements ArenaManager {
     public Arena getArena(Location location) {
 
         Set<ReadOnlyRegion> regions = GenericsLib.getRegionManager().getRegions(location);
-        if (regions == null || regions.isEmpty())
+        if (regions.isEmpty())
             return null;
 
         for (ReadOnlyRegion readOnlyRegion : regions) {
