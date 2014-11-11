@@ -29,12 +29,14 @@ import com.jcwhatever.bukkit.generic.scripting.IScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.scripting.ScriptHelper.ScriptConstructor;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
+import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiDepends;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiEconomy;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiInclude;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiInventory;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiItemBank;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiMsg;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiPermissions;
+import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiScheduler;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiSounds;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -104,6 +106,8 @@ public class PVScriptManager implements ScriptManager {
         registerApiType(new ScriptApiMsg(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiPermissions(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiSounds(PVStarAPI.getPlugin()));
+        registerApiType(new ScriptApiDepends(PVStarAPI.getPlugin()));
+        registerApiType(new ScriptApiScheduler(PVStarAPI.getPlugin()));
 
         // register PV-Star script api
         registerApiType(new EventsApi());
