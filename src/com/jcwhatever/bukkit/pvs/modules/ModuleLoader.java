@@ -228,16 +228,16 @@ public class ModuleLoader {
                 _modules.remove(container.getSearchName());
                 _moduleInfo.remove(container.getModule());
 
-                Msg.warning("Failed to load module '{0}' because required dependencies are missing:", container.getName());
+                Msg.warning("[{0}] Failed to load module because required dependencies are missing:", container.getName());
 
                 List<String> bukkitDepends = container.getMissingBukkitDepends();
                 for (String depend : bukkitDepends) {
-                    Msg.warning("[Missing Bukkit Plugin] {0}", depend);
+                    Msg.warning("[{0}] Missing Bukkit Plugin: {1}", container.getName(), depend);
                 }
 
                 List<String> moduleDepends = container.getMissingModuleDepends();
                 for (String depend : moduleDepends) {
-                    Msg.warning("[Missing PV-Star Module] {0}", depend);
+                    Msg.warning("[{0}] Missing PV-Star Module: {1}", container.getName(), depend);
                 }
             }
 
@@ -246,6 +246,7 @@ public class ModuleLoader {
             // Enable Modules
             for (PVStarModule module : _modules.values()) {
                 module.enable();
+                Msg.info("[{0}] Module enabled.", module.getName());
             }
 
             _isModulesLoaded = true;
