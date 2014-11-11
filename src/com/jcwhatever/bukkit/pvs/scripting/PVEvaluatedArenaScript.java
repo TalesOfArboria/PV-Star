@@ -56,7 +56,8 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
     /*
      * Constructor.
      */
-    public PVEvaluatedArenaScript(Arena arena, ScriptEngine engine, Script parentScript, @Nullable Collection<? extends IScriptApi> apiCollection) {
+    public PVEvaluatedArenaScript(Arena arena, ScriptEngine engine, Script parentScript,
+                                  @Nullable Collection<? extends IScriptApi> apiCollection) {
         PreCon.notNull(arena);
         PreCon.notNull(engine);
         PreCon.notNull(parentScript);
@@ -69,7 +70,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
 
         if (apiCollection != null) {
             for (IScriptApi api : apiCollection) {
-                _scriptApis.put(api.getVariableName(), api);
+                addScriptApi(api);
             }
         }
     }
@@ -103,9 +104,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
      */
     @Override
     public List<IScriptApi> getScriptApi() {
-        return _scriptApis == null
-                ? new ArrayList<IScriptApi>(0)
-                : new ArrayList<>(_scriptApis.values());
+        return new ArrayList<>(_scriptApis.values());
     }
 
     @Override

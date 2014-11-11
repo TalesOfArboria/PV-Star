@@ -130,13 +130,6 @@ public class PVScript implements Script {
                     ? new PVEvaluatedArenaScript(arena, engine, this, apiCollection)
                     : new GenericsEvaluatedScript(this, engine, apiCollection);
 
-        // add api to engine
-        if (apiCollection != null) {
-            for (IScriptApi api : apiCollection) {
-                engine.put(api.getVariableName(), api.getApiObject(evaluated));
-            }
-        }
-
         try {
             // evaluate script
             engine.eval(getScript());
