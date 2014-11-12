@@ -221,17 +221,8 @@ public class PVArenaScriptManager implements ArenaScriptManager {
      */
     public void resetApi() {
 
-        Set<IScriptApi> resetApis = new HashSet<>(25);
         for (EvaluatedScript script : _evaluatedScripts.values()) {
-
-            List<IScriptApi> apiList = script.getScriptApi();
-
-            for (IScriptApi api : apiList) {
-                if (!resetApis.contains(api)) {
-                    api.reset();
-                    resetApis.add(api);
-                }
-            }
+            script.resetApi();
         }
     }
 
