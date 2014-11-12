@@ -62,11 +62,6 @@ public class PVArenasRepoApi extends GenericsScriptApi {
         return _apiObject;
     }
 
-    @Override
-    public void reset() {
-        // do nothing
-    }
-
     public static class ApiObject implements IScriptApiObject {
 
         @Override

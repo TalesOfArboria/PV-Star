@@ -35,7 +35,6 @@ import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
-import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
 
 import org.bukkit.plugin.Plugin;
 
@@ -66,7 +65,6 @@ public class PVEventsRepoApi extends GenericsScriptApi {
         return _api;
     }
 
-    @Override
     public void reset() {
         _api.reset();
     }
@@ -127,10 +125,14 @@ public class PVEventsRepoApi extends GenericsScriptApi {
 
             EventWrapper eventHandler = new EventWrapper(arenas.get(0), handler);
 
-            Class<? extends AbstractArenaEvent> eventClass =
-                    PVStarAPI.getScriptManager().getEventType(eventName.toLowerCase());
+            Class<?> eventClass;
 
-            PreCon.notNull(eventClass);
+            try {
+                eventClass = Class.forName(eventName);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return;
+            }
 
             arenas.get(0).getEventManager().register(eventClass, eventPriority, eventHandler);
 
