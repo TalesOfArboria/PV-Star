@@ -35,8 +35,10 @@ import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nullable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -51,6 +53,7 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
     private final ScriptEngine _engine;
     private final Script _parentScript;
     private final Map<String, IScriptApi> _scriptApis;
+    private final Set<Class<? extends IScriptApi>> _included;
     private final List<IScriptApiObject> _apiObjects;
 
     /*
@@ -67,10 +70,11 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
         _parentScript = parentScript;
         _scriptApis = new HashMap<>(apiCollection == null ? 10 : apiCollection.size());
         _apiObjects = new ArrayList<>(apiCollection == null ? 10 : apiCollection.size());
+        _included = new HashSet<>(apiCollection == null ? 10 : apiCollection.size());
 
         if (apiCollection != null) {
             for (IScriptApi api : apiCollection) {
-                addScriptApi(api);
+                addScriptApi(api, api.getVariableName());
             }
         }
     }
@@ -108,16 +112,22 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
     }
 
     @Override
-    public void addScriptApi(IScriptApi scriptApi) {
+    public void addScriptApi(IScriptApi scriptApi, String variableName) {
+        PreCon.notNull(scriptApi);
+        PreCon.notNullOrEmpty(variableName);
+
+        if (_included.contains(scriptApi.getClass()))
+            return;
 
         if (_scriptApis.containsKey(scriptApi.getVariableName()))
             return;
 
         _scriptApis.put(scriptApi.getVariableName(), scriptApi);
+        _included.add(scriptApi.getClass());
 
         IScriptApiObject apiObject = scriptApi.getApiObject(this);
 
-        _engine.put(scriptApi.getVariableName(), apiObject);
+        _engine.put(variableName, apiObject);
         _apiObjects.add(apiObject);
     }
 
@@ -126,15 +136,12 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
      */
     @Override
     @Nullable
-    public Object invokeFunction(String functionName, Object... parameters) {
+    public Object invokeFunction(String functionName, Object... parameters)
+            throws NoSuchMethodException {
         Invocable inv = (Invocable)_engine;
 
         try {
             return inv.invokeFunction(functionName, parameters);
-        }
-        catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            return null;
         }
         catch (ScriptException e) {
             e.printStackTrace();
@@ -163,6 +170,12 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
      */
     @Override
     public void resetApi() {
+
+        try {
+            invokeFunction("onScriptReset");
+        } catch (NoSuchMethodException ignore) {
+            // do nothing
+        }
 
         for (IScriptApiObject api : _apiObjects) {
             api.reset();
