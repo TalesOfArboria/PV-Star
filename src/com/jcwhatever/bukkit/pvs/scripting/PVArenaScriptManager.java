@@ -24,11 +24,15 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
+import com.jcwhatever.bukkit.generic.events.EventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.pvs.PVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.events.PVStarLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
@@ -270,6 +274,19 @@ public class PVArenaScriptManager implements ArenaScriptManager {
                 addScript(script);
             }
         }
-        evaluate();
+
+        if (((PVStar)PVStarAPI.getPlugin()).isLoaded()) {
+            evaluate();
+        }
+        else {
+            PVStarAPI.getEventManager().register(PVStarLoadedEvent.class,
+                    GenericsEventPriority.NORMAL, new EventHandler() {
+
+                        @Override
+                        public void call(Object event) {
+                            evaluate();
+                        }
+                    });
+        }
     }
 }

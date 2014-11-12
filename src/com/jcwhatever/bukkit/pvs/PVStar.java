@@ -40,6 +40,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ExtensionTypeManager;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.ArenaManager;
 import com.jcwhatever.bukkit.pvs.api.commands.CommandHelper;
+import com.jcwhatever.bukkit.pvs.api.events.PVStarLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.ModuleInfo;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.points.PointsManager;
@@ -250,6 +251,8 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
+
+                _eventManager.call(new PVStarLoadedEvent());
             }
         });
     }
