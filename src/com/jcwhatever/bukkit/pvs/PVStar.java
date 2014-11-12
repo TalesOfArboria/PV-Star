@@ -57,7 +57,6 @@ import com.jcwhatever.bukkit.pvs.listeners.PvpListener;
 import com.jcwhatever.bukkit.pvs.listeners.SharingListener;
 import com.jcwhatever.bukkit.pvs.modules.ModuleLoader;
 import com.jcwhatever.bukkit.pvs.points.PVPointsManager;
-import com.jcwhatever.bukkit.pvs.scripting.ApiEventRegistrationHelper;
 import com.jcwhatever.bukkit.pvs.scripting.PVScriptManager;
 import com.jcwhatever.bukkit.pvs.signs.PVSignManager;
 import com.jcwhatever.bukkit.pvs.stats.PVStatsManager;
@@ -286,9 +285,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         }
 
         _scriptManager = new PVScriptManager(this, scriptFolder, ScriptHelper.getGlobalEngineManager());
-
-        // register script events
-        new ApiEventRegistrationHelper(_scriptManager).register();
     }
 
 

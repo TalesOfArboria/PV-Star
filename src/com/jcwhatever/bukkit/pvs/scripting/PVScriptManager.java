@@ -41,8 +41,6 @@ import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiSounds;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
-import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
-import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptManager;
 import com.jcwhatever.bukkit.pvs.scripting.api.EventsApi;
@@ -69,7 +67,6 @@ import javax.script.ScriptEngineManager;
  */
 public class PVScriptManager implements ScriptManager {
 
-    private Map<String, Class<? extends AbstractArenaEvent>> _registeredEvents = new HashMap<>(250);
     private final GenericsScriptManager _scriptRepository;
     private final Map<String, IScriptApi> _apiMap = new HashMap<>(30);
     private final File _scriptFolder;
@@ -130,41 +127,6 @@ public class PVScriptManager implements ScriptManager {
     public ScriptEngineManager getEngineManager() {
 
         return _scriptRepository.getEngineManager();
-    }
-
-    /*
-     * Register an event so scripts can easily attach event handlers to it.
-     * For internal registrations of PV-Star events which have no module prefix.
-     */
-    public void registerEventType(Class<? extends AbstractArenaEvent> eventClass) {
-        PreCon.notNull(eventClass);
-
-        registerEventType("", eventClass);
-    }
-
-    /*
-     * Register  an event so scripts can easily attach event handlers to it.
-     * The event name used by scripts is ModuleName:EventClassName, non case sensitive.
-     */
-    @Override
-    public void registerEventType(PVStarModule module, Class<? extends AbstractArenaEvent> eventClass) {
-        PreCon.notNull(module);
-        PreCon.notNull(eventClass);
-
-        registerEventType(module.getName().toLowerCase() + ':', eventClass);
-    }
-
-    /**
-     * Get a registered event type.
-     *
-     * @param name  The name of the event type. The name is the name of the registering module
-     *              followed by a period and the name of the event class. If the event is a PV-Star
-     *              event, then the name is simply the event class name.
-     */
-    @Nullable
-    @Override
-    public Class<? extends AbstractArenaEvent> getEventType(String name) {
-        return _registeredEvents.get(name.toLowerCase());
     }
 
     /*
@@ -261,10 +223,5 @@ public class PVScriptManager implements ScriptManager {
 
         _scriptRepository.clearScripts();
         _scriptRepository.loadScripts(_scriptFolder, DirectoryTraversal.RECURSIVE);
-    }
-
-
-    private void registerEventType(String context, Class<? extends AbstractArenaEvent> eventClass) {
-        _registeredEvents.put(context.toLowerCase() + eventClass.getSimpleName().toLowerCase(), eventClass);
     }
 }

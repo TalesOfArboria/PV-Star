@@ -29,9 +29,7 @@ import com.jcwhatever.bukkit.generic.events.EventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
-import com.jcwhatever.bukkit.pvs.api.events.AbstractArenaEvent;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 
@@ -46,7 +44,7 @@ public class EventsApi extends ScriptApi {
 
     @Override
     public String getVariableName() {
-        return "events";
+        return "arenaEvents";
     }
 
     @Override
@@ -56,7 +54,7 @@ public class EventsApi extends ScriptApi {
         return new ApiObject(arena);
     }
 
-    public class ApiObject implements IScriptApiObject {
+    public static class ApiObject implements IScriptApiObject {
 
         private final Arena _arena;
         private final MultiValueMap<Class<?>, EventHandler> _registeredHandlers = new MultiValueMap<>(30);
@@ -114,8 +112,14 @@ public class EventsApi extends ScriptApi {
                 }
             };
 
-            Class<? extends AbstractArenaEvent> eventClass = PVStarAPI.getScriptManager().getEventType(eventName.toLowerCase());
-            PreCon.notNull(eventClass);
+            Class<?> eventClass;
+
+            try {
+                eventClass = Class.forName(eventName);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return;
+            }
 
             _arena.getEventManager().register(eventClass, eventPriority, eventHandler);
 
