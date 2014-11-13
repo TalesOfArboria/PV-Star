@@ -54,6 +54,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
@@ -159,6 +160,8 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
         getEventManager().register(this);
 
         onInit();
+
+        getEventManager().call(new ArenaLoadedEvent(this));
     }
 
     /*
