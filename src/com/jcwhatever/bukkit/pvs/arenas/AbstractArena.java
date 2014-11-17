@@ -540,7 +540,6 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
      */
     protected abstract boolean onCanJoin();
 
-
     /*
      *  Handle player join event
      */
@@ -552,9 +551,6 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
         if (getGameManager().isRunning()) {
             event.setRejectionMessage(Lang.get(_ARENA_RUNNING, getName()));
             event.setCancelled(true);
-
         }
     }
-
-
 }

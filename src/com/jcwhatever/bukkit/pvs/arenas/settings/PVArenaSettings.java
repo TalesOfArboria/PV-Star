@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.pvs.arenas.settings;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
@@ -34,6 +35,7 @@ import com.jcwhatever.bukkit.pvs.api.events.ArenaPreEnableEvent;
 
 import org.bukkit.Location;
 
+import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
@@ -94,12 +96,24 @@ public class PVArenaSettings implements ArenaSettings {
 
             _isEnabled = true;
 
+            // Enable all extensions when arena is enabled.
+            Set<ArenaExtension> extensions = _arena.getExtensionManager().getAll();
+            for (ArenaExtension extension : extensions) {
+                extension.enable();
+            }
+
             _arena.getEventManager().call(new ArenaEnabledEvent(_arena));
         }
         else {
             _isEnabled = false;
 
             _arena.getGameManager().end();
+
+            // Disable all extensions when arena is disabled.
+            Set<ArenaExtension> extensions = _arena.getExtensionManager().getAll();
+            for (ArenaExtension extension : extensions) {
+                extension.disable();
+            }
 
             _arena.getEventManager().call(new ArenaDisabledEvent(_arena));
         }

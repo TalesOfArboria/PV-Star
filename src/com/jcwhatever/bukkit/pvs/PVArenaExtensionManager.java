@@ -228,8 +228,6 @@ public class PVArenaExtensionManager extends ArenaExtensionManager {
 
                 boolean isEnabled = _dataNode.getNode(name).getBoolean("enabled");
 
-
-
                 Class<? extends ArenaExtension> clazz = PVStarAPI.getExtensionManager().getExtensionClass(name);
                 if (clazz == null)
                     continue;
@@ -238,7 +236,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager {
                 if (extension == null)
                     continue;
 
-                if (isEnabled)
+                if (isEnabled && getArena().getSettings().isEnabled())
                     extension.enable();
             }
         }
