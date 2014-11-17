@@ -24,6 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.arenas;
 
+import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
+import com.jcwhatever.bukkit.pvs.Lang;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinEvent;
+
 @ArenaTypeInfo(
         typeName="arena",
         description="A basic arena.")
@@ -32,5 +37,19 @@ public class PVArena extends AbstractArena {
     @Override
     protected boolean onCanJoin() {
         return true;
+    }
+
+    /*
+     *  Handle player join event
+     */
+    @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
+    private void onPlayerJoin(PlayerJoinEvent event) {
+
+        // make sure game isn't already running, placed here
+        // so the functionality can be changed/replaced/removed.
+        if (getGameManager().isRunning()) {
+            event.setRejectionMessage(Lang.get(_ARENA_RUNNING, getName()));
+            event.setCancelled(true);
+        }
     }
 }

@@ -25,10 +25,8 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.jcwhatever.bukkit.generic.collections.WeakValueMap;
-import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
-import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.permissions.IPermission;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
@@ -539,18 +537,4 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
      * Called when determining if players can join.
      */
     protected abstract boolean onCanJoin();
-
-    /*
-     *  Handle player join event
-     */
-    @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
-    private void onPlayerJoin(PlayerJoinEvent event) {
-
-        // make sure game isn't already running, placed here
-        // so the functionality can be changed/replaced/removed.
-        if (getGameManager().isRunning()) {
-            event.setRejectionMessage(Lang.get(_ARENA_RUNNING, getName()));
-            event.setCancelled(true);
-        }
-    }
 }
