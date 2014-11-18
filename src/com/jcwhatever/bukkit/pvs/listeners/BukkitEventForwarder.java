@@ -42,6 +42,7 @@ import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.inventory.InventoryHolder;
 
@@ -58,7 +59,18 @@ public class BukkitEventForwarder implements EventHandler {
 
         Event event = (Event)e;
 
-        if (event instanceof PlayerEvent) {
+        if (event instanceof PlayerInteractEvent) {
+            PlayerInteractEvent interactEvent = (PlayerInteractEvent)event;
+
+            if (interactEvent.hasBlock()) {
+                callEvent(interactEvent.getClickedBlock(), event);
+            }
+            else {
+                callEvent(interactEvent.getPlayer(), event);
+            }
+        }
+
+        else if (event instanceof PlayerEvent) {
             callEvent(((PlayerEvent) event).getPlayer(), event);
         }
 
