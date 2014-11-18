@@ -503,13 +503,9 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
 
         getEventManager().call(new ArenaDisposeEvent(this));
 
-        DataStorage.removeStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + _id.toString()));
-
-        if (_dataFolder.exists() && !_dataFolder.delete()) {
-            Msg.warning("Failed to delete arena folder: {0}", _dataFolder.getAbsolutePath());
-        }
-
         getEventManager().dispose();
+
+        getRegion().dispose();
 
         _dataNode = null;
     }

@@ -26,9 +26,12 @@ package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.GenericsLib;
 import com.jcwhatever.bukkit.generic.regions.ReadOnlyRegion;
+import com.jcwhatever.bukkit.generic.storage.DataStorage;
+import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Utils;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaRegion;
@@ -42,6 +45,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -263,6 +267,15 @@ public class PVArenaManager implements ArenaManager {
         _arenaIdMap.remove(arena.getId());
 
         arena.dispose();
+
+        DataStorage.removeStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + arena.getId().toString()));
+
+        File arenaFolder = new File(PVStarAPI.getPlugin().getDataFolder(), "arenas");
+        File dataFolder = new File(arenaFolder, arena.getId().toString());
+
+        if (dataFolder.exists() && !dataFolder.delete()) {
+            Msg.warning("Failed to delete arena folder: {0}", dataFolder.getAbsolutePath());
+        }
 
         IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
         arenaNode.remove();
