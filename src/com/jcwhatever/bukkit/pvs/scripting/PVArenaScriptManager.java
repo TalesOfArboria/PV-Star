@@ -25,6 +25,8 @@
 package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.events.EventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -32,6 +34,8 @@ import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.PVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.PVStarLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
@@ -49,7 +53,7 @@ import javax.annotation.Nullable;
 /**
  * Arena script manager implementation.
  */
-public class PVArenaScriptManager implements ArenaScriptManager {
+public class PVArenaScriptManager implements ArenaScriptManager, GenericsEventListener {
 
     private final Arena _arena;
     private final IDataNode _dataNode;
@@ -64,6 +68,8 @@ public class PVArenaScriptManager implements ArenaScriptManager {
         _dataNode = arena.getDataNode("scripts");
 
         loadSettings();
+
+        _arena.getEventManager().register(this);
     }
 
     /*
@@ -240,6 +246,10 @@ public class PVArenaScriptManager implements ArenaScriptManager {
 
         _evaluatedScripts.clear();
 
+        // do not evaluate if arena is disabled
+        if (!_arena.getSettings().isEnabled())
+            return;
+
         List<IScriptApi> api = PVStarAPI.getScriptManager().getScriptApis();
 
         // iterate and evaluate scripts
@@ -288,5 +298,15 @@ public class PVArenaScriptManager implements ArenaScriptManager {
                         }
                     });
         }
+    }
+
+    @GenericsEventHandler
+    private void onArenaEnable(@SuppressWarnings("unused") ArenaEnabledEvent event) {
+        evaluate();
+    }
+
+    @GenericsEventHandler
+    private void onArenaDisable(@SuppressWarnings("unused") ArenaDisabledEvent event) {
+        evaluate();
     }
 }
