@@ -34,7 +34,6 @@ import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -53,7 +52,8 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaLoadedEvent;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
@@ -414,50 +414,28 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
         PreCon.isValid(reason != AddPlayerReason.ARENA_RELATION_CHANGE);
         PreCon.isValid(reason != AddPlayerReason.FORWARDING);
 
-        // Make sure the player is not already in an arena
-        Arena currentArena = player.getArena();
-        if (currentArena != null) {
-            Msg.tellError(player, Lang.get(_JOIN_LEAVE_CURRENT_FIRST, getName()));
-            return false; // finish
-        }
+        PlayerPreJoinEvent preJoinEvent = new PlayerPreJoinEvent(this, player);
 
-        // make sure arena is enabled
-        if (!getSettings().isEnabled()) {
-            Msg.tellError(player, Lang.get(_ARENA_DISABLED, getName()));
-            return false; // finish
-        }
+        if (getEventManager().call(preJoinEvent).isCancelled()) {
 
-        // check player permission
-        if (!player.getHandle().hasPermission(_permission.getName())) {
-            Msg.tellError(player.getHandle(), Lang.get(_JOIN_NO_PERMISSION), getName());
-            return false;
-        }
+            List<String> rejectionMessages = preJoinEvent.getRejectionMessages();
 
-        // make sure arena isn't busy
-        if (isBusy()) {
-            Msg.tellError(player, Lang.get(_ARENA_BUSY, getName()));
-            return false; // finish
-        }
-
-        // make sure there are enough join slots available
-        if (getAvailableSlots() <= 0) {
-            Msg.tellError(player, Lang.get(_JOIN_LIMIT_REACHED, getName()));
-            return false; // finish
-        }
-
-        PlayerJoinEvent joinEvent = new PlayerJoinEvent(this, player, null, reason);
-
-        if (getEventManager().call(joinEvent).isCancelled()) {
-
-            if (joinEvent.getRejectionMessage() != null) {
-                Msg.tellError(player, joinEvent.getRejectionMessage());
+            for (String message : rejectionMessages) {
+                Msg.tellError(player, message);
             }
 
             return false;
         }
 
-        // add player to lobby
-        return getLobbyManager().addPlayer(player, reason);
+        if (getLobbyManager().addPlayer(player, AddPlayerReason.PLAYER_JOIN)) {
+
+            PlayerJoinedEvent joinEvent = new PlayerJoinedEvent(this, player, null);
+            getEventManager().call(joinEvent);
+
+            return true;
+        }
+
+        return false;
     }
 
     /*

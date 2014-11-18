@@ -27,7 +27,9 @@ package com.jcwhatever.bukkit.pvs.arenas;
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.pvs.Lang;
-import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinEvent;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.options.JoinRejectReason;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 
 @ArenaTypeInfo(
         typeName="arena",
@@ -43,13 +45,38 @@ public class PVArena extends AbstractArena {
      *  Handle player join event
      */
     @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
-    private void onPlayerJoin(PlayerJoinEvent event) {
+    private void onPlayerPreJoin(PlayerPreJoinEvent event) {
+
+        // check player permission
+        if (!event.getPlayer().getHandle().hasPermission(getPermission().getName())) {
+            event.rejectJoin(JoinRejectReason.NO_PERMISSION, Lang.get(_JOIN_NO_PERMISSION, getName()));
+        }
+
+        // Make sure the player is not already in an arena
+        Arena currentArena = event.getPlayer().getArena();
+        if (currentArena != null) {
+            event.rejectJoin(JoinRejectReason.IN_OTHER_ARENA, Lang.get(_JOIN_LEAVE_CURRENT_FIRST, getName()));
+        }
+
+        // make sure arena is enabled
+        if (!getSettings().isEnabled()) {
+            event.rejectJoin(JoinRejectReason.ARENA_DISABLED, Lang.get(_ARENA_DISABLED, getName()));
+        }
+
+        // make sure arena isn't busy
+        if (isBusy()) {
+            event.rejectJoin(JoinRejectReason.ARENA_BUSY, Lang.get(_ARENA_BUSY, getName()));
+        }
+
+        // make sure there are enough join slots available
+        if (getAvailableSlots() <= 0) {
+            event.rejectJoin(JoinRejectReason.ARENA_BUSY, Lang.get(_JOIN_LIMIT_REACHED, getName()));
+        }
 
         // make sure game isn't already running, placed here
         // so the functionality can be changed/replaced/removed.
         if (getGameManager().isRunning()) {
-            event.setRejectionMessage(Lang.get(_ARENA_RUNNING, getName()));
-            event.setCancelled(true);
+            event.rejectJoin(JoinRejectReason.ARENA_RUNNING, Lang.get(_ARENA_RUNNING, getName()));
         }
     }
 }
