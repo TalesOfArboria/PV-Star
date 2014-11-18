@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.Result;
 import com.jcwhatever.bukkit.generic.utils.Scheduler;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -118,7 +119,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     @Override
     public final boolean canStart() {
         return getArena().getSettings().isEnabled() &&
-               !getArena().isBusy();
+                !getArena().isBusy();
     }
 
     /*
@@ -198,20 +199,18 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         PreCon.notNull(player);
         PreCon.notNull(nextArena);
 
-        if (removePlayer(player, RemovePlayerReason.FORWARDING)) {
+        Result<Location> result = removePlayer(player, RemovePlayerReason.FORWARDING);
+        if (!result.isSuccess())
+            return false;
 
-            if (nextArena.getGameManager().isRunning()) {
-                nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING);
-            }
-            else {
-                nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
-            }
-
-            return true;
+        if (nextArena.getGameManager().isRunning()) {
+            nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING);
+        }
+        else {
+            nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
         }
 
-        return false;
-
+        return true;
     }
 
     /*
@@ -375,8 +374,10 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         // transfer players from lobby
         for (ArenaPlayer player : players) {
 
-            if (!lobbyManager.removePlayer(player, RemovePlayerReason.ARENA_RELATION_CHANGE))
+            if (!lobbyManager.hasPlayer(player))
                 continue;
+
+            lobbyManager.removePlayer(player, RemovePlayerReason.ARENA_RELATION_CHANGE);
 
             addPlayer(player, AddPlayerReason.ARENA_RELATION_CHANGE);
         }

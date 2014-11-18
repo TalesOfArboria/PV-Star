@@ -34,6 +34,7 @@ import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.Result;
 import com.jcwhatever.bukkit.pvs.PVArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -66,6 +67,7 @@ import com.jcwhatever.bukkit.pvs.arenas.managers.PVTeamManager;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVArenaSettings;
 import com.jcwhatever.bukkit.pvs.scripting.PVArenaScriptManager;
 
+import org.bukkit.Location;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
@@ -452,12 +454,23 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
             return false;
 
         PlayerManager manager = player.getRelatedManager();
-        if (manager != null && manager.removePlayer(player, reason)) {
+        if (manager != null && manager.hasPlayer(player)) {
 
-            PlayerLeaveEvent leaveEvent = new PlayerLeaveEvent(this, player, manager, reason, null);
-            getEventManager().call(leaveEvent);
+            Result<Location> restoreLocation = manager.removePlayer(player, reason);
+            if (restoreLocation.hasResult()) {
 
-            return true;
+                PlayerLeaveEvent leaveEvent
+                        = new PlayerLeaveEvent(this, player, manager, reason, restoreLocation.getResult());
+                getEventManager().call(leaveEvent);
+
+                if (leaveEvent.isRestoring() &&
+                        leaveEvent.getRestoreLocation() != null) {
+
+                    player.getHandle().teleport(leaveEvent.getRestoreLocation());
+                }
+
+                return true;
+            }
         }
 
         return false;

@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.Result;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -161,7 +162,8 @@ public class PVArenasRepoApi extends GenericsScriptApi {
             if (manager == null)
                 return false;
 
-            if (!manager.removePlayer(p, RemovePlayerReason.FORWARDING))
+            Result<Location> result = manager.removePlayer(p, RemovePlayerReason.FORWARDING);
+            if (!result.isSuccess())
                 return false;
 
             if (!toArena.getLobbyManager().addPlayer(p, AddPlayerReason.FORWARDING))

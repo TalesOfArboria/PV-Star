@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.Result;
 import com.jcwhatever.bukkit.pvs.ArenaPlayersCollection;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -176,20 +177,21 @@ public abstract class AbstractPlayerManager implements PlayerManager {
      * Remove a player from the manager instance.
      */
     @Override
-    public final boolean removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    public final Result<Location> removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         PreCon.notNull(player);
         PreCon.notNull(reason);
 
         // make sure the manager has the player
         if (!_players.hasPlayer(player))
-            return false;
+            return new Result<>(false);
 
         if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
 
             // call pre remove event to see if the remove event is cancelled
             if (_arena.getEventManager().call(
-                    new PlayerPreRemoveEvent(_arena, player, this, reason)).isCancelled())
-                return false;
+                    new PlayerPreRemoveEvent(_arena, player, this, reason))
+                    .isCancelled())
+                return new Result<>(false);
         }
 
         onPreRemovePlayer(player, reason);
@@ -203,25 +205,18 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE &&
                 reason != RemovePlayerReason.FORWARDING) {
 
-                player.clearArena();
+            player.clearArena();
         }
 
         Location restoreLocation = onRemovePlayer(player, reason);
 
         // call player removed event
-        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
-            PlayerRemovedEvent removedEvent =
-                    new PlayerRemovedEvent(_arena, player, this, reason, restoreLocation);
-            _arena.getEventManager().call(removedEvent);
 
-            if (removedEvent.isRestoring() &&
-                removedEvent.getRestoreLocation() != null) {
+        PlayerRemovedEvent removedEvent =
+                new PlayerRemovedEvent(_arena, player, this, reason);
+        _arena.getEventManager().call(removedEvent);
 
-                player.getHandle().teleport(removedEvent.getRestoreLocation());
-            }
-        }
-
-        return true;
+        return new Result<>(true, restoreLocation);
     }
 
     /*
