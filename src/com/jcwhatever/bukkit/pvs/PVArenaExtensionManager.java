@@ -24,6 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs;
 
+import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -31,6 +33,8 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionManager;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingExtensionAnnotationException;
 
 import java.util.HashMap;
@@ -40,7 +44,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 
-public class PVArenaExtensionManager extends ArenaExtensionManager {
+public class PVArenaExtensionManager extends ArenaExtensionManager implements GenericsEventListener {
 
     private final Arena _arena;
     private final Set<ArenaExtension> _extensions = new HashSet<ArenaExtension>(15);
@@ -54,6 +58,8 @@ public class PVArenaExtensionManager extends ArenaExtensionManager {
         _dataNode = arena.getDataNode("extensions");
 
         load();
+
+        arena.getEventManager().register(this);
     }
 
     @Override
@@ -242,4 +248,21 @@ public class PVArenaExtensionManager extends ArenaExtensionManager {
         }
     }
 
+    @GenericsEventHandler
+    private void onArenaEnable(@SuppressWarnings("unused") ArenaEnabledEvent event) {
+
+        // Enable all extensions when arena is enabled.
+        for (ArenaExtension extension : _extensions) {
+            extension.enable();
+        }
+    }
+
+    @GenericsEventHandler
+    private void onArenaDisable(@SuppressWarnings("unused") ArenaDisabledEvent event) {
+
+        // Disable all extensions when arena is disabled.
+        for (ArenaExtension extension : _extensions) {
+            extension.disable();
+        }
+    }
 }

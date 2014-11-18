@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.JoinRejectReason;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 
 @ArenaTypeInfo(
@@ -78,5 +79,13 @@ public class PVArena extends AbstractArena {
         if (getGameManager().isRunning()) {
             event.rejectJoin(JoinRejectReason.ARENA_RUNNING, Lang.get(_ARENA_RUNNING, getName()));
         }
+    }
+
+    /*
+     * Handle arena disabled
+     */
+    @GenericsEventHandler
+    private void onArenaDisabled(@SuppressWarnings("unused") ArenaDisabledEvent event) {
+        getGameManager().end();
     }
 }
