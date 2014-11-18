@@ -53,6 +53,7 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLeaveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
@@ -451,7 +452,15 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
             return false;
 
         PlayerManager manager = player.getRelatedManager();
-        return manager != null && manager.removePlayer(player, reason);
+        if (manager != null && manager.removePlayer(player, reason)) {
+
+            PlayerLeaveEvent leaveEvent = new PlayerLeaveEvent(this, player, manager, reason, null);
+            getEventManager().call(leaveEvent);
+
+            return true;
+        }
+
+        return false;
     }
 
     /*
