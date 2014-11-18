@@ -32,7 +32,6 @@ import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
@@ -67,7 +66,7 @@ public class JoinCommand extends AbstractPVCommand {
         ArenaPlayer player = PVArenaPlayer.get(p);
 
         // Add player to arena
-        arena.join(player, AddPlayerReason.PLAYER_JOIN);
+        arena.join(player);
 
     }
 }

@@ -33,7 +33,6 @@ import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 
 import org.bukkit.entity.Player;
@@ -112,7 +111,7 @@ public class PveSignHandler extends SignHandler {
                 ArenaPlayer player = PVArenaPlayer.get(p);
 
                 // Add player to arena
-                arena.join(player, AddPlayerReason.PLAYER_JOIN);
+                arena.join(player);
             }
         });
 

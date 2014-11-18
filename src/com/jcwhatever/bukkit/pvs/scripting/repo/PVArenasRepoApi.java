@@ -120,7 +120,7 @@ public class PVArenasRepoApi extends GenericsScriptApi {
 
             ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
-            return arena.join(p, AddPlayerReason.PLAYER_JOIN);
+            return arena.join(p);
         }
 
         /**

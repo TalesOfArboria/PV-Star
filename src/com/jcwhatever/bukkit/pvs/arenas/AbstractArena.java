@@ -408,11 +408,8 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
      * Join a player to the arena.
      */
     @Override
-    public boolean join(ArenaPlayer player, AddPlayerReason reason) {
+    public boolean join(ArenaPlayer player) {
         PreCon.notNull(player);
-        PreCon.notNull(reason);
-        PreCon.isValid(reason != AddPlayerReason.ARENA_RELATION_CHANGE);
-        PreCon.isValid(reason != AddPlayerReason.FORWARDING);
 
         PlayerPreJoinEvent preJoinEvent = new PlayerPreJoinEvent(this, player);
 

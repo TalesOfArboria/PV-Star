@@ -198,8 +198,20 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         PreCon.notNull(player);
         PreCon.notNull(nextArena);
 
-        return removePlayer(player, RemovePlayerReason.FORWARDING) &&
-                nextArena.join(player, AddPlayerReason.FORWARDING);
+        if (removePlayer(player, RemovePlayerReason.FORWARDING)) {
+
+            if (nextArena.getGameManager().isRunning()) {
+                nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING);
+            }
+            else {
+                nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
+            }
+
+            return true;
+        }
+
+        return false;
+
     }
 
     /*
