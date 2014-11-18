@@ -51,7 +51,9 @@ import com.jcwhatever.bukkit.pvs.api.arena.managers.TeamManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.ArenaSettings;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaBusyEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisposeEvent;
+import com.jcwhatever.bukkit.pvs.api.events.ArenaIdleEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLeaveEvent;
@@ -354,6 +356,10 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
     @Override
     public final void setBusy() {
         _isBusy++;
+
+        if (_isBusy == 1) {
+            getEventManager().call(new ArenaBusyEvent(this));
+        }
     }
 
     /*
@@ -361,8 +367,14 @@ public abstract class AbstractArena implements Arena, GenericsEventListener {
      */
     @Override
     public final void setIdle() {
+        boolean initialBusyState = isBusy();
+
         _isBusy--;
         _isBusy = Math.max(0, _isBusy);
+
+        if (initialBusyState && !isBusy()) {
+            getEventManager().call(new ArenaIdleEvent(this));
+        }
     }
 
     /*
