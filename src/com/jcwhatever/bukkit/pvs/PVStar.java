@@ -56,6 +56,7 @@ import com.jcwhatever.bukkit.pvs.listeners.MobEventListener;
 import com.jcwhatever.bukkit.pvs.listeners.PlayerEventListener;
 import com.jcwhatever.bukkit.pvs.listeners.PvpListener;
 import com.jcwhatever.bukkit.pvs.listeners.SharingListener;
+import com.jcwhatever.bukkit.pvs.listeners.WorldEventListener;
 import com.jcwhatever.bukkit.pvs.modules.ModuleLoader;
 import com.jcwhatever.bukkit.pvs.points.PVPointsManager;
 import com.jcwhatever.bukkit.pvs.scripting.PVScriptManager;
@@ -242,7 +243,8 @@ public class PVStar extends GenericsPlugin implements IPVStar {
                         new MobEventListener(),
                         new PlayerEventListener(),
                         new PvpListener(),
-                        new SharingListener());
+                        new SharingListener(),
+                        new WorldEventListener());
 
                 // forward global Bukkit events to the appropriate
                 // arena event manager.

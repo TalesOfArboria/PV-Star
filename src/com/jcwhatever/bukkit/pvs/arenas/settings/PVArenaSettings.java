@@ -43,13 +43,15 @@ import javax.annotation.Nullable;
  */
 public class PVArenaSettings implements ArenaSettings {
 
+    private static final boolean DEFAULT_ENABLED_STATE = true;
+
     private final Arena _arena;
     private final IDataNode _dataNode;
 
     private int _minPlayers = 2;
     private int _maxPlayers = 10;
     private boolean _isVisible = true;
-    private boolean _isEnabled = true;
+    private boolean _isEnabled;
     private boolean _isMobSpawnEnabled = false;
     private Location _removeLocation;
     private String _typeDisplayName;
@@ -63,7 +65,7 @@ public class PVArenaSettings implements ArenaSettings {
         _arena = arena;
         _dataNode = arena.getDataNode("settings.arena");
 
-        _isEnabled = _dataNode.getBoolean("enabled", _isEnabled);
+        _isEnabled = _dataNode.getBoolean("enabled", DEFAULT_ENABLED_STATE);
         _minPlayers = _dataNode.getInteger("min-players", _minPlayers);
         _maxPlayers = _dataNode.getInteger("max-players", _maxPlayers);
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
@@ -77,7 +79,17 @@ public class PVArenaSettings implements ArenaSettings {
      */
     @Override
     public boolean isEnabled() {
-        return _isEnabled && _arena.getRegion().isDefined();
+        return _isEnabled && _arena.getRegion().isDefined() &&
+                _arena.getRegion().isWorldLoaded();
+    }
+
+    /*
+     * Get the arenas config setting for the
+     * enabled state.
+     */
+    @Override
+    public boolean isConfigEnabled() {
+        return _dataNode.getBoolean("enabled", DEFAULT_ENABLED_STATE);
     }
 
     /*
@@ -89,6 +101,31 @@ public class PVArenaSettings implements ArenaSettings {
         if (_isEnabled == isEnabled)
             return;
 
+        setTransientEnabled(isEnabled);
+
+        _dataNode.set("enabled", _isEnabled);
+        _dataNode.saveAsync(null);
+    }
+
+    /*
+     * Set the arena enabled state without changing config.
+     */
+    @Override
+    public void setTransientEnabled(boolean isEnabled) {
+
+        // Note: The setting is not checked to see if it is the same
+        // because the method may be called simply to run the events.
+        // (i.e. The arenas world is loaded or unloaded and events need)
+
+        // prevent enabling if world is not loaded
+        if (_arena.getRegion().isDefined() &&
+                !_arena.getRegion().isWorldLoaded()) {
+
+            if (isEnabled)
+                return;
+        }
+
+        _isEnabled = isEnabled;
         if (isEnabled) {
 
             if (_arena.getEventManager().call(new ArenaPreEnableEvent(_arena)).isCancelled())
@@ -117,9 +154,6 @@ public class PVArenaSettings implements ArenaSettings {
 
             _arena.getEventManager().call(new ArenaDisabledEvent(_arena));
         }
-
-        _dataNode.set("enabled", _isEnabled);
-        _dataNode.saveAsync(null);
     }
 
     /*
