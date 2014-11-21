@@ -47,7 +47,7 @@ public class SpawnApi extends ScriptApi {
 
     @Override
     public String getVariableName() {
-        return "spawns";
+        return "arenaSpawns";
     }
 
     @Override

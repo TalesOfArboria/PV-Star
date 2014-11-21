@@ -38,7 +38,7 @@ public class SchedulerApi extends ScriptApi {
 
     @Override
     public String getVariableName() {
-        return "scheduler";
+        return "arenaScheduler";
     }
 
     @Override

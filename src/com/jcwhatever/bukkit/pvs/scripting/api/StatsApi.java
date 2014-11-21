@@ -42,7 +42,7 @@ public class StatsApi extends ScriptApi {
 
     @Override
     public String getVariableName() {
-        return "stats";
+        return "arenaStats";
     }
 
     @Override
