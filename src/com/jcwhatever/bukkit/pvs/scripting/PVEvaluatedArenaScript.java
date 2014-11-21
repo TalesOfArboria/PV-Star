@@ -72,6 +72,8 @@ public class PVEvaluatedArenaScript implements EvaluatedScript {
         _apiObjects = new ArrayList<>(apiCollection == null ? 10 : apiCollection.size());
         _included = new HashSet<>(apiCollection == null ? 10 : apiCollection.size());
 
+        _engine.put("_arena", arena);
+
         if (apiCollection != null) {
             for (IScriptApi api : apiCollection) {
                 addScriptApi(api, api.getVariableName());
