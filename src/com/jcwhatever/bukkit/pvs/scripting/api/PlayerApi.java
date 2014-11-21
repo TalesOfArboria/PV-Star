@@ -44,7 +44,7 @@ public class PlayerApi extends ScriptApi {
 
     @Override
     public String getVariableName() {
-        return "arenaPlayer";
+        return "arenaPlayers";
     }
 
     @Override
