@@ -55,6 +55,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -103,6 +104,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     private int _lives = 0;
     private int _totalPoints = 0;
     private int _points;
+    private Date _lastJoin;
 
     // player to blame code induced death on
     private ArenaPlayer _deathBlamePlayer;
@@ -170,6 +172,16 @@ public class PVArenaPlayer implements ArenaPlayer {
     @Nullable
     public Arena getArena() {
         return _arena;
+    }
+
+    /*
+     * Get the most recent date/time that a player
+     * joined an arena during their current login session.
+     */
+    @Override
+    @Nullable
+    public Date getJoinDate() {
+        return _lastJoin;
     }
 
     /*
@@ -495,6 +507,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             throw new RuntimeException("Cannot set current arena on player if the player is not in the arena.");
 
         _arena = arena;
+        _lastJoin = new Date();
 
         GameManagerSettings settings = arena.getGameManager().getSettings();
         LivesBehavior livesBehavior = settings.getLivesBehavior();
