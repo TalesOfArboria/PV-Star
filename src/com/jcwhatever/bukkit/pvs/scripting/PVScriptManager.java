@@ -36,6 +36,7 @@ import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiInventory;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiItemBank;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiMsg;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiPermissions;
+import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiRand;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiScheduler;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiSounds;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
@@ -105,6 +106,7 @@ public class PVScriptManager implements ScriptManager {
         registerApiType(new ScriptApiSounds(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiDepends(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiScheduler(PVStarAPI.getPlugin()));
+        registerApiType(new ScriptApiRand(PVStarAPI.getPlugin()));
 
         // register PV-Star script api
         registerApiType(new EventsApi());
