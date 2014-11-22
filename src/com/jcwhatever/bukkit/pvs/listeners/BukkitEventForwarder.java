@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -39,6 +40,7 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerEvent;
@@ -87,10 +89,6 @@ public class BukkitEventForwarder implements EventHandler {
             callEvent(((PrepareItemEnchantEvent) event).getEnchanter(), event);
         }
 
-        else if (event instanceof EntityEvent) {
-            callEvent(((EntityEvent) event).getEntity(), event);
-        }
-
         else if (event instanceof HangingEvent) {
             callEvent(((HangingEvent) event).getEntity(), event);
         }
@@ -108,6 +106,21 @@ public class BukkitEventForwarder implements EventHandler {
 
             callEvent(((VehicleEvent) event).getVehicle(), event);
         }
+
+        else if (event instanceof EntityEvent) {
+
+            Entity entity = ((EntityEvent) event).getEntity();
+            if (entity != null) {
+                callEvent(entity, event);
+            }
+            else if (event instanceof EntityExplodeEvent) {
+                callEvent(((EntityExplodeEvent) event).getLocation(), event);
+            }
+            else {
+                Msg.debug("Failed to forward bukkit EntityEvent event because it has no entity.");
+            }
+        }
+
     }
 
     private <T extends Event> void callEvent(Block block, T event) {
