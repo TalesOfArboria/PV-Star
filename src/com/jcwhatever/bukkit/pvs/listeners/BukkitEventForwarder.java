@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.bukkit.generic.events.EventHandler;
+import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -51,7 +51,7 @@ import org.bukkit.inventory.InventoryHolder;
 /**
  * Forward global events to the appropriate arena.
  */
-public class BukkitEventForwarder implements EventHandler {
+public class BukkitEventForwarder implements IEventHandler {
 
     @Override
     public void call(Object e) {

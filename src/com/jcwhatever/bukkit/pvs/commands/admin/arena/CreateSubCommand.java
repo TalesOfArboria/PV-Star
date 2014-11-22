@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
@@ -37,7 +37,7 @@ import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
 
-@ICommandInfo(
+@CommandInfo(
         parent="arena",
         command={"create"},
         staticParams={"arenaName", "type=Arena"},

@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.bukkit.generic.events.EventHandler;
+import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
 /**
  * Arena script manager implementation.
  */
-public class PVArenaScriptManager implements ArenaScriptManager, GenericsEventListener {
+public class PVArenaScriptManager implements ArenaScriptManager, IGenericsEventListener {
 
     private final Arena _arena;
     private final IDataNode _dataNode;
@@ -290,7 +290,7 @@ public class PVArenaScriptManager implements ArenaScriptManager, GenericsEventLi
         }
         else {
             PVStarAPI.getEventManager().register(PVStarLoadedEvent.class,
-                    GenericsEventPriority.NORMAL, new EventHandler() {
+                    GenericsEventPriority.NORMAL, new IEventHandler() {
 
                         @Override
                         public void call(Object event) {

@@ -24,10 +24,10 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.spectator;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 
-@ICommandInfo(
+@CommandInfo(
         command="spectator",
         description="Manage spectator settings.")
 

@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.scripting.repo;
 
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-@IScriptApiInfo(
+@ScriptApiInfo(
         variableName = "pvArenas",
         description = "Access arenas through scripts.")
 public class PVArenasRepoApi extends GenericsScriptApi {

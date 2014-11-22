@@ -25,10 +25,10 @@
 package com.jcwhatever.bukkit.pvs.scripting.repo;
 
 import com.jcwhatever.bukkit.generic.collections.MultiValueMap;
-import com.jcwhatever.bukkit.generic.events.EventHandler;
+import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -41,7 +41,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 import java.util.Set;
 
-@IScriptApiInfo(
+@ScriptApiInfo(
         variableName = "pvEvents",
         description = "register PV-Star events."
 )
@@ -145,7 +145,7 @@ public class PVEventsRepoApi extends GenericsScriptApi {
         public abstract void onCall(Object event);
     }
 
-    private static class EventWrapper implements EventHandler {
+    private static class EventWrapper implements IEventHandler {
 
         private final Arena _arena;
         private final ArenaEventHandler _handler;

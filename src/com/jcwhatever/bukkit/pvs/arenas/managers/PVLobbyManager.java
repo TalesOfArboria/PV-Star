@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.GameManager;
@@ -44,7 +44,7 @@ import org.bukkit.Location;
 import java.util.List;
 import javax.annotation.Nullable;
 
-public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, GenericsEventListener {
+public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IGenericsEventListener {
 
     private LobbyManagerSettings _settings;
 

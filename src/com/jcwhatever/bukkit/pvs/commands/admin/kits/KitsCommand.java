@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.kits;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.kits.items.ItemsCommand;
 
-@ICommandInfo(
+@CommandInfo(
         command="kits",
         description="Manage kits.")
 

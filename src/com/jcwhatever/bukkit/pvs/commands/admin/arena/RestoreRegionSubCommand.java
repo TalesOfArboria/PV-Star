@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
@@ -40,7 +40,7 @@ import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
 
-@ICommandInfo(
+@CommandInfo(
         parent="arena",
         command="restoreregion",
         staticParams = { "fast|balanced|performance=performance" },

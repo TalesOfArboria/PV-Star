@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.ext;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
@@ -41,7 +41,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Set;
 
-@ICommandInfo(
+@CommandInfo(
         parent="ext",
         command="list",
         staticParams = { "page=1" },

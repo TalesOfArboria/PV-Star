@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.users;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
@@ -43,7 +43,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 
-@ICommandInfo(
+@CommandInfo(
         command="list",
         staticParams={"page=1"},
         usage="/{plugin-command} {command} [page]",

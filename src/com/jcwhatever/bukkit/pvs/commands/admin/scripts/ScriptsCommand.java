@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.scripts;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.scripts.reload.ReloadCommand;
 
-@ICommandInfo(
+@CommandInfo(
         command="scripts",
         description="Manage arena scripts.")
 

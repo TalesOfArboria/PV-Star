@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.game;
 
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.game.autostart.AutostartCommand;
 
-@ICommandInfo(
+@CommandInfo(
         command="game",
         description="Manage game settings.")
 

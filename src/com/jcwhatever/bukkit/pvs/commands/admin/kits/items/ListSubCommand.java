@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.commands.admin.kits.items;
 
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.inventory.Kit;
@@ -41,7 +41,7 @@ import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-@ICommandInfo(
+@CommandInfo(
         parent="items",
         command="list",
         staticParams={ "kitName", "page=1" },

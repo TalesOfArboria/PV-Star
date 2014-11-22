@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.commands.admin.kits;
 
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.inventory.Kit;
@@ -35,7 +35,7 @@ import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 
 import org.bukkit.command.CommandSender;
 
-@ICommandInfo(
+@CommandInfo(
         parent="kits",
         command="del",
         staticParams={ "kitName" },

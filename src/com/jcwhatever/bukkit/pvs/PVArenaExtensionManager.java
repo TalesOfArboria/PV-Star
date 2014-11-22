@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.GenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -44,7 +44,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 
-public class PVArenaExtensionManager extends ArenaExtensionManager implements GenericsEventListener {
+public class PVArenaExtensionManager extends ArenaExtensionManager implements IGenericsEventListener {
 
     private final Arena _arena;
     private final Set<ArenaExtension> _extensions = new HashSet<ArenaExtension>(15);
