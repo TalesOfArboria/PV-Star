@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.generic.events.EventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
@@ -97,6 +98,16 @@ public class EventsApi extends ScriptApi {
             PreCon.notNullOrEmpty(priority);
             PreCon.notNull(handler);
 
+            String[] priorityComp = TextUtils.PATTERN_COLON.split(priority);
+            boolean ignoreCancelled = false;
+
+            if (priorityComp.length == 2) {
+                if (priorityComp[1].equalsIgnoreCase("ignoreCancelled")) {
+                    ignoreCancelled = true;
+                    priority = priorityComp[0];
+                }
+            }
+
             GenericsEventPriority eventPriority = GenericsEventPriority.NORMAL;
 
             try {
@@ -121,7 +132,7 @@ public class EventsApi extends ScriptApi {
                 return;
             }
 
-            _arena.getEventManager().register(eventClass, eventPriority, eventHandler);
+            _arena.getEventManager().register(eventClass, eventPriority, ignoreCancelled, eventHandler);
 
             _registeredHandlers.put(eventClass, eventHandler);
         }
