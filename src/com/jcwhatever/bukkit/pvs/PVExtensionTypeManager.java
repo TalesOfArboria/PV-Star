@@ -51,7 +51,7 @@ public class PVExtensionTypeManager implements ExtensionTypeManager {
      * Get the names of available arena extensions
      */
     @Override
-    public Set<String> getExensionNames() {
+    public Set<String> getExtensionNames() {
         return _extensionMap.keySet();
     }
 
