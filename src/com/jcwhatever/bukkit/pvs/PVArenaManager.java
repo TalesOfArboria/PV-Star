@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.GenericsLib;
-import com.jcwhatever.bukkit.generic.regions.ReadOnlyRegion;
+import com.jcwhatever.bukkit.generic.regions.IRegion;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -153,11 +153,11 @@ public class PVArenaManager implements ArenaManager {
     @Nullable
     public Arena getArena(Location location) {
 
-        List<ReadOnlyRegion> regions = GenericsLib.getRegionManager().getRegions(location);
+        List<IRegion> regions = GenericsLib.getRegionManager().getRegions(location);
         if (regions.isEmpty())
             return null;
 
-        for (ReadOnlyRegion readOnlyRegion : regions) {
+        for (IRegion readOnlyRegion : regions) {
 
             ArenaRegion region = readOnlyRegion.getMeta(ArenaRegion.class.getName());
             if (region == null)
