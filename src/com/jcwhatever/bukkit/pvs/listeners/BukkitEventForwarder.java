@@ -24,7 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.bukkit.generic.events.IEventHandler;
+import com.jcwhatever.bukkit.generic.events.AbstractBukkitForwarder;
+import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -49,78 +50,92 @@ import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.inventory.InventoryHolder;
 
 /**
- * Forward global events to the appropriate arena.
+ * Forward Bukkit events to the appropriate arena.
  */
-public class BukkitEventForwarder implements IEventHandler {
+public class BukkitEventForwarder extends AbstractBukkitForwarder {
+
+
+    /**
+     * Constructor.
+     *
+     * <p>Automatically attaches forwarder to the specified source event manager.</p>
+     *
+     * @param source The event manager source that Bukkit events are handled from.
+     *               Typically this will be the global event manager since it is the
+     *               only manager that receives bukkit events as part of its normal
+     *               operation.
+     */
+    public BukkitEventForwarder(GenericsEventManager source) {
+        super(source);
+    }
 
     @Override
-    public void call(Object e) {
+    protected void onBlockEvent(BlockEvent event) {
+        callEvent(event.getBlock(), event);
+    }
 
-        if (!(e instanceof Event))
-            return;
-
-        Event event = (Event)e;
+    @Override
+    protected void onPlayerEvent(PlayerEvent event) {
 
         if (event instanceof PlayerInteractEvent) {
-            PlayerInteractEvent interactEvent = (PlayerInteractEvent)event;
+            PlayerInteractEvent interactEvent = (PlayerInteractEvent) event;
 
             if (interactEvent.hasBlock()) {
                 callEvent(interactEvent.getClickedBlock(), event);
-            }
-            else {
+            } else {
                 callEvent(interactEvent.getPlayer(), event);
             }
         }
-
-        else if (event instanceof PlayerEvent) {
-            callEvent(((PlayerEvent) event).getPlayer(), event);
+        else {
+            callEvent(event.getPlayer(), event);
         }
+    }
 
-        else if (event instanceof BlockEvent) {
-            callEvent(((BlockEvent) event).getBlock(), event);
-        }
-
-        else if (event instanceof EnchantItemEvent) {
+    @Override
+    protected void onInventoryEvent(InventoryEvent event) {
+        if (event instanceof EnchantItemEvent) {
             callEvent(((EnchantItemEvent) event).getEnchanter(), event);
         }
-
         else if (event instanceof PrepareItemEnchantEvent) {
 
             callEvent(((PrepareItemEnchantEvent) event).getEnchanter(), event);
         }
-
-        else if (event instanceof HangingEvent) {
-            callEvent(((HangingEvent) event).getEntity(), event);
-        }
-
-        else if (event instanceof InventoryEvent) {
-
-            InventoryHolder holder = ((InventoryEvent) event).getInventory().getHolder();
+        else {
+            InventoryHolder holder = event.getInventory().getHolder();
 
             if (holder instanceof Player) {
                 callEvent((Player)holder, event);
             }
         }
+    }
 
-        else if (event instanceof VehicleEvent) {
+    @Override
+    protected void onHangingEvent(HangingEvent event) {
 
-            callEvent(((VehicleEvent) event).getVehicle(), event);
+    }
+
+    @Override
+    protected void onVehicleEvent(VehicleEvent event) {
+        callEvent(event.getVehicle(), event);
+    }
+
+    @Override
+    protected void onEntityEvent(EntityEvent event) {
+        Entity entity = event.getEntity();
+        if (entity != null) {
+            callEvent(entity, event);
         }
-
-        else if (event instanceof EntityEvent) {
-
-            Entity entity = ((EntityEvent) event).getEntity();
-            if (entity != null) {
-                callEvent(entity, event);
-            }
-            else if (event instanceof EntityExplodeEvent) {
-                callEvent(((EntityExplodeEvent) event).getLocation(), event);
-            }
-            else {
-                Msg.debug("Failed to forward bukkit EntityEvent event because it has no entity.");
-            }
+        else if (event instanceof EntityExplodeEvent) {
+            callEvent(((EntityExplodeEvent) event).getLocation(), event);
         }
+        else {
+            Msg.debug("Failed to forward bukkit EntityEvent event because it has no entity.");
+        }
+    }
 
+    @Override
+    protected void onOtherEvent(Event event) {
+        // do nothing
     }
 
     private <T extends Event> void callEvent(Block block, T event) {
@@ -152,8 +167,4 @@ public class BukkitEventForwarder implements IEventHandler {
 
         arena.getEventManager().call(event);
     }
-
-
-
-
 }

@@ -248,8 +248,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
                 // forward global Bukkit events to the appropriate
                 // arena event manager.
-                _eventForwarder = new BukkitEventForwarder();
-                GenericsEventManager.getGlobal().addCallHandler(_eventForwarder);
+                _eventForwarder = new BukkitEventForwarder(GenericsEventManager.getGlobal());
 
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
@@ -277,7 +276,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         }
 
         if (_eventForwarder != null) {
-            GenericsEventManager.getGlobal().removeCallHandler(_eventForwarder);
+            _eventForwarder.dispose();
             _eventForwarder = null;
         }
     }
