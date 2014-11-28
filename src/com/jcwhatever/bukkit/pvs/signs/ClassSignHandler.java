@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.bukkit.generic.inventory.InventoryHelper;
+import com.jcwhatever.bukkit.generic.utils.InventoryUtils;
 import com.jcwhatever.bukkit.generic.inventory.Kit;
 import com.jcwhatever.bukkit.generic.signs.SignContainer;
 import com.jcwhatever.bukkit.generic.signs.SignHandler;
@@ -109,7 +109,7 @@ public class ClassSignHandler extends SignHandler {
             Kit kit = PVStarAPI.getKitManager().getKitByName(searchName);
 
             if (kit != null) {
-                InventoryHelper.clearAll(p.getInventory());
+                InventoryUtils.clearAll(p.getInventory());
 
                 kit.give(p);
 
