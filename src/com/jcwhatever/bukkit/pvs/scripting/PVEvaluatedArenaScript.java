@@ -47,7 +47,7 @@ public class PVEvaluatedArenaScript extends GenericsEvaluatedScript implements E
      */
     public PVEvaluatedArenaScript(Arena arena, ScriptEngine engine, Script parentScript,
                                   @Nullable Collection<? extends IScriptApi> apiCollection) {
-        super(parentScript, engine, apiCollection);
+        super(parentScript, engine, null);
 
         PreCon.notNull(arena);
 
@@ -60,6 +60,12 @@ public class PVEvaluatedArenaScript extends GenericsEvaluatedScript implements E
         }
         else if (!engineArena.equals(arena)) {
             throw new IllegalArgumentException("The engine provided is already reserved for a different arena.");
+        }
+
+        if (apiCollection != null) {
+            for (IScriptApi api : apiCollection) {
+                addScriptApi(api, api.getVariableName());
+            }
         }
     }
 
