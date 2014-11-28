@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.scripting.api;
 
-import com.jcwhatever.bukkit.generic.player.PlayerHelper;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -86,7 +86,7 @@ public class PlayerApi extends ScriptApi {
         public Player getPlayer(Object player) {
             PreCon.notNull(player);
 
-            Player p = PlayerHelper.getPlayer(player);
+            Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
             return p;

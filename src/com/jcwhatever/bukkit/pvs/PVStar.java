@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
-import com.jcwhatever.bukkit.generic.player.PlayerHelper;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.scripting.ScriptHelper;
 import com.jcwhatever.bukkit.generic.signs.SignManager;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -113,7 +113,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         if (player instanceof ArenaPlayer)
             return (ArenaPlayer)player;
 
-        Player p = PlayerHelper.getPlayer(player);
+        Player p = PlayerUtils.getPlayer(player);
         PreCon.notNull(p);
 
         return PVArenaPlayer.get(p);

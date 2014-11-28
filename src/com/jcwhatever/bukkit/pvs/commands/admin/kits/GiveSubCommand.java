@@ -32,7 +32,7 @@ import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderExc
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.inventory.Kit;
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.player.PlayerHelper;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 
@@ -70,7 +70,7 @@ public class GiveSubCommand extends AbstractCommand {
 
             String playerName = args.getName("playerName");
 
-            kitPlayer = PlayerHelper.getPlayer(playerName);
+            kitPlayer = PlayerUtils.getPlayer(playerName);
 
             if (kitPlayer == null) {
                 tellError(sender, Lang.get(_PLAYER_NOT_FOUND, playerName));
