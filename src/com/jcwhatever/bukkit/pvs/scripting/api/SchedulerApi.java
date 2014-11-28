@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.scripting.api;
 
+import com.jcwhatever.bukkit.generic.scheduler.ScheduledTask;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.utils.Scheduler.ScheduledTask;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
