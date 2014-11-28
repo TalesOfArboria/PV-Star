@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.listeners;
 
 import com.jcwhatever.bukkit.generic.extended.MaterialExt;
-import com.jcwhatever.bukkit.generic.items.ItemStackHelper;
+import com.jcwhatever.bukkit.generic.utils.ItemStackUtils;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -100,7 +100,7 @@ public class PvpListener implements Listener {
 
         // prevent armor damage
         if (!settings.isArmorDamageable()) {
-            ItemStackHelper.repair(p.getInventory().getArmorContents());
+            ItemStackUtils.repair(p.getInventory().getArmorContents());
         }
     }
 
