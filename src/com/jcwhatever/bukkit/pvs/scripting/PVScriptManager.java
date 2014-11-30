@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs.scripting;
 import com.jcwhatever.bukkit.generic.scripting.GenericsScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.IScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
-import com.jcwhatever.bukkit.generic.scripting.ScriptHelper.ScriptConstructor;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils.ScriptConstructor;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiDepends;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiEconomy;
