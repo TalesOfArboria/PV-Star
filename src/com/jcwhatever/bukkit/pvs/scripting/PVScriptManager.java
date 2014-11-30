@@ -75,13 +75,12 @@ public class PVScriptManager implements ScriptManager {
     /*
      * Constructor.
      */
-    public PVScriptManager(Plugin plugin, File scriptFolder, ScriptEngineManager engineManager) {
+    public PVScriptManager(Plugin plugin, File scriptFolder) {
         PreCon.notNull(plugin);
         PreCon.notNull(scriptFolder);
-        PreCon.notNull(engineManager);
 
         _scriptFolder = scriptFolder;
-        _scriptRepository = new GenericsScriptManager(plugin, engineManager) {
+        _scriptRepository = new GenericsScriptManager(plugin) {
 
             @Override
             public ScriptConstructor<IScript> getScriptConstructor() {

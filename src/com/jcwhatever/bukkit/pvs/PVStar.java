@@ -29,9 +29,8 @@ import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
-import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
-import com.jcwhatever.bukkit.generic.scripting.ScriptHelper;
 import com.jcwhatever.bukkit.generic.signs.SignManager;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -111,7 +110,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         PreCon.notNull(player);
 
         if (player instanceof ArenaPlayer)
-            return (ArenaPlayer)player;
+            return (ArenaPlayer) player;
 
         Player p = PlayerUtils.getPlayer(player);
         PreCon.notNull(p);
@@ -264,10 +263,10 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         _isLoaded = false;
 
         // end arenas
-       List<Arena> arenas = _arenaManager.getArenas();
-       for (Arena arena : arenas) {
-           arena.getGameManager().end();
-       }
+        List<Arena> arenas = _arenaManager.getArenas();
+        for (Arena arena : arenas) {
+            arena.getGameManager().end();
+        }
 
         Collection<PVStarModule> modules = _moduleLoader.getModules();
 
@@ -288,8 +287,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
             return;
         }
 
-        _scriptManager = new PVScriptManager(this, scriptFolder, ScriptHelper.getGlobalEngineManager());
+        _scriptManager = new PVScriptManager(this, scriptFolder);
     }
-
-
 }
