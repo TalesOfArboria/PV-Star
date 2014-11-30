@@ -87,8 +87,8 @@ public class PVScriptManager implements ScriptManager {
             public ScriptConstructor<IScript> getScriptConstructor() {
                 return new ScriptConstructor<IScript>() {
                     @Override
-                    public IScript construct(String name, String type, String script) {
-                        return new PVScript(name, type, script);
+                    public IScript construct(String name, @Nullable String filename, String type, String script) {
+                        return new PVScript(name, filename, type, script);
                     }
                 };
             }

@@ -47,8 +47,8 @@ public class PVScript extends GenericsScript implements Script {
     /*
      * Constructor.
      */
-    public PVScript(String name, String type, String script) {
-        super(name, type, script);
+    public PVScript(String name, @Nullable String filename, String type, String script) {
+        super(name, filename, type, script);
     }
 
     /*
@@ -77,7 +77,7 @@ public class PVScript extends GenericsScript implements Script {
         EvaluatedScript evaluated = new PVEvaluatedArenaScript(arena, engine, this, apiCollection);
 
         // evaluate
-        if (!eval(engine)) {
+        if (!eval(engine, evaluated.getContext())) {
             return null;
         }
 

@@ -33,7 +33,9 @@ import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 
 import java.util.Collection;
 import javax.annotation.Nullable;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
+import javax.script.SimpleScriptContext;
 
 /*
  * A script that has been evaluated for an arena.
@@ -53,15 +55,6 @@ public class PVEvaluatedArenaScript extends GenericsEvaluatedScript implements E
 
         _arena = arena;
 
-        Object engineArena = engine.get("_arena");
-
-        if (engineArena == null) {
-            engine.put("_arena", arena);
-        }
-        else if (!engineArena.equals(arena)) {
-            throw new IllegalArgumentException("The engine provided is already reserved for a different arena.");
-        }
-
         if (apiCollection != null) {
             for (IScriptApi api : apiCollection) {
                 addScriptApi(api, api.getVariableName());
@@ -75,5 +68,15 @@ public class PVEvaluatedArenaScript extends GenericsEvaluatedScript implements E
     @Override
     public Arena getArena() {
         return _arena;
+    }
+
+    /**
+     * Called to get a context for the script.
+     */
+    @Override
+    protected ScriptContext createContext() {
+        ScriptContext context = new SimpleScriptContext();
+        context.setAttribute("_arena", _arena, ScriptContext.ENGINE_SCOPE);
+        return context;
     }
 }
