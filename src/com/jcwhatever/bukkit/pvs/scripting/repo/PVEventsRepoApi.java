@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.scripting.repo;
 
-import com.jcwhatever.bukkit.generic.collections.MultiValueMap;
+import com.jcwhatever.bukkit.generic.collections.MultiValueBiMap;
 import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
@@ -71,8 +71,8 @@ public class PVEventsRepoApi extends GenericsScriptApi {
 
     public static class ApiObject implements IScriptApiObject {
 
-        private final MultiValueMap<Class<?>, EventWrapper> _registeredHandlers =
-                new MultiValueMap<>(30);
+        private final MultiValueBiMap<Class<?>, EventWrapper> _registeredHandlers =
+                new MultiValueBiMap<>(30);
 
         private boolean _isDisposed;
 
