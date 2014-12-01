@@ -24,10 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.bukkit.generic.scripting.GenericsScriptManager;
-import com.jcwhatever.bukkit.generic.scripting.IScript;
+import com.jcwhatever.bukkit.generic.scripting.AbstractScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
-import com.jcwhatever.bukkit.generic.utils.ScriptUtils.ScriptConstructor;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiDepends;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiEconomy;
@@ -41,7 +39,9 @@ import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiScheduler;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiSounds;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils.ScriptConstructor;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
+import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptManager;
 import com.jcwhatever.bukkit.pvs.scripting.api.EventsApi;
@@ -56,48 +56,33 @@ import com.jcwhatever.bukkit.pvs.scripting.repo.PVPlayersRepoApi;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.Nullable;
-import javax.script.ScriptEngineManager;
 
 /**
  * A central repository of unevaluated scripts which can be used for one or more arenas.
  */
-public class PVScriptManager implements ScriptManager {
+public class PVScriptManager
+        extends AbstractScriptManager<Script, EvaluatedScript>
+        implements ScriptManager {
 
-    private final GenericsScriptManager _scriptRepository;
-    private final Map<String, IScriptApi> _apiMap = new HashMap<>(30);
-    private final File _scriptFolder;
+    private static ScriptConstructor<Script> _scriptConstructor = new ScriptConstructor<Script>() {
+        @Override
+        public Script construct(String name, @Nullable String filename, String type, String script) {
+            return new PVScript(name, filename, type, script);
+        }
+    };
 
     /*
      * Constructor.
      */
     public PVScriptManager(Plugin plugin, File scriptFolder) {
-        PreCon.notNull(plugin);
-        PreCon.notNull(scriptFolder);
+        super(plugin, scriptFolder, DirectoryTraversal.RECURSIVE);
 
-        _scriptFolder = scriptFolder;
-        _scriptRepository = new GenericsScriptManager(plugin) {
-
-            @Override
-            public ScriptConstructor<IScript> getScriptConstructor() {
-                return new ScriptConstructor<IScript>() {
-                    @Override
-                    public IScript construct(String name, @Nullable String filename, String type, String script) {
-                        return new PVScript(name, filename, type, script);
-                    }
-                };
-            }
-        };
-
-        _scriptRepository.loadScripts(_scriptFolder, DirectoryTraversal.RECURSIVE);
+        loadScripts();
 
         // register Generics script api
         registerApiType(new ScriptApiEconomy(PVStarAPI.getPlugin()));
-        registerApiType(new ScriptApiInclude(PVStarAPI.getPlugin(), _scriptRepository));
+        registerApiType(new ScriptApiInclude(PVStarAPI.getPlugin(), this));
         registerApiType(new ScriptApiInventory(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiItemBank(PVStarAPI.getPlugin()));
         registerApiType(new ScriptApiMsg(PVStarAPI.getPlugin()));
@@ -120,109 +105,26 @@ public class PVScriptManager implements ScriptManager {
         ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVPlayersRepoApi.class);
     }
 
-
-    /*
-     * Get the engine manager used to get script engines.
-     */
     @Override
-    public ScriptEngineManager getEngineManager() {
-
-        return _scriptRepository.getEngineManager();
+    public ScriptConstructor<Script> getScriptConstructor() {
+        return _scriptConstructor;
     }
 
     /*
-     * Add a script to the script repository
-     */
-    @Override
-    public void addScript(Script script) {
-        PreCon.notNull(script);
-
-        _scriptRepository.addScript(script);
-    }
-
-    /*
-     * Remove a script from the repository by script name.
-     */
-    @Override
-    public void removeScript(String scriptName) {
-        PreCon.notNullOrEmpty(scriptName);
-
-        _scriptRepository.removeScript(scriptName);
-    }
-
-    /*
-     * Register an api to be used in all evaluated scripts.
-     */
+         * Register an api to be used in all evaluated scripts.
+         */
     @Override
     public void registerApiType(IScriptApi api) {
         PreCon.notNull(api);
 
-        _apiMap.put(api.getVariableName(), api);
+        addScriptApi(api);
     }
 
     /*
-     *  Get a script api by its variable name.
+     * Do not evaluate scripts
      */
     @Override
-    public IScriptApi getScriptApi(String apiVariableName) {
-        PreCon.notNullOrEmpty(apiVariableName);
-
-        return _apiMap.get(apiVariableName);
-    }
-
-    /*
-     *  Get all script api.
-     */
-    @Override
-    public List<IScriptApi> getScriptApis() {
-
-        return new ArrayList<>(_apiMap.values());
-    }
-
-    /*
-     * Get a script by name
-     */
-    @Nullable
-    @Override
-    public Script getScript(String scriptName) {
-        PreCon.notNullOrEmpty(scriptName);
-
-        IScript iScript = _scriptRepository.getScript(scriptName);
-        return iScript instanceof Script ? (Script) iScript : null;
-    }
-
-    /*
-     * Get the names of all scripts.
-     */
-    @Override
-    public List<String> getScriptNames() {
-
-        return _scriptRepository.getScriptNames();
-    }
-
-    /*
-     * Get all scripts.
-     */
-    @Override
-    public List<Script> getScripts() {
-
-        List<IScript> iScripts = _scriptRepository.getScripts();
-        List<Script> scripts = new ArrayList<>(iScripts.size());
-
-        for (IScript iScript : iScripts) {
-            scripts.add((Script)iScript);
-        }
-
-        return scripts;
-    }
-
-    /*
-     * Reload repository of scripts from script directory.
-     */
-    @Override
-    public void reload() {
-
-        _scriptRepository.clearScripts();
-        _scriptRepository.loadScripts(_scriptFolder, DirectoryTraversal.RECURSIVE);
+    public void evaluate() {
+        // do nothing
     }
 }
