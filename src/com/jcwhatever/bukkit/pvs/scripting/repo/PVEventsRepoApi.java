@@ -66,7 +66,7 @@ public class PVEventsRepoApi extends GenericsScriptApi {
     }
 
     public void reset() {
-        _api.reset();
+        _api.dispose();
     }
 
     public static class ApiObject implements IScriptApiObject {
@@ -81,7 +81,7 @@ public class PVEventsRepoApi extends GenericsScriptApi {
          * Reset api and release resources.
          */
         @Override
-        public void reset() {
+        public void dispose() {
 
             Set<Class<?>> events = _registeredHandlers.keySet();
 

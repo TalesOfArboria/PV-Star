@@ -68,7 +68,7 @@ public class EventsApi extends ScriptApi {
          * Reset api and release resources.
          */
         @Override
-        public void reset() {
+        public void dispose() {
 
             Set<Class<?>> events = _registeredHandlers.keySet();
 

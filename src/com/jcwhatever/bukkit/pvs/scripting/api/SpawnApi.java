@@ -72,7 +72,7 @@ public class SpawnApi extends ScriptApi {
          * Reset the api and release resources.
          */
         @Override
-        public void reset() {
+        public void dispose() {
             // do nothing
         }
 

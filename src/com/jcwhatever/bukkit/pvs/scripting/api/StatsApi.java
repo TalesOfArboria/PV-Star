@@ -67,7 +67,7 @@ public class StatsApi extends ScriptApi {
          * Reset api and release resources.
          */
         @Override
-        public void reset() {
+        public void dispose() {
             // do nothing
         }
 
