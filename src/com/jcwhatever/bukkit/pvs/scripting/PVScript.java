@@ -34,6 +34,7 @@ import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 
+import java.io.File;
 import java.util.Collection;
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
@@ -47,8 +48,8 @@ public class PVScript extends GenericsScript implements Script {
     /*
      * Constructor.
      */
-    public PVScript(String name, @Nullable String filename, String type, String script) {
-        super(name, filename, type, script);
+    public PVScript(String name, @Nullable File file, String type, String script) {
+        super(name, file, type, script);
     }
 
     /*

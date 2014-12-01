@@ -67,8 +67,8 @@ public class PVScriptManager
 
     private static ScriptConstructor<Script> _scriptConstructor = new ScriptConstructor<Script>() {
         @Override
-        public Script construct(String name, @Nullable String filename, String type, String script) {
-            return new PVScript(name, filename, type, script);
+        public Script construct(String name, @Nullable File file, String type, String script) {
+            return new PVScript(name, file, type, script);
         }
     };
 
