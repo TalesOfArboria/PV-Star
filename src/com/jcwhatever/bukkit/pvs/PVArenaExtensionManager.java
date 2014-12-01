@@ -101,7 +101,6 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IG
 
     @Nullable
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends ArenaExtension> T get(Class<T> clazz) {
         PreCon.notNull(clazz);
 
@@ -113,12 +112,14 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IG
         if (module == null)
             return null;
 
-        return (T)module;
+        @SuppressWarnings("unchecked")
+        T result = (T)module;
+
+        return result;
     }
 
     @Nullable
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends ArenaExtension> T add(String name) {
         PreCon.notNullOrEmpty(name);
 
@@ -142,7 +143,10 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IG
 
         extension.enable();
 
-        return (T)extension;
+        @SuppressWarnings("unchecked")
+        T result = (T)extension;
+
+        return result;
     }
 
     @Override
