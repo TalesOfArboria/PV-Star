@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.arenas;
 
-import com.jcwhatever.bukkit.generic.collections.WeakValueMap;
+import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
 import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.language.Localizable;
@@ -104,7 +104,7 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
     private ArenaRegion _region;
     private IPermission _permission;
 
-    private Map<String, IDataNode> _nodeMap = new WeakValueMap<>(20);
+    private Map<String, IDataNode> _nodeMap = new WeakValueHashMap<>(20);
 
     private GameManager _gameManager;
     private LobbyManager _lobbyManager;

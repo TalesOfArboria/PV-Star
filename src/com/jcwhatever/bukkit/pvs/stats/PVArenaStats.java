@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.stats;
 
-import com.jcwhatever.bukkit.generic.collections.WeakValueMap;
+import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -43,7 +43,7 @@ import java.util.UUID;
 public class PVArenaStats implements ArenaStats {
 
     private static Set<IDataNode> _nodesToSave = new HashSet<>(100);
-    private Map<StatType, IDataNode> _cachedNodes = new WeakValueMap<>(25);
+    private Map<StatType, IDataNode> _cachedNodes = new WeakValueHashMap<>(25);
 
     static {
         // schedule data saving
