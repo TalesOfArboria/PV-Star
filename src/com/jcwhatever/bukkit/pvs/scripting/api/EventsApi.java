@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.scripting.api;
 
-import com.jcwhatever.bukkit.generic.collections.MultiValueMap;
-import com.jcwhatever.bukkit.generic.events.IEventHandler;
+import com.jcwhatever.bukkit.generic.collections.HashSetMap;
 import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
+import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.TextUtils;
@@ -34,7 +34,6 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.ScriptApi;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,7 +57,7 @@ public class EventsApi extends ScriptApi {
     public static class ApiObject implements IScriptApiObject {
 
         private final Arena _arena;
-        private final MultiValueMap<Class<?>, IEventHandler> _registeredHandlers = new MultiValueMap<>(30);
+        private final HashSetMap<Class<?>, IEventHandler> _registeredHandlers = new HashSetMap<>(30);
         private boolean _isDisposed;
 
         ApiObject(Arena arena) {
@@ -80,7 +79,7 @@ public class EventsApi extends ScriptApi {
 
             for (Class<?> event : events) {
 
-                List<IEventHandler> handlers = _registeredHandlers.getValues(event);
+                Set<IEventHandler> handlers = _registeredHandlers.getAll(event);
                 if (handlers == null)
                     continue;
 
