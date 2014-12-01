@@ -68,6 +68,11 @@ public class SpawnApi extends ScriptApi {
             _arena = arena;
         }
 
+        @Override
+        public boolean isDisposed() {
+            return false;
+        }
+
         /**
          * Reset the api and release resources.
          */

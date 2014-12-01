@@ -59,9 +59,15 @@ public class EventsApi extends ScriptApi {
 
         private final Arena _arena;
         private final MultiValueMap<Class<?>, IEventHandler> _registeredHandlers = new MultiValueMap<>(30);
+        private boolean _isDisposed;
 
         ApiObject(Arena arena) {
             _arena = arena;
+        }
+
+        @Override
+        public boolean isDisposed() {
+            return _isDisposed;
         }
 
         /**
@@ -84,6 +90,7 @@ public class EventsApi extends ScriptApi {
             }
 
             _registeredHandlers.clear();
+            _isDisposed = true;
         }
 
         /**

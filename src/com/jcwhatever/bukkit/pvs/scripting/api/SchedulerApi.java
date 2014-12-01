@@ -59,12 +59,17 @@ public class SchedulerApi extends ScriptApi {
             _arena = arena;
         }
 
+        @Override
+        public boolean isDisposed() {
+            return false;
+        }
+
         /**
          * Reset api and release resources.
          */
         @Override
         public void dispose() {
-            // Do nothing
+            // do nothing
         }
 
         /**

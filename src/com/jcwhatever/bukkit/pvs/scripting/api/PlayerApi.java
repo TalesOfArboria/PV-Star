@@ -57,6 +57,11 @@ public class PlayerApi extends ScriptApi {
 
     public static class ApiObject implements IScriptApiObject {
 
+        @Override
+        public boolean isDisposed() {
+            return false;
+        }
+
         /**
          * Reset api and release resources.
          */

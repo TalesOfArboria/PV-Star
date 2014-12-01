@@ -115,6 +115,8 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
     private ArenaScriptManager _scriptManager;
     private ArenaSettings _arenaSettings;
 
+    private boolean _isDisposed;
+
 
     /*
      * Initialize an arenas typeInfo after it is instantiated.
@@ -488,6 +490,11 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
         return false;
     }
 
+    @Override
+    public final boolean isDisposed() {
+        return _isDisposed;
+    }
+
     /*
      * Dispose the arena and release resources.
      * Calls disable method first.
@@ -508,6 +515,7 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
         getRegion().dispose();
 
         _dataNode = null;
+        _isDisposed = true;
     }
 
     /*

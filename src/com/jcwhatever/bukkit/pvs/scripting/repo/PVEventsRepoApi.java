@@ -74,8 +74,15 @@ public class PVEventsRepoApi extends GenericsScriptApi {
         private final MultiValueMap<Class<?>, EventWrapper> _registeredHandlers =
                 new MultiValueMap<>(30);
 
+        private boolean _isDisposed;
+
 
         ApiObject() {}
+
+        @Override
+        public boolean isDisposed() {
+            return _isDisposed;
+        }
 
         /**
          * Reset api and release resources.
@@ -97,6 +104,7 @@ public class PVEventsRepoApi extends GenericsScriptApi {
             }
 
             _registeredHandlers.clear();
+            _isDisposed = true;
         }
 
         /**
