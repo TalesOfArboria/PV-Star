@@ -22,60 +22,63 @@
  * THE SOFTWARE.
  */
 
-package com.jcwhatever.bukkit.pvs.scripting.repo;
+package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
-import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 
-import org.bukkit.plugin.Plugin;
-
+import java.util.List;
 import javax.annotation.Nullable;
 
-@ScriptApiInfo(
-        variableName = "pvPlayers",
-        description = "Get arena player from player object.")
-public class PVPlayersRepoApi extends GenericsScriptApi {
+/*
+ *
+ */
+public class ArenaApiObject implements IScriptApiObject {
 
-    private static ApiObject _apiObject;
+    private Arena _arena;
+    private boolean _isDisposed;
 
-    public PVPlayersRepoApi(Plugin plugin) {
-        super(plugin);
+    public final ArenaEventsApiObject events = new ArenaEventsApiObject();
+    public final ArenaSchedulerApiObject scheduler = new ArenaSchedulerApiObject();
+    public final ArenaSpawnsApiObject spawns = new ArenaSpawnsApiObject();
+    public final ArenaStatsApiObject stats = new ArenaStatsApiObject();
 
-        _apiObject = new ApiObject();
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
     }
 
     @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        return _apiObject;
+    public void dispose() {
+        _arena = null;
+
+        events.dispose();
+
+        _isDisposed = true;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    @Nullable
+    public Arena setArenaByName(String name) {
+        PreCon.notNullOrEmpty(name);
 
-        @Override
-        public boolean isDisposed() {
-            return false;
+        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
+        Arena arena = arenas.size() == 1 ? arenas.get(0) : null;
+        if (arena != null) {
+            setArena(arena);
         }
 
-        @Override
-        public void dispose() {
-            // do nothing
-        }
+        return _arena;
+    }
 
-        /**
-         * Get an {@code ArenaPlayer} object from a player object.
-         *
-         * @param player  The player object.
-         */
-        @Nullable
-        public ArenaPlayer getArenaPlayer(Object player) {
-            PreCon.notNull(player);
+    public void setArena(Arena arena) {
+        PreCon.notNull(arena);
 
-            return PVStarAPI.getArenaPlayer(player);
-        }
+        _arena = arena;
+        events.setArena(arena);
+        scheduler.setArena(arena);
+        spawns.setArena(arena);
     }
 }

@@ -59,7 +59,6 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLeaveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
-import com.jcwhatever.bukkit.pvs.api.scripting.ArenaScriptManager;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVGameManager;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVLobbyManager;
@@ -67,7 +66,6 @@ import com.jcwhatever.bukkit.pvs.arenas.managers.PVSpawnManager;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVSpectatorManager;
 import com.jcwhatever.bukkit.pvs.arenas.managers.PVTeamManager;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVArenaSettings;
-import com.jcwhatever.bukkit.pvs.scripting.PVArenaScriptManager;
 
 import org.bukkit.Location;
 import org.bukkit.permissions.PermissionDefault;
@@ -112,7 +110,6 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
     private SpawnManager _spawnManager;
     private TeamManager _teamManager;
     private ArenaExtensionManager _extensionManager;
-    private ArenaScriptManager _scriptManager;
     private ArenaSettings _arenaSettings;
 
     private boolean _isDisposed;
@@ -159,7 +156,6 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
         _spectatorManager = new PVSpectatorManager(this);
         _spawnManager = new PVSpawnManager(this);
         _teamManager = new PVTeamManager(this);
-        _scriptManager = new PVArenaScriptManager(this);
         _extensionManager = new PVArenaExtensionManager(this);
 
         getEventManager().register(this);
@@ -223,14 +219,6 @@ public abstract class AbstractArena implements Arena, IGenericsEventListener {
     @Override
     public final ArenaExtensionManager getExtensionManager() {
         return _extensionManager;
-    }
-
-    /*
-     * Get the arenas script manager.
-     */
-    @Override
-    public final ArenaScriptManager getScriptManager() {
-        return _scriptManager;
     }
 
     /*

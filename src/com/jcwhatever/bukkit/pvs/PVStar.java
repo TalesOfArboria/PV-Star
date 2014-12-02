@@ -31,6 +31,7 @@ import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.signs.SignManager;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
@@ -46,7 +47,6 @@ import com.jcwhatever.bukkit.pvs.api.events.PVStarLoadedEvent;
 import com.jcwhatever.bukkit.pvs.api.modules.ModuleInfo;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.points.PointsManager;
-import com.jcwhatever.bukkit.pvs.api.scripting.ScriptManager;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnTypeManager;
 import com.jcwhatever.bukkit.pvs.api.stats.StatsManager;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
@@ -61,7 +61,7 @@ import com.jcwhatever.bukkit.pvs.listeners.SharingListener;
 import com.jcwhatever.bukkit.pvs.listeners.WorldEventListener;
 import com.jcwhatever.bukkit.pvs.modules.ModuleLoader;
 import com.jcwhatever.bukkit.pvs.points.PVPointsManager;
-import com.jcwhatever.bukkit.pvs.scripting.PVScriptManager;
+import com.jcwhatever.bukkit.pvs.scripting.PVStarScriptApi;
 import com.jcwhatever.bukkit.pvs.signs.PVSignManager;
 import com.jcwhatever.bukkit.pvs.stats.PVStatsManager;
 
@@ -86,7 +86,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     private PointsManager _pointsManager;
     private SignManager _signManager;
     private PVExtensionTypeManager _extensionManager;
-    private PVScriptManager _scriptManager;
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
     private BukkitEventForwarder _eventForwarder;
@@ -171,11 +170,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     }
 
     @Override
-    public ScriptManager getScriptManager() {
-        return _scriptManager;
-    }
-
-    @Override
     @Nullable
     public PVStarModule getModule(String name) {
         PreCon.notNullOrEmpty(name);
@@ -209,8 +203,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         // enable command
         _commandHandler = new CommandHandler(this);
         registerCommands(_commandHandler);
-
-        loadScripts();
 
         Msg.info("Loading modules...");
 
@@ -263,6 +255,9 @@ public class PVStar extends GenericsPlugin implements IPVStar {
                 // arena event manager.
                 _eventForwarder = new BukkitEventForwarder(GenericsEventManager.getGlobal());
 
+                // register script api
+                ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
+
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
 
@@ -292,15 +287,5 @@ public class PVStar extends GenericsPlugin implements IPVStar {
             _eventForwarder.dispose();
             _eventForwarder = null;
         }
-    }
-
-    private void loadScripts() {
-
-        File scriptFolder = new File(getDataFolder(), "scripts");
-        if (!scriptFolder.exists() && !scriptFolder.mkdirs()) {
-            return;
-        }
-
-        _scriptManager = new PVScriptManager(this, scriptFolder);
     }
 }
