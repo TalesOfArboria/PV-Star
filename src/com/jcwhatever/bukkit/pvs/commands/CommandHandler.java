@@ -28,7 +28,6 @@ import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
 import com.jcwhatever.bukkit.pvs.commands.admin.arena.ArenaCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.ext.ExtCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.game.GameCommand;
-import com.jcwhatever.bukkit.pvs.commands.admin.kits.KitsCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.lobby.LobbyCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.modules.ModulesCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.points.PointsCommand;
@@ -61,7 +60,6 @@ public class CommandHandler extends AbstractCommandHandler {
         registerCommand(ArenaCommand.class);
         registerCommand(ExtCommand.class);
         registerCommand(GameCommand.class);
-        registerCommand(KitsCommand.class);
         registerCommand(LobbyCommand.class);
         registerCommand(ModulesCommand.class);
         registerCommand(PointsCommand.class);

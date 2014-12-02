@@ -24,6 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs;
 
+import com.jcwhatever.bukkit.generic.GenericsLib;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
 import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
@@ -82,7 +83,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     private StatsManager _statsManager;
     private PointsManager _pointsManager;
     private SignManager _signManager;
-    private KitManager _kitManager;
     private PVExtensionTypeManager _extensionManager;
     private PVScriptManager _scriptManager;
     private PVSpawnTypeManager _spawnTypeManager;
@@ -145,7 +145,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
     @Override
     public KitManager getKitManager() {
-        return _kitManager;
+        return GenericsLib.getKitManager();
     }
 
     @Override
@@ -200,7 +200,6 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         _pointsManager = new PVPointsManager();
         _statsManager = new PVStatsManager();
         _eventManager = new GenericsEventManager();
-        _kitManager = new KitManager(this, getDataNode().getNode("kits"));
         _extensionManager = new PVExtensionTypeManager();
         _spawnTypeManager = new PVSpawnTypeManager();
         _commandHelper = new PVCommandHelper();
