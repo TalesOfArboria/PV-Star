@@ -39,7 +39,7 @@ import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiScheduler;
 import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiSounds;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.ScriptUtils.ScriptConstructor;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils.IScriptFactory;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.scripting.EvaluatedScript;
 import com.jcwhatever.bukkit.pvs.api.scripting.Script;
@@ -65,7 +65,7 @@ public class PVScriptManager
         extends AbstractScriptManager<Script, EvaluatedScript>
         implements ScriptManager {
 
-    private static ScriptConstructor<Script> _scriptConstructor = new ScriptConstructor<Script>() {
+    private static IScriptFactory<Script> _scriptFactory = new IScriptFactory<Script>() {
         @Override
         public Script construct(String name, @Nullable File file, String type, String script) {
             return new PVScript(name, file, type, script);
@@ -106,8 +106,8 @@ public class PVScriptManager
     }
 
     @Override
-    public ScriptConstructor<Script> getScriptConstructor() {
-        return _scriptConstructor;
+    public IScriptFactory<Script> getScriptConstructor() {
+        return _scriptFactory;
     }
 
     /*

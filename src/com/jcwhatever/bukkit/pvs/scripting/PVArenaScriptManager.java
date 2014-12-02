@@ -32,7 +32,7 @@ import com.jcwhatever.bukkit.generic.scripting.AbstractScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.ScriptUtils.ScriptConstructor;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils.IScriptFactory;
 import com.jcwhatever.bukkit.pvs.PVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -175,7 +175,7 @@ public class PVArenaScriptManager extends AbstractScriptManager<Script, Evaluate
      */
     @Override
     @Nullable
-    public ScriptConstructor<Script> getScriptConstructor() {
+    public IScriptFactory<Script> getScriptConstructor() {
         return null; // does not create script instances
     }
 
