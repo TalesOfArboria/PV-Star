@@ -61,6 +61,6 @@ public class TypesSubCommand extends AbstractPVCommand {
             pagin.add(handler.getName(), handler.getDescription());
         }
 
-        pagin.show(sender, args.getInteger("page"), FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, args.getInteger("page"), FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }

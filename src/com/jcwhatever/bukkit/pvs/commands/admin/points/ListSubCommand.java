@@ -65,7 +65,7 @@ public class ListSubCommand extends AbstractPVCommand {
             pagin.add(type.getName(), type.getDescription());
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }
 

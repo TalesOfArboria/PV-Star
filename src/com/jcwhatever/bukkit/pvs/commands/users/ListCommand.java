@@ -82,6 +82,6 @@ public class ListCommand extends AbstractPVCommand {
                 pagin.add(TextColor.GRAY + arena.getName() + ' ' + hiddenLabel, settings.getTypeDisplayName());
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }

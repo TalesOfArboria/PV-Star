@@ -65,6 +65,6 @@ public class ListAllSubCommand extends AbstractPVCommand {
             pagin.add(scriptName);
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM);
     }
 }
