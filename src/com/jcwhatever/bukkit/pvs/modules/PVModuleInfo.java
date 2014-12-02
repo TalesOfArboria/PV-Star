@@ -24,6 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
+import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
 import com.jcwhatever.bukkit.generic.storage.YamlDataStorage;
 import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -39,7 +40,7 @@ import java.util.Set;
  * Loads and stores module info from module.yml file
  * in the module jar file.
  */
-public class PVModuleInfo implements ModuleInfo {
+public class PVModuleInfo implements ModuleInfo, IModuleInfo {
 
     private String _name;
     private String _searchName;
