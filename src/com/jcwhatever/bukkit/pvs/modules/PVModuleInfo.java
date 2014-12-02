@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.modules;
 
 import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
+import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.storage.YamlDataStorage;
 import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -201,40 +202,31 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
         }
 
         // get Bukkit dependencies
-        List<String> bukkitDepends = moduleNode.getStringList("bukkit-depends",
-                null /* null to prevent unnecessary object creation*/);
-
-        if (bukkitDepends == null)
-            bukkitDepends = new ArrayList<>(0);
-
-        _bukkitDepends = Collections.unmodifiableSet(new HashSet<>(bukkitDepends));
+        _bukkitDepends = getDepends(moduleNode, "bukkit-depends");
 
         // get Bukkit soft dependencies
-        List<String> bukkitSoftDepends = moduleNode.getStringList("bukkit-soft-depends",
-                null /* null to prevent unnecessary object creation*/);
-
-        if (bukkitSoftDepends == null)
-            bukkitSoftDepends = new ArrayList<>(0);
-
-        _bukkitSoftDepends = Collections.unmodifiableSet(new HashSet<>(bukkitSoftDepends));
+        _bukkitSoftDepends = getDepends(moduleNode, "bukkit-soft-depends");
 
         // get PV-Star module dependencies
-        List<String> moduleDepends = moduleNode.getStringList("depends",
-                null /* null to prevent unnecessary object creation*/);
-        if (moduleDepends == null)
-            moduleDepends = new ArrayList<>(0);
-
-        _moduleDepends = Collections.unmodifiableSet(new HashSet<>(moduleDepends));
+        _moduleDepends = getDepends(moduleNode, "depends");
 
         // get PV-Star module soft dependencies
-        List<String> moduleSoftDepends = moduleNode.getStringList("soft-depends",
-                null /* null to prevent unnecessary object creation*/);
-
-        if (moduleSoftDepends == null)
-            moduleSoftDepends = new ArrayList<>(0);
-
-        _moduleSoftDepends = Collections.unmodifiableSet(new HashSet<>(moduleSoftDepends));
+        _moduleSoftDepends = getDepends(moduleNode, "soft-depends");
 
         return true;
+    }
+
+    /*
+     * Get dependencies from the specified module data node.
+     */
+    private Set<String> getDepends(IDataNode moduleNode, String nodeName) {
+
+        List<String> depends = moduleNode.getStringList(nodeName,
+                null /* null to prevent unnecessary object creation*/);
+
+        if (depends == null)
+            depends = new ArrayList<>(0);
+
+        return Collections.unmodifiableSet(new HashSet<>(depends));
     }
 }
