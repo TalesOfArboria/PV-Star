@@ -41,7 +41,9 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -74,17 +76,51 @@ public class PVStarScriptApi extends GenericsScriptApi {
 
     public static class ApiObject implements IScriptApiObject {
 
-        public final ArenaApiObject arena = new ArenaApiObject();
+        private Map<Arena, ArenaApiObject> _arenaApis = new HashMap<>(25);
+        private boolean _isDisposed;
+
         public final PlayersApiObject players = new PlayersApiObject();
 
         @Override
         public boolean isDisposed() {
-            return false;
+            return _isDisposed;
         }
 
         @Override
         public void dispose() {
-            // do nothing
+
+            for (ArenaApiObject api : _arenaApis.values()) {
+                api.dispose();
+            }
+
+            _arenaApis.clear();
+
+            _isDisposed = true;
+        }
+
+        /**
+         * Get an arena api by arena name.
+         *
+         * @param arenaName  The arena name.
+         *
+         * @return  Null if the arena is not found.
+         */
+        @Nullable
+        public ArenaApiObject getArenaApi(String arenaName) {
+            PreCon.notNullOrEmpty(arenaName);
+
+            Arena arena = getArenaByName(arenaName);
+            if (arena == null)
+                return null;
+
+            ArenaApiObject api = _arenaApis.get(arena);
+            if (api != null)
+                return api;
+
+            api = new ArenaApiObject(arena);
+            _arenaApis.put(arena, api);
+
+            return api;
         }
 
         /**

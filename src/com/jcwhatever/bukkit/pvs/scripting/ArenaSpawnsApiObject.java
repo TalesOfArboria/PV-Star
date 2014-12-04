@@ -43,14 +43,12 @@ import javax.annotation.Nullable;
  */
 public class ArenaSpawnsApiObject implements IScriptApiObject {
 
-    private Arena _arena;
+    private final Arena _arena;
 
     /**
      * Constructor.
      */
-    ArenaSpawnsApiObject() {}
-
-    void setArena(Arena arena) {
+    ArenaSpawnsApiObject(Arena arena) {
         _arena = arena;
     }
 

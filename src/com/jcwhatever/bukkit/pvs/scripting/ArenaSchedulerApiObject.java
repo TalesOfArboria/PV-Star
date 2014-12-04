@@ -34,14 +34,12 @@ import com.jcwhatever.bukkit.pvs.api.utils.ArenaScheduler;
  */
 public class ArenaSchedulerApiObject implements IScriptApiObject {
 
-    private Arena _arena;
+    private final Arena _arena;
 
     /**
      * Constructor.
      */
-    ArenaSchedulerApiObject() { }
-
-    void setArena(Arena arena) {
+    ArenaSchedulerApiObject(Arena arena) {
         _arena = arena;
     }
 

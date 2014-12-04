@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.events.IEventHandler;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
 import java.util.Set;
@@ -41,12 +41,10 @@ public class ArenaEventsApiObject implements IScriptApiObject {
 
     private final HashSetMap<Class<?>, EventWrapper> _registeredHandlers = new HashSetMap<>(30);
 
-    private Arena _arena;
+    private final Arena _arena;
     private boolean _isDisposed;
 
-    ArenaEventsApiObject() {}
-
-    void setArena(Arena arena) {
+    ArenaEventsApiObject(Arena arena) {
         _arena = arena;
     }
 

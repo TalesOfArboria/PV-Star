@@ -43,9 +43,7 @@ public class ArenaStatsApiObject implements IScriptApiObject {
     /**
      * Constructor.
      */
-    ArenaStatsApiObject() {}
-
-    void setArena(Arena arena) {
+    ArenaStatsApiObject(Arena arena) {
         _arena = arena;
     }
 

@@ -25,26 +25,30 @@
 package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
-import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
-
-import java.util.List;
-import javax.annotation.Nullable;
 
 /*
  *
  */
 public class ArenaApiObject implements IScriptApiObject {
 
-    private Arena _arena;
+
     private boolean _isDisposed;
 
-    public final ArenaEventsApiObject events = new ArenaEventsApiObject();
-    public final ArenaSchedulerApiObject scheduler = new ArenaSchedulerApiObject();
-    public final ArenaSpawnsApiObject spawns = new ArenaSpawnsApiObject();
-    public final ArenaStatsApiObject stats = new ArenaStatsApiObject();
+    public final Arena arena;
+    public final ArenaEventsApiObject events;
+    public final ArenaSchedulerApiObject scheduler;
+    public final ArenaSpawnsApiObject spawns;
+    public final ArenaStatsApiObject stats;
+
+    public ArenaApiObject(Arena arena) {
+        this.arena = arena;
+
+        events = new ArenaEventsApiObject(arena);
+        scheduler = new ArenaSchedulerApiObject(arena);
+        spawns = new ArenaSpawnsApiObject(arena);
+        stats = new ArenaStatsApiObject(arena);
+    }
 
     @Override
     public boolean isDisposed() {
@@ -53,32 +57,12 @@ public class ArenaApiObject implements IScriptApiObject {
 
     @Override
     public void dispose() {
-        _arena = null;
 
         events.dispose();
+        scheduler.dispose();
+        spawns.dispose();
+        stats.dispose();
 
         _isDisposed = true;
-    }
-
-    @Nullable
-    public Arena setArenaByName(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
-        Arena arena = arenas.size() == 1 ? arenas.get(0) : null;
-        if (arena != null) {
-            setArena(arena);
-        }
-
-        return _arena;
-    }
-
-    public void setArena(Arena arena) {
-        PreCon.notNull(arena);
-
-        _arena = arena;
-        events.setArena(arena);
-        scheduler.setArena(arena);
-        spawns.setArena(arena);
     }
 }
