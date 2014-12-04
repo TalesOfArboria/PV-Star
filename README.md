@@ -9,14 +9,18 @@ A basic arena framework designed to be extended via modules and extensions.
 
 PV-Star originally started out as a feature rich arena plugin whose main extensibility was through extending an abstract arena class to create different types of arenas. Unfortunately, as requirements and features were added, the plugin became more difficult to manage and less flexible.
 
-This new iteration of PV-Star solves many of the problems of the old one by trying to be extremely simple and providing a framework for extending the functionality via modularity. Many of the features
-that were removed are currently being developed as separate modules in the [PV-Star-Modules](https://github.com/JCThePants/PV-Star-Modules) project.
+This new iteration of PV-Star solves many of the problems of the old one by trying to be extremely simple and providing a framework for extending the functionality via modularity. Instead of extending a base class, PV-Star has one arena type that does almost nothing except basic arena functions. Customizing an arenas functionality is done by adding extensions.
 
-*Major Features of PV-Star:*
+Many of the features that were removed are currently being developed as separate modules in the [PV-Star-Modules](https://github.com/JCThePants/PV-Star-Modules) project.
 
-  * Add functionality through jar file modules.
-   
-  * Modules can add arena extensions. Arena extensions can be selectively added to an arena in order to extend or modify its behavior. 
+**Definitions**
+
+ * Module - Extends PV-Star functionality by adding new types, extensions, commands or anything else.
+ * Extension - Can be applied to one or more arenas to modify and extend its behavior.
+
+**Features of PV-Star**
+
+  * Add functionality through modules and arena extensions.
 
   * Modules can specify hard and soft dependencies for both Bukkit plugins and other PV-Star Modules. 
 
@@ -24,7 +28,7 @@ that were removed are currently being developed as separate modules in the [PV-S
   
   * Uses GenericsLib event manager. This allows each arena to have its own event manager. Registering event handlers with the arenas event manager ensures the handler will only be called if the event is called on the arena. The arena event managers are children of the PV-Star event manager, which receives calls from the arena event managers. An event handler registered with PV-Star's event manager will receive events from all arenas.
   
-  * Uses GenericsLib scripting and scripting api.
+  * Scripting supported by adding a script api to GenericsLib.
   
   * Handles core statistics but leaves adding statistics types and incrementing to modules/extensions.
   
