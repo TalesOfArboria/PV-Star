@@ -18,6 +18,8 @@ Many of the features that were removed are currently being developed as separate
  * Module - Extends PV-Star functionality by adding new types, extensions, commands or anything else.
  * Extension - Can be applied to one or more arenas to modify and extend its behavior.
 
+
+
 **Features of PV-Star**
 
   * Add functionality through modules and arena extensions.
@@ -41,6 +43,7 @@ Many of the features that were removed are currently being developed as separate
   * Built in team support.
   
   * Built in localization support via GenericsLib.
+
 
 
 *Dependencies*
