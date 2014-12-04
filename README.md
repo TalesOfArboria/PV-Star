@@ -1,4 +1,4 @@
-PVStar for Bukkit 1.7.9
+PVStar for Spigot 1.8
 =============
 
 (PV* - Player versus anything) 
@@ -24,7 +24,7 @@ that were removed are currently being developed as separate modules in the [PV-S
   
   * Uses GenericsLib event manager. This allows each arena to have its own event manager. Registering event handlers with the arenas event manager ensures the handler will only be called if the event is called on the arena. The arena event managers are children of the PV-Star event manager, which receives calls from the arena event managers. An event handler registered with PV-Star's event manager will receive events from all arenas.
   
-  * Uses GenericsLib scripting and scripting api. Scripts can be loaded and evaluated for a specific arena. Script API's can be registered via modules which gives scripts access to the modules features. The scripts also have access to the GenericsLib script API repository so they can get access to scripts API's registered by other Bukkit plugins.
+  * Uses GenericsLib scripting and scripting api.
   
   * Handles core statistics but leaves adding statistics types and incrementing to modules/extensions.
   
