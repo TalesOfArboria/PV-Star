@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.listeners;
 
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;

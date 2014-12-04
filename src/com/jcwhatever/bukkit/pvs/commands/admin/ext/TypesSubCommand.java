@@ -30,7 +30,7 @@ import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderExc
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
-import com.jcwhatever.bukkit.generic.utils.TextUtils.FormatTemplate;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;

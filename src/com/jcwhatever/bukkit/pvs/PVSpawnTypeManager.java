@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnTypeManager;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;

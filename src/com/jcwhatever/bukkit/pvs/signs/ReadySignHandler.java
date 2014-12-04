@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs.signs;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.signs.SignContainer;
 import com.jcwhatever.bukkit.generic.signs.SignHandler;
-import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
+import com.jcwhatever.bukkit.generic.utils.text.TextColor;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;

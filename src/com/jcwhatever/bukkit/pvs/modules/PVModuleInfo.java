@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs.modules;
 import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.storage.YamlDataStorage;
-import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.ModuleInfo;
 

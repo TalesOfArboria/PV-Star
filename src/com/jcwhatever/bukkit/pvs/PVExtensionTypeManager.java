@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.TextUtils;
+import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ExtensionTypeManager;
