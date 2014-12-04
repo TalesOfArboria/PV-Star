@@ -45,5 +45,5 @@ that were removed are currently being developed as separate modules in the [PV-S
   
   * [GenericsLib](https://github.com/JCThePants/GenericsLib) (provided)
   
-  * Bukkit API 1.7.9  (provided)
+  * Spigot 1.8  (provided)
 
