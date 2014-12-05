@@ -253,7 +253,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
                 // forward global Bukkit events to the appropriate
                 // arena event manager.
-                _eventForwarder = new BukkitEventForwarder(GenericsEventManager.getGlobal());
+                _eventForwarder = new BukkitEventForwarder(GenericsLib.getEventManager());
 
                 // register script api
                 ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
