@@ -159,7 +159,7 @@ public class PVArenaManager implements ArenaManager {
 
         for (IRegion readOnlyRegion : regions) {
 
-            ArenaRegion region = readOnlyRegion.getMeta(ArenaRegion.class.getName());
+            ArenaRegion region = readOnlyRegion.getMeta(ArenaRegion.ARENA_REGION_KEY);
             if (region == null)
                 continue;
 
