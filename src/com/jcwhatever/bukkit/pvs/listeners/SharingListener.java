@@ -46,7 +46,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 public class SharingListener implements Listener {
 
     /*
-     Handle inventory sharing
+     Handle chest sharing
     */
     @EventHandler(priority= EventPriority.HIGHEST)
     private void onInventorySharing(InventoryClickEvent event) {
@@ -85,9 +85,9 @@ public class SharingListener implements Listener {
                 event.setCancelled(true);
                 event.setResult(Result.DENY);
 
-                // close inventory to prevent sharing bug
+                // close chest to prevent sharing bug
                 // i.e. If you try enough, eventually the event wont fire but the item
-                // will make it into inventory.
+                // will make it into chest.
                 Bukkit.getScheduler().runTask(PVStarAPI.getPlugin(), new Runnable() {
 
                     @Override

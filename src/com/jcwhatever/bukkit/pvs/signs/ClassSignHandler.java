@@ -58,7 +58,7 @@ public class ClassSignHandler extends SignHandler {
 
     @Override
     public String getDescription() {
-        return "Gives a kit to the player that clicks on it after clearing the players inventory.";
+        return "Gives a kit to the player that clicks on it after clearing the players chest.";
     }
 
     @Override
