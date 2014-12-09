@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
 import com.jcwhatever.bukkit.generic.storage.BatchOperation;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;

@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.bukkit.generic.events.AbstractBukkitForwarder;
-import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
+import com.jcwhatever.bukkit.generic.events.manager.AbstractBukkitForwarder;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;

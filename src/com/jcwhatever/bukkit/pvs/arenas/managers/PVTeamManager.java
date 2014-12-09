@@ -26,9 +26,9 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.collections.EntryCounter;
 import com.jcwhatever.bukkit.generic.collections.EntryCounter.RemovalPolicy;
-import com.jcwhatever.bukkit.generic.events.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
-import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
+import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam.TeamDistributor;

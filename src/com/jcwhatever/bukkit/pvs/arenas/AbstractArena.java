@@ -25,8 +25,8 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
-import com.jcwhatever.bukkit.generic.events.IGenericsEventListener;
-import com.jcwhatever.bukkit.generic.events.GenericsEventManager;
+import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.permissions.IPermission;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;

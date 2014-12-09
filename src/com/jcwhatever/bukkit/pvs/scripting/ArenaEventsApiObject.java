@@ -25,8 +25,8 @@
 package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.jcwhatever.bukkit.generic.collections.HashSetMap;
-import com.jcwhatever.bukkit.generic.events.GenericsEventPriority;
-import com.jcwhatever.bukkit.generic.events.IEventHandler;
+import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
+import com.jcwhatever.bukkit.generic.events.manager.IEventHandler;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
