@@ -66,7 +66,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
      *               operation.
      */
     public BukkitEventForwarder(GenericsEventManager source) {
-        super(source);
+        super(PVStarAPI.getPlugin(), source);
     }
 
     @Override

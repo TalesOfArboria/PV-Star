@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
-import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.permissions.IPermission;
@@ -78,7 +78,7 @@ import java.util.UUID;
 /**
  * Abstract arena implementation.
  */
-public abstract class AbstractArena implements Arena, IGenericsEventListener {
+public abstract class AbstractArena implements Arena, IEventListener {
 
     @Localizable static final String _JOIN_LEAVE_CURRENT_FIRST = "You must leave the current arena before you can join another.";
     @Localizable static final String _ARENA_BUSY = "Arena '{0}' is busy at the moment. Try again later.";

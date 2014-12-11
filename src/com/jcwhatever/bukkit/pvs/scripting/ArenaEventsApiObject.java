@@ -30,6 +30,7 @@ import com.jcwhatever.bukkit.generic.events.manager.IEventHandler;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
 import java.util.Set;
@@ -68,6 +69,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
                 continue;
 
             for (EventWrapper handler : handlers) {
+                //noinspection unchecked
                 handler.getArena().getEventManager().unregister(event, handler);
             }
         }
@@ -108,7 +110,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
 
         EventWrapper eventHandler = new EventWrapper(_arena, handler) {
             @Override
-            public void call(Object event) {
+            public void handle(Object event) {
                 handler.call(event);
             }
         };
@@ -122,7 +124,8 @@ public class ArenaEventsApiObject implements IScriptApiObject {
             return;
         }
 
-        _arena.getEventManager().register(eventClass, eventPriority, ignoreCancelled, eventHandler);
+        //noinspection unchecked
+        _arena.getEventManager().register(PVStarAPI.getPlugin(), eventClass, eventPriority, ignoreCancelled, eventHandler);
 
         _registeredHandlers.put(eventClass, eventHandler);
     }
@@ -147,7 +150,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
         }
 
         @Override
-        public void call(Object event) {
+        public void handle(Object event) {
             _handler.call(event);
         }
     }

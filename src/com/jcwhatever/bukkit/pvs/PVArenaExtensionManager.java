@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -37,6 +37,8 @@ import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingExtensionAnnotationException;
 
+import org.bukkit.plugin.Plugin;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -44,7 +46,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 
-public class PVArenaExtensionManager extends ArenaExtensionManager implements IGenericsEventListener {
+public class PVArenaExtensionManager extends ArenaExtensionManager implements IEventListener {
 
     private final Arena _arena;
     private final Set<ArenaExtension> _extensions = new HashSet<ArenaExtension>(15);
@@ -60,6 +62,11 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IG
         load();
 
         arena.getEventManager().register(this);
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return PVStarAPI.getPlugin();
     }
 
     @Override

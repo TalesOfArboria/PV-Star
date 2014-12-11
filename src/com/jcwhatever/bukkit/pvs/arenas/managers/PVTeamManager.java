@@ -27,8 +27,9 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 import com.jcwhatever.bukkit.generic.collections.EntryCounter;
 import com.jcwhatever.bukkit.generic.collections.EntryCounter.RemovalPolicy;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam.TeamDistributor;
@@ -43,6 +44,8 @@ import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnAddedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 
+import org.bukkit.plugin.Plugin;
+
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -50,7 +53,7 @@ import javax.annotation.Nullable;
 /**
  * Team manager implementation.
  */
-public class PVTeamManager implements TeamManager, IGenericsEventListener {
+public class PVTeamManager implements TeamManager, IEventListener {
 
     private Arena _arena;
     private TeamDistributor _teamDistributor;
@@ -66,6 +69,11 @@ public class PVTeamManager implements TeamManager, IGenericsEventListener {
         arena.getEventManager().register(this);
 
         loadSettings();
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return PVStarAPI.getPlugin();
     }
 
     /*

@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.storage.BatchOperation;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -49,6 +49,7 @@ import com.jcwhatever.bukkit.pvs.api.utils.SpawnFilter;
 import com.jcwhatever.bukkit.pvs.spawns.SpawnpointsCollection;
 
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ import javax.annotation.Nullable;
 /**
  * Spawn manager implementation.
  */
-public class PVSpawnManager extends SpawnpointsCollection implements SpawnManager, IGenericsEventListener {
+public class PVSpawnManager extends SpawnpointsCollection implements SpawnManager, IEventListener {
 
     private final Map<UUID, Spawnpoint> _reserved = new HashMap<>(15); // key is player id
     private final Arena _arena;
@@ -77,6 +78,11 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         loadSettings();
 
         arena.getEventManager().register(this);
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return PVStarAPI.getPlugin();
     }
 
     /*

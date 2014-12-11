@@ -25,7 +25,8 @@
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.manager.IGenericsEventListener;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.managers.GameManager;
@@ -40,11 +41,12 @@ import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVLobbySettings;
 
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import javax.annotation.Nullable;
 
-public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IGenericsEventListener {
+public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IEventListener {
 
     private LobbyManagerSettings _settings;
 
@@ -56,6 +58,11 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
         _settings = new PVLobbySettings(arena);
         arena.getEventManager().register(this);
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return PVStarAPI.getPlugin();
     }
 
     /*

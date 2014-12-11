@@ -27,15 +27,23 @@ package com.jcwhatever.bukkit.pvs.arenas;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
 import com.jcwhatever.bukkit.pvs.Lang;
+import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 
+import org.bukkit.plugin.Plugin;
+
 @ArenaTypeInfo(
         typeName="arena",
         description="A basic arena.")
 public class PVArena extends AbstractArena {
+
+    @Override
+    public Plugin getPlugin() {
+        return PVStarAPI.getPlugin();
+    }
 
     @Override
     protected boolean onCanJoin() {
