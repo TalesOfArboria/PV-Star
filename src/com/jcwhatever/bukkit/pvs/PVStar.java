@@ -31,7 +31,6 @@ import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.signs.SignManager;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
@@ -256,7 +255,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
                 _eventForwarder = new BukkitEventForwarder(GenericsLib.getEventManager());
 
                 // register script api
-                ScriptApiRepo.registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
+                GenericsLib.getScriptApiRepo().registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
 
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
