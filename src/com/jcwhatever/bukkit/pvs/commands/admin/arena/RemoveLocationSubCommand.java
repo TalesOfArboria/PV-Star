@@ -47,8 +47,8 @@ import org.bukkit.entity.Player;
 
 public class RemoveLocationSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _VIEW_LOCATION = "Kick location for arena '{0}' is:";
-    @Localizable static final String _SET_LOCATION = "Kick location for arena '{0}' set to:";
+    @Localizable static final String _VIEW_LOCATION = "Remove location for arena '{0}' is:";
+    @Localizable static final String _SET_LOCATION = "Remove location for arena '{0}' set to:";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws InvalidValueException {
