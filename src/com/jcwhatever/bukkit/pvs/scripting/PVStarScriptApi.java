@@ -207,6 +207,9 @@ public class PVStarScriptApi extends GenericsScriptApi {
             PreCon.notNull(toArena);
             PreCon.notNull(player);
 
+            if (!toArena.getSettings().isEnabled())
+                return false;
+
             ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
             if (p.getArena() == null)
                 return false;
