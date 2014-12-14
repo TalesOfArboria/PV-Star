@@ -202,8 +202,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         _players.removePlayer(player, reason);
 
         // clear arena if leaving
-        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE &&
-                reason != RemovePlayerReason.FORWARDING) {
+        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
 
             player.clearArena();
         }

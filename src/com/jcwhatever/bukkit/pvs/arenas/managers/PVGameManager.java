@@ -40,7 +40,9 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.GameManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.bukkit.pvs.api.events.ArenaStartedEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerJoinedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLoseEvent;
+import com.jcwhatever.bukkit.pvs.api.events.players.PlayerPreJoinEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerWinEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamLoseEvent;
 import com.jcwhatever.bukkit.pvs.api.events.team.TeamWinEvent;
@@ -199,15 +201,28 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         PreCon.notNull(player);
         PreCon.notNull(nextArena);
 
+        if (!nextArena.getSettings().isEnabled())
+            return false;
+
         Result<Location> result = removePlayer(player, RemovePlayerReason.FORWARDING);
         if (!result.isSuccess())
             return false;
 
-        if (nextArena.getGameManager().isRunning()) {
-            nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING);
-        }
-        else {
-            nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
+        PlayerPreJoinEvent preJoin = new PlayerPreJoinEvent(nextArena, player);
+
+        nextArena.getEventManager().call(preJoin);
+
+        if (preJoin.isCancelled())
+            return false;
+
+        boolean isAdded = nextArena.getGameManager().isRunning()
+                ? nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING)
+                : nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
+
+        if (isAdded) {
+            PlayerJoinedEvent joined = new PlayerJoinedEvent(nextArena, player, player.getRelatedManager());
+
+            nextArena.getEventManager().call(joined);
         }
 
         return true;

@@ -29,12 +29,9 @@ import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.Result;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.bukkit.pvs.api.arena.managers.PlayerManager;
-import com.jcwhatever.bukkit.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 
@@ -207,25 +204,10 @@ public class PVStarScriptApi extends GenericsScriptApi {
             PreCon.notNull(toArena);
             PreCon.notNull(player);
 
-            if (!toArena.getSettings().isEnabled())
-                return false;
 
             ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
-            if (p.getArena() == null)
-                return false;
-
-            PlayerManager manager = p.getRelatedManager();
-            if (manager == null)
-                return false;
-
-            Result<Location> result = manager.removePlayer(p, RemovePlayerReason.FORWARDING);
-            if (!result.isSuccess())
-                return false;
-
-            if (!toArena.getLobbyManager().addPlayer(p, AddPlayerReason.FORWARDING))
-                return false;
-
-            return true;
+            return p.getArena() != null &&
+                    p.getArena().getGameManager().forwardPlayer(p, toArena);
         }
     }
 }
