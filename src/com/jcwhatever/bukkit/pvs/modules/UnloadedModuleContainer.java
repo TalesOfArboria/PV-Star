@@ -24,6 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
+import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IDependantRunnable;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 
@@ -37,12 +38,11 @@ import java.util.List;
  * Container for an unloaded module with utilities
  * to check if dependencies are loaded.
  */
-public class UnloadedModuleContainer {
+public class UnloadedModuleContainer implements IDependantRunnable {
 
     private final PVStarModule _module;
     private final PVModuleInfo _moduleInfo;
     private final ModuleLoader _loader;
-
 
     /*
      * Constructor.
@@ -158,4 +158,13 @@ public class UnloadedModuleContainer {
         return true;
     }
 
+    @Override
+    public boolean isDependencyReady() {
+        return isBukkitDependsLoaded() && isModuleDependsLoaded();
+    }
+
+    @Override
+    public void run() {
+        _module.preEnable();
+    }
 }

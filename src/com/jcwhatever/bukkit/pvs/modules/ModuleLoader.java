@@ -29,12 +29,11 @@ import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
 import com.jcwhatever.bukkit.generic.modules.IModuleInfoFactory;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoader;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
-import com.jcwhatever.bukkit.generic.scheduler.ScheduledTask;
-import com.jcwhatever.bukkit.generic.scheduler.TaskHandler;
+import com.jcwhatever.bukkit.generic.utils.DependencyRunner;
+import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IFinishHandler;
 import com.jcwhatever.bukkit.generic.utils.EntryValidator;
 import com.jcwhatever.bukkit.generic.utils.FileUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.Scheduler;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
@@ -51,7 +50,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -64,12 +62,8 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
     private static final String MODULE_MANIFEST = "module.yml";
 
-    private final ModuleLoader _moduleLoaderInstance;
-
     private Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
 
-    private ScheduledTask _enablerTask;
-    private Runnable _onModulesEnabled;
     private boolean _isModulesLoaded;
     private KickPlayersBukkitListener _kickPlayersListener;
 
@@ -79,8 +73,6 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     public ModuleLoader(Class<PVStarModule> moduleClass,
                         JarModuleLoaderSettings<PVStarModule> settings) {
         super(moduleClass, settings);
-
-        _moduleLoaderInstance = this;
 
         _kickPlayersListener = new KickPlayersBukkitListener();
         Bukkit.getPluginManager().registerEvents(_kickPlayersListener, PVStarAPI.getPlugin());
@@ -96,21 +88,52 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     /*
      * Enable modules. Can only be called once.
      */
-    public void enable(Runnable onModulesEnabled) {
+    public void enable(final Runnable onModulesEnabled) {
         PreCon.notNull(onModulesEnabled);
-        PreCon.isValid(_enablerTask == null, "Enable method can only be called once.");
+        PreCon.isValid(!_isModulesLoaded, "Modules can only be enabled once.");
 
-        _onModulesEnabled = onModulesEnabled;
-        _enablerTask = Scheduler.runTaskRepeat(PVStarAPI.getPlugin(), 1, 10, new ModuleEnabler());
+        DependencyRunner<UnloadedModuleContainer> moduleEnabler =
+                new DependencyRunner<UnloadedModuleContainer>(PVStarAPI.getPlugin());
 
-        Scheduler.runTaskLater(PVStarAPI.getPlugin(), 20 * 20, new Runnable() {
-
+        moduleEnabler.addAll(_unloadedModules.values());
+        moduleEnabler.onFinish(new IFinishHandler<UnloadedModuleContainer>() {
             @Override
-            public void run() {
-                if (!_enablerTask.isCancelled())
-                    _enablerTask.cancel();
+            public void onFinish(List<UnloadedModuleContainer> notRun) {
+
+                // remove unloaded modules
+                for (UnloadedModuleContainer container : notRun) {
+                    removeModule(container.getSearchName());
+
+                    Msg.warning("[{0}] Failed to load module because required dependencies are missing:", container.getName());
+
+                    List<String> bukkitDepends = container.getMissingBukkitDepends();
+                    for (String depend : bukkitDepends) {
+                        Msg.warning("[{0}] Missing Bukkit Plugin: {1}", container.getName(), depend);
+                    }
+
+                    List<String> moduleDepends = container.getMissingModuleDepends();
+                    for (String depend : moduleDepends) {
+                        Msg.warning("[{0}] Missing PV-Star Module: {1}", container.getName(), depend);
+                    }
+                }
+
+                _unloadedModules.clear();
+
+                // Enable Modules
+                for (PVStarModule module : getModules()) {
+                    module.enable();
+                    Msg.info("[{0}] Module enabled.", module.getName());
+                }
+
+                _isModulesLoaded = true;
+
+                onModulesEnabled.run();
+
+                HandlerList.unregisterAll(_kickPlayersListener);
             }
         });
+
+        moduleEnabler.start();
     }
 
     @Override
@@ -195,74 +218,7 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
         super.addModule(info, instance);
 
         _unloadedModules.put(info.getSearchName(),
-                new UnloadedModuleContainer(_moduleLoaderInstance, instance, (PVModuleInfo)info));
-    }
-
-    /*
-     * module enabler task handler
-     */
-    private class ModuleEnabler extends TaskHandler {
-
-        @Override
-        public void run() {
-
-            LinkedList<UnloadedModuleContainer> containers = new LinkedList<>(_unloadedModules.values());
-
-            while (!containers.isEmpty()) {
-
-                UnloadedModuleContainer container = containers.remove();
-
-                if (container.isBukkitDependsLoaded() && container.isModuleDependsLoaded()) {
-
-                    // Pre-enable module
-                    container.getModule().preEnable();
-
-                    _unloadedModules.remove(container.getSearchName());
-                }
-            }
-
-            if (_unloadedModules.isEmpty())
-                cancelTask();
-        }
-
-        /*
-         * Called when all modules are pre-init or
-         * time to pre-init expires.
-         */
-        @Override
-        protected void onCancel() {
-
-            // remove unloaded modules
-            for (UnloadedModuleContainer container : _unloadedModules.values()) {
-                removeModule(container.getSearchName());
-
-                Msg.warning("[{0}] Failed to load module because required dependencies are missing:", container.getName());
-
-                List<String> bukkitDepends = container.getMissingBukkitDepends();
-                for (String depend : bukkitDepends) {
-                    Msg.warning("[{0}] Missing Bukkit Plugin: {1}", container.getName(), depend);
-                }
-
-                List<String> moduleDepends = container.getMissingModuleDepends();
-                for (String depend : moduleDepends) {
-                    Msg.warning("[{0}] Missing PV-Star Module: {1}", container.getName(), depend);
-                }
-            }
-
-            _unloadedModules.clear();
-
-            // Enable Modules
-            for (PVStarModule module : getModules()) {
-                module.enable();
-                Msg.info("[{0}] Module enabled.", module.getName());
-            }
-
-            _isModulesLoaded = true;
-
-            _onModulesEnabled.run();
-
-            HandlerList.unregisterAll(_kickPlayersListener);
-        }
+                new UnloadedModuleContainer(this, instance, (PVModuleInfo)info));
     }
 
     /*
