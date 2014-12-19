@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
-import com.jcwhatever.bukkit.generic.storage.BatchOperation;
+import com.jcwhatever.bukkit.generic.storage.DataBatchOperation;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -197,7 +197,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public void addSpawns(final Collection<Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
-        _dataNode.runBatchOperation(new BatchOperation() {
+        _dataNode.runBatchOperation(new DataBatchOperation() {
 
             @Override
             public void run(IDataNode dataNode) {
@@ -238,7 +238,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public void removeSpawns(final Collection<Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
-        _dataNode.runBatchOperation(new BatchOperation() {
+        _dataNode.runBatchOperation(new DataBatchOperation() {
 
             @Override
             public void run(IDataNode dataNode) {
