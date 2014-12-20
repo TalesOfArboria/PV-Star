@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.regions.selection.RegionSelection;
+import com.jcwhatever.bukkit.generic.regions.selection.IRegionSelection;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaRegion;
@@ -43,11 +43,10 @@ import org.bukkit.entity.Player;
         parent="arena",
         command="setregion",
         usage="/{plugin-command} {command} setregion",
-        description="Sets the region of the selected arena using the current World Edit selection.")
+        description="Sets the region of the selected arena using your current region selection.")
 
 public class SetRegionSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _MUST_BE_SAME_WORLD = "The new region selection must be in the same world as the current region.";
     @Localizable static final String _SUCCESS =  "Region for arena '{0}' has been set.";
 
     @Override
@@ -61,7 +60,7 @@ public class SetRegionSubCommand extends AbstractPVCommand {
 
         Player p = (Player)sender;
 
-        RegionSelection sel = getWorldEditSelection(p);
+        IRegionSelection sel = getRegionSelection(p);
         if (sel == null)
             return; // finish
 
@@ -69,11 +68,6 @@ public class SetRegionSubCommand extends AbstractPVCommand {
         Location locationB = sel.getP2();
 
         ArenaRegion region = arena.getRegion();
-
-        if (region.isDefined() && !locationA.getWorld().equals(region.getP1().getWorld())) {
-            tellError(sender, Lang.get(_MUST_BE_SAME_WORLD));
-            return; // finish
-        }
 
         region.setCoords(locationA, locationB);
 
