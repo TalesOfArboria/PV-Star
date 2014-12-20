@@ -31,7 +31,7 @@ import com.jcwhatever.bukkit.generic.modules.JarModuleLoader;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IFinishHandler;
-import com.jcwhatever.bukkit.generic.utils.EntryValidator;
+import com.jcwhatever.bukkit.generic.utils.IEntryValidator;
 import com.jcwhatever.bukkit.generic.utils.FileUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -137,8 +137,8 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     }
 
     @Override
-    public EntryValidator<JarFile> getDefaultJarValidator() {
-        return new EntryValidator<JarFile>() {
+    public IEntryValidator<JarFile> getDefaultJarValidator() {
+        return new IEntryValidator<JarFile>() {
             @Override
             public boolean isValid(JarFile entry) {
                 JarEntry moduleEntry = entry.getJarEntry(MODULE_MANIFEST);
