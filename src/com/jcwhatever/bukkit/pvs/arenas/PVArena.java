@@ -57,7 +57,7 @@ public class PVArena extends AbstractArena {
     private void onPlayerPreJoin(PlayerPreJoinEvent event) {
 
         // check player permission
-        if (!event.getPlayer().getHandle().hasPermission(getPermission().getName())) {
+        if (!event.getPlayer().getPlayer().hasPermission(getPermission().getName())) {
             event.rejectJoin(JoinRejectReason.NO_PERMISSION, Lang.get(_JOIN_NO_PERMISSION, getName()));
         }
 

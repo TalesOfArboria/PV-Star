@@ -468,7 +468,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
                 if (leaveEvent.isRestoring() &&
                         leaveEvent.getRestoreLocation() != null) {
 
-                    player.getHandle().teleport(leaveEvent.getRestoreLocation());
+                    player.getPlayer().teleport(leaveEvent.getRestoreLocation());
                 }
 
                 return true;

@@ -151,7 +151,7 @@ public class PVArenaPlayer implements ArenaPlayer {
      * Get the encapsulated {@code Player} object.
      */
     @Override
-    public Player getHandle() {
+    public Player getPlayer() {
         return _player;
     }
 

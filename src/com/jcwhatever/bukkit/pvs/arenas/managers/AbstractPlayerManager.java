@@ -114,7 +114,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         if (respawnLocation == null)
             return false;
 
-        player.getHandle().teleport(respawnLocation);
+        player.getPlayer().teleport(respawnLocation);
         return true;
     }
 
@@ -152,7 +152,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         // teleport player to spawn location from event
         if (event.getSpawnLocation() != null) {
 
-            player.getHandle().teleport(event.getSpawnLocation());
+            player.getPlayer().teleport(event.getSpawnLocation());
 
             // reserve spawnpoint
             if (event.getSpawnLocation() instanceof Spawnpoint) {

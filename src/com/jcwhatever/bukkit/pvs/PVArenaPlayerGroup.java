@@ -114,7 +114,7 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         PreCon.notNull(params);
 
         for (ArenaPlayer player : _players) {
-            Msg.tell(player.getHandle(), message, params);
+            Msg.tell(player.getPlayer(), message, params);
         }
     }
 

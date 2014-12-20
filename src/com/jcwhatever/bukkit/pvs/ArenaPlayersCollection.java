@@ -156,7 +156,7 @@ public class ArenaPlayersCollection {
         PreCon.notNullOrEmpty(message);
 
         for (ArenaPlayer player : _players) {
-            Msg.tell(player.getHandle(), message, params);
+            Msg.tell(player.getPlayer(), message, params);
         }
     }
 
