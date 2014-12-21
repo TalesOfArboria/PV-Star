@@ -36,10 +36,10 @@ public class SpawnsCommand extends AbstractPVCommand {
     public SpawnsCommand() {
         super();
 
-        registerSubCommand(AddSubCommand.class);
-        registerSubCommand(DelSubCommand.class);
-        registerSubCommand(ListSubCommand.class);
-        registerSubCommand(TypesSubCommand.class);
+        registerCommand(AddSubCommand.class);
+        registerCommand(DelSubCommand.class);
+        registerCommand(ListSubCommand.class);
+        registerCommand(TypesSubCommand.class);
     }
 
 }

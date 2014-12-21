@@ -36,19 +36,19 @@ public class ArenaCommand extends AbstractPVCommand {
     public ArenaCommand() {
         super();
 
-        registerSubCommand(CreateSubCommand.class);
-        registerSubCommand(DelSubCommand.class);
-        registerSubCommand(DisableSubCommand.class);
-        registerSubCommand(EnableSubCommand.class);
-        registerSubCommand(RemoveLocationSubCommand.class);
-        registerSubCommand(RestoreRegionSubCommand.class);
-        registerSubCommand(SaveRegionSubCommand.class);
-        registerSubCommand(MaxPlayersSubCommand.class);
-        registerSubCommand(MinPlayersSubCommand.class);
-        registerSubCommand(MobSpawnSubCommand.class);
-        registerSubCommand(SelectSubCommand.class);
-        registerSubCommand(SetRegionSubCommand.class);
-        registerSubCommand(TypeNameSubCommand.class);
+        registerCommand(CreateSubCommand.class);
+        registerCommand(DelSubCommand.class);
+        registerCommand(DisableSubCommand.class);
+        registerCommand(EnableSubCommand.class);
+        registerCommand(RemoveLocationSubCommand.class);
+        registerCommand(RestoreRegionSubCommand.class);
+        registerCommand(SaveRegionSubCommand.class);
+        registerCommand(MaxPlayersSubCommand.class);
+        registerCommand(MinPlayersSubCommand.class);
+        registerCommand(MobSpawnSubCommand.class);
+        registerCommand(SelectSubCommand.class);
+        registerCommand(SetRegionSubCommand.class);
+        registerCommand(TypeNameSubCommand.class);
     }
 
 }

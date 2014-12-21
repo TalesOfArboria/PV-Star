@@ -51,7 +51,7 @@ public class AutostartCommand extends AbstractPVCommand {
     public AutostartCommand() {
         super();
 
-        registerSubCommand(MinPlayersSubCommand.class);
+        registerCommand(MinPlayersSubCommand.class);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ModulesCommand extends AbstractPVCommand {
     public ModulesCommand() {
         super();
 
-        registerSubCommand(ListSubCommand.class);
+        registerCommand(ListSubCommand.class);
 
     }
 }

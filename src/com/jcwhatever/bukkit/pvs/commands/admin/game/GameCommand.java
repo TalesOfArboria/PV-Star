@@ -37,21 +37,21 @@ public class GameCommand extends AbstractPVCommand {
     public GameCommand() {
         super();
 
-        registerSubCommand(ArmorDamageSubCommand.class);
-        registerSubCommand(AutostartCommand.class);
-        registerSubCommand(CleanupSubCommand.class);
-        registerSubCommand(FallSubCommand.class);
-        registerSubCommand(HungerSubCommand.class);
-        registerSubCommand(LivesBehaviorSubCommand.class);
-        registerSubCommand(LivesSubCommand.class);
-        registerSubCommand(PointsSubCommand.class);
-        registerSubCommand(PointsBehaviorSubCommand.class);
-        registerSubCommand(PvpSubCommand.class);
-        registerSubCommand(ReserveSpawnsSubCommand.class);
-        registerSubCommand(SharingSubCommand.class);
-        registerSubCommand(TeamPvpSubCommand.class);
-        registerSubCommand(ToolDamageSubCommand.class);
-        registerSubCommand(WeaponDamageSubCommand.class);
+        registerCommand(ArmorDamageSubCommand.class);
+        registerCommand(AutostartCommand.class);
+        registerCommand(CleanupSubCommand.class);
+        registerCommand(FallSubCommand.class);
+        registerCommand(HungerSubCommand.class);
+        registerCommand(LivesBehaviorSubCommand.class);
+        registerCommand(LivesSubCommand.class);
+        registerCommand(PointsSubCommand.class);
+        registerCommand(PointsBehaviorSubCommand.class);
+        registerCommand(PvpSubCommand.class);
+        registerCommand(ReserveSpawnsSubCommand.class);
+        registerCommand(SharingSubCommand.class);
+        registerCommand(TeamPvpSubCommand.class);
+        registerCommand(ToolDamageSubCommand.class);
+        registerCommand(WeaponDamageSubCommand.class);
     }
 
 }

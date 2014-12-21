@@ -36,7 +36,7 @@ public class SignsCommand extends AbstractPVCommand {
     public SignsCommand() {
         super();
 
-        registerSubCommand(TypesSubCommand.class);
-        registerSubCommand(UsageSubCommand.class);
+        registerCommand(TypesSubCommand.class);
+        registerCommand(UsageSubCommand.class);
     }
 }

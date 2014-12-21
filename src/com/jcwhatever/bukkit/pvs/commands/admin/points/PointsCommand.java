@@ -36,10 +36,10 @@ public class PointsCommand extends AbstractPVCommand {
     public PointsCommand() {
         super();
 
-        registerSubCommand(AddSubCommand.class);
-        registerSubCommand(CurrentSubCommand.class);
-        registerSubCommand(DelSubCommand.class);
-        registerSubCommand(ListSubCommand.class);
-        registerSubCommand(SetSubCommand.class);
+        registerCommand(AddSubCommand.class);
+        registerCommand(CurrentSubCommand.class);
+        registerCommand(DelSubCommand.class);
+        registerCommand(ListSubCommand.class);
+        registerCommand(SetSubCommand.class);
     }
 }

@@ -36,12 +36,12 @@ public class SpectatorCommand extends AbstractPVCommand {
     public SpectatorCommand() {
         super();
 
-        registerSubCommand(ArmorDamageSubCommand.class);
-        registerSubCommand(FallSubCommand.class);
-        registerSubCommand(HungerSubCommand.class);
-        registerSubCommand(PvpSubCommand.class);
-        registerSubCommand(SharingSubCommand.class);
-        registerSubCommand(ToolDamageSubCommand.class);
-        registerSubCommand(WeaponDamageSubCommand.class);
+        registerCommand(ArmorDamageSubCommand.class);
+        registerCommand(FallSubCommand.class);
+        registerCommand(HungerSubCommand.class);
+        registerCommand(PvpSubCommand.class);
+        registerCommand(SharingSubCommand.class);
+        registerCommand(ToolDamageSubCommand.class);
+        registerCommand(WeaponDamageSubCommand.class);
     }
 }
