@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -47,7 +47,7 @@ public class MaxPlayersSubCommand extends AbstractPVCommand {
     @Localizable static final String _VIEW_MAX = "Max players for arena '{0}' is {1}.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws InvalidValueException {
+    public void execute(CommandSender sender, CommandArguments args) throws InvalidArgumentException {
 
         Arena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "max"));
         if (arena == null)
