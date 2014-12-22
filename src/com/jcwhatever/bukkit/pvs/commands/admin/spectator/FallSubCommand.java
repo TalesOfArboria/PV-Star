@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="spectator",
         command="fall",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} fall [on|off]",
-        description="Allow or prevent player fall damage in the selected arena spectator area.")
+        description="Allow or prevent player fall damage in the selected arena spectator area.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class FallSubCommand extends AbstractPVCommand {
 

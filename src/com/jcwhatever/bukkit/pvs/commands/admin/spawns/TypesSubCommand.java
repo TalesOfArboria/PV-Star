@@ -44,8 +44,10 @@ import java.util.List;
         parent="spawns",
         command="types",
         staticParams={"page=1"},
-        usage="/{plugin-command} {command} types [page]",
-        description="Shows a list of usable spawn types.")
+        description="Shows a list of usable spawn types.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class TypesSubCommand extends AbstractPVCommand {
 

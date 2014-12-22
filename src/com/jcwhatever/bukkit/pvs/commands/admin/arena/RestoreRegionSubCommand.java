@@ -44,8 +44,11 @@ import java.io.IOException;
         parent="arena",
         command="restoreregion",
         staticParams = { "fast|balanced|performance=performance" },
-        usage="/{plugin-command} {command} restoreregion [fast|balanced|performance]",
-        description="Restore the selected arenas region from disk.")
+        description="Restore the selected arenas region from disk.",
+
+        paramDescriptions = {
+                "fast|balanced|performance= Optional. Use one of the values to " +
+                        "set the build mode. Default is 'performance'."})
 
 public class RestoreRegionSubCommand extends AbstractPVCommand {
 

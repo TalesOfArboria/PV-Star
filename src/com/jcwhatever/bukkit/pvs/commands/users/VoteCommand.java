@@ -42,7 +42,6 @@ import org.bukkit.permissions.PermissionDefault;
 
 @CommandInfo(
         command={"vote", "v"},
-        usage="/{plugin-command} {command}",
         description="Vote to start the arena you're in.",
         permissionDefault= PermissionDefault.TRUE)
 

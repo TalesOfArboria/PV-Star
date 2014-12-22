@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="lobby",
         command="armordamage",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} armordamage [on|off]",
-        description="Allow or prevent player armor damage/durability in the selected arena lobby.")
+        description="Allow or prevent player armor damage/durability in the selected arena lobby.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class ArmorDamageSubCommand extends AbstractPVCommand {
 

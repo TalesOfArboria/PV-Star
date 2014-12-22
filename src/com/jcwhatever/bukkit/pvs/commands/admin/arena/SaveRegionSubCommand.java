@@ -42,7 +42,6 @@ import java.io.IOException;
 @CommandInfo(
         parent="arena",
         command="saveregion",
-        usage="/{plugin-command} {command} saveregion",
         description="Save the selected arenas region to disk.")
 
 public class SaveRegionSubCommand extends AbstractPVCommand {

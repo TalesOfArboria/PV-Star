@@ -40,9 +40,11 @@ import org.bukkit.command.CommandSender;
 @CommandInfo(
         parent="arena",
         command={"create"},
-        staticParams={"arenaName", "type=Arena"},
-        usage="/{plugin-command} {command} create <arenaName> [type]",
-        description="Create a new arena. Type is for display purposes and is optional.")
+        staticParams={ "arenaName" },
+        description="Create a new arena. Type is for display purposes and is optional.",
+
+        paramDescriptions = {
+                "arenaName= The name of the arena. {NAME16}"})
 
 public class CreateSubCommand extends AbstractPVCommand {
 
@@ -56,7 +58,7 @@ public class CreateSubCommand extends AbstractPVCommand {
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, "Console cannot select regions.");
 
         String name = args.getName("arenaName");
-        String type = args.getString("type");
+        String type = "Arena";
 
         Arena arena = getArena(name);
 

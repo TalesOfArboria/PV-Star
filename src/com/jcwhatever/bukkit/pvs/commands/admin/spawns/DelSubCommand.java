@@ -39,8 +39,10 @@ import org.bukkit.command.CommandSender;
         parent="spawns",
         command="del",
         staticParams={"name"},
-        usage="/{plugin-command} {command} del <name>",
-        description="Deletes specified spawn point from the selected arena.")
+        description="Deletes specified spawn point from the selected arena.",
+
+        paramDescriptions = {
+                "name= The name of the spawn to delete."})
 
 public class DelSubCommand extends AbstractPVCommand {
 

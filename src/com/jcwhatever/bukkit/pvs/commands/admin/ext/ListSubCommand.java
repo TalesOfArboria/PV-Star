@@ -45,8 +45,10 @@ import java.util.Set;
         parent="ext",
         command="list",
         staticParams = { "page=1" },
-        usage="/{plugin-command} {command} list [page]",
-        description="List extensions installed in the currently selected arena.")
+        description="List extensions installed in the currently selected arena.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class ListSubCommand extends AbstractPVCommand {
 

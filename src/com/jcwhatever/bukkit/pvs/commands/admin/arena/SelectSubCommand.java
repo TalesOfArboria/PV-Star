@@ -39,8 +39,10 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="select",
         staticParams={"arenaName"},
-        usage="/{plugin-command} {command} select <arenaName>",
-        description="Set an arena as your selected arena.")
+        description="Set an arena as your selected arena.",
+
+        paramDescriptions = {
+                "arenaName= The name of the arena to select."})
 
 public class SelectSubCommand extends AbstractPVCommand {
 

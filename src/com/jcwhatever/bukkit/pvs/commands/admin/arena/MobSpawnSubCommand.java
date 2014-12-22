@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="mobspawn",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} mobspawn [on|off]",
-        description="Set or view the settings for allowing natural mob spawns in the selected arena.")
+        description="Set or view the settings for allowing natural mob spawns in the selected arena.",
+
+        paramDescriptions = {
+                "on|off|info= 'on' to turn on, 'off' to turn off, 'info' or " +
+                        "leave blank to see current setting."})
 
 public class MobSpawnSubCommand extends AbstractPVCommand {
 

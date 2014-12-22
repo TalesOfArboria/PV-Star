@@ -39,8 +39,13 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="pointsbehavior",
         staticParams={"static|reset|additive|info=info"},
-        usage="/{plugin-command} {command} pointsbehavior [static|reset|additive]",
-        description="Set or view points behavior when forwarded to the currently selected arena.")
+        description="Set or view points behavior when forwarded to the currently selected arena.",
+
+        paramDescriptions = {
+                "static|reset|additive|info= 'static' to keep points unchanged, " +
+                        "'reset' to lose points from prev arena, " +
+                        "'additive' to add points from prev arena to next arena, " +
+                        "'info' or leave blank to see the current setting."})
 
 public class PointsBehaviorSubCommand extends AbstractPVCommand {
 

@@ -40,7 +40,6 @@ import org.bukkit.command.CommandSender;
         parent="points",
         command="add",
         staticParams={ "typeName" },
-        usage="/{plugin-command} {command} add <typeName>",
         description="Add points type to the currently selected arena.")
 
 public class AddSubCommand extends AbstractPVCommand {

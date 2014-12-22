@@ -40,8 +40,10 @@ import org.bukkit.command.CommandSender;
         parent="points",
         command="del",
         staticParams={ "typeName" },
-        usage="/{plugin-command} {command} del <typeName>",
-        description="Remove points type from the currently selected arena.")
+        description="Remove points type from the currently selected arena.",
+
+        paramDescriptions = {
+                "typeName= The name of the points type to remove."})
 
 public class DelSubCommand extends AbstractPVCommand {
 

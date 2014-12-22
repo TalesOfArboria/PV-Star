@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="hunger",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} hunger [on|off]",
-        description="Allow or prevent player hunger in the selected arena game.")
+        description="Allow or prevent player hunger in the selected arena game.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class HungerSubCommand extends AbstractPVCommand {
 

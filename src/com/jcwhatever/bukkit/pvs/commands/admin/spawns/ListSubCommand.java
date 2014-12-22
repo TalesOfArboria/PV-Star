@@ -49,8 +49,11 @@ import java.util.List;
         command="list",
         staticParams={"page=1"},
         floatingParams={"type=$all"},
-        usage="/{plugin-command} {command} list [page] [--type]",
-        description="Shows a list of spawns for the selected arena.")
+        description="Shows a list of spawns for the selected arena.",
+
+        paramDescriptions = {
+                "page= {PAGE}",
+                "type= Optional. Specify the name of the spawn type to filter the results by."})
 
 public class ListSubCommand extends AbstractPVCommand {
 

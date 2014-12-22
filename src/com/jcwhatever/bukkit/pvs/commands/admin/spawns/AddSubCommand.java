@@ -48,8 +48,12 @@ import org.bukkit.entity.Player;
         parent="spawns",
         command="add",
         staticParams={"name", "type", "team=none"},
-        usage="/{plugin-command} {command} add <name> <type> [team=none]",
-        description="Adds your location as a spawn point in the selected arena.")
+        description="Adds your location as a spawn point in the selected arena.",
+
+        paramDescriptions = {
+                "name= The name of the spawn. {NAME16}",
+                "type= The name of the spawn type.",
+                "team= Optional. The name of the team the spawn is for. Default is 'none'."})
 
 public class AddSubCommand extends AbstractPVCommand {
 

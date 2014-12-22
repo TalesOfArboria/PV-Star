@@ -44,8 +44,10 @@ import java.util.List;
         parent="signs",
         command="types",
         staticParams={"page=1"},
-        usage="/{plugin-command} {command} types [page]",
-        description="Show a list of sign types.")
+        description="Show a list of sign types.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class TypesSubCommand extends AbstractPVCommand {
 

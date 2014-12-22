@@ -38,8 +38,10 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="typename",
         staticParams={"name=info"},
-        usage="/{plugin-command} {command} typename [name]",
-        description="Set or view the type display name for the selected arena.")
+        description="Set or view the type display name for the selected arena.",
+
+        paramDescriptions = {
+                "name= The type name to set. Leave blank to see current setting."})
 
 public class TypeNameSubCommand extends AbstractPVCommand {
 

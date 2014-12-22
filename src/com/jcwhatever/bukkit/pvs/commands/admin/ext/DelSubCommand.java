@@ -41,8 +41,10 @@ import org.bukkit.command.CommandSender;
         parent="ext",
         command="del",
         staticParams = { "extName" },
-        usage="/{plugin-command} {command} del <extName>",
-        description="Remove an extension from the currently selected arena.")
+        description="Remove an extension from the currently selected arena.",
+
+        paramDescriptions = {
+                "extName= The name of the arena extension to remove."})
 
 public class DelSubCommand extends AbstractPVCommand {
 

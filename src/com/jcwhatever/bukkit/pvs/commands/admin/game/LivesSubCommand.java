@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="lives",
         staticParams={"amount=info"},
-        usage="/{plugin-command} {command} lives [amount]",
-        description="Set or view player lives in the currently selected arena.")
+        description="Set or view player lives in the currently selected arena.",
+
+        paramDescriptions = {
+                "amount=The number of lives the player starts with. " +
+                        "Leave blank to see current setting."})
 
 public class LivesSubCommand extends AbstractPVCommand {
 

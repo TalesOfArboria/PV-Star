@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="points",
         staticParams={"amount=info"},
-        usage="/{plugin-command} {command} points [amount]",
-        description="Set or view player lives in the currently selected arena.")
+        description="Set or view player points in the currently selected arena.",
+
+        paramDescriptions = {
+                "amount= The number of points the player starts with. " +
+                        "Leave blank to see current setting."})
 
 public class PointsSubCommand extends AbstractPVCommand {
 

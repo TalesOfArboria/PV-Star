@@ -42,9 +42,11 @@ import org.bukkit.permissions.PermissionDefault;
 @CommandInfo(
         command={"join", "j"},
         staticParams={"arenaName"},
-        usage="/{plugin-command} {command} <arenaName>",
         description="Join an arena.",
-        permissionDefault= PermissionDefault.TRUE)
+        permissionDefault= PermissionDefault.TRUE,
+
+        paramDescriptions = {
+                "arenaName= The name of the arena to join."})
 
 public class JoinCommand extends AbstractPVCommand {
 

@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs;
 
 import com.jcwhatever.bukkit.generic.GenericsLib;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
+import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
@@ -50,7 +50,7 @@ import com.jcwhatever.bukkit.pvs.api.spawns.SpawnTypeManager;
 import com.jcwhatever.bukkit.pvs.api.stats.StatsManager;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.PVArena;
-import com.jcwhatever.bukkit.pvs.commands.CommandHandler;
+import com.jcwhatever.bukkit.pvs.commands.PVCommandDispatcher;
 import com.jcwhatever.bukkit.pvs.commands.PVCommandHelper;
 import com.jcwhatever.bukkit.pvs.listeners.BukkitEventForwarder;
 import com.jcwhatever.bukkit.pvs.listeners.MobEventListener;
@@ -79,7 +79,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
     private ModuleLoader _moduleLoader;
     private PVArenaManager _arenaManager;
-    private CommandHandler _commandHandler;
+    private PVCommandDispatcher _commandHandler;
     private GenericsEventManager _eventManager;
     private StatsManager _statsManager;
     private PointsManager _pointsManager;
@@ -154,7 +154,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     }
 
     @Override
-    public AbstractCommandHandler getCommandHandler() {
+    public CommandDispatcher getCommandHandler() {
         return _commandHandler;
     }
 
@@ -200,7 +200,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         _commandHelper = new PVCommandHelper();
 
         // enable command
-        _commandHandler = new CommandHandler(this);
+        _commandHandler = new PVCommandDispatcher(this);
         registerCommands(_commandHandler);
 
         Msg.info("Loading modules...");

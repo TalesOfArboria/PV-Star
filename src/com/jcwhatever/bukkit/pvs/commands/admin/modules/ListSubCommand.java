@@ -44,8 +44,10 @@ import java.util.List;
         parent="modules",
         command="list",
         staticParams={"page=1"},
-        usage="/{plugin-command} {command} list [page]",
-        description="Shows list of loaded modules.")
+        description="Shows list of loaded modules.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class ListSubCommand extends AbstractPVCommand {
 

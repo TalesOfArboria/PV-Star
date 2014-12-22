@@ -41,8 +41,12 @@ import org.bukkit.command.CommandSender;
         parent="points",
         command="set",
         staticParams={ "typeName", "amount=info" },
-        usage="/{plugin-command} {command} set <typeName> <amount>",
-        description="Set points received or deducted for a points type in the selected arena.")
+        description="Set points received or deducted for a points type in the selected arena.",
+
+        paramDescriptions = {
+                "typeName= The name of the points type.",
+                "amount= The amount received or deducted. Use a negative number to deduct. " +
+                        "Leave blank to see current setting."})
 
 public class SetSubCommand extends AbstractPVCommand {
 

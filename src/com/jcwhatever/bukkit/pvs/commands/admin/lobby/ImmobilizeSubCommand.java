@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="lobby",
         command="immobilize",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} immobilize [on|off]",
-        description="Allow or prevent players from being able to move in the lobby.")
+        description="Allow or prevent players from being able to move in the lobby.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class ImmobilizeSubCommand extends AbstractPVCommand {
 

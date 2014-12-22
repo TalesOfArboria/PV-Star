@@ -44,8 +44,10 @@ import java.util.List;
         parent="points",
         command="list",
         staticParams={ "page=1" },
-        usage="/{plugin-command} {command} list [page]",
-        description="List available points types.")
+        description="List available points types.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class ListSubCommand extends AbstractPVCommand {
 

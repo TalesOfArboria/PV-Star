@@ -38,8 +38,10 @@ import org.bukkit.command.CommandSender;
         parent="autostart",
         command="minplayers",
         staticParams={"amount=info"},
-        usage="/{plugin-command} {command} autostart minplayers [amount]",
-        description="Set or view autostart minimum players in the currently selected arena.")
+        description="Set or view autostart minimum players in the currently selected arena.",
+
+        paramDescriptions = {
+                "amount= The minimum number of players. Leave blank to see current setting."})
 
 public class MinPlayersSubCommand extends AbstractPVCommand {
 

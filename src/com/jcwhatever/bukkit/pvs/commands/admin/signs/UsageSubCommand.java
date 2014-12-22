@@ -42,8 +42,10 @@ import org.bukkit.command.CommandSender;
         parent="signs",
         command="usage",
         staticParams={ "typeName" },
-        usage="/{plugin-command} {command} usage <typeName>",
-        description="Get usage information about a sign type.")
+        description="Get usage information about a sign type.",
+
+        paramDescriptions = {
+                "typeName= The name of the sign type."})
 
 public class UsageSubCommand extends AbstractPVCommand {
 

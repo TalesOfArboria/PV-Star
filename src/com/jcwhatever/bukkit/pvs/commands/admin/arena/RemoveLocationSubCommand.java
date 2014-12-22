@@ -42,8 +42,11 @@ import org.bukkit.entity.Player;
         parent="arena",
         command="removelocation",
         staticParams={"current|select|info=info"},
-        usage="/{plugin-command} {command} removelocation [current|select]",
-        description="Set or view the location that players are teleported to when they are removed from the selected arena.")
+        description="Set or view the location that players are teleported to when they " +
+                "are removed from the selected arena.",
+
+        paramDescriptions = {
+                "Leave blank to see current setting. {LOCATION}"})
 
 public class RemoveLocationSubCommand extends AbstractPVCommand {
 

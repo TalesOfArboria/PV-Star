@@ -42,7 +42,6 @@ import org.bukkit.permissions.PermissionDefault;
 
 @CommandInfo(
         command={"leave", "l"},
-        usage="/{plugin-command} {command}",
         description="Leave the arena.",
         permissionDefault= PermissionDefault.TRUE)
 

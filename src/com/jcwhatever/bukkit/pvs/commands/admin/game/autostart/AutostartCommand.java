@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="autostart",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} autostart [on|off]",
-        description="Turn autostart on or off for the selected arena.")
+        description="Turn autostart on or off for the selected arena.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class AutostartCommand extends AbstractPVCommand {
 

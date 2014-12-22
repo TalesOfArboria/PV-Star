@@ -39,8 +39,12 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="livesbehavior",
         staticParams={"static|reset|additive|info=info"},
-        usage="/{plugin-command} {command} livesbehavior [static|reset|additive]",
-        description="Set or view lives behavior when forwarded to the currently selected arena.")
+        description="Set or view lives behavior when forwarded to the currently selected arena.",
+
+        paramDescriptions = {
+                "static|reset|additive|info= 'static' to keep current lives unchanged, " +
+                        "'reset' to use next arena lives, 'additive' to add lives from previous and next arena," +
+                        "'info' or leave blank to see the current setting."})
 
 public class LivesBehaviorSubCommand extends AbstractPVCommand {
 

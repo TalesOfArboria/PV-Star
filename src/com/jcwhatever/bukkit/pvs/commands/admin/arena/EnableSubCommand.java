@@ -37,7 +37,6 @@ import org.bukkit.command.CommandSender;
 @CommandInfo(
         parent="arena",
         command="enable",
-        usage="/{plugin-command} {command} enable",
         description="Enable the currently selected arena.")
 
 public class EnableSubCommand extends AbstractPVCommand {

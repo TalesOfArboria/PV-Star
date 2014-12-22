@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="lobby",
         command="sharing",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} sharing [on|off]",
-        description="Allow or deny players to drop chest items in the selected arena lobby.")
+        description="Allow or deny players to drop chest items in the selected arena lobby.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class SharingSubCommand extends AbstractPVCommand {
 

@@ -46,8 +46,10 @@ import java.util.List;
         parent="points",
         command="current",
         staticParams={ "page=1" },
-        usage="/{plugin-command} {command} current [page]",
-        description="List points types enabled in the selected arena.")
+        description="List points types enabled in the selected arena.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class CurrentSubCommand extends AbstractPVCommand {
 

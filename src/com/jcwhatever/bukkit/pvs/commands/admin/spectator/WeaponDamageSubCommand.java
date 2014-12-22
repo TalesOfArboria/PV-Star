@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="spectator",
         command="weapondamage",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} weapondamage [on|off]",
-        description="Allow or prevent spectator weapon damage/durability in the selected arena.")
+        description="Allow or prevent spectator weapon damage/durability in the selected arena.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class WeaponDamageSubCommand extends AbstractPVCommand {
 

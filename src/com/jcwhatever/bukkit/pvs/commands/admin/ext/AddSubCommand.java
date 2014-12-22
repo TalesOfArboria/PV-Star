@@ -41,8 +41,10 @@ import org.bukkit.command.CommandSender;
         parent="ext",
         command="add",
         staticParams = { "extName" },
-        usage="/{plugin-command} {command} add <extName>",
-        description="Add an extension to the currently selected arena.")
+        description="Add an extension to the currently selected arena.",
+
+        paramDescriptions = {
+                "extName= The name of the arena extension to add."})
 
 public class AddSubCommand extends AbstractPVCommand {
 

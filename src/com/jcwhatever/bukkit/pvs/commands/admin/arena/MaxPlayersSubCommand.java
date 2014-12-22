@@ -38,8 +38,10 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="maxplayers",
         staticParams={"max=info"},
-        usage="/{plugin-command} {command} maxplayers [max]",
-        description="Set or view the maximum players setting for your selected arena.")
+        description="Set or view the maximum players setting for your selected arena.",
+
+        paramDescriptions = {
+                "max= The max players to set. Leave blank to see current setting."})
 
 public class MaxPlayersSubCommand extends AbstractPVCommand {
 

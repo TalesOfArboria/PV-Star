@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands;
 
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
+import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
 import com.jcwhatever.bukkit.pvs.commands.admin.arena.ArenaCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.ext.ExtCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.game.GameCommand;
@@ -41,14 +41,14 @@ import com.jcwhatever.bukkit.pvs.commands.users.VoteCommand;
 
 import org.bukkit.plugin.Plugin;
 
-public class CommandHandler extends AbstractCommandHandler {
+public class PVCommandDispatcher extends CommandDispatcher {
 
     /**
      * Constructor
      *
      * @param plugin The plugin the command handler is for
      */
-    public CommandHandler(Plugin plugin) {
+    public PVCommandDispatcher(Plugin plugin) {
         super(plugin);
     }
 

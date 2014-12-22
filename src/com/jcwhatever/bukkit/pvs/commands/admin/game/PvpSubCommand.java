@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="pvp",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} pvp [on|off]",
-        description="Turn PVP on or off in the selected arenas game.")
+        description="Turn PVP on or off in the selected arenas game.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class PvpSubCommand extends AbstractPVCommand {
 

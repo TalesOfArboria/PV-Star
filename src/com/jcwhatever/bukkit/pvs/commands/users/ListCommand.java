@@ -46,9 +46,11 @@ import java.util.List;
 @CommandInfo(
         command="list",
         staticParams={"page=1"},
-        usage="/{plugin-command} {command} [page]",
         description="Lists all available arenas.",
-        permissionDefault= PermissionDefault.TRUE)
+        permissionDefault= PermissionDefault.TRUE,
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class ListCommand extends AbstractPVCommand {
 

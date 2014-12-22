@@ -46,8 +46,10 @@ import java.util.List;
         parent="ext",
         command="types",
         staticParams = { "page=1" },
-        usage="/{plugin-command} {command} types [page]",
-        description="List available arena extensions.")
+        description="List available arena extensions.",
+
+        paramDescriptions = {
+                "page= {PAGE}"})
 
 public class TypesSubCommand extends AbstractPVCommand {
 

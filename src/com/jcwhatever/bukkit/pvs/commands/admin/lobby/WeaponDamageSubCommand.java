@@ -38,8 +38,11 @@ import org.bukkit.command.CommandSender;
         parent="lobby",
         command="weapondamage",
         staticParams={"on|off|info=info"},
-        usage="/{plugin-command} {command} weapondamage [on|off]",
-        description="Allow or prevent player weapon damage/durability in the selected arena lobby.")
+        description="Allow or prevent player weapon damage/durability in the selected arena lobby.",
+
+        paramDescriptions = {
+                "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
+                        "'info' or leave blank to see current setting."})
 
 public class WeaponDamageSubCommand extends AbstractPVCommand {
 

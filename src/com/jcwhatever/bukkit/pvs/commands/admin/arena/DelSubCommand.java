@@ -42,8 +42,10 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="del",
         staticParams={"arenaName"},
-        usage="/{plugin-command} {command} del <arenaName>",
-        description="Delete the specified arena.")
+        description="Delete the specified arena.",
+
+        paramDescriptions = {
+                "arenaName= The name of the arena to delete."})
 
 public class DelSubCommand extends AbstractPVCommand {
 

@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands;
 
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandUtils;
+import com.jcwhatever.bukkit.generic.commands.CommandUtils;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class PVCommandHelper extends AbstractCommandUtils implements CommandHelper {
+public class PVCommandHelper extends CommandUtils implements CommandHelper {
 
     @Localizable static final String _ARENA_NOT_SELECTED = "No arena selected. Use '/{plugin-command} arena select <arenaName>' first.";
     @Localizable static final String _WAIT_TILL_FINISHED = "Please wait until the arena is finished.";

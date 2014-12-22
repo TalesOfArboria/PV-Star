@@ -42,8 +42,8 @@ import org.bukkit.entity.Player;
 @CommandInfo(
         parent="arena",
         command="setregion",
-        usage="/{plugin-command} {command} setregion",
-        description="Sets the region of the selected arena using your current region selection.")
+        description="Sets the region of the selected arena using your current " +
+                "region selection.")
 
 public class SetRegionSubCommand extends AbstractPVCommand {
 

@@ -38,8 +38,10 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="minplayers",
         staticParams={"min=info"},
-        usage="/{plugin-command} {command} minplayers [min]",
-        description="Set or view the minimum players setting for your selected arena.")
+        description="Set or view the minimum players setting for your selected arena.",
+
+        paramDescriptions = {
+                "min= The minimum players to set. Leave blank to see current setting."})
 
 public class MinPlayersSubCommand extends AbstractPVCommand {
 
