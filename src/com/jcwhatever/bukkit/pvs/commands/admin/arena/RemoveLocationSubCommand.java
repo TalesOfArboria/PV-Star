@@ -46,7 +46,7 @@ import org.bukkit.entity.Player;
                 "are removed from the selected arena.",
 
         paramDescriptions = {
-                "Leave blank to see current setting. {LOCATION}"})
+                "current|select|info= Leave blank to see current setting. {LOCATION}"})
 
 public class RemoveLocationSubCommand extends AbstractPVCommand {
 
