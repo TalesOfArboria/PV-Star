@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.points;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils.FormatTemplate;
@@ -54,7 +54,7 @@ public class ListSubCommand extends AbstractPVCommand {
     @Localizable static final String _PAGINATOR_TITLE = "Points Types";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
         int page = args.getInteger("page");
 

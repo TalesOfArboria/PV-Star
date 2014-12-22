@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.arguments.LocationResponse;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.utils.LocationUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
@@ -54,7 +54,7 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
     @Localizable static final String _SET_LOCATION = "Remove location for arena '{0}' set to:";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
         final Arena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "current|select|info"));
         if (arena == null)

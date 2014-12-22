@@ -26,8 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.users;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
@@ -51,9 +50,9 @@ public class LeaveCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS = "Thanks for playing!";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws InvalidCommandSenderException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER);
+        CommandException.assertNotConsole(this, sender);
 
         Player p = (Player)sender;
         ArenaPlayer player = PVArenaPlayer.get(p);

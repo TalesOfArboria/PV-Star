@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.commands.response.CommandRequests;
 import com.jcwhatever.bukkit.generic.commands.response.IResponseHandler;
 import com.jcwhatever.bukkit.generic.commands.response.ResponseType;
@@ -54,7 +54,7 @@ public class DelSubCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS = "Arena '{0}' deleted.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
         String arenaName = args.getString("arenaName");
 

@@ -26,9 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.spawns;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
@@ -65,11 +63,9 @@ public class AddSubCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS = "Spawnpoint '{0}' added to arena '{1}'.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args)
-            throws InvalidArgumentException, InvalidCommandSenderException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER,
-                "Console cannot set locations.");
+        CommandException.assertNotConsole(this, sender);
 
         String name = args.getName("name");
         String type = args.getName("type", 32);

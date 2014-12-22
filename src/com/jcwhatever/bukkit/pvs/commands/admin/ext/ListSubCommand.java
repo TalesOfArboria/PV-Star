@@ -26,8 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.ext;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils.FormatTemplate;
@@ -55,8 +54,7 @@ public class ListSubCommand extends AbstractPVCommand {
     @Localizable static final String _PAGINATOR_TITLE = "Extensions in arena '{0}'";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args)
-            throws InvalidCommandSenderException, InvalidArgumentException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
         Arena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
         if (arena == null)

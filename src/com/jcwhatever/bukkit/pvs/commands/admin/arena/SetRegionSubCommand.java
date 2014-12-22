@@ -26,8 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.regions.selection.IRegionSelection;
 import com.jcwhatever.bukkit.pvs.Lang;
@@ -50,9 +49,9 @@ public class SetRegionSubCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS =  "Region for arena '{0}' has been set.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws InvalidCommandSenderException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, "Console cannot select regions.");
+        CommandException.assertNotConsole(this, sender);
 
         Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
         if (arena == null)

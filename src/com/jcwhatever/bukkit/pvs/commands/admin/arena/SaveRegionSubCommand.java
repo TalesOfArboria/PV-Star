@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.performance.queued.QueueResult.CancelHandler;
 import com.jcwhatever.bukkit.generic.performance.queued.QueueResult.FailHandler;
@@ -52,7 +52,7 @@ public class SaveRegionSubCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS = "The region for arena '{0}' has been saved.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
         final Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
         if (arena == null)

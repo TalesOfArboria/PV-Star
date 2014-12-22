@@ -26,9 +26,7 @@ package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -53,9 +51,9 @@ public class CreateSubCommand extends AbstractPVCommand {
     @Localizable static final String _SUCCESS = "A new arena with the name '{0}' of type '{1}' has been created.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws InvalidArgumentException, InvalidCommandSenderException {
+    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, "Console cannot select regions.");
+        CommandException.assertNotConsole(this, sender);
 
         String name = args.getName("arenaName");
         String type = "Arena";
