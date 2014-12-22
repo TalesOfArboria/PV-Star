@@ -29,10 +29,8 @@ import com.jcwhatever.bukkit.generic.GenericsPlugin;
 import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.inventory.KitManager;
-import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
 import com.jcwhatever.bukkit.generic.signs.SignManager;
-import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;
@@ -67,7 +65,6 @@ import com.jcwhatever.bukkit.pvs.stats.PVStatsManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -205,19 +202,8 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
         Msg.info("Loading modules...");
 
-        // get module folder
-        File moduleDir = new File(getDataFolder(), "modules");
-        if (!moduleDir.exists() && !moduleDir.mkdirs()) {
-            throw new RuntimeException("Failed to create PV-Star modules folder.");
-        }
-
-        // setup module loader settings
-        JarModuleLoaderSettings<PVStarModule> loaderSettings = new JarModuleLoaderSettings<>();
-        loaderSettings.setModuleFolder(moduleDir);
-        loaderSettings.setDirectoryTraversal(DirectoryTraversal.NONE);
-
         // load modules
-        _moduleLoader = new ModuleLoader(PVStarModule.class, loaderSettings);
+        _moduleLoader = new ModuleLoader();
         _moduleLoader.loadModules();
 
         // enable loaded modules

@@ -24,15 +24,10 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
-import com.jcwhatever.bukkit.generic.modules.IModuleFactory;
 import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
-import com.jcwhatever.bukkit.generic.modules.IModuleInfoFactory;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoader;
-import com.jcwhatever.bukkit.generic.modules.JarModuleLoaderSettings;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IFinishHandler;
-import com.jcwhatever.bukkit.generic.utils.IEntryValidator;
-import com.jcwhatever.bukkit.generic.utils.FileUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
@@ -46,21 +41,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 /**
  * Loads and stores PV-Star modules.
  */
 public class ModuleLoader extends JarModuleLoader<PVStarModule> {
-
-    private static final String MODULE_MANIFEST = "module.yml";
 
     private Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
 
@@ -70,9 +58,8 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     /*
      * Constructor.
      */
-    public ModuleLoader(Class<PVStarModule> moduleClass,
-                        JarModuleLoaderSettings<PVStarModule> settings) {
-        super(moduleClass, settings);
+    public ModuleLoader() {
+        super(PVStarModule.class, new PVModuleLoaderSettings());
 
         _kickPlayersListener = new KickPlayersBukkitListener();
         Bukkit.getPluginManager().registerEvents(_kickPlayersListener, PVStarAPI.getPlugin());
@@ -134,83 +121,6 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
         });
 
         moduleEnabler.start();
-    }
-
-    @Override
-    public IEntryValidator<JarFile> getDefaultJarValidator() {
-        return new IEntryValidator<JarFile>() {
-            @Override
-            public boolean isValid(JarFile entry) {
-                JarEntry moduleEntry = entry.getJarEntry(MODULE_MANIFEST);
-                if (moduleEntry == null) {
-                    Msg.warning("Failed to load {0} because its missing its {1} file.",
-                            entry.getName(), MODULE_MANIFEST);
-                    return false;
-                }
-
-                return true;
-            }
-        };
-    }
-
-    @Override
-    public IModuleFactory<PVStarModule> getDefaultModuleFactory() {
-
-        return new IModuleFactory<PVStarModule>() {
-            @Override
-            public PVStarModule create(Class<PVStarModule> clazz)
-                    throws InstantiationException, IllegalAccessException,
-                    NoSuchMethodException, InvocationTargetException {
-
-                Constructor<PVStarModule> constructor = clazz.getConstructor();
-                return constructor.newInstance();
-            }
-        };
-    }
-
-    @Override
-    public IModuleInfoFactory<PVStarModule> getDefaultModuleInfoFactory() {
-        return new IModuleInfoFactory<PVStarModule>() {
-
-            private Map<String, PVModuleInfo> namedModuleInfo = new HashMap<>(20);
-
-            @Override
-            public IModuleInfo create(PVStarModule module) {
-
-                // get "module.yml" file from module
-                String moduleInfoString = FileUtils.scanTextFile(module.getClass(),
-                        '/' + MODULE_MANIFEST, StandardCharsets.UTF_8);
-
-                if (moduleInfoString == null) {
-                    // jar validator prevents loading jars with no module.yml file
-                    throw new AssertionError();
-                }
-
-                // get module info from yaml string
-                PVModuleInfo moduleInfo = new PVModuleInfo(moduleInfoString);
-                if (!moduleInfo.isLoaded()) {
-
-                    Msg.warning("Failed to load module '{0}' because its {1} file is missing " +
-                                    "required information.",
-                            module.getClass().getName(), MODULE_MANIFEST);
-
-                    return null;
-                }
-
-                PVStarModule current = getModule(moduleInfo.getName());
-                PVModuleInfo currentInfo = namedModuleInfo.get(moduleInfo.getSearchName());
-
-                // see if module is already loaded and only replace if current is a lesser version.
-                if (current != null && currentInfo != null &&
-                        currentInfo.getLogicalVersion() >= moduleInfo.getLogicalVersion()) {
-                    return null;
-                }
-
-                namedModuleInfo.put(moduleInfo.getSearchName(), moduleInfo);
-
-                return moduleInfo;
-            }
-        };
     }
 
     @Override

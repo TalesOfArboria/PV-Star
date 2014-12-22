@@ -46,6 +46,7 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
     private String _name;
     private String _searchName;
     private String _version;
+    private String _moduleClassName;
     private String _description;
     private long _logicalVersion;
     private List<String> _authors;
@@ -84,6 +85,13 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
     @Override
     public String getSearchName() {
         return _searchName;
+    }
+
+    /**
+     * Get the module class name.
+     */
+    public String getModuleClassName() {
+        return _moduleClassName;
     }
 
     /*
@@ -183,6 +191,10 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
 
         // get the optional description
         _description = moduleNode.getString("description", "");
+
+        _moduleClassName = moduleNode.getString("module");
+        if (_moduleClassName == null)
+            return false;
 
         // get module authors
         String rawAuthors = moduleNode.getString("authors");
