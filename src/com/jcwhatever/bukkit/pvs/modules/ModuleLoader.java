@@ -24,10 +24,13 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
+import com.jcwhatever.bukkit.generic.modules.ClassLoadMethod;
 import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoader;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IFinishHandler;
+import com.jcwhatever.bukkit.generic.utils.FileUtils;
+import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
@@ -41,17 +44,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import javax.annotation.Nullable;
 
 /**
  * Loads and stores PV-Star modules.
  */
 public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
-    private Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
+    private static final String MODULE_MANIFEST = "module.yml";
 
+    private final File _moduleFolder;
+    private final Map<String, PVModuleInfo> _moduleInfo = new HashMap<>(50);
+
+    private Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
     private boolean _isModulesLoaded;
     private KickPlayersBukkitListener _kickPlayersListener;
 
@@ -59,7 +75,12 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
      * Constructor.
      */
     public ModuleLoader() {
-        super(PVStarModule.class, new PVModuleLoaderSettings());
+        super(PVStarModule.class);
+
+        _moduleFolder = new File(PVStarAPI.getPlugin().getDataFolder(), "modules");
+        if (!_moduleFolder.exists() && !_moduleFolder.mkdirs()) {
+            throw new RuntimeException("Failed to create PV-Star modules folder.");
+        }
 
         _kickPlayersListener = new KickPlayersBukkitListener();
         Bukkit.getPluginManager().registerEvents(_kickPlayersListener, PVStarAPI.getPlugin());
@@ -124,11 +145,110 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     }
 
     @Override
+    public File getModuleFolder() {
+        return _moduleFolder;
+    }
+
+    @Override
+    public DirectoryTraversal getDirectoryTraversal() {
+        return DirectoryTraversal.NONE;
+    }
+
+    @Override
     protected void addModule(IModuleInfo info, PVStarModule instance) {
         super.addModule(info, instance);
 
         _unloadedModules.put(info.getSearchName(),
                 new UnloadedModuleContainer(this, instance, (PVModuleInfo)info));
+    }
+
+    @Override
+    protected ClassLoadMethod getLoadMethod(File file) {
+        return ClassLoadMethod.DIRECT;
+    }
+
+    @Override
+    protected String getModuleClassName(JarFile jarFile) {
+        JarEntry entry = jarFile.getJarEntry(MODULE_MANIFEST);
+
+        InputStream stream = null;
+        String moduleInfoString = null;
+        try {
+            stream = jarFile.getInputStream(entry);
+
+            moduleInfoString = FileUtils.scanTextFile(stream, StandardCharsets.UTF_8, 50);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (moduleInfoString == null) {
+            return null;
+        }
+
+        PVModuleInfo moduleInfo = new PVModuleInfo(moduleInfoString);
+        if (!moduleInfo.isLoaded()) {
+            Msg.warning("Failed to load module '{0}' because its {1} file is missing " +
+                            "required information.",
+                    jarFile.getName(), MODULE_MANIFEST);
+            return null;
+        }
+
+        PVStarModule current = getModule(moduleInfo.getName());
+        PVModuleInfo currentInfo = _moduleInfo.get(moduleInfo.getModuleClassName());
+        // see if module is already loaded and only replace if current is a lesser version.
+        if (current != null && currentInfo != null) {
+
+            if (currentInfo.getLogicalVersion() >= moduleInfo.getLogicalVersion()) {
+                return null;
+            }
+        }
+
+        _moduleInfo.put(moduleInfo.getModuleClassName(), moduleInfo);
+
+        return moduleInfo.getModuleClassName();
+    }
+
+    @Nullable
+    @Override
+    protected IModuleInfo createModuleInfo(PVStarModule moduleInstance) {
+        return _moduleInfo.get(moduleInstance.getClass().getCanonicalName());
+    }
+
+    @Nullable
+    @Override
+    protected PVStarModule instantiateModule(Class<PVStarModule> clazz) {
+
+        try {
+            Constructor<PVStarModule> constructor = clazz.getConstructor();
+            return constructor.newInstance();
+        } catch (NoSuchMethodException | InvocationTargetException |
+                InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    protected boolean isValidJarFile(@SuppressWarnings("unused") JarFile jarFile) {
+        JarEntry moduleEntry = jarFile.getJarEntry(MODULE_MANIFEST);
+        if (moduleEntry == null) {
+            Msg.warning("Failed to load {0} because its missing its {1} file.",
+                    jarFile.getName(), MODULE_MANIFEST);
+            return false;
+        }
+
+        return true;
     }
 
     /*
