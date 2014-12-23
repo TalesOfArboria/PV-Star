@@ -203,7 +203,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         Msg.info("Loading modules...");
 
         // load modules
-        _moduleLoader = new ModuleLoader();
+        _moduleLoader = new ModuleLoader(this);
         _moduleLoader.loadModules();
 
         // enable loaded modules

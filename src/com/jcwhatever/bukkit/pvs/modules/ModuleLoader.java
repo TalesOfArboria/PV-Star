@@ -43,6 +43,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,8 +75,8 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     /*
      * Constructor.
      */
-    public ModuleLoader() {
-        super(PVStarModule.class);
+    public ModuleLoader(Plugin plugin) {
+        super(plugin, PVStarModule.class);
 
         _moduleFolder = new File(PVStarAPI.getPlugin().getDataFolder(), "modules");
         if (!_moduleFolder.exists() && !_moduleFolder.mkdirs()) {
