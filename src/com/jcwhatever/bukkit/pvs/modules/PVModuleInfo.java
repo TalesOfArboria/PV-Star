@@ -24,9 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
-import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
+import com.jcwhatever.bukkit.generic.modules.YamlModuleInfo;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.storage.YamlDataStorage;
 import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.ModuleInfo;
@@ -36,15 +35,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarFile;
 
 /*
  * Loads and stores module info from module.yml file
  * in the module jar file.
  */
-public class PVModuleInfo implements ModuleInfo, IModuleInfo {
 
-    private String _name;
-    private String _searchName;
+public class PVModuleInfo extends YamlModuleInfo implements ModuleInfo {
+
     private String _version;
     private String _moduleClassName;
     private String _description;
@@ -54,37 +53,12 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
     private Set<String> _bukkitSoftDepends;
     private Set<String> _moduleDepends;
     private Set<String> _moduleSoftDepends;
-    private boolean _isLoaded;
 
     /*
      * Constructor. Pass in module.yml text string.
      */
-    public PVModuleInfo(String moduleInfoString) {
-        _isLoaded = load(moduleInfoString);
-    }
-
-    /*
-     * Determine if the module information was
-     * successfully loaded in the constructor.
-     */
-    public boolean isLoaded() {
-        return _isLoaded;
-    }
-
-    /*
-     * Get the name of the module
-     */
-    @Override
-    public String getName() {
-        return _name;
-    }
-
-    /*
-     * Get the name of the module in lower case.
-     */
-    @Override
-    public String getSearchName() {
-        return _searchName;
+    public PVModuleInfo(JarFile jarFile) {
+        super(PVStarAPI.getPlugin(), "module.yml", jarFile);
     }
 
     /**
@@ -164,40 +138,27 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
     }
 
     /*
-     * Load module info from yaml string.
+     * Load module info from yaml data node.
      */
-    private boolean load(String moduleInfoString) {
-
-        // Load yaml string into data node.
-        YamlDataStorage moduleNode = new YamlDataStorage(PVStarAPI.getPlugin(), moduleInfoString);
-        if (!moduleNode.load())
-            return false;
-
-        // get the required name of the module
-        _name = moduleNode.getString("name");
-        if (_name == null)
-            return false;
-
-        // convert the name to lower case.
-        _searchName = _name.toLowerCase();
-
-        // get the required logical version
-        _logicalVersion = moduleNode.getLong("logical-version", -1);
+    @Override
+    protected boolean onLoad(IDataNode dataNode) {
+// get the required logical version
+        _logicalVersion = dataNode.getLong("logical-version", -1);
         if (_logicalVersion < 0)
             return false;
 
         // get the optional display version
-        _version = moduleNode.getString("display-version", "v" + _logicalVersion);
+        _version = dataNode.getString("display-version", "v" + _logicalVersion);
 
         // get the optional description
-        _description = moduleNode.getString("description", "");
+        _description = dataNode.getString("description", "");
 
-        _moduleClassName = moduleNode.getString("module");
+        _moduleClassName = dataNode.getString("module");
         if (_moduleClassName == null)
             return false;
 
         // get module authors
-        String rawAuthors = moduleNode.getString("authors");
+        String rawAuthors = dataNode.getString("authors");
 
         if (rawAuthors == null) {
             _authors = Collections.unmodifiableList(new ArrayList<String>(0));
@@ -214,16 +175,16 @@ public class PVModuleInfo implements ModuleInfo, IModuleInfo {
         }
 
         // get Bukkit dependencies
-        _bukkitDepends = getDepends(moduleNode, "bukkit-depends");
+        _bukkitDepends = getDepends(dataNode, "bukkit-depends");
 
         // get Bukkit soft dependencies
-        _bukkitSoftDepends = getDepends(moduleNode, "bukkit-soft-depends");
+        _bukkitSoftDepends = getDepends(dataNode, "bukkit-soft-depends");
 
         // get PV-Star module dependencies
-        _moduleDepends = getDepends(moduleNode, "depends");
+        _moduleDepends = getDepends(dataNode, "depends");
 
         // get PV-Star module soft dependencies
-        _moduleSoftDepends = getDepends(moduleNode, "soft-depends");
+        _moduleSoftDepends = getDepends(dataNode, "soft-depends");
 
         return true;
     }

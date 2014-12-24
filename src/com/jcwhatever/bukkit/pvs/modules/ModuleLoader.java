@@ -29,7 +29,6 @@ import com.jcwhatever.bukkit.generic.modules.IModuleInfo;
 import com.jcwhatever.bukkit.generic.modules.JarModuleLoader;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner;
 import com.jcwhatever.bukkit.generic.utils.DependencyRunner.IFinishHandler;
-import com.jcwhatever.bukkit.generic.utils.FileUtils;
 import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -46,11 +45,8 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,54 +166,14 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
     @Override
     protected String getModuleClassName(JarFile jarFile) {
-        JarEntry entry = jarFile.getJarEntry(MODULE_MANIFEST);
 
-        InputStream stream = null;
-        String moduleInfoString = null;
-        try {
-            stream = jarFile.getInputStream(entry);
-
-            moduleInfoString = FileUtils.scanTextFile(stream, StandardCharsets.UTF_8, 50);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        PVModuleInfo info = new PVModuleInfo(jarFile);
+        if (!info.isValid())
             return null;
-        }
-        finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
-        if (moduleInfoString == null) {
-            return null;
-        }
+        _moduleInfo.put(info.getModuleClassName(), info);
 
-        PVModuleInfo moduleInfo = new PVModuleInfo(moduleInfoString);
-        if (!moduleInfo.isLoaded()) {
-            Msg.warning("Failed to load module '{0}' because its {1} file is missing " +
-                            "required information.",
-                    jarFile.getName(), MODULE_MANIFEST);
-            return null;
-        }
-
-        PVStarModule current = getModule(moduleInfo.getName());
-        PVModuleInfo currentInfo = _moduleInfo.get(moduleInfo.getModuleClassName());
-        // see if module is already loaded and only replace if current is a lesser version.
-        if (current != null && currentInfo != null) {
-
-            if (currentInfo.getLogicalVersion() >= moduleInfo.getLogicalVersion()) {
-                return null;
-            }
-        }
-
-        _moduleInfo.put(moduleInfo.getModuleClassName(), moduleInfo);
-
-        return moduleInfo.getModuleClassName();
+        return info.getModuleClassName();
     }
 
     @Nullable
