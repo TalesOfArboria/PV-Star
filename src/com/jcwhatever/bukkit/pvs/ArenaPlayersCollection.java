@@ -26,6 +26,7 @@ package com.jcwhatever.bukkit.pvs;
 
 
 import com.jcwhatever.bukkit.generic.performance.SingleCache;
+import com.jcwhatever.bukkit.generic.utils.CollectionUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -164,7 +165,7 @@ public class ArenaPlayersCollection {
      * Get all player groups in the collection.
      */
     public Set<ArenaPlayerGroup> getGroups() {
-        return new HashSet<>(_groups);
+        return CollectionUtils.unmodifiableSet(_groups);
     }
 
     /*

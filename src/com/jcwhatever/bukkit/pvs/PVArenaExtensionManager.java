@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.pvs;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
 import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
+import com.jcwhatever.bukkit.generic.utils.CollectionUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -94,7 +95,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
 
     @Override
     public Set<ArenaExtension> getAll() {
-        return new HashSet<ArenaExtension>(_extensions);
+        return CollectionUtils.unmodifiableSet(_extensions);
     }
 
     @Nullable
