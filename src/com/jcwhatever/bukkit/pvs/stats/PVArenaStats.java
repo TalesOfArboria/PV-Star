@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.stats;
 
-import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
+import com.jcwhatever.bukkit.generic.collections.wrappers.WeakValueHashMap;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;

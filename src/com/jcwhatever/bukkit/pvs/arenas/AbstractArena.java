@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.arenas;
 
-import com.jcwhatever.bukkit.generic.collections.WeakValueHashMap;
+import com.jcwhatever.bukkit.generic.collections.wrappers.WeakValueHashMap;
 import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
 import com.jcwhatever.bukkit.generic.language.Localizable;
