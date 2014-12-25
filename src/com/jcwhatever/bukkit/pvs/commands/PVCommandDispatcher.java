@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands;
 
-import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
+import com.jcwhatever.generic.commands.CommandDispatcher;
 import com.jcwhatever.bukkit.pvs.commands.admin.arena.ArenaCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.ext.ExtCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.game.GameCommand;

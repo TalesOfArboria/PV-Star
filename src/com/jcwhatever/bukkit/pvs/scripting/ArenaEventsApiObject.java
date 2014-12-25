@@ -26,11 +26,11 @@ package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
-import com.jcwhatever.bukkit.generic.events.manager.IEventHandler;
-import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
+import com.jcwhatever.generic.events.manager.GenericsEventPriority;
+import com.jcwhatever.generic.events.manager.IEventHandler;
+import com.jcwhatever.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 

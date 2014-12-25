@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
-import com.jcwhatever.bukkit.generic.commands.CommandInfo;
+import com.jcwhatever.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 
 @CommandInfo(

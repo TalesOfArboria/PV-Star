@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.Result;
+import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.Result;
 import com.jcwhatever.bukkit.pvs.ArenaPlayersCollection;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;

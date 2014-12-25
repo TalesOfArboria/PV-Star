@@ -24,12 +24,12 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.bukkit.generic.utils.InventoryUtils;
-import com.jcwhatever.bukkit.generic.inventory.Kit;
-import com.jcwhatever.bukkit.generic.signs.SignContainer;
-import com.jcwhatever.bukkit.generic.signs.SignHandler;
-import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
-import com.jcwhatever.bukkit.generic.utils.text.TextColor;
+import com.jcwhatever.generic.utils.InventoryUtils;
+import com.jcwhatever.generic.inventory.Kit;
+import com.jcwhatever.generic.signs.SignContainer;
+import com.jcwhatever.generic.signs.SignHandler;
+import com.jcwhatever.generic.utils.text.TextUtils;
+import com.jcwhatever.generic.utils.text.TextColor;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;

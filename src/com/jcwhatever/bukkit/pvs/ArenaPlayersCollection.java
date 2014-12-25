@@ -25,9 +25,9 @@
 package com.jcwhatever.bukkit.pvs;
 
 
-import com.jcwhatever.bukkit.generic.performance.SingleCache;
-import com.jcwhatever.bukkit.generic.utils.CollectionUtils;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.performance.SingleCache;
+import com.jcwhatever.generic.utils.CollectionUtils;
+import com.jcwhatever.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayerGroup;

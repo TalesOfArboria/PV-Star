@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.stats;
 
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.stats.ArenaStats;
 import com.jcwhatever.bukkit.pvs.api.stats.StatType;
 import com.jcwhatever.bukkit.pvs.api.stats.StatsManager;

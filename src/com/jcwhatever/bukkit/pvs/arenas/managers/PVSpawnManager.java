@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.bukkit.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
-import com.jcwhatever.bukkit.generic.storage.DataBatchOperation;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.events.manager.GenericsEventHandler;
+import com.jcwhatever.generic.events.manager.IEventListener;
+import com.jcwhatever.generic.storage.DataBatchOperation;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;

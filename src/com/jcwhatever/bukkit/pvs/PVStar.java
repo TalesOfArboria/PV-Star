@@ -24,15 +24,15 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.bukkit.generic.GenericsLib;
-import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
-import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
-import com.jcwhatever.bukkit.generic.inventory.KitManager;
-import com.jcwhatever.bukkit.generic.permissions.Permissions;
-import com.jcwhatever.bukkit.generic.signs.SignManager;
-import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.GenericsLib;
+import com.jcwhatever.generic.GenericsPlugin;
+import com.jcwhatever.generic.commands.CommandDispatcher;
+import com.jcwhatever.generic.events.manager.GenericsEventManager;
+import com.jcwhatever.generic.inventory.KitManager;
+import com.jcwhatever.generic.permissions.Permissions;
+import com.jcwhatever.generic.signs.SignManager;
+import com.jcwhatever.generic.utils.player.PlayerUtils;
+import com.jcwhatever.generic.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;

@@ -24,12 +24,12 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
-import com.jcwhatever.bukkit.generic.commands.CommandInfo;
-import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.arguments.LocationResponse;
-import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
-import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.utils.LocationUtils;
+import com.jcwhatever.generic.commands.CommandInfo;
+import com.jcwhatever.generic.commands.arguments.CommandArguments;
+import com.jcwhatever.generic.commands.arguments.LocationResponse;
+import com.jcwhatever.generic.commands.exceptions.CommandException;
+import com.jcwhatever.generic.language.Localizable;
+import com.jcwhatever.generic.utils.LocationUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;

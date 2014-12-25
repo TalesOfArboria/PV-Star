@@ -24,10 +24,10 @@
 
 package com.jcwhatever.bukkit.pvs.commands;
 
-import com.jcwhatever.bukkit.generic.commands.CommandUtils;
-import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
+import com.jcwhatever.generic.commands.CommandUtils;
+import com.jcwhatever.generic.language.Localizable;
+import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
