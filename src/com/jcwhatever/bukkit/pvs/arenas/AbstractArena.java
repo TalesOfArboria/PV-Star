@@ -24,14 +24,14 @@
 
 package com.jcwhatever.bukkit.pvs.arenas;
 
-import com.jcwhatever.bukkit.generic.collections.wrappers.WeakValueHashMap;
-import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
+import com.google.common.collect.MapMaker;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventManager;
+import com.jcwhatever.bukkit.generic.events.manager.IEventListener;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.permissions.IPermission;
 import com.jcwhatever.bukkit.generic.permissions.Permissions;
-import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataPath;
+import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Result;
@@ -102,7 +102,8 @@ public abstract class AbstractArena implements Arena, IEventListener {
     private ArenaRegion _region;
     private IPermission _permission;
 
-    private Map<String, IDataNode> _nodeMap = new WeakValueHashMap<>(20);
+    private Map<String, IDataNode> _nodeMap =
+            new MapMaker().weakValues().concurrencyLevel(1).initialCapacity(20).makeMap();
 
     private GameManager _gameManager;
     private LobbyManager _lobbyManager;
