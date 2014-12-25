@@ -24,7 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.bukkit.generic.collections.HashSetMap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.generic.events.manager.GenericsEventPriority;
 import com.jcwhatever.bukkit.generic.events.manager.IEventHandler;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
@@ -33,6 +34,7 @@ import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
+import java.util.Collection;
 import java.util.Set;
 
 /*
@@ -40,7 +42,8 @@ import java.util.Set;
  */
 public class ArenaEventsApiObject implements IScriptApiObject {
 
-    private final HashSetMap<Class<?>, EventWrapper> _registeredHandlers = new HashSetMap<>(30);
+    private final Multimap<Class<?>, EventWrapper> _registeredHandlers =
+            MultimapBuilder.hashKeys(30).hashSetValues(5).build();
 
     private final Arena _arena;
     private boolean _isDisposed;
@@ -64,7 +67,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
 
         for (Class<?> event : events) {
 
-            Set<EventWrapper> handlers = _registeredHandlers.getAll(event);
+            Collection<EventWrapper> handlers = _registeredHandlers.get(event);
             if (handlers == null)
                 continue;
 
