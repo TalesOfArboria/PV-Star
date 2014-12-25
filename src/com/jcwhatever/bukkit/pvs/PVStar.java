@@ -28,7 +28,7 @@ import com.jcwhatever.generic.GenericsLib;
 import com.jcwhatever.generic.GenericsPlugin;
 import com.jcwhatever.generic.commands.CommandDispatcher;
 import com.jcwhatever.generic.events.manager.GenericsEventManager;
-import com.jcwhatever.generic.inventory.KitManager;
+import com.jcwhatever.generic.kits.KitManager;
 import com.jcwhatever.generic.permissions.Permissions;
 import com.jcwhatever.generic.signs.SignManager;
 import com.jcwhatever.generic.utils.player.PlayerUtils;
