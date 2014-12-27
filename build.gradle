@@ -1,23 +1,41 @@
 def projectName = 'PV-Star'
 def majorVersion = '0'
+def minorVersion = '0'
 def buildBy = null
-def providedDepends = [
-        'C:/JavaRepo/bukkit/spigot-api-1.8-R0.1-SNAPSHOT.jar',
-        'C:/JavaRepo/jsr305-1.3.9.jar',
-        'NucleusFramework.jar'
+def mavenRepositories = [
+        'https://github.com/JCThePants/mvn-repo/raw/master',
+        'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 ]
-
+def providedDependsFiles = null
+def providedDepends = [
+        'org.spigotmc:spigot-api:1.8-R0.1',
+        'com.google.code.findbugs:jsr305:3.0.0',
+        'com.jcwhatever.bukkit:NucleusFramework:0.0.SNAPSHOT'
+]
+def compileDependsFiles = null
 def compileDepends = [
-        'PV-StarAPI.jar'
+        'com.jcwhatever.bukkit:PV-StarAPI:0.0.SNAPSHOT'
 ]
 def includeFiles = [
         'plugin.yml',
         'LICENSE.txt'
 ]
+def javaVersion = 1.7
+
+
+/* Maven Repository Task Stuff */
+def shCmd = 'D:/mvn-repo/bin/sh.exe'
+def mavenCmd = 'D:/apache-maven-3.2.5/bin/mvn'
+def mavenFolder = 'D:/mvn-repo/'
+def mavenGroupId = 'com.jcwhatever.bukkit'
+def mavenArtifactId = projectName
+def mavenVersion = majorVersion + '.' + minorVersion + '.SNAPSHOT'
+
+/* Begin */
 
 // Set version number
 if (hasProperty("teamcity")) {
-    version = majorVersion + '.' + teamcity["build.number"] + '.git-' + teamcity["build.vcs.number"]
+    version = majorVersion + '.' + minorVersion + '.' + teamcity["build.number"] + '.git-' + teamcity["build.vcs.number"]
 
     if (buildBy == null) {
         buildBy = teamcity["build.triggeredBy.username"]
@@ -32,24 +50,20 @@ if (hasProperty("teamcity")) {
     }
 
 }else {
-    version = majorVersion + '.000.git-unknown'
+    version = majorVersion + '.' + minorVersion + '.000.git-unknown'
 }
 
 if (buildBy == null) {
     buildBy = System.properties['user.name']
 }
 
-defaultTasks 'clean', 'build'
+defaultTasks 'build'
 
 apply plugin: 'java'
 
 // Minimum Java Version
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
-repositories {
-    mavenCentral()
-}
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
 
 // Add provided configuration to prevent dependencies
 // from being included in the jar
@@ -74,18 +88,51 @@ sourceSets {
     }
 }
 
-// Add dependencies
-dependencies {
-
-    if (compileDepends) {
-        compile files(compileDepends)
+buildscript {
+    repositories {
+        mavenCentral()
     }
+    dependencies { classpath 'org.ajoberstar:gradle-git:0.2.3' }
+}
 
-    if (providedDepends) {
-        provided files(providedDepends)
+repositories {
+    mavenCentral()
+
+    if (mavenRepositories) {
+        for (repo in mavenRepositories) {
+            maven {
+                url repo
+            }
+        }
     }
 }
 
+// Add dependencies
+dependencies {
+
+    if (compileDependsFiles) {
+        compile files(compileDependsFiles)
+    }
+
+    if (providedDependsFiles) {
+        provided files(providedDependsFiles)
+    }
+
+    if (compileDepends) {
+        compile compileDepends
+    }
+
+    if (providedDepends) {
+        provided providedDepends
+    }
+}
+
+def manifestAttr = manifest {
+    attributes("Built-By": buildBy,
+            "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+            "Implementation-Title": projectName,
+            "Implementation-Version": version)
+}
 
 // Jar file output with version number
 jar {
@@ -98,13 +145,7 @@ jar {
         from includeFiles
     }
 
-    manifest {
-        attributes("Built-By": buildBy,
-                "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
-                "Implementation-Title": projectName,
-                "Implementation-Version": version)
-    }
-
+    manifest = manifestAttr
 }
 
 // Task to create a Jar file artifact with no version number
@@ -118,16 +159,33 @@ task simpleNamedJar(type: Jar) {
         from includeFiles
     }
 
-    manifest {
-        attributes("Built-By": buildBy,
-                "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
-                "Implementation-Title": projectName,
-                "Implementation-Version": version)
-    }
+    manifest = manifestAttr
 
     with jar
 }
 
 artifacts {
     archives simpleNamedJar
+}
+
+/* Maven Snapshot Update Tasks */
+import org.ajoberstar.gradle.git.tasks.*
+task cloneMaven(type: GitClone) {
+    def destination = file(mavenFolder)
+    uri = "https://github.com/JCThePants/mvn-repo.git"
+    destinationPath = destination
+    bare = false
+    enabled = !destination.exists()
+}
+
+task updateLocalMavenHolding(type: Copy) {
+    from file('build/libs/' + projectName + '.jar')
+    into file(mavenFolder + 'holding')
+}
+
+task updateLocalMaven(type: Exec) {
+    workingDir mavenFolder
+    executable shCmd
+    args '--login', '-i', '-c', mavenCmd + ' install:install-file -DgroupId=' + mavenGroupId +
+            ' -DartifactId=' + mavenArtifactId + ' -Dversion=' + mavenVersion + ' -Dfile=holding/' + projectName + '.jar -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=';
 }
