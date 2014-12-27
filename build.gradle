@@ -8,7 +8,7 @@ def mavenRepositories = [
 ]
 def providedDependsFiles = null
 def providedDepends = [
-        'org.spigotmc:spigot-api:1.8-R0.1',
+        'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT',
         'com.google.code.findbugs:jsr305:3.0.0',
         'com.jcwhatever.bukkit:NucleusFramework:0.0.SNAPSHOT'
 ]
