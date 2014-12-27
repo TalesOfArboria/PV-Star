@@ -2,7 +2,7 @@ name: PV-Star
 author: JCThePants
 main: com.jcwhatever.bukkit.pvs.PVStar
 version: 0.0-beta
-depend: [GenericsLib]
+depend: [NucleusFramework]
 commands:
     pv:
         description: Base command for PV-Star
