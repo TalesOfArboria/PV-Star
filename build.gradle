@@ -59,7 +59,7 @@ if (buildBy == null) {
     buildBy = System.properties['user.name']
 }
 
-defaultTasks 'build'
+defaultTasks 'clean', 'build'
 
 apply plugin: 'java'
 
