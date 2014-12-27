@@ -24,13 +24,13 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.generic.GenericsLib;
-import com.jcwhatever.generic.regions.IRegion;
-import com.jcwhatever.generic.storage.DataStorage;
-import com.jcwhatever.generic.storage.DataPath;
-import com.jcwhatever.generic.storage.IDataNode;
-import com.jcwhatever.generic.utils.PreCon;
-import com.jcwhatever.generic.utils.Utils;
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.regions.IRegion;
+import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Utils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -153,7 +153,7 @@ public class PVArenaManager implements ArenaManager {
     @Nullable
     public Arena getArena(Location location) {
 
-        List<IRegion> regions = GenericsLib.getRegionManager().getRegions(location);
+        List<IRegion> regions = Nucleus.getRegionManager().getRegions(location);
         if (regions.isEmpty())
             return null;
 

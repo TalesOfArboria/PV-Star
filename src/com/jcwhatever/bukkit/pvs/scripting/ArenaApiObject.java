@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
 /*

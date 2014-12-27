@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas;
 
-import com.jcwhatever.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.generic.events.manager.GenericsEventPriority;
+import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.NucleusEventPriority;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -53,7 +53,7 @@ public class PVArena extends AbstractArena {
     /*
      *  Handle player join event
      */
-    @GenericsEventHandler(priority = GenericsEventPriority.FIRST)
+    @NucleusEventHandler(priority = NucleusEventPriority.FIRST)
     private void onPlayerPreJoin(PlayerPreJoinEvent event) {
 
         // check player permission
@@ -92,7 +92,7 @@ public class PVArena extends AbstractArena {
     /*
      * Handle arena disabled
      */
-    @GenericsEventHandler
+    @NucleusEventHandler
     private void onArenaDisabled(@SuppressWarnings("unused") ArenaDisabledEvent event) {
         getGameManager().end();
     }

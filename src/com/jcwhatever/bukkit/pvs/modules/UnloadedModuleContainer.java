@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
-import com.jcwhatever.generic.utils.DependencyRunner.IDependantRunnable;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.utils.DependencyRunner.IDependantRunnable;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 
 import org.bukkit.Bukkit;

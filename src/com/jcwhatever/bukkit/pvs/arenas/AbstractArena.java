@@ -25,16 +25,16 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.google.common.collect.MapMaker;
-import com.jcwhatever.generic.events.manager.GenericsEventManager;
-import com.jcwhatever.generic.events.manager.IEventListener;
-import com.jcwhatever.generic.language.Localizable;
-import com.jcwhatever.generic.permissions.IPermission;
-import com.jcwhatever.generic.permissions.Permissions;
-import com.jcwhatever.generic.storage.DataPath;
-import com.jcwhatever.generic.storage.DataStorage;
-import com.jcwhatever.generic.storage.IDataNode;
-import com.jcwhatever.generic.utils.PreCon;
-import com.jcwhatever.generic.utils.Result;
+import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
+import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.permissions.IPermission;
+import com.jcwhatever.nucleus.permissions.Permissions;
+import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.bukkit.pvs.PVArenaExtensionManager;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -98,7 +98,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     private IDataNode _dataNode;
     private File _dataFolder;
 
-    private GenericsEventManager _eventManager;
+    private NucleusEventManager _eventManager;
     private ArenaRegion _region;
     private IPermission _permission;
 
@@ -134,7 +134,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         _searchName = name.toLowerCase();
         _typeInfo = getClass().getAnnotation(ArenaTypeInfo.class);
 
-        _eventManager = new GenericsEventManager(PVStarAPI.getEventManager());
+        _eventManager = new NucleusEventManager(PVStarAPI.getEventManager());
 
         _dataNode = DataStorage.getStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
         _dataNode.load();
@@ -170,7 +170,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
      * Get the arenas event manager.
      */
     @Override
-    public final GenericsEventManager getEventManager() {
+    public final NucleusEventManager getEventManager() {
         return _eventManager;
     }
 

@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.game;
 
-import com.jcwhatever.generic.commands.CommandInfo;
+import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.bukkit.pvs.commands.admin.game.autostart.AutostartCommand;
 

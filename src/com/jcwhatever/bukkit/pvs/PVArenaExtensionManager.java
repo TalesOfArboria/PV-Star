@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.generic.events.manager.IEventListener;
-import com.jcwhatever.generic.storage.IDataNode;
-import com.jcwhatever.generic.utils.CollectionUtils;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.CollectionUtils;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;
@@ -260,7 +260,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
         }
     }
 
-    @GenericsEventHandler
+    @NucleusEventHandler
     private void onArenaEnable(@SuppressWarnings("unused") ArenaEnabledEvent event) {
 
         // Enable all extensions when arena is enabled.
@@ -269,7 +269,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
         }
     }
 
-    @GenericsEventHandler
+    @NucleusEventHandler
     private void onArenaDisable(@SuppressWarnings("unused") ArenaDisabledEvent event) {
 
         // Disable all extensions when arena is disabled.

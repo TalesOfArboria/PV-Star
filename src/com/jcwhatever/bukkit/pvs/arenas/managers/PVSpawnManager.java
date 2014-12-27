@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.generic.events.manager.IEventListener;
-import com.jcwhatever.generic.storage.DataBatchOperation;
-import com.jcwhatever.generic.storage.IDataNode;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
+import com.jcwhatever.nucleus.storage.DataBatchOperation;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -411,7 +411,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     /*
      * Un-reserve a spawn when a player leaves.
      */
-    @GenericsEventHandler
+    @NucleusEventHandler
     private void onPlayerRemoved(PlayerRemovedEvent event) {
 
         if (event.getReason() == RemovePlayerReason.ARENA_RELATION_CHANGE)

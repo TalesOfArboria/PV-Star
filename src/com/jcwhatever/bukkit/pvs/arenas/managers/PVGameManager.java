@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.generic.utils.PreCon;
-import com.jcwhatever.generic.utils.Result;
-import com.jcwhatever.generic.utils.Scheduler;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Result;
+import com.jcwhatever.nucleus.utils.Scheduler;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;

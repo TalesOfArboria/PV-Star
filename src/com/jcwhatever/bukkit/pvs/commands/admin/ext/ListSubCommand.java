@@ -24,12 +24,12 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.ext;
 
-import com.jcwhatever.generic.commands.CommandInfo;
-import com.jcwhatever.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.generic.commands.exceptions.CommandException;
-import com.jcwhatever.generic.language.Localizable;
-import com.jcwhatever.generic.messaging.ChatPaginator;
-import com.jcwhatever.generic.utils.text.TextUtils.FormatTemplate;
+import com.jcwhatever.nucleus.commands.CommandInfo;
+import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
+import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.extensions.ArenaExtension;

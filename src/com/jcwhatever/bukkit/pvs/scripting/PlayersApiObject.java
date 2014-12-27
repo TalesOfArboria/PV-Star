@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.generic.utils.player.PlayerUtils;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 

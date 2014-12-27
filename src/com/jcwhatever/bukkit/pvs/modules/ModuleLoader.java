@@ -24,13 +24,13 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
-import com.jcwhatever.generic.modules.ClassLoadMethod;
-import com.jcwhatever.generic.modules.IModuleInfo;
-import com.jcwhatever.generic.modules.JarModuleLoader;
-import com.jcwhatever.generic.utils.DependencyRunner;
-import com.jcwhatever.generic.utils.DependencyRunner.IFinishHandler;
-import com.jcwhatever.generic.utils.file.FileUtils.DirectoryTraversal;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.modules.ClassLoadMethod;
+import com.jcwhatever.nucleus.modules.IModuleInfo;
+import com.jcwhatever.nucleus.modules.JarModuleLoader;
+import com.jcwhatever.nucleus.utils.DependencyRunner;
+import com.jcwhatever.nucleus.utils.DependencyRunner.IFinishHandler;
+import com.jcwhatever.nucleus.utils.file.FileUtils.DirectoryTraversal;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;

@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayerGroup;

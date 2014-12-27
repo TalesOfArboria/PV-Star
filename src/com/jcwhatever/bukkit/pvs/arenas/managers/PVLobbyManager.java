@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.generic.events.manager.GenericsEventHandler;
-import com.jcwhatever.generic.events.manager.IEventListener;
+import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -217,7 +217,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
 
     // try ready start when a player is ready
-    @GenericsEventHandler
+    @NucleusEventHandler
     private void onPlayerReady(@SuppressWarnings("UnusedParameters") PlayerReadyEvent event) {
         tryReadyStart();
     }

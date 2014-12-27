@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.generic.events.manager.AbstractBukkitForwarder;
-import com.jcwhatever.generic.events.manager.GenericsEventManager;
+import com.jcwhatever.nucleus.events.manager.AbstractBukkitForwarder;
+import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -65,7 +65,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
      *               only manager that receives bukkit events as part of its normal
      *               operation.
      */
-    public BukkitEventForwarder(GenericsEventManager source) {
+    public BukkitEventForwarder(NucleusEventManager source) {
         super(PVStarAPI.getPlugin(), source);
     }
 

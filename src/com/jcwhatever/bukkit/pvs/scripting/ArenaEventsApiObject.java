@@ -26,11 +26,11 @@ package com.jcwhatever.bukkit.pvs.scripting;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.jcwhatever.generic.events.manager.GenericsEventPriority;
-import com.jcwhatever.generic.events.manager.IEventHandler;
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.generic.utils.PreCon;
-import com.jcwhatever.generic.utils.text.TextUtils;
+import com.jcwhatever.nucleus.events.manager.NucleusEventPriority;
+import com.jcwhatever.nucleus.events.manager.IEventHandler;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
@@ -103,10 +103,10 @@ public class ArenaEventsApiObject implements IScriptApiObject {
             }
         }
 
-        GenericsEventPriority eventPriority = GenericsEventPriority.NORMAL;
+        NucleusEventPriority eventPriority = NucleusEventPriority.NORMAL;
 
         try {
-            eventPriority = GenericsEventPriority.valueOf(priority.toUpperCase());
+            eventPriority = NucleusEventPriority.valueOf(priority.toUpperCase());
         } catch (Exception e) {
             e.printStackTrace();
         }

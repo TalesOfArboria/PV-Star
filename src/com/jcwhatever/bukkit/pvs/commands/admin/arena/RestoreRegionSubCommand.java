@@ -24,14 +24,14 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.arena;
 
-import com.jcwhatever.generic.commands.CommandInfo;
-import com.jcwhatever.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.generic.commands.exceptions.CommandException;
-import com.jcwhatever.generic.language.Localizable;
-import com.jcwhatever.generic.utils.performance.queued.QueueResult.CancelHandler;
-import com.jcwhatever.generic.utils.performance.queued.QueueResult.FailHandler;
-import com.jcwhatever.generic.utils.performance.queued.QueueResult.Future;
-import com.jcwhatever.generic.regions.BuildMethod;
+import com.jcwhatever.nucleus.commands.CommandInfo;
+import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
+import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.utils.performance.queued.QueueResult.CancelHandler;
+import com.jcwhatever.nucleus.utils.performance.queued.QueueResult.FailHandler;
+import com.jcwhatever.nucleus.utils.performance.queued.QueueResult.Future;
+import com.jcwhatever.nucleus.regions.BuildMethod;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;

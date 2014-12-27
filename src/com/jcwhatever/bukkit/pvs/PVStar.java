@@ -24,15 +24,15 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.generic.GenericsLib;
-import com.jcwhatever.generic.GenericsPlugin;
-import com.jcwhatever.generic.commands.CommandDispatcher;
-import com.jcwhatever.generic.events.manager.GenericsEventManager;
-import com.jcwhatever.generic.kits.KitManager;
-import com.jcwhatever.generic.permissions.Permissions;
-import com.jcwhatever.generic.signs.SignManager;
-import com.jcwhatever.generic.utils.player.PlayerUtils;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.NucleusPlugin;
+import com.jcwhatever.nucleus.commands.CommandDispatcher;
+import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
+import com.jcwhatever.nucleus.kits.KitManager;
+import com.jcwhatever.nucleus.permissions.Permissions;
+import com.jcwhatever.nucleus.signs.SignManager;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -72,12 +72,12 @@ import javax.annotation.Nullable;
 /**
  * PV-Star plugin implementation.
  */
-public class PVStar extends GenericsPlugin implements IPVStar {
+public class PVStar extends NucleusPlugin implements IPVStar {
 
     private ModuleLoader _moduleLoader;
     private PVArenaManager _arenaManager;
     private PVCommandDispatcher _commandHandler;
-    private GenericsEventManager _eventManager;
+    private NucleusEventManager _eventManager;
     private StatsManager _statsManager;
     private PointsManager _pointsManager;
     private SignManager _signManager;
@@ -142,7 +142,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
     @Override
     public KitManager getKitManager() {
-        return GenericsLib.getKitManager();
+        return Nucleus.getKitManager();
     }
 
     @Override
@@ -161,7 +161,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
     }
 
     @Override
-    public GenericsEventManager getEventManager() {
+    public NucleusEventManager getEventManager() {
         return _eventManager;
     }
 
@@ -191,7 +191,7 @@ public class PVStar extends GenericsPlugin implements IPVStar {
         _signManager = new PVSignManager(this, getDataNode().getNode("signs"));
         _pointsManager = new PVPointsManager();
         _statsManager = new PVStatsManager();
-        _eventManager = new GenericsEventManager();
+        _eventManager = new NucleusEventManager();
         _extensionManager = new PVExtensionTypeManager();
         _spawnTypeManager = new PVSpawnTypeManager();
         _commandHelper = new PVCommandHelper();
@@ -238,10 +238,10 @@ public class PVStar extends GenericsPlugin implements IPVStar {
 
                 // forward global Bukkit events to the appropriate
                 // arena event manager.
-                _eventForwarder = new BukkitEventForwarder(GenericsLib.getEventManager());
+                _eventForwarder = new BukkitEventForwarder(Nucleus.getEventManager());
 
                 // register script api
-                GenericsLib.getScriptApiRepo().registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
+                Nucleus.getScriptApiRepo().registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
 
                 Msg.info("Modules loaded.");
                 _isLoaded = true;

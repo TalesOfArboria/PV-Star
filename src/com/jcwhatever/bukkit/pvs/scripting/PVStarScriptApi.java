@@ -24,11 +24,11 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.generic.scripting.api.GenericsScriptApi;
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
+import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
+import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -51,7 +51,7 @@ import javax.annotation.Nullable;
         variableName = "pvstar",
         description = "Provides access to PV-Star scripting api."
 )
-public class PVStarScriptApi extends GenericsScriptApi {
+public class PVStarScriptApi extends NucleusScriptApi {
 
     private static ApiObject _apiObject;
 
