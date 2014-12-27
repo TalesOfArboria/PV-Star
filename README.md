@@ -28,9 +28,9 @@ Many of the features that were removed are currently being developed as separate
 
   * Uses its own module loader instead of relying on Bukkit plugins. This gives greater control over the loading process and ensures that modules are not enabled until all modules are ready.
   
-  * Uses GenericsLib event manager. This allows each arena to have its own event manager. Registering event handlers with the arenas event manager ensures the handler will only be called if the event is called on the arena. The arena event managers are children of the PV-Star event manager, which receives calls from the arena event managers. An event handler registered with PV-Star's event manager will receive events from all arenas.
+  * Uses Nucleus event manager. This allows each arena to have its own event manager. Registering event handlers with the arenas event manager ensures the handler will only be called if the event is called on the arena. The arena event managers are children of the PV-Star event manager, which receives calls from the arena event managers. An event handler registered with PV-Star's event manager will receive events from all arenas.
   
-  * Scripting supported by adding a script api to GenericsLib.
+  * Scripting supported by adding a script api to NucleusFramework for scripts to use.
   
   * Handles core statistics but leaves adding statistics types and incrementing to modules/extensions.
   
@@ -42,15 +42,15 @@ Many of the features that were removed are currently being developed as separate
   
   * Built in team support.
   
-  * Built in localization support via GenericsLib.
+  * Built in localization support via Nucleus.
 
 
 
 *Dependencies*
 
-  * [PV-StarAPI](https://github.com/JCThePants/PV-StarAPI) (compile)
+  * [PV-StarAPI](https://github.com/JCThePants/PV-StarAPI) (compile dependency)
   
-  * [GenericsLib](https://github.com/JCThePants/GenericsLib) (provided)
+  * [NucleusFramework](https://github.com/JCThePants/NucleusFramework) (provided dependency)
   
-  * Spigot 1.8  (provided)
+  * Spigot 1.8  (provided dependency)
 
