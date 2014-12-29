@@ -14,7 +14,7 @@ def providedDepends = [
 ]
 def compileDependsFiles = null
 def compileDepends = [
-        'com.jcwhatever.bukkit:PV-StarAPI:0.0.SNAPSHOT'
+        'com.jcwhatever.bukkit:PV-StarAPI:0.0-SNAPSHOT'
 ]
 def includeFiles = [
         'plugin.yml',
