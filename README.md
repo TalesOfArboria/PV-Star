@@ -30,6 +30,8 @@ Many of the features that were removed are currently being developed as separate
   
   * Built in localization support via NucleusFramework.
 
+  * If it doesn't have a feature, you can add it. If it has a feature you don't like, you can remove it.
+
 ## Resources
   * [PVStar-API](https://github.com/JCThePants/PV-StarAPI) - The API that module and extension developers should use.
   * [PVStar Modules](https://github.com/JCThePants/PV-Star-Modules) - A collection of pre-made modules and extensions.
