@@ -106,7 +106,7 @@ public class ClassSignHandler extends SignHandler {
 
         if (currentClassName == null || !searchName.equals(currentClassName.toLowerCase())) {
 
-            IKit kit = PVStarAPI.getKitManager().getKit(searchName);
+            IKit kit = PVStarAPI.getKitManager().get(searchName);
 
             if (kit != null) {
                 InventoryUtils.clearAll(p.getInventory());
