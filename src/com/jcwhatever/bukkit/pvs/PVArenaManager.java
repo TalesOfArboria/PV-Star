@@ -24,13 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.nucleus.Nucleus;
-import com.jcwhatever.nucleus.regions.IRegion;
-import com.jcwhatever.nucleus.storage.DataStorage;
-import com.jcwhatever.nucleus.storage.DataPath;
-import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Utils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -40,6 +33,13 @@ import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.bukkit.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.ArenaTypeInfo;
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.regions.IRegion;
+import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -293,7 +293,7 @@ public class PVArenaManager implements ArenaManager {
 
         for (String rawId : rawArenaIds) {
 
-            UUID arenaId = Utils.getId(rawId);
+            UUID arenaId = TextUtils.parseUUID(rawId);
             if (arenaId == null) {
                 Msg.warning("Invalid arena id found in config file: {0}", rawId);
                 continue;
