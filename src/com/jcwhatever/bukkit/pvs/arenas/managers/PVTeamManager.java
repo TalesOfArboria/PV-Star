@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.nucleus.collections.EntryCounter;
-import com.jcwhatever.nucleus.collections.EntryCounter.RemovalPolicy;
+import com.jcwhatever.nucleus.collections.ElementCounter;
+import com.jcwhatever.nucleus.collections.ElementCounter.RemovalPolicy;
 import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.events.manager.NucleusEventPriority;
@@ -57,8 +57,8 @@ public class PVTeamManager implements TeamManager, IEventListener {
 
     private Arena _arena;
     private TeamDistributor _teamDistributor;
-    private EntryCounter<ArenaTeam> _teams = new EntryCounter<>(RemovalPolicy.REMOVE);
-    private EntryCounter<ArenaTeam> _currentTeams = new EntryCounter<>(RemovalPolicy.REMOVE);
+    private ElementCounter<ArenaTeam> _teams = new ElementCounter<>(RemovalPolicy.REMOVE);
+    private ElementCounter<ArenaTeam> _currentTeams = new ElementCounter<>(RemovalPolicy.REMOVE);
 
     /*
      * Constructor.
@@ -91,7 +91,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
      */
     @Override
     public Set<ArenaTeam> getTeams() {
-        return _teams.getEntries();
+        return _teams.getElements();
     }
 
     /**
@@ -99,12 +99,12 @@ public class PVTeamManager implements TeamManager, IEventListener {
      */
     @Override
     public Set<ArenaTeam> getCurrentTeams() {
-        return _currentTeams.getEntries();
+        return _currentTeams.getElements();
     }
 
     @Override
     public int totalTeams() {
-        return _teams.getEntrySize();
+        return _teams.size();
     }
 
     /**
@@ -112,7 +112,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
      */
     @Override
     public int totalCurrentTeams() {
-        return _currentTeams.getEntrySize();
+        return _currentTeams.size();
     }
 
     /*
