@@ -24,11 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
-import com.jcwhatever.nucleus.events.manager.IEventListener;
-import com.jcwhatever.nucleus.storage.DataBatchOperation;
-import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -37,16 +32,21 @@ import com.jcwhatever.bukkit.pvs.api.arena.managers.SpawnManager;
 import com.jcwhatever.bukkit.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ClearReservedSpawnsEvent;
-import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreRemoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.ReserveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnAddedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreAddEvent;
+import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnPreRemoveEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.spawns.UnreserveSpawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.SpawnType;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.SpawnFilter;
 import com.jcwhatever.bukkit.pvs.spawns.SpawnpointsCollection;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
+import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.storage.DataBatchOperation;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
@@ -55,7 +55,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -376,34 +375,28 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
      */
     private void loadSettings() {
 
-        Set<String> spawnNames = _dataNode.getSubNodeNames();
-        if (spawnNames != null && !spawnNames.isEmpty()) {
+        for (IDataNode spawnNode : _dataNode) {
 
-            for (String spawnName : spawnNames) {
+            String typeName = spawnNode.getString("type");
+            Location location = spawnNode.getLocation("location");
+            ArenaTeam team = spawnNode.getEnum("team", ArenaTeam.class);
 
-                IDataNode spawnNode = _dataNode.getNode(spawnName);
+            if (typeName == null || typeName.isEmpty())
+                continue;
 
-                String typeName = spawnNode.getString("type");
-                Location location = spawnNode.getLocation("location");
-                ArenaTeam team = spawnNode.getEnum("team", ArenaTeam.class);
+            if (location == null)
+                continue;
 
-                if (typeName == null || typeName.isEmpty())
-                    continue;
+            if (team == null)
+                continue;
 
-                if (location == null)
-                    continue;
+            SpawnType type = PVStarAPI.getSpawnTypeManager().getType(typeName);
+            if (type == null)
+                continue;
 
-                if (team == null)
-                    continue;
+            Spawnpoint spawnpoint = new Spawnpoint(spawnNode.getName(), type, team, location);
 
-                SpawnType type = PVStarAPI.getSpawnTypeManager().getType(typeName);
-                if (type == null)
-                    continue;
-
-                Spawnpoint spawnpoint = new Spawnpoint(spawnName, type, team, location);
-
-                super.addSpawn(spawnpoint);
-            }
+            super.addSpawn(spawnpoint);
         }
     }
 

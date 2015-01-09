@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -286,20 +285,13 @@ public class PVArenaManager implements ArenaManager {
 
     void loadArenas() {
 
-        Set<String> rawArenaIds = _dataNode.getSubNodeNames();
+        for (IDataNode arenaNode : _dataNode) {
 
-        if (rawArenaIds == null || rawArenaIds.isEmpty())
-            return;
-
-        for (String rawId : rawArenaIds) {
-
-            UUID arenaId = TextUtils.parseUUID(rawId);
+            UUID arenaId = TextUtils.parseUUID(arenaNode.getName());
             if (arenaId == null) {
-                Msg.warning("Invalid arena id found in config file: {0}", rawId);
+                Msg.warning("Invalid arena id found in config file: {0}", arenaNode.getName());
                 continue;
             }
-
-            IDataNode arenaNode = _dataNode.getNode(rawId);
 
             String arenaName = arenaNode.getString("name");
             String typeName = arenaNode.getString("type");

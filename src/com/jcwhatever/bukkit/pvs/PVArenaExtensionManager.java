@@ -239,24 +239,21 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
     }
 
     private void load() {
-        Set<String> extNames = _dataNode.getSubNodeNames();
 
-        if (extNames != null && !extNames.isEmpty()) {
-            for (String name : extNames) {
+        for (IDataNode node : _dataNode) {
 
-                boolean isEnabled = _dataNode.getNode(name).getBoolean("enabled");
+            boolean isEnabled = node.getBoolean("enabled");
 
-                Class<? extends ArenaExtension> clazz = PVStarAPI.getExtensionManager().getExtensionClass(name);
-                if (clazz == null)
-                    continue;
+            Class<? extends ArenaExtension> clazz = PVStarAPI.getExtensionManager().getExtensionClass(node.getName());
+            if (clazz == null)
+                continue;
 
-                ArenaExtension extension = loadExtension(clazz);
-                if (extension == null)
-                    continue;
+            ArenaExtension extension = loadExtension(clazz);
+            if (extension == null)
+                continue;
 
-                if (isEnabled && getArena().getSettings().isEnabled())
-                    extension.enable();
-            }
+            if (isEnabled && getArena().getSettings().isEnabled())
+                extension.enable();
         }
     }
 

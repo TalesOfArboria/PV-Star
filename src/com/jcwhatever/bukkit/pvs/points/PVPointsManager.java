@@ -24,18 +24,17 @@
 
 package com.jcwhatever.bukkit.pvs.points;
 
-import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.points.PointsManager;
 import com.jcwhatever.bukkit.pvs.api.points.PointsType;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
@@ -81,12 +80,11 @@ public class PVPointsManager implements PointsManager {
         // get the arenas points type node
         IDataNode dataNode = arena.getDataNode("points");
 
-        Set<String> typeNames = dataNode.getSubNodeNames();
-        List<PointsType> results = new ArrayList<PointsType>(typeNames.size());
+        List<PointsType> results = new ArrayList<PointsType>(dataNode.size());
 
-        for (String typeName : typeNames) {
+        for (IDataNode node : dataNode) {
 
-            PointsType type = getType(typeName);
+            PointsType type = getType(node.getName());
             if (type == null)
                 continue;
 
@@ -114,15 +112,13 @@ public class PVPointsManager implements PointsManager {
 
         IDataNode dataNode = arena.getDataNode("points");
 
-        Set<String> typeNames = dataNode.getSubNodeNames();
+        for (IDataNode node : dataNode) {
 
-        for (String typeName : typeNames) {
-
-            PointsType type = getType(typeName);
+            PointsType type = getType(node.getName());
             if (type == null)
                 continue;
 
-            boolean isEnabled = dataNode.getBoolean(typeName + ".enabled");
+            boolean isEnabled = node.getBoolean("enabled");
 
             if (isEnabled)
                 type.add(arena);
