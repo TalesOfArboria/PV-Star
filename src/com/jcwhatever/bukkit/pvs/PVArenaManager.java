@@ -267,7 +267,7 @@ public class PVArenaManager implements ArenaManager {
 
         arena.dispose();
 
-        DataStorage.removeStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + arena.getId().toString()));
+        DataStorage.remove(PVStarAPI.getPlugin(), new DataPath("arenas." + arena.getId().toString()));
 
         File arenaFolder = new File(PVStarAPI.getPlugin().getDataFolder(), "arenas");
         File dataFolder = new File(arenaFolder, arena.getId().toString());

@@ -69,7 +69,7 @@ public class PVArenaStats implements ArenaStats {
 
         IDataNode node = _cachedNodes.get(type);
         if (node == null) {
-            node = DataStorage.getStorage(PVStarAPI.getPlugin(), new DataPath("stats." + _arenaId + '.' + type.getName()));
+            node = DataStorage.get(PVStarAPI.getPlugin(), new DataPath("stats." + _arenaId + '.' + type.getName()));
             node.load();
             _cachedNodes.put(type, node);
         }

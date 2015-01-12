@@ -136,7 +136,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
 
         _eventManager = new NucleusEventManager(PVStarAPI.getEventManager());
 
-        _dataNode = DataStorage.getStorage(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
+        _dataNode = DataStorage.get(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
         _dataNode.load();
 
         _region = new ArenaRegion(this, _dataNode.getNode("region"));
