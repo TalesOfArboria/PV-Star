@@ -126,17 +126,17 @@ public class PVArenaSettings implements ArenaSettings {
         _isEnabled = isEnabled;
         if (isEnabled) {
 
-            if (_arena.getEventManager().call(new ArenaPreEnableEvent(_arena)).isCancelled())
+            if (_arena.getEventManager().call(this, new ArenaPreEnableEvent(_arena)).isCancelled())
                 return;
 
             _isEnabled = true;
 
-            _arena.getEventManager().call(new ArenaEnabledEvent(_arena));
+            _arena.getEventManager().call(this, new ArenaEnabledEvent(_arena));
         }
         else {
             _isEnabled = false;
 
-            _arena.getEventManager().call(new ArenaDisabledEvent(_arena));
+            _arena.getEventManager().call(this, new ArenaDisabledEvent(_arena));
         }
     }
 

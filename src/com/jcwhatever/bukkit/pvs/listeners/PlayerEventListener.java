@@ -119,7 +119,7 @@ public class PlayerEventListener implements Listener {
             PlayerArenaRespawnEvent respawnEvent =
                     new PlayerArenaRespawnEvent(arena, player, player.getRelatedManager(), spawn.getLocation());
 
-            arena.getEventManager().call(respawnEvent);
+            arena.getEventManager().call(this, respawnEvent);
 
             event.setRespawnLocation(respawnEvent.getRespawnLocation());
         }

@@ -24,26 +24,24 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
-import com.jcwhatever.nucleus.events.manager.NucleusEventPriority;
-import com.jcwhatever.nucleus.events.manager.IEventHandler;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.scripting.api.ScriptEventSubscriber;
+import com.jcwhatever.nucleus.scripting.api.ScriptEventSubscriber.IScriptEventSubscriber;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
+import com.jcwhatever.nucleus.utils.observer.event.IEventSubscriber;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.LinkedList;
 
-/*
- * 
+/**
+ * Script API to attach events directly to an arena.
  */
 public class ArenaEventsApiObject implements IScriptApiObject {
 
-    private final Multimap<Class<?>, EventWrapper> _registeredHandlers =
-            MultimapBuilder.hashKeys(30).hashSetValues(5).build();
+    private final LinkedList<IEventSubscriber> _subscribers = new LinkedList<>();
 
     private final Arena _arena;
     private boolean _isDisposed;
@@ -63,21 +61,10 @@ public class ArenaEventsApiObject implements IScriptApiObject {
     @Override
     public void dispose() {
 
-        Set<Class<?>> events = _registeredHandlers.keySet();
-
-        for (Class<?> event : events) {
-
-            Collection<EventWrapper> handlers = _registeredHandlers.get(event);
-            if (handlers == null)
-                continue;
-
-            for (EventWrapper handler : handlers) {
-                //noinspection unchecked
-                handler.getArena().getEventManager().unregister(event, handler);
-            }
+        while (!_subscribers.isEmpty()) {
+            _subscribers.remove().dispose();
         }
 
-        _registeredHandlers.clear();
         _isDisposed = true;
     }
 
@@ -88,7 +75,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
      * @param priority   The event priority.
      * @param handler    The event handler.
      */
-    public void on(String eventName, String priority, final ArenaEventHandler handler) {
+    public void on(String eventName, String priority, final IScriptEventSubscriber handler) {
         PreCon.notNullOrEmpty(eventName);
         PreCon.notNullOrEmpty(priority);
         PreCon.notNull(handler);
@@ -103,20 +90,17 @@ public class ArenaEventsApiObject implements IScriptApiObject {
             }
         }
 
-        NucleusEventPriority eventPriority = NucleusEventPriority.NORMAL;
+        EventSubscriberPriority eventPriority = EventSubscriberPriority.NORMAL;
 
         try {
-            eventPriority = NucleusEventPriority.valueOf(priority.toUpperCase());
+            eventPriority = EventSubscriberPriority.valueOf(priority.toUpperCase());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        EventWrapper eventHandler = new EventWrapper(_arena, handler) {
-            @Override
-            public void handle(Object event) {
-                handler.call(event);
-            }
-        };
+        ScriptEventSubscriber subscriber = new ScriptEventSubscriber(handler);
+        subscriber.setPriority(eventPriority);
+        subscriber.setCancelIgnored(ignoreCancelled);
 
         Class<?> eventClass;
 
@@ -128,33 +112,8 @@ public class ArenaEventsApiObject implements IScriptApiObject {
         }
 
         //noinspection unchecked
-        _arena.getEventManager().register(PVStarAPI.getPlugin(), eventClass, eventPriority, ignoreCancelled, eventHandler);
+        _arena.getEventManager().register(PVStarAPI.getPlugin(), eventClass, subscriber);
 
-        _registeredHandlers.put(eventClass, eventHandler);
-    }
-
-    public static interface ArenaEventHandler {
-
-        public abstract void call(Object event);
-    }
-
-    private static class EventWrapper implements IEventHandler {
-
-        private final Arena _arena;
-        private final ArenaEventHandler _handler;
-
-        EventWrapper(Arena arena, ArenaEventHandler handler) {
-            _arena = arena;
-            _handler = handler;
-        }
-
-        public Arena getArena() {
-            return _arena;
-        }
-
-        @Override
-        public void handle(Object event) {
-            _handler.call(event);
-        }
+        _subscribers.add(subscriber);
     }
 }

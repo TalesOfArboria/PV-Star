@@ -26,9 +26,9 @@ package com.jcwhatever.bukkit.pvs.arenas.managers;
 
 import com.jcwhatever.nucleus.collections.ElementCounter;
 import com.jcwhatever.nucleus.collections.ElementCounter.RemovalPolicy;
-import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
-import com.jcwhatever.nucleus.events.manager.NucleusEventPriority;
+import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
@@ -145,7 +145,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     /*
      * Set a players team when they are added to an arena.
      */
-    @NucleusEventHandler(priority = NucleusEventPriority.FIRST)
+    @EventMethod(priority = EventSubscriberPriority.FIRST)
     private void onPlayerAdd(PlayerPreAddEvent event) {
 
         if (event.getReason() != AddPlayerReason.FORWARDING &&
@@ -167,7 +167,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
      * Recycle the a players team when they are removed from the arena.
      * Ensures an even distribution of teams.
      */
-    @NucleusEventHandler(priority = NucleusEventPriority.FIRST)
+    @EventMethod(priority = EventSubscriberPriority.FIRST)
     private void onPlayerRemove(PlayerRemovedEvent event) {
 
         if (event.getReason() != RemovePlayerReason.FORWARDING &&
@@ -184,7 +184,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     /*
      * Make sure teams updated if players team is changed.
      */
-    @NucleusEventHandler(priority = NucleusEventPriority.LAST)
+    @EventMethod(priority = EventSubscriberPriority.LAST)
     private void onTeamChange(PlayerTeamChangedEvent event) {
 
         if (event.getReason() == TeamChangeReason.JOIN_ARENA)
@@ -209,7 +209,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     /*
      * Add spawn team.
      */
-    @NucleusEventHandler(priority = NucleusEventPriority.LAST)
+    @EventMethod(priority = EventSubscriberPriority.LAST)
     private void onAddSpawn(SpawnAddedEvent event) {
 
         if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)
@@ -221,7 +221,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     /*
      * Remove team when spawn is removed.
      */
-    @NucleusEventHandler(priority = NucleusEventPriority.LAST)
+    @EventMethod(priority = EventSubscriberPriority.LAST)
     private void onRemoveSpawn(SpawnRemovedEvent event) {
 
         if (event.getSpawnpoint().getTeam() == ArenaTeam.NONE)

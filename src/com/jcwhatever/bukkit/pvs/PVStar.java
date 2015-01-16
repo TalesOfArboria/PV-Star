@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.commands.CommandDispatcher;
-import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
+import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.kits.KitManager;
 import com.jcwhatever.nucleus.utils.Permissions;
 import com.jcwhatever.nucleus.signs.SignManager;
@@ -77,7 +77,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     private ModuleLoader _moduleLoader;
     private PVArenaManager _arenaManager;
     private PVCommandDispatcher _commandHandler;
-    private NucleusEventManager _eventManager;
+    private EventManager _eventManager;
     private StatsManager _statsManager;
     private PointsManager _pointsManager;
     private SignManager _signManager;
@@ -161,7 +161,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public NucleusEventManager getEventManager() {
+    public EventManager getEventManager() {
         return _eventManager;
     }
 
@@ -191,7 +191,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         _signManager = new PVSignManager(this, getDataNode().getNode("signs"));
         _pointsManager = new PVPointsManager();
         _statsManager = new PVStatsManager();
-        _eventManager = new NucleusEventManager();
+        _eventManager = new EventManager(this);
         _extensionManager = new PVExtensionTypeManager();
         _spawnTypeManager = new PVSpawnTypeManager();
         _commandHelper = new PVCommandHelper();
@@ -246,7 +246,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
 
-                _eventManager.call(new PVStarLoadedEvent());
+                _eventManager.call(this, new PVStarLoadedEvent());
             }
         });
     }

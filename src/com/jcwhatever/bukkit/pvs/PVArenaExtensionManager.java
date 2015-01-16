@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
@@ -257,7 +257,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
         }
     }
 
-    @NucleusEventHandler
+    @EventMethod
     private void onArenaEnable(@SuppressWarnings("unused") ArenaEnabledEvent event) {
 
         // Enable all extensions when arena is enabled.
@@ -266,7 +266,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
         }
     }
 
-    @NucleusEventHandler
+    @EventMethod
     private void onArenaDisable(@SuppressWarnings("unused") ArenaDisabledEvent event) {
 
         // Disable all extensions when arena is disabled.

@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.arenas;
 
 import com.google.common.collect.MapMaker;
-import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
+import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.language.Localizable;
 import com.jcwhatever.nucleus.providers.permissions.IPermission;
@@ -98,7 +98,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     private IDataNode _dataNode;
     private File _dataFolder;
 
-    private NucleusEventManager _eventManager;
+    private EventManager _eventManager;
     private ArenaRegion _region;
     private IPermission _permission;
 
@@ -134,7 +134,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         _searchName = name.toLowerCase();
         _typeInfo = getClass().getAnnotation(ArenaTypeInfo.class);
 
-        _eventManager = new NucleusEventManager(PVStarAPI.getEventManager());
+        _eventManager = new EventManager(PVStarAPI.getPlugin(), PVStarAPI.getEventManager());
 
         _dataNode = DataStorage.get(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
         _dataNode.load();
@@ -163,14 +163,14 @@ public abstract class AbstractArena implements Arena, IEventListener {
 
         onInit();
 
-        getEventManager().call(new ArenaLoadedEvent(this));
+        getEventManager().call(this, new ArenaLoadedEvent(this));
     }
 
     /*
      * Get the arenas event manager.
      */
     @Override
-    public final NucleusEventManager getEventManager() {
+    public final EventManager getEventManager() {
         return _eventManager;
     }
 
@@ -349,7 +349,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         _isBusy++;
 
         if (_isBusy == 1) {
-            getEventManager().call(new ArenaBusyEvent(this));
+            getEventManager().call(this, new ArenaBusyEvent(this));
         }
     }
 
@@ -364,7 +364,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         _isBusy = Math.max(0, _isBusy);
 
         if (initialBusyState && !isBusy()) {
-            getEventManager().call(new ArenaIdleEvent(this));
+            getEventManager().call(this, new ArenaIdleEvent(this));
         }
     }
 
@@ -419,7 +419,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
 
         PlayerPreJoinEvent preJoinEvent = new PlayerPreJoinEvent(this, player);
 
-        if (getEventManager().call(preJoinEvent).isCancelled()) {
+        if (getEventManager().call(this, preJoinEvent).isCancelled()) {
 
             List<String> rejectionMessages = preJoinEvent.getRejectionMessages();
 
@@ -433,7 +433,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         if (getLobbyManager().addPlayer(player, AddPlayerReason.PLAYER_JOIN)) {
 
             PlayerJoinedEvent joinEvent = new PlayerJoinedEvent(this, player, null);
-            getEventManager().call(joinEvent);
+            getEventManager().call(this, joinEvent);
 
             return true;
         }
@@ -464,7 +464,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
 
                 PlayerLeaveEvent leaveEvent
                         = new PlayerLeaveEvent(this, player, manager, reason, restoreLocation.getResult());
-                getEventManager().call(leaveEvent);
+                getEventManager().call(this, leaveEvent);
 
                 if (leaveEvent.isRestoring() &&
                         leaveEvent.getRestoreLocation() != null) {
@@ -497,7 +497,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
 
         Permissions.unregister("pvstar.arena." + _id.toString());
 
-        getEventManager().call(new ArenaDisposeEvent(this));
+        getEventManager().call(this, new ArenaDisposeEvent(this));
 
         getEventManager().dispose();
 

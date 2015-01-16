@@ -43,7 +43,7 @@ import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.SpawnFilter;
 import com.jcwhatever.bukkit.pvs.spawns.SpawnpointsCollection;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
-import com.jcwhatever.nucleus.events.manager.NucleusEventHandler;
+import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.storage.DataBatchOperation;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -170,7 +170,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public boolean addSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isSpawnAdded = !getArena().getEventManager().call(new SpawnPreAddEvent(getArena(), spawn)).isCancelled()
+        boolean isSpawnAdded = !getArena().getEventManager().call(this, new SpawnPreAddEvent(getArena(), spawn)).isCancelled()
                 && super.addSpawn(spawn);
 
         if (!isSpawnAdded)
@@ -184,7 +184,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
         node.saveAsync(null);
 
-        getArena().getEventManager().call(new SpawnAddedEvent(getArena(), spawn));
+        getArena().getEventManager().call(this, new SpawnAddedEvent(getArena(), spawn));
 
         return true;
     }
@@ -214,7 +214,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public boolean removeSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isRemoved = !getArena().getEventManager().call(new SpawnPreRemoveEvent(getArena(), spawn)).isCancelled()
+        boolean isRemoved = !getArena().getEventManager().call(this, new SpawnPreRemoveEvent(getArena(), spawn)).isCancelled()
                 && super.removeSpawn(spawn);
 
         if (!isRemoved)
@@ -224,7 +224,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         node.remove();
         node.saveAsync(null);
 
-        getArena().getEventManager().call(new SpawnRemovedEvent(getArena(), spawn));
+        getArena().getEventManager().call(this, new SpawnRemovedEvent(getArena(), spawn));
 
         return true;
 
@@ -324,7 +324,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         PreCon.notNull(p);
         PreCon.notNull(spawn);
 
-        if (getArena().getEventManager().call(new ReserveSpawnEvent(getArena(), p, spawn)).isCancelled())
+        if (getArena().getEventManager().call(this, new ReserveSpawnEvent(getArena(), p, spawn)).isCancelled())
             return;
 
         // remove spawn to prevent it's use
@@ -344,7 +344,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         if (spawn == null)
             return;
 
-        if (getArena().getEventManager().call(new UnreserveSpawnEvent(getArena(), p, spawn)).isCancelled()) {
+        if (getArena().getEventManager().call(this, new UnreserveSpawnEvent(getArena(), p, spawn)).isCancelled()) {
             _reserved.put(p.getUniqueId(), spawn);
             return;
         }
@@ -359,7 +359,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     @Override
     public void clearReserved() {
 
-        if (getArena().getEventManager().call(new ClearReservedSpawnsEvent(getArena())).isCancelled())
+        if (getArena().getEventManager().call(this, new ClearReservedSpawnsEvent(getArena())).isCancelled())
             return;
 
         for (Spawnpoint spawn : _reserved.values()) {
@@ -404,7 +404,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     /*
      * Un-reserve a spawn when a player leaves.
      */
-    @NucleusEventHandler
+    @EventMethod
     private void onPlayerRemoved(PlayerRemovedEvent event) {
 
         if (event.getReason() == RemovePlayerReason.ARENA_RELATION_CHANGE)

@@ -211,7 +211,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             return;
 
         PlayerTeamPreChangeEvent preEvent = new PlayerTeamPreChangeEvent(_arena, this, manager, team, reason);
-        _arena.getEventManager().call(preEvent);
+        _arena.getEventManager().call(this, preEvent);
 
         if (preEvent.isCancelled())
             return;
@@ -220,7 +220,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         _team = preEvent.getNewTeam();
 
         PlayerTeamChangedEvent postEvent = new PlayerTeamChangedEvent(_arena, this, manager, previousTeam, reason);
-        _arena.getEventManager().call(postEvent);
+        _arena.getEventManager().call(this, postEvent);
     }
 
 
@@ -291,7 +291,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         if (_isReady) {
 
             PlayerReadyEvent event = new PlayerReadyEvent(_arena, this, _arena.getLobbyManager(), null);
-            _arena.getEventManager().call(event);
+            _arena.getEventManager().call(this, event);
 
             if (event.getMessage() != null) {
                 PlayerManager manager = getRelatedManager();
@@ -602,7 +602,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
         PlayerLivesChangeEvent event = new PlayerLivesChangeEvent(_arena, this, manager, _lives, lives);
 
-        _arena.getEventManager().call(event);
+        _arena.getEventManager().call(this, event);
 
         if (event.isCancelled())
             return;

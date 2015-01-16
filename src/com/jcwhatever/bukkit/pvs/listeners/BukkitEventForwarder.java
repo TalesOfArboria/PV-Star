@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.listeners;
 
 import com.jcwhatever.nucleus.events.manager.AbstractBukkitForwarder;
-import com.jcwhatever.nucleus.events.manager.NucleusEventManager;
+import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -65,7 +65,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
      *               only manager that receives bukkit events as part of its normal
      *               operation.
      */
-    public BukkitEventForwarder(NucleusEventManager source) {
+    public BukkitEventForwarder(EventManager source) {
         super(PVStarAPI.getPlugin(), source);
     }
 
@@ -147,7 +147,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
         if (player.getArena() == null)
             return;
 
-        player.getArena().getEventManager().call(event);
+        player.getArena().getEventManager().call(this, event);
     }
 
     private <T extends Event> void callEvent(Entity entity, T event) {
@@ -165,6 +165,6 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
         if (arena == null)
             return;
 
-        arena.getEventManager().call(event);
+        arena.getEventManager().call(this, event);
     }
 }

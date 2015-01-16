@@ -146,7 +146,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         ArenaPreStartEvent preStartEvent = new ArenaPreStartEvent(getArena(), new HashSet<>(players), reason);
 
         // call pre-start event
-        if (getArena().getEventManager().call(preStartEvent).isCancelled())
+        if (getArena().getEventManager().call(this, preStartEvent).isCancelled())
             return false;
 
         // determine if there are players joining
@@ -161,7 +161,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         _isGameOver = false;
 
         // call arena started event
-        getArena().getEventManager().call(
+        getArena().getEventManager().call(this,
                 new ArenaStartedEvent(getArena(), reason));
 
         return true;
@@ -188,7 +188,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
             getArena().getRegion().removeEntities(Projectile.class, Explosive.class, Item.class);
         }
 
-        getArena().getEventManager().call(new ArenaEndedEvent(getArena()));
+        getArena().getEventManager().call(this, new ArenaEndedEvent(getArena()));
 
         return true;
     }
@@ -210,7 +210,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
         PlayerPreJoinEvent preJoin = new PlayerPreJoinEvent(nextArena, player);
 
-        nextArena.getEventManager().call(preJoin);
+        nextArena.getEventManager().call(this, preJoin);
 
         if (preJoin.isCancelled())
             return false;
@@ -222,7 +222,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (isAdded) {
             PlayerJoinedEvent joined = new PlayerJoinedEvent(nextArena, player, player.getRelatedManager());
 
-            nextArena.getEventManager().call(joined);
+            nextArena.getEventManager().call(this, joined);
         }
 
         return true;
@@ -278,7 +278,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
         TeamWinEvent winEvent = new TeamWinEvent(getArena(), team, winningTeam, null);
 
-        getArena().getEventManager().call(winEvent);
+        getArena().getEventManager().call(this, winEvent);
 
         if (winEvent.getWinMessage() != null)
             tell(winEvent.getWinMessage());
@@ -305,7 +305,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
             }
         }
 
-        getArena().getEventManager().call(
+        getArena().getEventManager().call(this,
                 new TeamLoseEvent(getArena(), team, losingTeam, null));
 
         return true;
@@ -405,7 +405,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
      */
     private void callWinEvent(ArenaPlayer player) {
         PlayerWinEvent event = new PlayerWinEvent(getArena(), player, this, null);
-        getArena().getEventManager().call(event);
+        getArena().getEventManager().call(this, event);
 
         if (event.getWinMessage() != null)
             tell(event.getWinMessage());
@@ -417,7 +417,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
      */
     private void callLoseEvent(ArenaPlayer player) {
         PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, this, null);
-        getArena().getEventManager().call(event);
+        getArena().getEventManager().call(this, event);
 
         if (event.getLoseMessage() != null)
             tell(event.getLoseMessage());
