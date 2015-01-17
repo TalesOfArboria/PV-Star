@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
-import com.jcwhatever.nucleus.modules.ClassLoadMethod;
-import com.jcwhatever.nucleus.modules.IModuleInfo;
-import com.jcwhatever.nucleus.modules.JarModuleLoader;
+import com.jcwhatever.nucleus.utils.modules.ClassLoadMethod;
+import com.jcwhatever.nucleus.utils.modules.IModuleInfo;
+import com.jcwhatever.nucleus.utils.modules.JarModuleLoader;
 import com.jcwhatever.nucleus.utils.DependencyRunner;
 import com.jcwhatever.nucleus.utils.DependencyRunner.IFinishHandler;
 import com.jcwhatever.nucleus.utils.file.FileUtils.DirectoryTraversal;
