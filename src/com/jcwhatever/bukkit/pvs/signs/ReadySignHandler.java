@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.signs.SignContainer;
 import com.jcwhatever.nucleus.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;

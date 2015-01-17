@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.pvs.arenas;
 import com.google.common.collect.MapMaker;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
-import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.providers.permissions.IPermission;
 import com.jcwhatever.nucleus.utils.Permissions;
 import com.jcwhatever.nucleus.storage.DataPath;

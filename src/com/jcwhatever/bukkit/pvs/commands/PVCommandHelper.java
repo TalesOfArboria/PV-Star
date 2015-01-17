@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs.commands;
 
 import com.jcwhatever.nucleus.commands.CommandUtils;
-import com.jcwhatever.nucleus.language.Localizable;
+import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
