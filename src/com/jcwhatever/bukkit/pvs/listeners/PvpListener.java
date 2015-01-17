@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.nucleus.extended.MaterialExt;
+import com.jcwhatever.nucleus.utils.extended.MaterialExt;
 import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
