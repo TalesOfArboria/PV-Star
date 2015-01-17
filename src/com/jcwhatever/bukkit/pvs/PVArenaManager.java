@@ -121,7 +121,7 @@ public class PVArenaManager implements ArenaManager {
 
         IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
         arenaNode.set("name", name);
-        arenaNode.saveAsync(null);
+        arenaNode.save();
 
         arena.setName(name);
         return true;
@@ -243,7 +243,7 @@ public class PVArenaManager implements ArenaManager {
         IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
         arenaNode.set("name", arenaName);
         arenaNode.set("type", "arena");
-        arenaNode.saveAsync(null);
+        arenaNode.save();
 
         _arenaIdMap.put(arenaId, arena);
 
@@ -278,7 +278,7 @@ public class PVArenaManager implements ArenaManager {
 
         IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
         arenaNode.remove();
-        arenaNode.saveAsync(null);
+        arenaNode.save();
 
         return true;
     }

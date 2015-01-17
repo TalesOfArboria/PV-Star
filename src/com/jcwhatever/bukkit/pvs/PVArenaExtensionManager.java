@@ -147,7 +147,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
 
         IDataNode extNode = _dataNode.getNode(name);
         extNode.set("enabled", true);
-        extNode.saveAsync(null);
+        extNode.save();
 
         extension.enable();
 

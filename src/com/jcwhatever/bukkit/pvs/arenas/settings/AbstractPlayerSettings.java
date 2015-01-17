@@ -255,7 +255,7 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
      */
     protected void save(String nodeName, Object value) {
         _dataNode.set(nodeName, value);
-        _dataNode.saveAsync(null);
+        _dataNode.save();
     }
 
 

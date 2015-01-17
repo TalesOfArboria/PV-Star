@@ -182,7 +182,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         node.set("team", spawn.getTeam());
         node.set("location", spawn.getLocation());
 
-        node.saveAsync(null);
+        node.save();
 
         getArena().getEventManager().call(this, new SpawnAddedEvent(getArena(), spawn));
 
@@ -222,7 +222,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
         IDataNode node = _dataNode.getNode(spawn.getName());
         node.remove();
-        node.saveAsync(null);
+        node.save();
 
         getArena().getEventManager().call(this, new SpawnRemovedEvent(getArena(), spawn));
 

@@ -147,7 +147,7 @@ public class PVArenaStats implements ArenaStats {
                 return;
 
             for (IDataNode node : _nodesToSave) {
-                node.saveAsync(null);
+                node.save();
             }
 
             _nodesToSave.clear();

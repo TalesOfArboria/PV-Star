@@ -102,7 +102,7 @@ public class PVArenaSettings implements ArenaSettings {
         setTransientEnabled(isEnabled);
 
         _dataNode.set("enabled", _isEnabled);
-        _dataNode.saveAsync(null);
+        _dataNode.save();
     }
 
     /*
@@ -157,7 +157,7 @@ public class PVArenaSettings implements ArenaSettings {
         _isVisible = isVisible;
 
         _dataNode.set("visible", isVisible);
-        _dataNode.saveAsync(null);
+        _dataNode.save();
     }
 
     /*
@@ -179,7 +179,7 @@ public class PVArenaSettings implements ArenaSettings {
         _typeDisplayName = typeDisplayName;
 
         _dataNode.set("type-display", typeDisplayName);
-        _dataNode.saveAsync(null);
+        _dataNode.save();
     }
 
     /*
@@ -270,7 +270,7 @@ public class PVArenaSettings implements ArenaSettings {
      */
     protected void save(String nodeName, @Nullable Object value) {
         _dataNode.set(nodeName, value);
-        _dataNode.saveAsync(null);
+        _dataNode.save();
     }
 
 }
