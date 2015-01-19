@@ -28,13 +28,14 @@ import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.commands.response.CommandRequests;
-import com.jcwhatever.nucleus.commands.response.IResponseHandler;
 import com.jcwhatever.nucleus.commands.response.ResponseType;
 import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
+import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
+import com.jcwhatever.nucleus.utils.observer.result.Result;
 
 import org.bukkit.command.CommandSender;
 
@@ -71,23 +72,22 @@ public class DelSubCommand extends AbstractPVCommand {
         tell(sender, Lang.get(_CONFIRM, arena.getName()));
 
         // get confirmation
-        CommandRequests.request(PVStarAPI.getPlugin(), "delete_" + arena.getName(), sender, new IResponseHandler() {
+        CommandRequests.request(PVStarAPI.getPlugin(), "delete_" + arena.getName(), sender, ResponseType.CONFIRM)
+                .onSuccess(new FutureSubscriber<ResponseType>() {
+                    @Override
+                    public void on(Result<ResponseType> result) {
 
-            @Override
-            public void onResponse(ResponseType response) {
+                        PVStarAPI.getArenaManager().removeArena(arena.getId());
 
-                PVStarAPI.getArenaManager().removeArena(arena.getId());
+                        Arena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
 
-                Arena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
+                        if (selectedArena != null && selectedArena.equals(arena)) {
+                            PVStarAPI.getArenaManager().setSelectedArena(sender, null);
+                        }
 
-                if (selectedArena != null && selectedArena.equals(arena)) {
-                    PVStarAPI.getArenaManager().setSelectedArena(sender, null);
-                }
-
-                tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
-
-            }
-        }, ResponseType.CONFIRM);
+                        tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
+                    }
+                });
     }
 
 }
