@@ -125,7 +125,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         PreCon.notNullOrEmpty(name);
 
         if (_isInitialized)
-            throw new RuntimeException("An arena can only be initialized once.");
+            throw new IllegalStateException("An arena can only be initialized once.");
 
         _isInitialized = true;
 
