@@ -24,33 +24,33 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.nucleus.signs.SignContainer;
-import com.jcwhatever.nucleus.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.Scheduler;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.options.NameMatchMode;
+import com.jcwhatever.nucleus.signs.SignContainer;
+import com.jcwhatever.nucleus.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.Scheduler;
+import com.jcwhatever.nucleus.utils.text.TextColor;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.regex.Matcher;
 
 public class PveSignHandler extends SignHandler {
 
-    @Override
-    public Plugin getPlugin() {
-        return PVStarAPI.getPlugin();
+    /**
+     * Constructor.
+     */
+    public PveSignHandler() {
+        super(PVStarAPI.getPlugin(), "PVE");
     }
 
-    @Override
-    public String getName() {
-        return "PVE";
+    public PveSignHandler(String name) {
+        super(PVStarAPI.getPlugin(), name);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class PveSignHandler extends SignHandler {
     }
 
     @Override
-    protected boolean onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
         String rawName = sign.getRawLine(1);
 
         Matcher matcher = TextUtils.PATTERN_SPACE.matcher(rawName);
@@ -87,11 +87,13 @@ public class PveSignHandler extends SignHandler {
         String arenaName = matcher.replaceAll("_");
 
         List<Arena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
-        return arenas.size() == 1;
+        return arenas.size() == 1 ?
+                SignChangeResult.VALID :
+                SignChangeResult.INVALID;
     }
 
     @Override
-    protected boolean onSignClick(final Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(final Player p, SignContainer sign) {
         String rawName = sign.getRawLine(1);
         Matcher matcher = TextUtils.PATTERN_SPACE.matcher(rawName);
 
@@ -99,7 +101,7 @@ public class PveSignHandler extends SignHandler {
 
         List<Arena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
         if (arenas.size() != 1)
-            return false;
+            return SignClickResult.IGNORED;
 
         final Arena arena =  arenas.get(0);
 
@@ -115,12 +117,11 @@ public class PveSignHandler extends SignHandler {
             }
         });
 
-        return true;
+        return SignClickResult.HANDLED;
     }
 
     @Override
-    protected boolean onSignBreak(Player p, SignContainer sign) {
-        // allow
-        return true;
+    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+        return SignBreakResult.ALLOW;
     }
 }

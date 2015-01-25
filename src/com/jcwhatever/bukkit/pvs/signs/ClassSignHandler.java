@@ -38,7 +38,6 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.regex.Matcher;
 
@@ -46,14 +45,11 @@ public class ClassSignHandler extends SignHandler {
 
     private static final String PLAYER_CLASS_META = "com.jcwhatever.bukkit.pvs.signs.ClassSignHandler.PLAYER_CLASS_META";
 
-    @Override
-    public Plugin getPlugin() {
-        return PVStarAPI.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "Class";
+    /**
+     * Constructor.
+     */
+    public ClassSignHandler() {
+        super(PVStarAPI.getPlugin(), "Class");
     }
 
     @Override
@@ -82,21 +78,23 @@ public class ClassSignHandler extends SignHandler {
     }
 
     @Override
-    protected boolean onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
         Arena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
-        return arena != null;
+        return arena != null
+                ? SignChangeResult.VALID
+                : SignChangeResult.INVALID;
     }
 
     @Override
-    protected boolean onSignClick(Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(Player p, SignContainer sign) {
 
         ArenaPlayer player = PVArenaPlayer.get(p);
         Arena arena = player.getArena();
         if (arena == null)
-            return false;
+            return SignClickResult.IGNORED;
 
         if (player.getArenaRelation() != ArenaPlayerRelation.LOBBY)
-            return false;
+            return SignClickResult.IGNORED;
 
         String className = sign.getRawLine(1);
         String currentClassName = player.getSessionMeta().get(PLAYER_CLASS_META);
@@ -118,12 +116,11 @@ public class ClassSignHandler extends SignHandler {
             }
         }
 
-        return false;
+        return SignClickResult.HANDLED;
     }
 
     @Override
-    protected boolean onSignBreak(Player p, SignContainer sign) {
-        // allow
-        return true;
+    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+        return SignBreakResult.ALLOW;
     }
 }

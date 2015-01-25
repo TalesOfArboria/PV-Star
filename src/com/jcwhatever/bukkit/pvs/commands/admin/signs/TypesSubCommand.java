@@ -24,21 +24,21 @@
 
 package com.jcwhatever.bukkit.pvs.commands.admin.signs;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
-import com.jcwhatever.nucleus.utils.language.Localizable;
-import com.jcwhatever.nucleus.messaging.ChatPaginator;
-import com.jcwhatever.nucleus.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import com.jcwhatever.nucleus.commands.CommandInfo;
+import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
+import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
+import java.util.Collection;
 
 @CommandInfo(
         parent="signs",
@@ -58,7 +58,7 @@ public class TypesSubCommand extends AbstractPVCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<SignHandler> signHandlers = PVStarAPI.getSignManager().getSignHandlers();
+        Collection<SignHandler> signHandlers = PVStarAPI.getSignManager().getSignHandlers();
         for (SignHandler handler : signHandlers) {
             pagin.add(handler.getName(), handler.getDescription());
         }

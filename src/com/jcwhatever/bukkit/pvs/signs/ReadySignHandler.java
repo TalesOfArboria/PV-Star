@@ -24,10 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.nucleus.utils.language.Localizable;
-import com.jcwhatever.nucleus.signs.SignContainer;
-import com.jcwhatever.nucleus.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -35,23 +31,23 @@ import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import com.jcwhatever.nucleus.signs.SignContainer;
+import com.jcwhatever.nucleus.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.utils.text.TextColor;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class ReadySignHandler extends SignHandler {
 
     @Localizable static final String _VOTE_NOT_IN_GAME = "You're not in a game.";
     @Localizable static final String _VOTE_GAME_ALREADY_STARTED = "The game has already started.";
 
-    @Override
-    public Plugin getPlugin() {
-        return PVStarAPI.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "Ready";
+    /**
+     * Constructor.
+     */
+    public ReadySignHandler() {
+        super(PVStarAPI.getPlugin(), "Ready");
     }
 
     @Override
@@ -80,36 +76,37 @@ public class ReadySignHandler extends SignHandler {
     }
 
     @Override
-    protected boolean onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
 
         Arena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
-        return arena != null;
+        return arena != null
+                ? SignChangeResult.VALID
+                : SignChangeResult.INVALID;
     }
 
     @Override
-    protected boolean onSignClick(Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(Player p, SignContainer sign) {
 
         ArenaPlayer player = PVArenaPlayer.get(p);
         Arena arena = player.getArena();
 
         if (arena == null || player.getArenaRelation() == ArenaPlayerRelation.SPECTATOR) {
             Msg.tellError(p, Lang.get(_VOTE_NOT_IN_GAME));
-            return false; // finish
+            return SignClickResult.IGNORED;
         }
 
         if (player.getArenaRelation() == ArenaPlayerRelation.GAME) {
             Msg.tellError(p, Lang.get(_VOTE_GAME_ALREADY_STARTED));
-            return false; // finish
+            return SignClickResult.IGNORED;
         }
 
         player.setReady(true);
 
-        return true;
+        return SignClickResult.HANDLED;
     }
 
     @Override
-    protected boolean onSignBreak(Player p, SignContainer sign) {
-        // allow
-        return true;
+    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+        return SignBreakResult.ALLOW;
     }
 }
