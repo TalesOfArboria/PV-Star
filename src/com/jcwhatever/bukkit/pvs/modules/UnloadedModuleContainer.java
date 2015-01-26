@@ -24,15 +24,17 @@
 
 package com.jcwhatever.bukkit.pvs.modules;
 
+import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
+import com.jcwhatever.nucleus.utils.DependencyRunner.DependencyStatus;
 import com.jcwhatever.nucleus.utils.DependencyRunner.IDependantRunnable;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Container for an unloaded module with utilities
@@ -120,51 +122,68 @@ public class UnloadedModuleContainer implements IDependantRunnable {
      * Determine if Bukkit dependencies are loaded.
      */
     public boolean isBukkitDependsLoaded() {
-        for (String depend : _moduleInfo.getBukkitDepends()) {
+        return isBukkitDependsLoaded(_moduleInfo.getBukkitDepends());
+    }
 
-            Plugin plugin = Bukkit.getPluginManager().getPlugin(depend);
-            if (plugin == null || !plugin.isEnabled())
-                return false;
-        }
-
-        for (String depend : _moduleInfo.getBukkitSoftDepends()) {
-
-            Plugin plugin = Bukkit.getPluginManager().getPlugin(depend);
-            if (plugin != null && !plugin.isEnabled())
-                return false;
-        }
-
-        return true;
+    /*
+     * Determine if optional Bukkit dependencies are loaded.
+     */
+    public boolean isBukkitSoftDependsLoaded() {
+        return isBukkitDependsLoaded(_moduleInfo.getBukkitSoftDepends());
     }
 
     /*
      * Determine if PV-Star module dependencies are loaded.
      */
     public boolean isModuleDependsLoaded() {
-        for (String depend : _moduleInfo.getModuleDepends()) {
+        return isModuleDependsLoaded(_moduleInfo.getModuleDepends());
+    }
 
-            PVStarModule module = _loader.getModule(depend);
-            if (module == null || !module.isEnabled())
-                return false;
-        }
-
-        for (String depend : _moduleInfo.getModuleSoftDepends()) {
-
-            PVStarModule module = _loader.getModule(depend);
-            if (module != null && !module.isEnabled())
-                return false;
-        }
-
-        return true;
+    /*
+     * Determine if optional PV-Star module dependencies are loaded.
+     */
+    public boolean isModuleSoftDependsLoaded() {
+        return isModuleDependsLoaded(_moduleInfo.getModuleSoftDepends());
     }
 
     @Override
-    public boolean isDependencyReady() {
-        return isBukkitDependsLoaded() && isModuleDependsLoaded();
+    public DependencyStatus getDependencyStatus() {
+        boolean isDependsReady = isBukkitDependsLoaded() && isModuleDependsLoaded();
+        boolean isSoftReady = isBukkitSoftDependsLoaded() && isModuleSoftDependsLoaded();
+
+        if (isDependsReady && isSoftReady) {
+            return DependencyStatus.READY;
+        }
+        else {
+            return isDependsReady
+                    ? DependencyStatus.REQUIRED_READY
+                    : DependencyStatus.NOT_READY;
+        }
     }
 
     @Override
     public void run() {
         _module.preEnable();
     }
+
+    private boolean isBukkitDependsLoaded(Set<String> depends) {
+        for (String depend : depends) {
+
+            Plugin plugin = Bukkit.getPluginManager().getPlugin(depend);
+            if (plugin == null || !plugin.isEnabled())
+                return false;
+        }
+        return true;
+    }
+
+    private boolean isModuleDependsLoaded(Set<String> depends) {
+        for (String depend : depends) {
+
+            PVStarModule module = _loader.getModule(depend);
+            if (module == null || !module.isEnabled())
+                return false;
+        }
+        return true;
+    }
+
 }
