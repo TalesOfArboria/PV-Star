@@ -34,7 +34,6 @@ import com.jcwhatever.bukkit.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.ArenaTypeInfo;
 import com.jcwhatever.nucleus.Nucleus;
-import com.jcwhatever.nucleus.regions.IRegion;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
@@ -152,20 +151,12 @@ public class PVArenaManager implements ArenaManager {
     @Nullable
     public Arena getArena(Location location) {
 
-        List<IRegion> regions = Nucleus.getRegionManager().getRegions(location);
+        List<ArenaRegion> regions = Nucleus.getRegionManager().getRegions(location, ArenaRegion.class);
         if (regions.isEmpty())
             return null;
 
-        for (IRegion readOnlyRegion : regions) {
-
-            ArenaRegion region = readOnlyRegion.getMeta(ArenaRegion.ARENA_REGION_KEY);
-            if (region == null)
-                continue;
-
-            return region.getArena();
-        }
-
-        return null;
+        ArenaRegion region = regions.get(0);
+        return region.getArena();
     }
 
     @Override
