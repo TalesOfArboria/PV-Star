@@ -21,8 +21,8 @@ def providedDependsFiles = null
 def providedDepends = [
         'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT',
         'com.google.code.findbugs:jsr305:3.0.0',
-        'com.jcwhatever.bukkit:NucleusFramework:0.0-SNAPSHOT',
-        'com.jcwhatever.bukkit:PV-StarAPI:0.0-SNAPSHOT'
+        'com.jcwhatever.bukkit:NucleusFramework:LATEST',
+        'com.jcwhatever.bukkit:PV-StarAPI:LATEST'
 ]
 
 // compile dependencies (compiled into output jar)
