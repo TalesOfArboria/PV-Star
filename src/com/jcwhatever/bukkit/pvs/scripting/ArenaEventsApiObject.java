@@ -27,11 +27,11 @@ package com.jcwhatever.bukkit.pvs.scripting;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.scripting.api.ScriptEventSubscriber;
-import com.jcwhatever.nucleus.scripting.api.ScriptEventSubscriber.IScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.nucleus.utils.observer.event.IEventSubscriber;
+import com.jcwhatever.nucleus.utils.observer.script.IScriptEventSubscriber;
+import com.jcwhatever.nucleus.utils.observer.script.ScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import java.util.LinkedList;
@@ -98,6 +98,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
             e.printStackTrace();
         }
 
+        @SuppressWarnings("unchecked")
         ScriptEventSubscriber subscriber = new ScriptEventSubscriber(handler);
         subscriber.setPriority(eventPriority);
         subscriber.setCancelIgnored(ignoreCancelled);
