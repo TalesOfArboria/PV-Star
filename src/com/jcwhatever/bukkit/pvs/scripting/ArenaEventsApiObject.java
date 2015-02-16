@@ -69,7 +69,7 @@ public class ArenaEventsApiObject implements IScriptApiObject {
     }
 
     /**
-     * Register an {@code AbstractArenaEvent} event handler with the arena.
+     * Register an {@link IScriptEventSubscriber} event handler with the arena.
      *
      * @param eventName  The event type.
      * @param priority   The event priority.

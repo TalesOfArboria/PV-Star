@@ -44,7 +44,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * {@code ArenaPlayerGroup} collection.
+ * {@link ArenaPlayerGroup} collection.
  */
 public class ArenaPlayersCollection {
 

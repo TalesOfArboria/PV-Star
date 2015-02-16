@@ -32,8 +32,10 @@ import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 
 import org.bukkit.entity.Player;
 
-/*
- * 
+/**
+ * Script API to help convert between a Bukkit
+ * {@link org.bukkit.entity.Player} object and a PV-Star
+ * {@link com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer}.
  */
 public class PlayersApiObject implements IScriptApiObject {
 
@@ -49,7 +51,7 @@ public class PlayersApiObject implements IScriptApiObject {
 
     /**
      * Ensure an object that represents a player is returned
-     * as an {@code ArenaPlayer} object.
+     * as an {@link ArenaPlayer} object.
      *
      * @param player  The player object.
      */
@@ -61,7 +63,7 @@ public class PlayersApiObject implements IScriptApiObject {
 
     /**
      * Ensure an object that represents a player is returned
-     * as an {@code Player} object.
+     * as an {@link Player} object.
      *
      * @param player  The player object.
      */

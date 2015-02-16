@@ -61,6 +61,9 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of {@link com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer}.
+ */
 public class PVArenaPlayer implements ArenaPlayer {
 
 
@@ -148,7 +151,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     /*
-     * Get the encapsulated {@code Player} object.
+     * Get the encapsulated {@link Player} object.
      */
     @Override
     public Player getPlayer() {
@@ -261,7 +264,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     /*
-     * Get the {@code ArenaPlayerGroup} the player is part of.
+     * Get the {@link ArenaPlayerGroup} the player is part of.
      */
     @Override
     @Nullable
@@ -389,7 +392,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     /*
-     * Get {@code PlayerSettings} implementation from the
+     * Get {@link PlayerSettings} implementation from the
      * arena the player is in based on their current arena relation.
      * i.e. If the player is in the lobby, returns the lobby managers
      * settings.
@@ -417,7 +420,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     /*
      * Get the players meta data object for a specific arena,
-     * which is used until the {@code ArenaPlayer} instance is disposed.
+     * which is used until the {@link ArenaPlayer} instance is disposed.
      */
     @Override
     public PlayerMeta getMeta(UUID arenaId) {
@@ -434,7 +437,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     /**
      * Get the players global meta data object
-     * which is used until the {@code ArenaPlayer} instance is disposed.
+     * which is used until the {@link ArenaPlayer} instance is disposed.
      */
     @Override
     public PlayerMeta getMeta() {

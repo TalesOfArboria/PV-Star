@@ -29,8 +29,8 @@ import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.utils.ArenaScheduler;
 
-/*
- * 
+/**
+ * Script API to give access to the scheduler.
  */
 public class ArenaSchedulerApiObject implements IScriptApiObject {
 
@@ -63,7 +63,7 @@ public class ArenaSchedulerApiObject implements IScriptApiObject {
      * @param delayTicks  Delay in ticks before executing the task
      * @param runnable    The task to run
      *
-     * @return {@code ScheduledTask}
+     * @return {@link ScheduledTask}
      */
     public ScheduledTask runTaskLater(int delayTicks, Runnable runnable) {
         return ArenaScheduler.runTaskLater(_arena, delayTicks, runnable);
@@ -77,7 +77,7 @@ public class ArenaSchedulerApiObject implements IScriptApiObject {
      * @param interval      The delay in ticks between tasks
      * @param runnable      The task to run
      *
-     * @return {@code ScheduledTask}
+     * @return {@link ScheduledTask}
      */
     public ScheduledTask runTaskRepeat(int initialDelay, int interval, Runnable runnable) {
         return ArenaScheduler.runTaskRepeat(_arena, initialDelay, interval, runnable);
