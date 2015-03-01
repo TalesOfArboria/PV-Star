@@ -24,14 +24,15 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.nucleus.utils.extended.MaterialExt;
-import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
+import com.jcwhatever.nucleus.utils.materials.Materials;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -68,10 +69,10 @@ public class PvpListener implements Listener {
         if (settings == null)
             return;
 
-        MaterialExt materialExt = MaterialExt.from(inHand.getType());
+        Material material = inHand.getType();
 
-        if ((materialExt.isTool() && !settings.isToolsDamageable())
-                || (materialExt.isWeapon() && !settings.isWeaponsDamageable())) {
+        if ((Materials.isTool(material) && !settings.isToolsDamageable())
+                || (Materials.isWeapon(material) && !settings.isWeaponsDamageable())) {
 
             event.setCancelled(true);
         }
