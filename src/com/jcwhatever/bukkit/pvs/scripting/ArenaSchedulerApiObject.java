@@ -24,10 +24,10 @@
 
 package com.jcwhatever.bukkit.pvs.scripting;
 
-import com.jcwhatever.nucleus.utils.scheduler.ScheduledTask;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.utils.ArenaScheduler;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.scheduler.IScheduledTask;
 
 /**
  * Script API to give access to the scheduler.
@@ -63,9 +63,9 @@ public class ArenaSchedulerApiObject implements IScriptApiObject {
      * @param delayTicks  Delay in ticks before executing the task
      * @param runnable    The task to run
      *
-     * @return {@link ScheduledTask}
+     * @return {@link IScheduledTask}
      */
-    public ScheduledTask runTaskLater(int delayTicks, Runnable runnable) {
+    public IScheduledTask runTaskLater(int delayTicks, Runnable runnable) {
         return ArenaScheduler.runTaskLater(_arena, delayTicks, runnable);
     }
 
@@ -77,9 +77,9 @@ public class ArenaSchedulerApiObject implements IScriptApiObject {
      * @param interval      The delay in ticks between tasks
      * @param runnable      The task to run
      *
-     * @return {@link ScheduledTask}
+     * @return {@link IScheduledTask}
      */
-    public ScheduledTask runTaskRepeat(int initialDelay, int interval, Runnable runnable) {
+    public IScheduledTask runTaskRepeat(int initialDelay, int interval, Runnable runnable) {
         return ArenaScheduler.runTaskRepeat(_arena, initialDelay, interval, runnable);
     }
 }
