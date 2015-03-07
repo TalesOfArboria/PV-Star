@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 public class MobEventListener implements Listener {
 
@@ -40,7 +41,7 @@ public class MobEventListener implements Listener {
     @EventHandler(priority= EventPriority.HIGHEST)
     private void onNaturalSpawn(CreatureSpawnEvent event) {
 
-        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM)
+        if (event.getSpawnReason() != SpawnReason.NATURAL)
             return;
 
         Arena arena = PVStarAPI.getArenaManager().getArena(event.getLocation());
