@@ -71,7 +71,7 @@ public class PvpListener implements Listener {
 
         Material material = inHand.getType();
 
-        if ((Materials.isTool(material) && !settings.isToolsDamageable())
+        if ((Materials.isMiningTool(material) && !settings.isToolsDamageable())
                 || (Materials.isWeapon(material) && !settings.isWeaponsDamageable())) {
 
             event.setCancelled(true);
