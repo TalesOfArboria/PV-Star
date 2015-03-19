@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.commands.CommandDispatcher;
 import com.jcwhatever.nucleus.events.manager.EventManager;
-import com.jcwhatever.nucleus.kits.KitManager;
+import com.jcwhatever.nucleus.utils.kits.KitManager;
 import com.jcwhatever.nucleus.utils.Permissions;
 import com.jcwhatever.nucleus.signs.SignManager;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;

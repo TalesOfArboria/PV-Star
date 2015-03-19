@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.arena.options.ArenaPlayerRelation;
-import com.jcwhatever.nucleus.kits.IKit;
+import com.jcwhatever.nucleus.utils.kits.IKit;
 import com.jcwhatever.nucleus.signs.SignContainer;
 import com.jcwhatever.nucleus.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
