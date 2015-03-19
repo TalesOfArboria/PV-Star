@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
-import com.jcwhatever.nucleus.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;

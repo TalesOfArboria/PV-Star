@@ -30,7 +30,7 @@ import com.jcwhatever.nucleus.commands.CommandDispatcher;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.utils.kits.KitManager;
 import com.jcwhatever.nucleus.utils.Permissions;
-import com.jcwhatever.nucleus.signs.SignManager;
+import com.jcwhatever.nucleus.utils.signs.SignManager;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.IPVStar;

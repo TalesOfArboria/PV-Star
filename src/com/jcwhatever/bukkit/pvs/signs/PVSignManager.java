@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.pvs.signs;
 
-import com.jcwhatever.nucleus.signs.SignManager;
+import com.jcwhatever.nucleus.utils.signs.SignManager;
 import com.jcwhatever.nucleus.storage.IDataNode;
 
 import org.bukkit.plugin.Plugin;
