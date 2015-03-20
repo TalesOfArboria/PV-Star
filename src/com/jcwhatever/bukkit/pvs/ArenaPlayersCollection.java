@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.pvs;
 
 
-import com.jcwhatever.nucleus.utils.performance.SingleCache;
+import com.jcwhatever.nucleus.utils.performance.EntryCache;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
@@ -52,7 +52,7 @@ public class ArenaPlayersCollection {
     private Set<ArenaPlayerGroup> _groups = new HashSet<>(5);
     private Set<ArenaPlayer> _players = new HashSet<>(30);
 
-    private SingleCache<Integer, List<ArenaPlayer>> _cachedNextGroup = new SingleCache<>();
+    private EntryCache<Integer, List<ArenaPlayer>> _cachedNextGroup = new EntryCache<>();
     private List<ArenaPlayer> _cachedReadyGroup;
 
     /*
