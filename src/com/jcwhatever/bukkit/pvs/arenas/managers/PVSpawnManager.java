@@ -180,7 +180,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
         node.set("type", spawn.getSpawnType().getName());
         node.set("team", spawn.getTeam());
-        node.set("location", spawn.getLocation());
+        node.set("location", spawn);
 
         node.save();
 
