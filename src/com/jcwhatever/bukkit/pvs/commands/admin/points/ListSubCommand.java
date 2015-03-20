@@ -44,10 +44,13 @@ import java.util.List;
         parent="points",
         command="list",
         staticParams={ "page=1" },
+        floatingParams={ "search=" },
         description="List available points types.",
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class ListSubCommand extends AbstractPVCommand {
 
@@ -66,6 +69,9 @@ public class ListSubCommand extends AbstractPVCommand {
 
             pagin.add(type.getName(), type.getDescription());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

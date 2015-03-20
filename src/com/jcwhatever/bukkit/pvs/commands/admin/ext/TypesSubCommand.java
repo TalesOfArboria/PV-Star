@@ -45,10 +45,13 @@ import java.util.List;
         parent="ext",
         command="types",
         staticParams = { "page=1" },
+        floatingParams = { "search=" },
         description="List available arena extensions.",
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class TypesSubCommand extends AbstractPVCommand {
 
@@ -70,6 +73,9 @@ public class TypesSubCommand extends AbstractPVCommand {
 
             pagin.add(info.name(), info.description());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm("search");
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

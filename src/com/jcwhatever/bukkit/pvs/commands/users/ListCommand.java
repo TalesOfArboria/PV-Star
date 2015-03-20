@@ -46,11 +46,14 @@ import java.util.List;
 @CommandInfo(
         command="list",
         staticParams={"page=1"},
+        floatingParams = {"search="},
         description="Lists all available arenas.",
         permissionDefault= PermissionDefault.TRUE,
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class ListCommand extends AbstractPVCommand {
 
@@ -83,6 +86,9 @@ public class ListCommand extends AbstractPVCommand {
             else if (sender.isOp())
                 pagin.add(TextColor.GRAY + arena.getName() + ' ' + hiddenLabel, settings.getTypeDisplayName());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

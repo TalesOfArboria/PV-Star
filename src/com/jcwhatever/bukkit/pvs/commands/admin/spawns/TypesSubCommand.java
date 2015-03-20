@@ -44,10 +44,13 @@ import java.util.List;
         parent="spawns",
         command="types",
         staticParams={"page=1"},
+        floatingParams={"search="},
         description="Shows a list of usable spawn types.",
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class TypesSubCommand extends AbstractPVCommand {
 
@@ -63,6 +66,9 @@ public class TypesSubCommand extends AbstractPVCommand {
         for (SpawnType type : types) {
             pagin.add(type.getName(), type.getDescription());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, args.getInteger("page"), FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

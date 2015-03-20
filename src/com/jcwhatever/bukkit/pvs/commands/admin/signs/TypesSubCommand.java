@@ -44,10 +44,13 @@ import java.util.Collection;
         parent="signs",
         command="types",
         staticParams={"page=1"},
+        floatingParams={"search="},
         description="Show a list of sign types.",
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class TypesSubCommand extends AbstractPVCommand {
 
@@ -62,6 +65,9 @@ public class TypesSubCommand extends AbstractPVCommand {
         for (SignHandler handler : signHandlers) {
             pagin.add(handler.getName(), handler.getDescription());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, args.getInteger("page"), FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

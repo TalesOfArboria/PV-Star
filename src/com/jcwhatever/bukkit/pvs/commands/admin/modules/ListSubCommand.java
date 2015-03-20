@@ -44,10 +44,13 @@ import java.util.List;
         parent="modules",
         command="list",
         staticParams={"page=1"},
+        floatingParams={"search="},
         description="Shows list of loaded modules.",
 
         paramDescriptions = {
-                "page= {PAGE}"})
+                "page= {PAGE}",
+                "search= Optional. Specify a search filter."
+        })
 
 public class ListSubCommand extends AbstractPVCommand {
 
@@ -65,6 +68,9 @@ public class ListSubCommand extends AbstractPVCommand {
         for (PVStarModule module : modules) {
             pagin.add(module.getName() + ' ' + module.getVersion(), module.getDescription());
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

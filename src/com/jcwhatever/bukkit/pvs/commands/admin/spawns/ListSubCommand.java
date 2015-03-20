@@ -48,12 +48,13 @@ import java.util.List;
         parent="spawns",
         command="list",
         staticParams={"page=1"},
-        floatingParams={"type=$all"},
+        floatingParams={"type=$all", "search="},
         description="Shows a list of spawns for the selected arena.",
 
         paramDescriptions = {
                 "page= {PAGE}",
-                "type= Optional. Specify the name of the spawn type to filter the results by."})
+                "type= Optional. Specify the name of the spawn type to filter the results by.",
+                "search= Optional. Specify a search filter."})
 
 public class ListSubCommand extends AbstractPVCommand {
 
@@ -89,6 +90,9 @@ public class ListSubCommand extends AbstractPVCommand {
             }
 
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.RAW);
     }
