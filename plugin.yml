@@ -1,6 +1,6 @@
 name: PV-Star
 author: JCThePants
-main: com.jcwhatever.bukkit.pvs.PVStar
+main: PVStar
 version: 0.0-beta
 depend: [NucleusFramework]
 commands:
