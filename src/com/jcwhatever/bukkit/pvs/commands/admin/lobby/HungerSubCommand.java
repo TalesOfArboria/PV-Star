@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class HungerSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _HUNGER_ENABLED = "Arena '{0}' lobby Hunger is enabled.";
-    @Localizable static final String _HUNGER_DISABLED = "Arena '{0}' lobby Hunger is {RED}disabled.";
-    @Localizable static final String _HUNGER_CHANGE_ENABLED = "Arena '{0}' lobby Hunger changed to enabled.";
-    @Localizable static final String _HUNGER_CHANGE_DISABLED = "Arena '{0}' lobby Hunger changed to {RED}disabled.";
+    @Localizable static final String _HUNGER_ENABLED =
+            "Arena '{0: arena name}' lobby Hunger is enabled.";
+
+    @Localizable static final String _HUNGER_DISABLED =
+            "Arena '{0: arena name}' lobby Hunger is {RED}disabled.";
+
+    @Localizable static final String _HUNGER_CHANGE_ENABLED =
+            "Arena '{0: arena name}' lobby Hunger changed to enabled.";
+
+    @Localizable static final String _HUNGER_CHANGE_DISABLED =
+            "Arena '{0: arena name}' lobby Hunger changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

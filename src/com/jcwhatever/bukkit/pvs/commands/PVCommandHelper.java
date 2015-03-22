@@ -47,11 +47,20 @@ import javax.annotation.Nullable;
 
 public class PVCommandHelper extends CommandUtils implements CommandHelper {
 
-    @Localizable static final String _ARENA_NOT_SELECTED = "No arena selected. Use '/{plugin-command} arena select <arenaName>' first.";
-    @Localizable static final String _WAIT_TILL_FINISHED = "Please wait until the arena is finished.";
-    @Localizable static final String _ARENA_NOT_EXISTS = "Specified arena '{0}' doesn't exist. Type '/{plugin-command} list' for a list.";
-    @Localizable static final String _MULTIPLE_ARENAS = "Multiple arenas found for '{0}'. Please be more specific:";
-    @Localizable static final String _EXTENSION_NOT_FOUND = "{0} is not installed in arena '{1}'.";
+    @Localizable static final String _ARENA_NOT_SELECTED =
+            "No arena selected. Use '/{plugin-command} arena select <arenaName>' first.";
+
+    @Localizable static final String _WAIT_TILL_FINISHED =
+            "Please wait until the arena is finished.";
+
+    @Localizable static final String _ARENA_NOT_EXISTS =
+            "Specified arena '{0: arena name}' doesn't exist. Type '/{plugin-command} list' for a list.";
+
+    @Localizable static final String _MULTIPLE_ARENAS =
+            "Multiple arenas found for '{0: arena search name}'. Please be more specific:";
+
+    @Localizable static final String _EXTENSION_NOT_FOUND =
+            "{0: extension name} is not installed in arena '{1: arena name}'.";
 
     /**
      * Constructor.

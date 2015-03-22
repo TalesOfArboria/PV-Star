@@ -55,10 +55,11 @@ import javax.annotation.Nullable;
  */
 public class PVTeamManager implements TeamManager, IEventListener {
 
-    private Arena _arena;
+    private final Arena _arena;
+    private final ElementCounter<ArenaTeam> _teams = new ElementCounter<>(RemovalPolicy.REMOVE);
+    private final ElementCounter<ArenaTeam> _currentTeams = new ElementCounter<>(RemovalPolicy.REMOVE);
+
     private TeamDistributor _teamDistributor;
-    private ElementCounter<ArenaTeam> _teams = new ElementCounter<>(RemovalPolicy.REMOVE);
-    private ElementCounter<ArenaTeam> _currentTeams = new ElementCounter<>(RemovalPolicy.REMOVE);
 
     /*
      * Constructor.
@@ -76,27 +77,16 @@ public class PVTeamManager implements TeamManager, IEventListener {
         return PVStarAPI.getPlugin();
     }
 
-    /*
-     * Get the owning arena.
-     */
     @Override
     public Arena getArena() {
         return _arena;
     }
 
-    /*
-     * Get available teams in the arena. Available teams
-     * are determined by the teams set on spawnpoints in
-     * the spawn manager.
-     */
     @Override
     public Set<ArenaTeam> getTeams() {
         return _teams.getElements();
     }
 
-    /**
-     * Get the teams currently in the arena.
-     */
     @Override
     public Set<ArenaTeam> getCurrentTeams() {
         return _currentTeams.getElements();
@@ -107,15 +97,12 @@ public class PVTeamManager implements TeamManager, IEventListener {
         return _teams.size();
     }
 
-    /**
-     * Get the number of teams currently in the arena.
-     */
     @Override
     public int totalCurrentTeams() {
         return _currentTeams.size();
     }
 
-    /*
+    /**
      * Get the next available team from the team distributor.
      */
     @Nullable
@@ -123,7 +110,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
         return getTeamDistributor().next();
     }
 
-    /*
+    /**
      * Place a team back into circulation. Use when a player leaves the arena
      * to prevent issues with the distribution of teams.
      */
@@ -131,7 +118,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
         getTeamDistributor().recycle(team);
     }
 
-    /*
+    /**
      * Get the distributor responsible for distributing teams to players
      * as they join.
      */

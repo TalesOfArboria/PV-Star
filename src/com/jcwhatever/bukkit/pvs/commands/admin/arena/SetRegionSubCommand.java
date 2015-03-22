@@ -46,7 +46,8 @@ import org.bukkit.entity.Player;
 
 public class SetRegionSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SUCCESS =  "Region for arena '{0}' has been set.";
+    @Localizable static final String _SUCCESS =
+            "Region for arena '{0: arena name}' has been set.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

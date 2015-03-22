@@ -44,7 +44,7 @@ public class PVArenaStats implements ArenaStats {
 
     private static Set<IDataNode> _nodesToSave = new HashSet<>(100);
 
-    private Map<StatType, IDataNode> _cachedNodes =
+    private final Map<StatType, IDataNode> _cachedNodes =
             new MapMaker().weakValues().concurrencyLevel(1).initialCapacity(25).makeMap();
 
     static {
@@ -153,5 +153,4 @@ public class PVArenaStats implements ArenaStats {
             _nodesToSave.clear();
         }
     }
-
 }

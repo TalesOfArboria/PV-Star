@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class AutostartCommand extends AbstractPVCommand {
 
-    @Localizable static final String _AUTOSTART_ENABLED = "Arena '{0}' autostart is enabled.";
-    @Localizable static final String _AUTOSTART_DISABLED = "Arena '{0}' autostart is {RED}disabled.";
-    @Localizable static final String _AUTOSTART_CHANGE_ENABLED = "Arena '{0}' autostart changed to enabled.";
-    @Localizable static final String _AUTOSTART_CHANGE_DISABLED = "Arena '{0}' autostart changed to {RED}disabled.";
+    @Localizable static final String _AUTOSTART_ENABLED =
+            "Arena '{0: arena name}' autostart is enabled.";
+
+    @Localizable static final String _AUTOSTART_DISABLED =
+            "Arena '{0: arena name}' autostart is {RED}disabled.";
+
+    @Localizable static final String _AUTOSTART_CHANGE_ENABLED =
+            "Arena '{0: arena name}' autostart changed to enabled.";
+
+    @Localizable static final String _AUTOSTART_CHANGE_DISABLED =
+            "Arena '{0: arena name}' autostart changed to {RED}disabled.";
 
     public AutostartCommand() {
         super();
@@ -89,8 +96,5 @@ public class AutostartCommand extends AbstractPVCommand {
             }
         }
     }
-
-
-
 }
 

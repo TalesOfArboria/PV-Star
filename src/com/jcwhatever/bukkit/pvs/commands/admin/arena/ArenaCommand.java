@@ -50,5 +50,4 @@ public class ArenaCommand extends AbstractPVCommand {
         registerCommand(SetRegionSubCommand.class);
         registerCommand(TypeNameSubCommand.class);
     }
-
 }

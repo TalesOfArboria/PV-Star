@@ -46,8 +46,11 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class VoteCommand extends AbstractPVCommand {
 
-    @Localizable static final String _VOTE_NOT_IN_GAME = "You're not in a game.";
-    @Localizable static final String _VOTE_GAME_ALREADY_STARTED = "The game has already started.";
+    @Localizable static final String _VOTE_NOT_IN_GAME =
+            "You're not in a game.";
+
+    @Localizable static final String _VOTE_GAME_ALREADY_STARTED =
+            "The game has already started.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.pvs.modules;
 
 import com.jcwhatever.bukkit.pvs.api.modules.PVStarModule;
+import com.jcwhatever.nucleus.mixins.INamedInsensitive;
 import com.jcwhatever.nucleus.utils.DependencyRunner.DependencyStatus;
 import com.jcwhatever.nucleus.utils.DependencyRunner.IDependantRunnable;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -40,13 +41,13 @@ import java.util.Set;
  * Container for an unloaded module with utilities
  * to check if dependencies are loaded.
  */
-public class UnloadedModuleContainer implements IDependantRunnable {
+public class UnloadedModuleContainer implements INamedInsensitive, IDependantRunnable {
 
     private final PVStarModule _module;
     private final PVModuleInfo _moduleInfo;
     private final ModuleLoader _loader;
 
-    /*
+    /**
      * Constructor.
      */
     public UnloadedModuleContainer(ModuleLoader loader, PVStarModule module, PVModuleInfo moduleInfo) {
@@ -59,28 +60,24 @@ public class UnloadedModuleContainer implements IDependantRunnable {
         _moduleInfo = moduleInfo;
     }
 
-    /*
-     * Get the name of the module.
-     */
+    @Override
     public String getName() {
         return _moduleInfo.getName();
     }
 
-    /*
-     * Get the name of the module in lowercase.
-     */
+    @Override
     public String getSearchName() {
         return _moduleInfo.getSearchName();
     }
 
-    /*
+    /**
      * Get the module.
      */
     public PVStarModule getModule() {
         return _module;
     }
 
-    /*
+    /**
      * Get the names of required Bukkit dependencies that are not
      * loaded yet.
      */
@@ -99,7 +96,7 @@ public class UnloadedModuleContainer implements IDependantRunnable {
         return result;
     }
 
-    /*
+    /**
      * Get the names of required PV-Star module dependencies that
      * are not loaded yet.
      */
@@ -118,28 +115,28 @@ public class UnloadedModuleContainer implements IDependantRunnable {
         return result;
     }
 
-    /*
+    /**
      * Determine if Bukkit dependencies are loaded.
      */
     public boolean isBukkitDependsLoaded() {
         return isBukkitDependsLoaded(_moduleInfo.getBukkitDepends());
     }
 
-    /*
+    /**
      * Determine if optional Bukkit dependencies are loaded.
      */
     public boolean isBukkitSoftDependsLoaded() {
         return isBukkitDependsLoaded(_moduleInfo.getBukkitSoftDepends());
     }
 
-    /*
+    /**
      * Determine if PV-Star module dependencies are loaded.
      */
     public boolean isModuleDependsLoaded() {
         return isModuleDependsLoaded(_moduleInfo.getModuleDepends());
     }
 
-    /*
+    /**
      * Determine if optional PV-Star module dependencies are loaded.
      */
     public boolean isModuleSoftDependsLoaded() {
@@ -185,5 +182,4 @@ public class UnloadedModuleContainer implements IDependantRunnable {
         }
         return true;
     }
-
 }

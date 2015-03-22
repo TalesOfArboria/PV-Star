@@ -58,7 +58,9 @@ import java.util.List;
 
 public class ListSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "{0} Spawnpoints";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "{0: arena name} Spawnpoints";
+
     @Localizable static final String _LABEL_TYPE = "Type";
     @Localizable static final String _LABEL_TEAM = "Team";
 
@@ -105,7 +107,8 @@ public class ListSubCommand extends AbstractPVCommand {
 
         for (Spawnpoint spawn : spawns) {
 
-            String formatted = TextUtils.format("{YELLOW}{0}{GRAY} - {1}:{2}, {3}:{4}", spawn.getName(), typeLabel, spawn.getSpawnType().getName(), teamLabel, spawn.getTeam().name());
+            String formatted = TextUtils.format("{YELLOW}{0}{GRAY} - {1}:{2}, {3}:{4}",
+                    spawn.getName(), typeLabel, spawn.getSpawnType().getName(), teamLabel, spawn.getTeam().name());
 
             pagin.addFormatted(FormatTemplate.RAW, formatted);
         }

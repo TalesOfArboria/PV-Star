@@ -66,7 +66,6 @@ public class JoinCommand extends AbstractPVCommand {
 
         // Add player to arena
         arena.join(player);
-
     }
 }
 

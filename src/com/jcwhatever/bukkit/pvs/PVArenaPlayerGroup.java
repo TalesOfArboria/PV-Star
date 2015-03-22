@@ -38,11 +38,8 @@ import java.util.Set;
 
 public class PVArenaPlayerGroup implements ArenaPlayerGroup {
 
-    private Set<ArenaPlayer> _players = new HashSet<>(20);
+    private final Set<ArenaPlayer> _players = new HashSet<>(20);
 
-    /*
-     * Determine if the group has the specified player.
-     */
     @Override
     public boolean hasPlayer(ArenaPlayer player) {
         PreCon.notNull(player);
@@ -50,29 +47,16 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         return _players.contains(player);
     }
 
-    /*
-     * Get the number of players in the group.
-     */
     @Override
     public int size() {
         return _players.size();
     }
 
-    /*
-     * Get the number of players in the group who are in the specified arena.
-     */
     @Override
     public int size(Arena arena) {
         return getPlayers(arena).size();
     }
 
-    /*
-     * Determine if players in the provided collection are ready.
-     *
-     * Players that are not in the group are ignored.
-     *
-     * If any player that is in the group is not ready, false is returned.
-     */
     @Override
     public boolean isReady(Collection<ArenaPlayer> players) {
         PreCon.notNull(players);
@@ -87,9 +71,6 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         return true;
     }
 
-    /*
-     * Filters the collection of players to players that are in the group
-     */
     @Override
     public List<ArenaPlayer> filterPlayers(Collection<ArenaPlayer> players) {
 
@@ -105,9 +86,6 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         return result;
     }
 
-    /*
-     * Tell a message to all players in the group.
-     */
     @Override
     public void tell(String message, Object... params) {
         PreCon.notNullOrEmpty(message);
@@ -118,9 +96,6 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         }
     }
 
-    /*
-     * Add a player to the group.
-     */
     @Override
     public void addPlayer(ArenaPlayer player) {
         PreCon.isValid(player instanceof PVArenaPlayer);
@@ -135,9 +110,6 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         player.setPlayerGroup(this);
     }
 
-    /*
-     * Remove a player from the group.
-     */
     @Override
     public void removePlayer(ArenaPlayer player) {
         PreCon.isValid(player instanceof PVArenaPlayer);
@@ -153,17 +125,11 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         player.setPlayerGroup(null);
     }
 
-    /*
-     * Get all players in the group
-     */
     @Override
     public List<ArenaPlayer> getPlayers() {
         return new ArrayList<>(_players);
     }
 
-    /*
-     * Get players in the group who are in the specified arena.
-     */
     @Override
     public List<ArenaPlayer> getPlayers(Arena arena) {
         PreCon.notNull(arena);

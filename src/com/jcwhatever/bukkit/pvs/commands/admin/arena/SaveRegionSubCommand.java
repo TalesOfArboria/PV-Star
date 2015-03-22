@@ -47,10 +47,17 @@ import java.io.IOException;
 
 public class SaveRegionSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SAVING = "The region for arena '{0}' is being saved...";
-    @Localizable static final String _CANCELLED = "Save cancelled.";
-    @Localizable static final String _FAILED = "There was an error that prevented the region from being saved.";
-    @Localizable static final String _SUCCESS = "The region for arena '{0}' has been saved.";
+    @Localizable static final String _SAVING =
+            "The region for arena '{0: arena name}' is being saved...";
+
+    @Localizable static final String _CANCELLED =
+            "Save cancelled.";
+
+    @Localizable static final String _FAILED =
+            "There was an error that prevented the region from being saved.";
+
+    @Localizable static final String _SUCCESS =
+            "The region for arena '{0: arena name}' has been saved.";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {

@@ -50,10 +50,17 @@ import org.bukkit.command.CommandSender;
 
 public class SetSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _TYPE_NOT_FOUND = "A points type named '{0}' was not found.";
-    @Localizable static final String _TYPE_NOT_ADDED = "Points type '{0}' is not added to arena '{1}'";
-    @Localizable static final String _INFO = "Points type value in arena '{0}' is {1}.";
-    @Localizable static final String _CHANGED = "Points type value in arena '{0}' changed to {1}.";
+    @Localizable static final String _TYPE_NOT_FOUND =
+            "A points type named '{0: points type name}' was not found.";
+
+    @Localizable static final String _TYPE_NOT_ADDED =
+            "Points type '{0: points type name}' is not added to arena '{1: arena name}'";
+
+    @Localizable static final String _INFO =
+            "Points type in arena '{0: arena name}' is {1: points type name}.";
+
+    @Localizable static final String _CHANGED =
+            "Points type in arena '{0: arena name}' changed to {1: points type name}.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
@@ -91,7 +98,6 @@ public class SetSubCommand extends AbstractPVCommand {
             tellSuccess(sender, Lang.get(_CHANGED, arena.getName(), points));
 
         }
-
     }
 }
 

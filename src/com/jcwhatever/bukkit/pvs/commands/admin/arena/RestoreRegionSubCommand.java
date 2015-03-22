@@ -53,11 +53,20 @@ import java.io.IOException;
 
 public class RestoreRegionSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _CANNOT_RESTORE = "The region for arena '{0}' is not saved.";
-    @Localizable static final String _RESTORING = "The region for arena '{0}' is being restored...";
-    @Localizable static final String _CANCELLED = "Restore cancelled.";
-    @Localizable static final String _FAILED = "There was an error that prevented the region from being restored.";
-    @Localizable static final String _SUCCESS = "The region for arena '{0}' has been restored.";
+    @Localizable static final String _CANNOT_RESTORE =
+            "The region for arena '{0: arena name}' is not saved.";
+
+    @Localizable static final String _RESTORING =
+            "The region for arena '{0: arena name}' is being restored...";
+
+    @Localizable static final String _CANCELLED =
+            "Restore cancelled.";
+
+    @Localizable static final String _FAILED =
+            "There was an error that prevented the region from being restored.";
+
+    @Localizable static final String _SUCCESS =
+            "The region for arena '{0: arena name}' has been restored.";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {

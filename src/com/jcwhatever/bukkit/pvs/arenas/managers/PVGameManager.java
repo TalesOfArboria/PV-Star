@@ -24,9 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs.arenas.managers;
 
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.nucleus.utils.Scheduler;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -49,6 +46,9 @@ import com.jcwhatever.bukkit.pvs.api.events.team.TeamWinEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
 import com.jcwhatever.bukkit.pvs.arenas.settings.PVGameSettings;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Result;
+import com.jcwhatever.nucleus.utils.Scheduler;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Explosive;
@@ -68,6 +68,7 @@ import javax.annotation.Nullable;
 public class PVGameManager extends AbstractPlayerManager implements GameManager {
 
     private final GameManagerSettings _settings;
+
     private boolean _isRunning = false;
     private boolean _isGameOver = false;
     private Date _startTime;
@@ -81,52 +82,33 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         _settings = new PVGameSettings(arena);
     }
 
-    /*
-     * Get the start time of the most recent game.
-     */
     @Override
     @Nullable
     public Date getStartTime() {
         return _startTime;
     }
 
-    /*
-     * Determine if the game is running.
-     */
     @Override
     public boolean isRunning() {
         return _isRunning;
     }
 
-    /*
-     * Determine if the game is over but still running.
-     * Should always return false if isRunning() returns false.
-     */
     @Override
     public boolean isGameOver() {
         return _isGameOver;
     }
 
-    /*
-     * Get game manager settings.
-     */
     @Override
     public GameManagerSettings getSettings() {
         return _settings;
     }
 
-    /*
-     * Determine if the arena can be started.
-     */
     @Override
     public final boolean canStart() {
         return getArena().getSettings().isEnabled() &&
                 !getArena().isBusy();
     }
 
-    /*
-     * Start the game. Transfers the next group of players from the lobby.
-     */
     @Override
     public final boolean start(ArenaStartReason reason) {
 
@@ -167,10 +149,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-
-    /*
-     * End the current game.
-     */
     @Override
     public boolean end() {
 
@@ -193,9 +171,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-    /*
-     * Forward a player in the current game to another arena.
-     */
     @Override
     public boolean forwardPlayer(ArenaPlayer player, Arena nextArena) {
         PreCon.notNull(player);
@@ -228,9 +203,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-    /*
-     * Declare a winner.
-     */
     @Override
     public boolean setWinner(ArenaPlayer player) {
         PreCon.notNull(player);
@@ -254,9 +226,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-    /*
-     * Declare a team as the winner.
-     */
     @Override
     public boolean setWinner(ArenaTeam team) {
         PreCon.notNull(team);
@@ -270,8 +239,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
             if (player.getTeam() == team) {
                 winningTeam.add(player);
                 callWinEvent(player);
-            }
-            else {
+            } else {
                 callLoseEvent(player);
             }
         }
@@ -287,9 +255,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-    /*
-     * Declare a losing team.
-     */
     @Override
     public boolean setLoser(ArenaTeam team) {
 
@@ -311,9 +276,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return true;
     }
 
-    /*
-     * Called to get the respawn location for a player.
-     */
     @Nullable
     @Override
     protected Location onRespawnPlayer(ArenaPlayer player) {
@@ -327,9 +289,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return spawnpoint;
     }
 
-    /*
-     * Called to get the spawn location for an added player.
-     */
     @Override
     @Nullable
     protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
@@ -347,9 +306,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         return spawnpoint;
     }
 
-    /*
-     * Called before a player is removed.
-     */
     @Override
     protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
 
@@ -361,10 +317,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         }
     }
 
-    /*
-     * Called after a player is removed in order to get a location the
-     * removed player should be sent.
-     */
     @Override
     protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
 
@@ -422,6 +374,4 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (event.getLoseMessage() != null)
             tell(event.getLoseMessage());
     }
-
-
 }

@@ -51,5 +51,4 @@ public class MobEventListener implements Listener {
         if (!arena.getSettings().isMobSpawnEnabled())
             event.setCancelled(true);
     }
-
 }

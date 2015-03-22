@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class TeamPvpSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _TEAM_PVP_ENABLED = "Arena '{0}' game Team PVP is enabled.";
-    @Localizable static final String _TEAM_PVP_DISABLED = "Arena '{0}' game Team PVP is {RED}disabled.";
-    @Localizable static final String _TEAM_PVP_CHANGE_ENABLED = "Arena '{0}' game Team PVP changed to enabled.";
-    @Localizable static final String _TEAM_PVP_CHANGE_DISABLED = "Arena '{0}' game Team PVP changed to {RED}disabled.";
+    @Localizable static final String _TEAM_PVP_ENABLED =
+            "Arena '{0: arena name}' game Team PVP is enabled.";
+
+    @Localizable static final String _TEAM_PVP_DISABLED =
+            "Arena '{0: arena name}' game Team PVP is {RED}disabled.";
+
+    @Localizable static final String _TEAM_PVP_CHANGE_ENABLED =
+            "Arena '{0: arena name}' game Team PVP changed to enabled.";
+
+    @Localizable static final String _TEAM_PVP_CHANGE_DISABLED =
+            "Arena '{0: arena name}' game Team PVP changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

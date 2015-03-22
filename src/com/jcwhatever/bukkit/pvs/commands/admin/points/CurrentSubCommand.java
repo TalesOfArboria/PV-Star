@@ -53,8 +53,11 @@ import java.util.List;
 
 public class CurrentSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "Points Types in Arena '{0}'";
-    @Localizable static final String _POINTS = "{0} points";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "Points Types in Arena '{0: arena name}'";
+
+    @Localizable static final String _POINTS =
+            "{0: number of points} points";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

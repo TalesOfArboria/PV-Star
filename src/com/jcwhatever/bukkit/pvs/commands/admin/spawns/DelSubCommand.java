@@ -46,7 +46,9 @@ import org.bukkit.command.CommandSender;
 
 public class DelSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _FAILED = "Spawnpoint '{0}' for the arena '{1}' was not found.";
+    @Localizable static final String _FAILED =
+            "Spawnpoint '{0: spawn name}' in the arena '{1: arena name}' was not found.";
+
     @Localizable static final String _SUCCESS = "Spawnpoint {0} removed from arena '{1}'.";
 
 

@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  */
 public class PVSpectatorManager extends AbstractPlayerManager implements SpectatorManager {
 
-    private SpectatorManagerSettings _settings;
+    private final SpectatorManagerSettings _settings;
 
     /*
      * Constructor.
@@ -54,50 +54,32 @@ public class PVSpectatorManager extends AbstractPlayerManager implements Spectat
         _settings = new PVSpectatorSettings(arena);
     }
 
-    /*
-     * Get the spectator manager settings.
-     */
     @Override
     public SpectatorManagerSettings getSettings() {
         return _settings;
     }
 
-    /*
-     * Called when a respawn location is needed for a player.
-     */
     @Nullable
     @Override
     protected Location onRespawnPlayer(ArenaPlayer player) {
         return getSpawnLocation(player);
     }
 
-    /**
-     * Called when a spawn location is needed for a player.
-     */
     @Override
     protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
         return getSpawnLocation(player);
     }
 
-    /*
-     * Called before a player is removed from spectators.
-     */
     @Override
     protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         // do nothing
     }
 
-    /*
-     * Called after a player is removed from spectators.
-     */
     @Override
     protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         return getArena().getSettings().getRemoveLocation();
     }
 
-    /*
-     * Get a spectator spawn
-     */
     @Nullable
     private Location getSpawnLocation(ArenaPlayer player) {
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomSpectatorSpawn(player.getTeam());

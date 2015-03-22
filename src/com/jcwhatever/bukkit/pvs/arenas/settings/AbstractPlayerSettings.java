@@ -47,7 +47,6 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
     private boolean _hasFallDamage = true;
     private boolean _isSpawnsReserved = false;
 
-
     /*
      * Constructor.
      * nodeName is the name of the settings node.
@@ -70,33 +69,21 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         _isSpawnsReserved = _dataNode.getBoolean("spawns-reserved", _isSpawnsReserved);
     }
 
-    /*
-     * Get the owning arena.
-     */
     @Override
     public final Arena getArena() {
         return _arena;
     }
 
-    /*
-     * Get the settings data node.
-     */
     @Override
     public final IDataNode getDataNode() {
         return _dataNode;
     }
 
-    /*
-     * Determine if pvp is enabled.
-     */
     @Override
     public boolean isPvpEnabled() {
         return _isPvpEnabled;
     }
 
-    /*
-     * Set pvp enabled.
-     */
     @Override
     public void setPvpEnabled(boolean isEnabled) {
         _isPvpEnabled = isEnabled;
@@ -104,17 +91,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("pvp", isEnabled);
     }
 
-    /*
-     * Determine if team pvp is enabled.
-     */
     @Override
     public boolean isTeamPvpEnabled() {
         return _isTeamPvpEnabled;
     }
 
-    /*
-     * Set team pvp enabled.
-     */
     @Override
     public void setTeamPvpEnabled(boolean isEnabled) {
         _isTeamPvpEnabled = isEnabled;
@@ -122,17 +103,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("team-pvp", isEnabled);
     }
 
-    /*
-     * Determine if item sharing is enabled.
-     */
     @Override
     public boolean isSharingEnabled() {
         return _isSharingEnabled;
     }
 
-    /*
-     * Set item sharing is enabled.
-     */
     @Override
     public void setSharingEnabled(boolean isEnabled) {
         _isSharingEnabled = isEnabled;
@@ -140,17 +115,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("sharing", isEnabled);
     }
 
-    /*
-     * Determine if hunger is enabled.
-     */
     @Override
     public boolean isHungerEnabled() {
         return _isHungerEnabled;
     }
 
-    /*
-     * Set hunger enabled.
-     */
     @Override
     public void setHungerEnabled(boolean isEnabled) {
         _isHungerEnabled = isEnabled;
@@ -158,17 +127,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("hunger", isEnabled);
     }
 
-    /*
-     * Determine if player armor is damageable.
-     */
     @Override
     public boolean isArmorDamageable() {
         return _isArmorDamageable;
     }
 
-    /*
-     * Set player armor damageable.
-     */
     @Override
     public void setArmorDamageable(boolean isDamageable) {
         _isArmorDamageable = isDamageable;
@@ -176,17 +139,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("armor-damage", isDamageable);
     }
 
-    /*
-     * Determine if player weapons are damageable.
-     */
     @Override
     public boolean isWeaponsDamageable() {
         return _isWeaponsDamageable;
     }
 
-    /*
-     * Set player weapons damageable.
-     */
     @Override
     public void setWeaponsDamageable(boolean isDamageable) {
         _isWeaponsDamageable = isDamageable;
@@ -194,17 +151,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("weapons-damage", isDamageable);
     }
 
-    /*
-     * Determine if player tools are damageable.
-     */
     @Override
     public boolean isToolsDamageable() {
         return _isToolsDamageable;
     }
 
-    /*
-     * Set tools damageable.
-     */
     @Override
     public void setToolsDamageable(boolean isDamageable) {
         _isToolsDamageable = isDamageable;
@@ -212,17 +163,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("tools-damage", isDamageable);
     }
 
-    /*
-     * Determine if players have fall damage.
-     */
     @Override
     public boolean hasFallDamage() {
         return _hasFallDamage;
     }
 
-    /*
-     * Set fall damage.
-     */
     @Override
     public void setFallDamage(boolean hasFallDamage) {
         _hasFallDamage = hasFallDamage;
@@ -230,18 +175,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("fall-damage", hasFallDamage);
     }
 
-    /*
-     * Determine if spawns are reserved after a player uses it.
-     */
     @Override
     public boolean isPlayerSpawnsReserved() {
         return _isSpawnsReserved;
     }
 
-    /*
-     * Set player spawns reserved for player after first use.
-     * (until player removed)
-     */
     @Override
     public void setPlayerSpawnsReserved(boolean isEnabled) {
         _isSpawnsReserved = isEnabled;
@@ -249,14 +187,11 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
         save("spawns-reserved", isEnabled);
     }
 
-
-    /*
+    /**
      * Save setting.
      */
     protected void save(String nodeName, Object value) {
         _dataNode.set(nodeName, value);
         _dataNode.save();
     }
-
-
 }

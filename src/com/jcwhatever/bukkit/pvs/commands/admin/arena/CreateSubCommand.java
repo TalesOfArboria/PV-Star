@@ -46,9 +46,14 @@ import org.bukkit.command.CommandSender;
 
 public class CreateSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _ARENA_ALREADY_EXISTS = "An arena with the name '{0}' already exists.";
-    @Localizable static final String _FAILED = "Failed to create arena.";
-    @Localizable static final String _SUCCESS = "A new arena with the name '{0}' of type '{1}' has been created.";
+    @Localizable static final String _ARENA_ALREADY_EXISTS =
+            "An arena with the name '{0: arena name}' already exists.";
+
+    @Localizable static final String _FAILED =
+            "Failed to create arena.";
+
+    @Localizable static final String _SUCCESS =
+            "A new arena with the name '{0: arena name}' of type '{1: arena type}' has been created.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
@@ -73,10 +78,7 @@ public class CreateSubCommand extends AbstractPVCommand {
             PVStarAPI.getArenaManager().setSelectedArena(sender, arena);
             tellSuccess(sender, Lang.get(_SUCCESS, name, type));
         }
-
     }
-
-
 }
 
 

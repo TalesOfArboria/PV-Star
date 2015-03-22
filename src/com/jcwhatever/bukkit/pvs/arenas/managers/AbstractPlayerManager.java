@@ -50,61 +50,44 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractPlayerManager implements PlayerManager {
 
-    private Arena _arena;
+    private final Arena _arena;
     protected final ArenaPlayersCollection _players;
 
     /*
      * Constructor.
      */
     public AbstractPlayerManager(Arena arena) {
+        PreCon.notNull(arena);
+
         _arena = arena;
         _players = new ArenaPlayersCollection(arena);
     }
 
-    /*
-     * Get the managers owning arena.
-     */
     @Override
     public final Arena getArena() {
         return _arena;
     }
 
-    /*
-     * Tell all players being managed.
-     */
     @Override
     public final void tell(String message, Object... params) {
         _players.tell(message, params);
     }
 
-    /*
-     * Get the players being managed.
-     */
     @Override
     public final List<ArenaPlayer> getPlayers() {
         return _players.getPlayers();
     }
 
-    /*
-     * Get the number of players being managed.
-     */
     @Override
     public final int getPlayerCount() {
         return _players.size();
     }
 
-    /*
-     * Determine if the manager is managing the specified player.
-     */
     @Override
     public final boolean hasPlayer(ArenaPlayer player) {
         return _players.hasPlayer(player);
     }
 
-    /*
-     * Respawn the specified player if the player is being managed
-     * by the manager instance.
-     */
     @Override
     public final boolean respawnPlayer(ArenaPlayer player) {
         if (!_players.hasPlayer(player))
@@ -118,9 +101,6 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         return true;
     }
 
-    /*
-     * Add a player to the manager instance to be managed.
-     */
     @Override
     public final boolean addPlayer(ArenaPlayer player, AddPlayerReason reason) {
         PreCon.notNull(player);
@@ -173,9 +153,6 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         return true;
     }
 
-    /*
-     * Remove a player from the manager instance.
-     */
     @Override
     public final Result<Location> removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         PreCon.notNull(player);
@@ -218,28 +195,33 @@ public abstract class AbstractPlayerManager implements PlayerManager {
         return new Result<>(true, restoreLocation);
     }
 
-    /*
-     * Called when a player is respawned.
-     * Returns the location the player should be respawned at.
+    /**
+     * Invoked when a player is respawned.
+     *
+     * @return  The location the player should be respawned at or null to prevent
+     * setting respawn location.
      */
     @Nullable
     protected abstract Location onRespawnPlayer(ArenaPlayer player);
 
-    /*
-     * Called when a player is added.
-     * Returns the location the player should be spawned at.
+    /**
+     * Invoked when a player is added.
+     *
+     * @return  The location the player should be spawned at or null to prevent teleport.
      */
     @Nullable
     protected abstract Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason);
 
-    /*
-     * Called before a player is removed.
+    /**
+     * Invoked before a player is removed.
      */
     protected abstract void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);
 
-    /*
-     * Called after a player is removed.
-     * Returns the location the player should be teleported after removed.
+    /**
+     * Invoked after a player is removed.
+     *
+     * @return  The location the player should be teleported after removed or null to
+     * prevent teleport.
      */
     @Nullable
     protected abstract Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);

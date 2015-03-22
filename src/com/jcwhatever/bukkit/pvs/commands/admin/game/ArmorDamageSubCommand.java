@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class ArmorDamageSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _ARMOR_DAMAGE_ENABLED = "Arena '{0}' game armor damage is enabled.";
-    @Localizable static final String _ARMOR_DAMAGE_DISABLED = "Arena '{0}' game armor damage is {RED}disabled.";
-    @Localizable static final String _ARMOR_DAMAGE_CHANGE_ENABLED = "Arena '{0}' game armor damage changed to enabled.";
-    @Localizable static final String _ARMOR_DAMAGE_CHANGE_DISABLED = "Arena '{0}' game armor damage changed to {RED}disabled.";
+    @Localizable static final String _ARMOR_DAMAGE_ENABLED =
+            "Arena '{0: arena name}' game armor damage is enabled.";
+
+    @Localizable static final String _ARMOR_DAMAGE_DISABLED =
+            "Arena '{0: arena name}' game armor damage is {RED}disabled.";
+
+    @Localizable static final String _ARMOR_DAMAGE_CHANGE_ENABLED =
+            "Arena '{0: arena name}' game armor damage changed to enabled.";
+
+    @Localizable static final String _ARMOR_DAMAGE_CHANGE_DISABLED =
+            "Arena '{0: arena name}' game armor damage changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

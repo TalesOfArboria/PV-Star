@@ -53,5 +53,4 @@ public class GameCommand extends AbstractPVCommand {
         registerCommand(ToolDamageSubCommand.class);
         registerCommand(WeaponDamageSubCommand.class);
     }
-
 }

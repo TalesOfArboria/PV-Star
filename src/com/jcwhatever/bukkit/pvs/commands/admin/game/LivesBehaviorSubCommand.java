@@ -48,8 +48,11 @@ import org.bukkit.command.CommandSender;
 
 public class LivesBehaviorSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _BEHAVIOR_INFO = "Player lives behavior in arena '{0}' is set to {1}.";
-    @Localizable static final String _BEHAVIOR_SET = "Player lives behavior in arena '{0}' changed to {1}.";
+    @Localizable static final String _BEHAVIOR_INFO =
+            "Player lives behavior in arena '{0: arena name}' is set to {1: behaviour}.";
+
+    @Localizable static final String _BEHAVIOR_SET =
+            "Player lives behavior in arena '{0: arena name}' changed to {1: behaviour}.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -33,6 +33,7 @@ import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.commands.AbstractPVCommand;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -50,8 +51,11 @@ import org.bukkit.entity.Player;
 
 public class RemoveLocationSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _VIEW_LOCATION = "Remove location for arena '{0}' is:";
-    @Localizable static final String _SET_LOCATION = "Remove location for arena '{0}' set to:";
+    @Localizable static final String _VIEW_LOCATION =
+            "Remove location for arena '{0: arena name}' is:";
+
+    @Localizable static final String _SET_LOCATION =
+            "Remove location for arena '{0: arena name}' set to:\n{WHITE}{1: location}";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
@@ -74,10 +78,10 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
 
                     arena.getSettings().setRemoveLocation(result);
 
-                    tellSuccess(sender, Lang.get(_SET_LOCATION, arena.getName()));
-                    tell(sender, LocationUtils.locationToString(arena.getSettings().getRemoveLocation()));
+                    tellSuccess(sender, Lang.get(_SET_LOCATION,
+                            arena.getName(),
+                            TextUtils.formatLocation(arena.getSettings().getRemoveLocation(), true)));
                 }
-
             });
         }
     }

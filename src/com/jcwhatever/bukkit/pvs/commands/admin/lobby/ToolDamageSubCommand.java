@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class ToolDamageSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _TOOL_DAMAGE_ENABLED = "Arena '{0}' lobby Tool Damage is enabled.";
-    @Localizable static final String _TOOL_DAMAGE_DISABLED = "Arena '{0}' lobby Tool Damage is {RED}disabled.";
-    @Localizable static final String _TOOL_DAMAGE_CHANGE_ENABLED = "Arena '{0}' lobby Tool Damage changed to enabled.";
-    @Localizable static final String _TOOL_DAMAGE_CHANGE_DISABLED = "Arena '{0}' lobby Tool Damage changed to {RED}disabled.";
+    @Localizable static final String _TOOL_DAMAGE_ENABLED =
+            "Arena '{0: arena name}' Lobby Tool Damage is enabled.";
+
+    @Localizable static final String _TOOL_DAMAGE_DISABLED =
+            "Arena '{0: arena name}' Lobby Tool Damage is {RED}disabled.";
+
+    @Localizable static final String _TOOL_DAMAGE_CHANGE_ENABLED =
+            "Arena '{0: arena name}' lobby Tool Damage changed to enabled.";
+
+    @Localizable static final String _TOOL_DAMAGE_CHANGE_DISABLED =
+            "Arena '{0: arena name}' lobby Tool Damage changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -49,9 +49,14 @@ import org.bukkit.command.CommandSender;
 
 public class UsageSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "Usage for '{0}'";
-    @Localizable static final String _HANDLER_NOT_FOUND = "A sign handler named '{0}' was not found.";
-    @Localizable static final String _FORMAT = "{GRAY}{0} {WHITE}{1}";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "Usage for '{0: sign type name}'";
+
+    @Localizable static final String _HANDLER_NOT_FOUND =
+            "A sign handler named '{0: sign type name}' was not found.";
+
+    @Localizable static final String _FORMAT =
+            "{GRAY}{0: line index} {WHITE}{1: centered text}";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

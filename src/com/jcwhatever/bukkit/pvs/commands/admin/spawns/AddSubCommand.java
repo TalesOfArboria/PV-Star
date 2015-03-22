@@ -55,12 +55,23 @@ import org.bukkit.entity.Player;
 
 public class AddSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _INVALID_SPAWN_TYPE = "'{0}' is not a valid spawn type.";
-    @Localizable static final String _REGION_UNDEFINED = "Cannot add spawns until the arena region is defined.";
-    @Localizable static final String _DIFFERENT_WORLD = "The spawn location must be in the same world as the arena.";
-    @Localizable static final String _OUTSIDE_REGION = "You must be inside the arena region.";
-    @Localizable static final String _ALREADY_EXISTS = "A spawnpoint named '{0}' already exists.";
-    @Localizable static final String _SUCCESS = "Spawnpoint '{0}' added to arena '{1}'.";
+    @Localizable static final String _INVALID_SPAWN_TYPE =
+            "'{0: spawn type name}' is not a valid spawn type.";
+
+    @Localizable static final String _REGION_UNDEFINED =
+            "Cannot add spawns until the arena region is defined.";
+
+    @Localizable static final String _DIFFERENT_WORLD =
+            "The spawn location must be in the same world as the arena.";
+
+    @Localizable static final String _OUTSIDE_REGION =
+            "You must be inside the arena region.";
+
+    @Localizable static final String _ALREADY_EXISTS =
+            "A spawnpoint named '{0: spawn name}' already exists.";
+
+    @Localizable static final String _SUCCESS =
+            "Spawnpoint '{0: spawn name}' added to arena '{1: arena name}'.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
@@ -96,9 +107,7 @@ public class AddSubCommand extends AbstractPVCommand {
             return; // finish
         }
 
-        if (!region.contains(p.getLocation())) {
-            tellError(sender, Lang.get(_OUTSIDE_REGION));
-        } else {
+        if (region.contains(p.getLocation())) {
 
             Location loc = p.getLocation();
 
@@ -112,6 +121,8 @@ public class AddSubCommand extends AbstractPVCommand {
 
             tellSuccess(sender, Lang.get(_SUCCESS, name, arena.getName()));
             tell(sender, TextUtils.formatLocation(loc, true));
+        } else {
+            tellError(sender, Lang.get(_OUTSIDE_REGION));
         }
     }
 }

@@ -65,7 +65,6 @@ import javax.annotation.Nullable;
  */
 public class PVArenaPlayer implements ArenaPlayer {
 
-
     private static Map<UUID, PVArenaPlayer> _playerMap = new HashMap<>(100);
     private static Map<UUID, PlayerMeta> _meta = new HashMap<UUID, PlayerMeta>(100);
     private static BukkitPlayerListener _listener;
@@ -98,7 +97,8 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
 
-    private Player _player;
+    private final Player _player;
+
     private boolean _isReady;
     private boolean _isImmobilized;
     private boolean _isInvulnerable;
@@ -120,30 +120,20 @@ public class PVArenaPlayer implements ArenaPlayer {
     private PlayerMeta _globalMeta = new PVPlayerMeta();
 
     // private constructor
-    private PVArenaPlayer(Player p) {
-        _player = p;
+    private PVArenaPlayer(Player player) {
+        _player = player;
     }
 
-    /*
-     * Get the players unique minecraft Id.
-     */
     @Override
     public UUID getUniqueId() {
         return _player.getUniqueId();
     }
 
-    /*
-     * Get the players minecraft name.
-     */
     @Override
     public String getName() {
         return _player.getName();
     }
 
-    /*
-     * Get the players display name. Returns the player name
-     * if the player has no display name set.
-     */
     @Override
     public String getDisplayName() {
         return _player.getDisplayName() != null
@@ -151,54 +141,33 @@ public class PVArenaPlayer implements ArenaPlayer {
                 : _player.getName();
     }
 
-    /*
-     * Get the encapsulated {@link Player} object.
-     */
     @Override
     public Player getPlayer() {
         return _player;
     }
 
-    /*
-     * Get the players current location.
-     */
     @Override
     public Location getLocation() {
         return _player.getLocation();
     }
 
-
-    /*
-     * Get the arena the player is currently in.
-     * @return
-     */
     @Override
     @Nullable
     public Arena getArena() {
         return _arena;
     }
 
-    /*
-     * Get the most recent date/time that a player
-     * joined an arena during their current login session.
-     */
     @Override
     @Nullable
     public Date getJoinDate() {
         return _lastJoin;
     }
 
-    /*
-     * Get the players team.
-     */
     @Override
     public ArenaTeam getTeam() {
         return _team;
     }
 
-    /*
-     * Set the players team.
-     */
     @Override
     public void setTeam(ArenaTeam team, TeamChangeReason reason) {
         PreCon.notNull(team);
@@ -228,33 +197,21 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
 
-    /*
-     * Get the number of lives the player has left.
-     */
     @Override
     public int getLives() {
         return _lives;
     }
 
-    /*
-     * Get the total points earned in the current session.
-     */
     @Override
     public int getTotalPoints() {
         return _totalPoints;
     }
 
-    /*
-     * Get the number of points the player has in the current session.
-     */
     @Override
     public int getPoints() {
         return _points;
     }
 
-    /*
-     * Increment player points by the specified amount.
-     */
     @Override
     public int incrementPoints(int amount) {
         if (amount > 0) {
@@ -264,26 +221,17 @@ public class PVArenaPlayer implements ArenaPlayer {
         return _points;
     }
 
-    /*
-     * Get the {@link ArenaPlayerGroup} the player is part of.
-     */
     @Override
     @Nullable
     public ArenaPlayerGroup getPlayerGroup() {
         return _playerGroup;
     }
 
-    /*
-     * Determine if the player is ready to play.
-     */
     @Override
     public boolean isReady() {
         return _isReady;
     }
 
-    /*
-     * Set the player ready variable.
-     */
     @Override
     public void setReady(boolean isReady) {
 
@@ -306,9 +254,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
     }
 
-    /*
-     * Determine if the player is immobilized.
-     */
     @Override
     public boolean isImmobilized() {
 
@@ -321,35 +266,21 @@ public class PVArenaPlayer implements ArenaPlayer {
         return _isImmobilized;
     }
 
-    /*
-     * Set the players immobilized flag.
-     */
     @Override
     public void setImmobilized(boolean isImmobilized) {
         _isImmobilized =  isImmobilized;
     }
 
-    /*
-     * Determine if the player is invulnerable to damage.
-     */
     @Override
     public boolean isInvulnerable() {
         return _isInvulnerable;
     }
 
-    /*
-     * Set the players invulnerability flag.
-     *
-     * @param isInvulnerable  True to make the player invulnerable to damage.
-     */
     @Override
     public void setInvulnerable(boolean isInvulnerable) {
         _isInvulnerable = isInvulnerable;
     }
 
-    /*
-     * Get the players relationship to the arena they are in.
-     */
     @Override
     public ArenaPlayerRelation getArenaRelation() {
         if (_arena == null)
@@ -367,10 +298,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         return ArenaPlayerRelation.NONE;
     }
 
-    /*
-     * Get the manager responsible for the players current arena relation.
-     * (i.e. Lobby, Game, Spectator)
-     */
     @Override
     @Nullable
     public PlayerManager getRelatedManager() {
@@ -392,12 +319,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
     }
 
-    /*
-     * Get {@link PlayerSettings} implementation from the
-     * arena the player is in based on their current arena relation.
-     * i.e. If the player is in the lobby, returns the lobby managers
-     * settings.
-     */
     @Override
     @Nullable
     public PlayerManagerSettings getRelatedSettings() {
@@ -419,10 +340,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
     }
 
-    /*
-     * Get the players meta data object for a specific arena,
-     * which is used until the {@link ArenaPlayer} instance is disposed.
-     */
     @Override
     public PlayerMeta getMeta(UUID arenaId) {
         PreCon.notNull(arenaId);
@@ -436,46 +353,27 @@ public class PVArenaPlayer implements ArenaPlayer {
         return meta;
     }
 
-    /**
-     * Get the players global meta data object
-     * which is used until the {@link ArenaPlayer} instance is disposed.
-     */
     @Override
     public PlayerMeta getMeta() {
         return _globalMeta;
     }
 
-    /*
-     * Get the players session meta data object,
-     * which is used until the player joins another arena.
-     */
     @Override
     public PlayerMeta getSessionMeta() {
         return _sessionMeta;
     }
 
-    /*
-     * Kill the player
-     */
     @Override
     public void kill() {
         _player.damage(_player.getMaxHealth());
     }
 
-    /*
-     * Kill the player and blame the specified arena player.
-     * Blame only works with PV-Star events.
-     */
     @Override
     public void kill(@Nullable ArenaPlayer blame) {
         _deathBlamePlayer = blame;
         _player.damage(_player.getMaxHealth());
     }
 
-    /*
-     * Clear all flags related to the players current arena. Effectively
-     * updates the player to "Not in an arena" status.
-     */
     @Override
     public void clearArena() {
 
@@ -493,12 +391,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         _points = 0;
     }
 
-    /*
-     * Notify the instance that the player is part of
-     * the specified arena.
-     *
-     * Available publicly but is intended for use internally.
-     */
     @Override
     public void setCurrentArena(Arena arena) {
         PreCon.notNull(arena);
@@ -569,11 +461,6 @@ public class PVArenaPlayer implements ArenaPlayer {
         }
     }
 
-    /*
-     * Set the player group the player is in.
-     *
-     * Available publicly but is intended for use internally.
-     */
     @Override
     public void setPlayerGroup(@Nullable ArenaPlayerGroup playerGroup) {
 
@@ -668,7 +555,6 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     }
 
-
     /*
      * Meta data storage for a player
      */
@@ -687,5 +573,4 @@ public class PVArenaPlayer implements ArenaPlayer {
             return value;
         }
     }
-
 }

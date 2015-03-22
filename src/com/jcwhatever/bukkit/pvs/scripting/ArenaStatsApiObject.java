@@ -33,8 +33,8 @@ import com.jcwhatever.bukkit.pvs.api.stats.StatType;
 
 import javax.annotation.Nullable;
 
-/*
- * 
+/**
+ * Arena Statistics sub API.
  */
 public class ArenaStatsApiObject implements IScriptApiObject {
 

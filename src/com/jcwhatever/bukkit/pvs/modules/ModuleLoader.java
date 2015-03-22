@@ -63,12 +63,12 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
     private final File _moduleFolder;
     private final Map<String, PVModuleInfo> _moduleInfo = new HashMap<>(50);
+    private final Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
 
-    private Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
     private boolean _isModulesLoaded;
     private KickPlayersBukkitListener _kickPlayersListener;
 
-    /*
+    /**
      * Constructor.
      */
     public ModuleLoader(Plugin plugin) {
@@ -83,14 +83,14 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
         Bukkit.getPluginManager().registerEvents(_kickPlayersListener, PVStarAPI.getPlugin());
     }
 
-    /*
+    /**
      * Determine if modules are loaded and enabled.
      */
     public boolean isModulesLoaded() {
         return _isModulesLoaded;
     }
 
-    /*
+    /**
      * Enable modules. Can only be called once.
      */
     public void enable(final Runnable onModulesEnabled) {

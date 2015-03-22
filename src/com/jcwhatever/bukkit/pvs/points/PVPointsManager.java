@@ -42,11 +42,8 @@ import javax.annotation.Nullable;
  */
 public class PVPointsManager implements PointsManager {
 
-    private Map<String, PointsType> _typeMap = new HashMap<>(25);
+    private final Map<String, PointsType> _typeMap = new HashMap<>(25);
 
-    /*
-     * Register a points type
-     */
     @Override
     public boolean registerType(PointsType type) {
         PreCon.notNull(type);
@@ -62,18 +59,11 @@ public class PVPointsManager implements PointsManager {
         return true;
     }
 
-    /*
-     * Get the registered points types.
-     */
     @Override
     public List<PointsType> getTypes() {
         return new ArrayList<>(_typeMap.values());
     }
 
-    /*
-     * Get a list of registered points types
-     * installed on the specified arena.
-     */
     @Override
     public List<PointsType> getTypes(Arena arena) {
 
@@ -94,19 +84,12 @@ public class PVPointsManager implements PointsManager {
         return results;
     }
 
-    /*
-     * Get a points type by name.
-     */
     @Override
     @Nullable
     public PointsType getType(String typeName) {
         return _typeMap.get(typeName.toLowerCase());
     }
 
-    /*
-     * Enable points types on the specified arena.
-     * Intended to be called once after an arena is loaded.
-     */
     @Override
     public void loadTypes(Arena arena) {
 

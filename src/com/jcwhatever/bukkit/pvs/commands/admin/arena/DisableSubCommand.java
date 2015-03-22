@@ -41,17 +41,22 @@ import org.bukkit.command.CommandSender;
 
 public class DisableSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _ALREADY_DISABLED = "Arena '{0}' is already disabled.";
-    @Localizable static final String _FAILED = "Failed to disable Arena '{0}'.";
-    @Localizable static final String _SUCCESS = "Arena '{0}' disabled.";
+    @Localizable static final String _ALREADY_DISABLED =
+            "Arena '{0: arena name}' is already disabled.";
+
+    @Localizable static final String _FAILED =
+            "Failed to disable arena '{0: arena name}'.";
+
+    @Localizable static final String _SUCCESS =
+            "Arena '{0: arena name}' disabled.";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
         Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
-        if (arena == null) {
+        if (arena == null)
             return; // finish
-        }
+
 
         if (!arena.getSettings().isEnabled()) {
             tellError(sender, Lang.get(_ALREADY_DISABLED, arena.getName()));

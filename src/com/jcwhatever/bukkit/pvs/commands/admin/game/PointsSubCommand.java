@@ -46,8 +46,11 @@ import org.bukkit.command.CommandSender;
 
 public class PointsSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _POINTS_INFO = "Player start points in arena '{0}' is set to {1}.";
-    @Localizable static final String _POINTS_SET = "Player start points in arena '{0}' changed to {1}.";
+    @Localizable static final String _POINTS_INFO =
+            "Player start points in arena '{0: arena name}' is set to {1: number of points}.";
+
+    @Localizable static final String _POINTS_SET =
+            "Player start points in arena '{0: arena name}' changed to {1: number of points}.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

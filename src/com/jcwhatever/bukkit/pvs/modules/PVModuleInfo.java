@@ -41,7 +41,6 @@ import java.util.jar.JarFile;
  * Loads and stores module info from module.yml file
  * in the module jar file.
  */
-
 public class PVModuleInfo extends YamlModuleInfo implements ModuleInfo {
 
     private String _version;
@@ -68,81 +67,49 @@ public class PVModuleInfo extends YamlModuleInfo implements ModuleInfo {
         return _moduleClassName;
     }
 
-    /*
-     * Get the modules display version.
-     */
     @Override
     public String getVersion() {
         return _version;
     }
 
-    /*
-     * Get the module description.
-     */
     @Override
     public String getDescription() {
         return _description;
     }
 
-    /**
-     * Get the modules author names.
-     */
     @Override
     public List<String> getAuthors() {
         return _authors;
     }
 
-    /*
-     * Get the modules logical version used to solve
-     * issues with loading two conflicting versions.
-     */
     @Override
     public long getLogicalVersion() {
         return _logicalVersion;
     }
 
-    /*
-     * Get the names of Bukkit plugins the module
-     * depends on.
-     */
     @Override
     public Set<String> getBukkitDepends() {
         return _bukkitDepends;
     }
 
-    /*
-     * Get the names of Bukkit plugins the module
-     * has a soft dependency on.
-     */
     @Override
     public Set<String> getBukkitSoftDepends() {
         return _bukkitSoftDepends;
     }
 
-    /*
-     * Get the names of PV-Star modules the module
-     * depends on.
-     */
     @Override
     public Set<String> getModuleDepends() {
         return _moduleDepends;
     }
 
-    /*
-     * Get the names of PV-Star modules tje module
-     * has a soft dependency on.
-     */
     @Override
     public Set<String> getModuleSoftDepends() {
         return _moduleSoftDepends;
     }
 
-    /*
-     * Load module info from yaml data node.
-     */
     @Override
     protected boolean onLoad(IDataNode dataNode) {
-// get the required logical version
+        // get the required logical version
         _logicalVersion = dataNode.getLong("logical-version", -1);
         if (_logicalVersion < 0)
             return false;

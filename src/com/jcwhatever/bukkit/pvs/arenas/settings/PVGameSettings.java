@@ -53,19 +53,11 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         _pointsBehavior = getDataNode().getEnum("points-behavior", _pointsBehavior, PointsBehavior.class);
     }
 
-    /*
-     * Get the number of lives the players
-     * start with.
-     */
     @Override
     public int getStartLives() {
         return _lives;
     }
 
-    /*
-     * Set the number of lives the players
-     * start with.
-     */
     @Override
     public void setStartLives(int lives) {
         _lives = lives;
@@ -73,17 +65,11 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         save("lives", lives);
     }
 
-    /*
-     * Get the number of points players start with.
-     */
     @Override
     public int getStartPoints() {
         return _points;
     }
 
-    /*
-     * Set the number of points players start with.
-     */
     @Override
     public void setStartPoints(int points) {
         _points = points;
@@ -91,19 +77,11 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         save("points", points);
     }
 
-    /*
-     * Get the behavior of lives when players are
-     * forwarded to the arena.
-     */
     @Override
     public LivesBehavior getLivesBehavior() {
         return _livesBehavior;
     }
 
-    /*
-     * Set the behavior of lives when players are
-     * forwarded to the arena.
-     */
     @Override
     public void setLivesBehavior(LivesBehavior behavior) {
         _livesBehavior = behavior;
@@ -111,19 +89,11 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         save("lives-behavior", behavior);
     }
 
-    /*
-     * Get the behavior of points when players are
-     * forwarded to the arena.
-     */
     @Override
     public PointsBehavior getPointsBehavior() {
         return _pointsBehavior;
     }
 
-    /*
-     * Set the behavior of points when players are
-     * forwarded to the arena.
-     */
     @Override
     public void setPointsBehavior(PointsBehavior behavior) {
         _pointsBehavior = behavior;
@@ -131,24 +101,15 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
         save("points-behavior", behavior);
     }
 
-    /*
-     * Determine if entities such as dropped items
-     * should be removed when the game ends.
-     */
     @Override
     public boolean hasPostGameEntityCleanup() {
         return _postGameCleanup;
     }
 
-    /*
-     * Set entities such as dropped items removed
-     * when the game ends.
-     */
     @Override
     public void setPostGameEntityCleanup(boolean isEnabled) {
         _postGameCleanup = isEnabled;
 
         save("post-game-cleanup", isEnabled);
     }
-
 }

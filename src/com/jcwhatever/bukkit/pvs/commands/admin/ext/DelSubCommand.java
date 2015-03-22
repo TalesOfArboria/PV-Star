@@ -47,10 +47,17 @@ import org.bukkit.command.CommandSender;
 
 public class DelSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _EXT_NOT_FOUND = "An arena extension named '{0}' was not found.";
-    @Localizable static final String _EXT_NOT_IN_ARENA = "Arena extension '{0}' is not installed in arena '{1}'.";
-    @Localizable static final String _FAILED =  "Failed to remove extension '{0}' from arena '{1}'.";
-    @Localizable static final String _SUCCESS =  "Removed extension '{0}' from arena '{1}'.";
+    @Localizable static final String _EXT_NOT_FOUND =
+            "An arena extension named '{0: extension name}' was not found.";
+
+    @Localizable static final String _EXT_NOT_IN_ARENA =
+            "Arena extension '{0: extension name}' is not installed in arena '{1: arena name}'.";
+
+    @Localizable static final String _FAILED =
+            "Failed to remove extension '{0: extension name}' from arena '{1: arena name}'.";
+
+    @Localizable static final String _SUCCESS =
+            "Removed extension '{0: extension name}' from arena '{1: arena name}'.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -46,8 +46,11 @@ import org.bukkit.permissions.PermissionDefault;
 
 public class LeaveCommand extends AbstractPVCommand {
 
-    @Localizable static final String _NOT_IN_ARENA = "You're not in an arena.";
-    @Localizable static final String _SUCCESS = "Thanks for playing!";
+    @Localizable static final String _NOT_IN_ARENA =
+            "You're not in an arena.";
+
+    @Localizable static final String _SUCCESS =
+            "Thanks for playing!";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

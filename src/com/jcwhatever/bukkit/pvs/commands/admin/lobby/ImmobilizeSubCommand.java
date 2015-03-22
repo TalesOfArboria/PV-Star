@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class ImmobilizeSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _IMMOBILIZE_ENABLED = "Arena '{0}' lobby Immobilization is enabled.";
-    @Localizable static final String _IMMOBILIZE_DISABLED = "Arena '{0}' lobby Immobilization is {RED}disabled.";
-    @Localizable static final String _IMMOBILIZE_CHANGE_ENABLED = "Arena '{0}' lobby Immobilization changed to enabled.";
-    @Localizable static final String _IMMOBILIZE_CHANGE_DISABLED = "Arena '{0}' lobby Immobilization changed to {RED}disabled.";
+    @Localizable static final String _IMMOBILIZE_ENABLED =
+            "Arena '{0: arena name}' lobby Immobilization is enabled.";
+
+    @Localizable static final String _IMMOBILIZE_DISABLED =
+            "Arena '{0: arena name}' lobby Immobilization is {RED}disabled.";
+
+    @Localizable static final String _IMMOBILIZE_CHANGE_ENABLED =
+            "Arena '{0: arena name}' lobby Immobilization changed to enabled.";
+
+    @Localizable static final String _IMMOBILIZE_CHANGE_DISABLED =
+            "Arena '{0: arena name}' lobby Immobilization changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

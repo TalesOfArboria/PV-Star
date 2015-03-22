@@ -46,7 +46,8 @@ import org.bukkit.command.CommandSender;
 
 public class SelectSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SUCCESS = "'{0}' is your selected arena.";
+    @Localizable static final String _SUCCESS =
+            "'{0: arena name}' is your selected arena.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

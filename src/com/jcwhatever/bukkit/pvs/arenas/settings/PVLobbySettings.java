@@ -45,18 +45,11 @@ public class PVLobbySettings extends AbstractPlayerSettings implements LobbyMana
         loadSettings();
     }
 
-    /*
-     * Determine if players in the lobby are prevented
-     * from moving from their spawn in location.
-     */
     @Override
     public boolean isImmobilized() {
         return _isImmobilized;
     }
 
-    /*
-     * Set players immobilized in lobby.
-     */
     @Override
     public void setImmobilized(boolean isEnabled) {
         _isImmobilized = isEnabled;
@@ -64,17 +57,11 @@ public class PVLobbySettings extends AbstractPlayerSettings implements LobbyMana
         save("immobilized", isEnabled);
     }
 
-    /*
-     * Determine if auto start is enabled.
-     */
     @Override
     public boolean hasAutoStart() {
         return _hasAutoStart;
     }
 
-    /*
-     * Set auto start enabled.
-     */
     @Override
     public void setAutoStart(boolean isEnabled) {
         _hasAutoStart = isEnabled;
@@ -82,19 +69,11 @@ public class PVLobbySettings extends AbstractPlayerSettings implements LobbyMana
         save("auto-start", isEnabled);
     }
 
-    /*
-     * Get the minimum number of players required
-     * to auto start.
-     */
     @Override
     public int getMinAutoStartPlayers() {
         return _minAutoStartPlayers;
     }
 
-    /*
-     * Set the minimum number of players required
-     * to auto start.
-     */
     @Override
     public void setMinAutoStartPlayers(int minPlayers) {
         _minAutoStartPlayers = minPlayers;

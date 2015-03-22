@@ -41,5 +41,4 @@ public class SpawnsCommand extends AbstractPVCommand {
         registerCommand(ListSubCommand.class);
         registerCommand(TypesSubCommand.class);
     }
-
 }

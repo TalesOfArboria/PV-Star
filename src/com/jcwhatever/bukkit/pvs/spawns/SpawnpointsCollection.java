@@ -44,26 +44,45 @@ import javax.annotation.Nullable;
 
 public abstract class SpawnpointsCollection {
 
-    private Map<String, Spawnpoint> _nameMap = new HashMap<>(30);
-    private Map<ArenaTeam, Set<Spawnpoint>> _teamMap = new EnumMap<>(ArenaTeam.class);
-    private Map<SpawnType, Set<Spawnpoint>> _typeMap = new HashMap<>(30);
+    private final Map<String, Spawnpoint> _nameMap = new HashMap<>(25);
+    private final Map<ArenaTeam, Set<Spawnpoint>> _teamMap = new EnumMap<>(ArenaTeam.class);
+    private final Map<SpawnType, Set<Spawnpoint>> _typeMap = new HashMap<>(25);
 
+    /**
+     * Constructor.
+     */
     public SpawnpointsCollection() {}
 
-    public SpawnpointsCollection(Collection<Spawnpoint> spawns) {
+    /**
+     * Constructor.
+     *
+     * @param spawns
+     */
+    public SpawnpointsCollection(Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         addSpawns(spawns);
     }
 
+    /**
+     * Get all available teams.
+     */
     public Set<ArenaTeam> getTeams() {
         return EnumSet.copyOf(_teamMap.keySet());
     }
 
+    /**
+     * Get all spawnpoints.
+     */
     public List<Spawnpoint> getSpawns() {
         return new ArrayList<Spawnpoint>(_nameMap.values());
     }
 
+    /**
+     * Get spawnpoints from a comma delimited list of spawn names.
+     *
+     * @param names  The names of the spawns.
+     */
     public List<Spawnpoint> getSpawns(String names) {
         PreCon.notNull(names);
 
@@ -80,6 +99,11 @@ public abstract class SpawnpointsCollection {
         return results;
     }
 
+    /**
+     * Get all spawns of the specified type.
+     *
+     * @param type  The spawn type.
+     */
     public List<Spawnpoint> getSpawns(SpawnType type) {
         PreCon.notNull(type);
 
@@ -90,6 +114,11 @@ public abstract class SpawnpointsCollection {
         return new ArrayList<Spawnpoint>(spawns);
     }
 
+    /**
+     * Get all spawns of the specified team.
+     *
+     * @param team  The team.
+     */
     public List<Spawnpoint> getSpawns(ArenaTeam team) {
         PreCon.notNull(team);
 
@@ -100,6 +129,12 @@ public abstract class SpawnpointsCollection {
         return new ArrayList<>(spawns);
     }
 
+    /**
+     * Get all spawns of the specified type and team.
+     *
+     * @param type  The spawn type.
+     * @param team  The team.
+     */
     public List<Spawnpoint> getSpawns (SpawnType type, ArenaTeam team) {
         PreCon.notNull(type);
         PreCon.notNull(team);
@@ -111,12 +146,25 @@ public abstract class SpawnpointsCollection {
         return SpawnFilter.filter(type, spawns);
     }
 
-
+    /**
+     * Get a spawn by name.
+     *
+     * @param name  The spawn name.
+     *
+     * @return  The {@link Spawnpoint} or null if not found.
+     */
     @Nullable
     public Spawnpoint getSpawn(String name) {
         return _nameMap.get(name.toLowerCase());
     }
 
+    /**
+     * Add a spawnpoint.
+     *
+     * @param spawn  The spawn to add.
+     *
+     * @return  True if added, otherwise false.
+     */
     public boolean addSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
@@ -135,7 +183,12 @@ public abstract class SpawnpointsCollection {
         return true;
     }
 
-    public void addSpawns(Collection<Spawnpoint> spawns) {
+    /**
+     * Add a collection of spawns.
+     *
+     * @param spawns  The spawns to add.
+     */
+    public void addSpawns(Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         for (Spawnpoint spawn : spawns) {
@@ -143,6 +196,13 @@ public abstract class SpawnpointsCollection {
         }
     }
 
+    /**
+     * Remove a spawn point.
+     *
+     * @param spawn  The spawn point to remove.
+     *
+     * @return  True if the spawn was found and removed, otherwise false.
+     */
     public boolean removeSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
@@ -159,7 +219,12 @@ public abstract class SpawnpointsCollection {
         return _nameMap.remove(spawn.getSearchName()) != null;
     }
 
-    public void removeSpawns(Collection<Spawnpoint> spawns) {
+    /**
+     * Remove a collection of spawns.
+     *
+     * @param spawns  The spawns to remove.
+     */
+    public void removeSpawns(Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         for (Spawnpoint spawn : spawns)
@@ -185,5 +250,4 @@ public abstract class SpawnpointsCollection {
         }
         return spawns;
     }
-
 }

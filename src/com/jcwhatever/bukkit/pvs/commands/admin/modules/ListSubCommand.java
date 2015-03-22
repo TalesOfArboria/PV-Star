@@ -54,7 +54,8 @@ import java.util.List;
 
 public class ListSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "PV-Star Modules";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "PV-Star Modules";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -45,8 +45,11 @@ import org.bukkit.command.CommandSender;
 
 public class MaxPlayersSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SET_MAX = "Max players for arena '{0}' has been set to {1}.";
-    @Localizable static final String _VIEW_MAX = "Max players for arena '{0}' is {1}.";
+    @Localizable static final String _SET_MAX =
+            "Max players for arena '{0: arena name}' has been set to {1: number of players}.";
+
+    @Localizable static final String _VIEW_MAX =
+            "Max players for arena '{0: arena name}' is {1: number of players}.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

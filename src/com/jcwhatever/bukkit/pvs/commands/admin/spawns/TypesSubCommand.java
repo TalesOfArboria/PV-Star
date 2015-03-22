@@ -54,7 +54,8 @@ import java.util.List;
 
 public class TypesSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "Spawn Types";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "Spawn Types";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

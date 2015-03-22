@@ -38,7 +38,7 @@ import org.bukkit.command.CommandSender;
         parent="game",
         command="sharing",
         staticParams={"on|off|info=info"},
-        description="Allow or deny players to drop chest items in the selected arena game.",
+        description="Allow or deny players to drop inventory items in the selected arena game.",
 
         paramDescriptions = {
                 "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class SharingSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SHARING_ENABLED = "Arena '{0}' game chest sharing is enabled.";
-    @Localizable static final String _SHARING_DISABLED = "Arena '{0}' game chest sharing is {RED}disabled.";
-    @Localizable static final String _SHARING_CHANGE_ENABLED = "Arena '{0}' game chest sharing changed to enabled.";
-    @Localizable static final String _SHARING_CHANGE_DISABLED = "Arena '{0}' game chest sharing changed to {RED}disabled.";
+    @Localizable static final String _SHARING_ENABLED =
+            "Arena '{0: arena name}' game inventory sharing is enabled.";
+
+    @Localizable static final String _SHARING_DISABLED =
+            "Arena '{0: arena name}' game inventory sharing is {RED}disabled.";
+
+    @Localizable static final String _SHARING_CHANGE_ENABLED =
+            "Arena '{0: arena name}' game inventory sharing changed to enabled.";
+
+    @Localizable static final String _SHARING_CHANGE_DISABLED =
+            "Arena '{0: arena name}' game inventory sharing changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

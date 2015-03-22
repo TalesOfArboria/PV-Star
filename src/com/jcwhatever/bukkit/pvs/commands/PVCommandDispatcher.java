@@ -71,6 +71,5 @@ public class PVCommandDispatcher extends CommandDispatcher {
         registerCommand(LeaveCommand.class);
         registerCommand(ListCommand.class);
         registerCommand(VoteCommand.class);
-
     }
 }

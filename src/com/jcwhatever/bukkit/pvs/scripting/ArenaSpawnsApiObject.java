@@ -38,8 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
-/*
- * 
+/**
+ * Arena spawns sub API.
  */
 public class ArenaSpawnsApiObject implements IScriptApiObject {
 

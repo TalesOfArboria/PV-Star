@@ -45,8 +45,11 @@ import org.bukkit.command.CommandSender;
 
 public class MinPlayersSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _MIN_PLAYERS_INFO = "Minimum autostart players in arena '{0}' is set to {1}.";
-    @Localizable static final String _MIN_PLAYERS_SET = "Minimum autostart players in arena '{0}' changed to {1}.";
+    @Localizable static final String _MIN_PLAYERS_INFO =
+            "Minimum autostart players in arena '{0: arena name}' is set to {1: number of players}.";
+
+    @Localizable static final String _MIN_PLAYERS_SET =
+            "Minimum autostart players in arena '{0: arena name}' changed to {1: number of players}.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

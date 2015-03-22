@@ -54,7 +54,8 @@ import java.util.Set;
 
 public class ListSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "Extensions in arena '{0}'";
+    @Localizable static final String _PAGINATOR_TITLE =
+            "Extensions in arena '{0: arena name}'";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

@@ -57,8 +57,8 @@ import java.util.regex.Matcher;
 
 public class PlayerEventListener implements Listener {
 
-    @Localizable static final String _COMMAND_NOT_IN_ARENA = "{RED}You can't use that command in the arena!";
-
+    @Localizable static final String _COMMAND_NOT_IN_ARENA =
+            "{RED}You can't use that command in the arena!";
 
     /**
      * Ensure player data disposal on join.

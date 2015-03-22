@@ -44,8 +44,11 @@ import org.bukkit.command.CommandSender;
 
 public class AddSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _TYPE_NOT_FOUND = "A points type named '{0}' was not found.";
-    @Localizable static final String _SUCCESS = "Points type '{0}' added to arena '{1}'.";
+    @Localizable static final String _TYPE_NOT_FOUND =
+            "A points type named '{0: points type name}' was not found.";
+
+    @Localizable static final String _SUCCESS =
+            "Points type '{0: points type name}' added to arena '{1: arena name}'.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

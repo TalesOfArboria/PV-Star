@@ -52,9 +52,8 @@ public class PVSpawnTypeManager implements SpawnTypeManager {
     public final LobbySpawnType _lobbySpawn = new LobbySpawnType();
     public final GameSpawnType _gameSpawn = new GameSpawnType();
     public final SpectatorSpawnType _spectatorSpawn = new SpectatorSpawnType();
-
-    private Map<String, SpawnType> _typeMap = new HashMap<>(40);
-    private Map<EntityType, Set<SpawnType>> _entityMap = new EnumMap<>(EntityType.class);
+    private final Map<String, SpawnType> _typeMap = new HashMap<>(25);
+    private final Map<EntityType, Set<SpawnType>> _entityMap = new EnumMap<>(EntityType.class);
 
     /*
      * Constructor.
@@ -66,41 +65,26 @@ public class PVSpawnTypeManager implements SpawnTypeManager {
         registerType(new LocationSpawnType());
     }
 
-    /*
-     * Get spawn type used for arena lobby spawns.
-     */
     @Override
     public SpawnType getLobbySpawnType() {
         return _lobbySpawn;
     }
 
-    /*
-     * Get spawn type used for arena game spawns.
-     */
     @Override
     public SpawnType getGameSpawnType() {
         return _gameSpawn;
     }
 
-    /*
-     * Get spawn type used for arena spectator spawns.
-     */
     @Override
     public SpawnType getSpectatorSpawnType() {
         return _spectatorSpawn;
     }
 
-    /*
-     * Get all registered spawn types.
-     */
     @Override
     public List<SpawnType> getSpawnTypes() {
         return new ArrayList<SpawnType>(_typeMap.values());
     }
 
-    /*
-     * Get spawn types that can spawn the specified entity type.
-     */
     @Override
     public List<SpawnType> getSpawnTypes(EntityType entityType) {
         Set<SpawnType> types = _entityMap.get(entityType);
@@ -110,23 +94,18 @@ public class PVSpawnTypeManager implements SpawnTypeManager {
         return new ArrayList<>(types);
     }
 
-    /*
-     * Get a spawn type by type name.
-     */
     @Nullable
     @Override
     public SpawnType getType(String typeName) {
         return _typeMap.get(typeName.toLowerCase());
     }
 
-    /*
-     * Register a spawn type
-     */
     @Override
     public boolean registerType(SpawnType spawnType) {
 
         if (_typeMap.containsKey(spawnType.getSearchName())) {
-            Msg.debug("SpawnType '{0}' could not be registered because a type with that name is already registered", spawnType.getName());
+            Msg.debug("SpawnType '{0}' could not be registered because a type with " +
+                    "that name is already registered.", spawnType.getName());
             return false;
         }
 

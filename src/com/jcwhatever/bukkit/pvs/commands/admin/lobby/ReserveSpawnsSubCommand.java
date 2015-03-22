@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class ReserveSpawnsSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _RESERVE_ENABLED = "Arena '{0}' lobby Spawn Reserving is enabled.";
-    @Localizable static final String _RESERVE_DISABLED = "Arena '{0}' lobby Spawn Reserving is {RED}disabled.";
-    @Localizable static final String _RESERVE_CHANGE_ENABLED = "Arena '{0}' lobby Spawn Reserving changed to enabled.";
-    @Localizable static final String _RESERVE_CHANGE_DISABLED = "Arena '{0}' lobby Spawn Reserving changed to {RED}disabled.";
+    @Localizable static final String _RESERVE_ENABLED =
+            "Arena '{0: arena name}' lobby Spawn Reserving is enabled.";
+
+    @Localizable static final String _RESERVE_DISABLED =
+            "Arena '{0: arena name}' lobby Spawn Reserving is {RED}disabled.";
+
+    @Localizable static final String _RESERVE_CHANGE_ENABLED =
+            "Arena '{0: arena name}' lobby Spawn Reserving changed to enabled.";
+
+    @Localizable static final String _RESERVE_CHANGE_DISABLED =
+            "Arena '{0: arena name}' lobby Spawn Reserving changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

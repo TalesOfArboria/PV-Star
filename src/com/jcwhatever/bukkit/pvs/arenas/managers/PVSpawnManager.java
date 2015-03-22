@@ -84,42 +84,26 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         return PVStarAPI.getPlugin();
     }
 
-    /*
-     * Get the owning arena.
-     */
     @Override
     public Arena getArena() {
         return _arena;
     }
 
-    /*
-     * Determine if there are lobby spawns available.
-     */
     @Override
     public boolean hasLobbySpawns() {
         return !getSpawns(PVStarAPI.getSpawnTypeManager().getLobbySpawnType()).isEmpty();
     }
 
-    /*
-     * Determine if there are game spawns available.
-     */
     @Override
     public boolean hasGameSpawns() {
         return !getSpawns(PVStarAPI.getSpawnTypeManager().getGameSpawnType()).isEmpty();
     }
 
-    /*
-     * Determine if there are spectator spawns available.
-     */
     @Override
     public boolean hasSpectatorSpawns() {
         return !getSpawns(PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType()).isEmpty();
     }
 
-    /*
-     * Get all lobby spawn points. If there are no lobby spawns,
-     * returns game spawns.
-     */
     @Override
     public List<Spawnpoint> getLobbyOrGameSpawns() {
 
@@ -135,27 +119,18 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         return spawns;
     }
 
-    /*
-     * Get all lobby spawn points.
-     */
     @Override
     public List<Spawnpoint> getLobbySpawns() {
         return getSpawns(
                 PVStarAPI.getSpawnTypeManager().getLobbySpawnType());
     }
 
-    /*
-     * Get all game spawn points.
-     */
     @Override
     public List<Spawnpoint> getGameSpawns() {
         return getSpawns(
                 PVStarAPI.getSpawnTypeManager().getGameSpawnType());
     }
 
-    /*
-     * Get all spectator spawn points.
-     */
     @Override
     public List<Spawnpoint> getSpectatorSpawns() {
         return getSpawns(
@@ -163,9 +138,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     }
 
 
-    /*
-     * Add a spawn point.
-     */
     @Override
     public boolean addSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
@@ -189,11 +161,8 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         return true;
     }
 
-    /*
-     * Add a collection of spawnpoints.
-     */
     @Override
-    public void addSpawns(final Collection<Spawnpoint> spawns) {
+    public void addSpawns(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         _dataNode.runBatchOperation(new DataBatchOperation() {
@@ -207,9 +176,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         });
     }
 
-    /*
-     * Remove a spawn point.
-     */
     @Override
     public boolean removeSpawn(Spawnpoint spawn) {
         PreCon.notNull(spawn);
@@ -230,11 +196,8 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
     }
 
-    /*
-     * Remove a collection of spawnpoints.
-     */
     @Override
-    public void removeSpawns(final Collection<Spawnpoint> spawns) {
+    public void removeSpawns(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         _dataNode.runBatchOperation(new DataBatchOperation() {
@@ -247,11 +210,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         });
     }
 
-    /*
-     * Get a random spawn for a player. The spawn returned correlates
-     * to the players current arena relation. (i.e player in lobby gets a lobby spawn)
-     * Returns null if the player is not in an arena or a related spawn is not found.
-     */
     @Nullable
     @Override
     public Spawnpoint getRandomSpawn(ArenaPlayer player) {
@@ -269,9 +227,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         }
     }
 
-    /*
-     * Get a random lobby spawn.
-     */
     @Nullable
     @Override
     public Spawnpoint getRandomLobbySpawn(ArenaTeam team) {
@@ -294,10 +249,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
         return SpawnFilter.getRandomSpawn(spawns);
     }
 
-
-    /*
-     * Get a random game spawn.
-     */
     @Nullable
     @Override
     public Spawnpoint getRandomGameSpawn(ArenaTeam team) {
@@ -305,9 +256,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
                 PVStarAPI.getSpawnTypeManager().getGameSpawnType(), team, this.getSpawns());
     }
 
-    /*
-     * Get a random spectator spawn.
-     */
     @Nullable
     @Override
     public Spawnpoint getRandomSpectatorSpawn(ArenaTeam team) {
@@ -315,47 +263,35 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
                 PVStarAPI.getSpawnTypeManager().getLobbySpawnType(), team, this.getSpawns());
     }
 
-    /*
-     * Reserves a spawn point for a player by removing it as a candidate
-     * for the managers getter methods (getRandomSpawn, getSpawns, etc).
-     */
     @Override
-    public void reserveSpawn(ArenaPlayer p, Spawnpoint spawn) {
-        PreCon.notNull(p);
+    public void reserveSpawn(ArenaPlayer player, Spawnpoint spawn) {
+        PreCon.notNull(player);
         PreCon.notNull(spawn);
 
-        if (getArena().getEventManager().call(this, new ReserveSpawnEvent(getArena(), p, spawn)).isCancelled())
+        if (getArena().getEventManager().call(this, new ReserveSpawnEvent(getArena(), player, spawn)).isCancelled())
             return;
 
         // remove spawn to prevent it's use
         super.removeSpawn(spawn);
-        _reserved.put(p.getUniqueId(), spawn);
+        _reserved.put(player.getUniqueId(), spawn);
     }
 
-    /*
-     * Removes the reserved status of the spawnpoint reserved for a player
-     * and makes it available via the managers spawnpoint getter methods.
-     */
     @Override
-    public void unreserveSpawn(ArenaPlayer p) {
-        PreCon.notNull(p);
+    public void unreserveSpawn(ArenaPlayer player) {
+        PreCon.notNull(player);
 
-        Spawnpoint spawn = _reserved.remove(p.getUniqueId());
+        Spawnpoint spawn = _reserved.remove(player.getUniqueId());
         if (spawn == null)
             return;
 
-        if (getArena().getEventManager().call(this, new UnreserveSpawnEvent(getArena(), p, spawn)).isCancelled()) {
-            _reserved.put(p.getUniqueId(), spawn);
+        if (getArena().getEventManager().call(this, new UnreserveSpawnEvent(getArena(), player, spawn)).isCancelled()) {
+            _reserved.put(player.getUniqueId(), spawn);
             return;
         }
 
         super.addSpawn(spawn);
     }
 
-    /*
-     * Clear all reserved spawns and make them available via the managers
-     * spawnpoint getter methods.
-     */
     @Override
     public void clearReserved() {
 
@@ -368,7 +304,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
         _reserved.clear();
     }
-
 
     /*
      * Load spawn manager settings.
@@ -399,7 +334,6 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
             super.addSpawn(spawnpoint);
         }
     }
-
 
     /*
      * Un-reserve a spawn when a player leaves.

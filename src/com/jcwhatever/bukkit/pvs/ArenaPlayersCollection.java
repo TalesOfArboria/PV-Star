@@ -48,11 +48,11 @@ import javax.annotation.Nullable;
  */
 public class ArenaPlayersCollection {
 
-    private Arena _arena;
-    private Set<ArenaPlayerGroup> _groups = new HashSet<>(5);
-    private Set<ArenaPlayer> _players = new HashSet<>(30);
+    private final Arena _arena;
+    private final Set<ArenaPlayerGroup> _groups = new HashSet<>(5);
+    private final Set<ArenaPlayer> _players = new HashSet<>(30);
+    private final EntryCache<Integer, List<ArenaPlayer>> _cachedNextGroup = new EntryCache<>();
 
-    private EntryCache<Integer, List<ArenaPlayer>> _cachedNextGroup = new EntryCache<>();
     private List<ArenaPlayer> _cachedReadyGroup;
 
     /*

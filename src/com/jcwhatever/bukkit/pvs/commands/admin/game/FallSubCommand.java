@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class FallSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _HUNGER_ENABLED = "Arena '{0}' game fall damage is enabled.";
-    @Localizable static final String _HUNGER_DISABLED = "Arena '{0}' game fall damage is {RED}disabled.";
-    @Localizable static final String _HUNGER_CHANGE_ENABLED = "Arena '{0}' game fall damage changed to enabled.";
-    @Localizable static final String _HUNGER_CHANGE_DISABLED = "Arena '{0}' game dall damage changed to {RED}disabled.";
+    @Localizable static final String _HUNGER_ENABLED =
+            "Arena '{0: arena name}' game fall damage is enabled.";
+
+    @Localizable static final String _HUNGER_DISABLED =
+            "Arena '{0: arena name}' game fall damage is {RED}disabled.";
+
+    @Localizable static final String _HUNGER_CHANGE_ENABLED =
+            "Arena '{0: arena name}' game fall damage changed to enabled.";
+
+    @Localizable static final String _HUNGER_CHANGE_DISABLED =
+            "Arena '{0: arena name}' game dall damage changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

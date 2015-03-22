@@ -45,8 +45,11 @@ import org.bukkit.command.CommandSender;
 
 public class TypeNameSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _VIEW_TYPE_NAME = "The type name of arena '{0}' is '{1}'.";
-    @Localizable static final String _SET_TYPE_NAME = "Type name of arena '{0}' set to '{1}'.";
+    @Localizable static final String _VIEW_TYPE_NAME =
+            "The type name of arena '{0: arena name}' is '{1: type name}'.";
+
+    @Localizable static final String _SET_TYPE_NAME =
+            "Type name of arena '{0: arena name}' set to '{1: type name}'.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

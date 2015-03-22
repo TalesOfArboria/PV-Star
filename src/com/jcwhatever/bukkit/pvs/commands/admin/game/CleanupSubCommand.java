@@ -45,10 +45,17 @@ import org.bukkit.command.CommandSender;
 
 public class CleanupSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _CLEANUP_ENABLED = "Arena '{0}' post game cleanup is enabled.";
-    @Localizable static final String _CLEANUP_DISABLED = "Arena '{0}' post game cleanup is {RED}disabled.";
-    @Localizable static final String _CLEANUP_CHANGE_ENABLED = "Arena '{0}' post game cleanup changed to enabled.";
-    @Localizable static final String _CLEANUP_CHANGE_DISABLED = "Arena '{0}' post game cleanup changed to {RED}disabled.";
+    @Localizable static final String _CLEANUP_ENABLED =
+            "Arena '{0: arena name}' post game cleanup is enabled.";
+
+    @Localizable static final String _CLEANUP_DISABLED =
+            "Arena '{0: arena name}' post game cleanup is {RED}disabled.";
+
+    @Localizable static final String _CLEANUP_CHANGE_ENABLED =
+            "Arena '{0: arena name}' post game cleanup changed to enabled.";
+
+    @Localizable static final String _CLEANUP_CHANGE_DISABLED =
+            "Arena '{0: arena name}' post game cleanup changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

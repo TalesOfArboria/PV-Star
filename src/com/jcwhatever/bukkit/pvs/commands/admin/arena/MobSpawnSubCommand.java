@@ -38,7 +38,8 @@ import org.bukkit.command.CommandSender;
         parent="arena",
         command="mobspawn",
         staticParams={"on|off|info=info"},
-        description="Set or view the settings for allowing natural mob spawns in the selected arena.",
+        description="Set or view the settings for allowing natural mob spawns in the " +
+                "selected arena.",
 
         paramDescriptions = {
                 "on|off|info= 'on' to turn on, 'off' to turn off, 'info' or " +
@@ -46,10 +47,17 @@ import org.bukkit.command.CommandSender;
 
 public class MobSpawnSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SPAWNING_ENABLED = "{WHITE}Natural mob spawning in arena '{0}' is {GREEN}Enabled{WHITE}.";
-    @Localizable static final String _SPAWNING_DISABLED = "{WHITE}Natural mob spawning in arena '{0}' is {RED}Disabled{WHITE}.";
-    @Localizable static final String _SPAWNING_CHANGED_ENABLED = "Natural mob spawning in arena '{0}' changed to Enabled.";
-    @Localizable static final String _SPAWNING_CHANGED_DISABLED = "Natural mob spawning in arena '{0}' changed to {RED}Disabled.";
+    @Localizable static final String _SPAWNING_ENABLED =
+            "{WHITE}Natural mob spawning in arena '{0: arena name}' is {GREEN}Enabled{WHITE}.";
+
+    @Localizable static final String _SPAWNING_DISABLED =
+            "{WHITE}Natural mob spawning in arena '{0: arena name}' is {RED}Disabled{WHITE}.";
+
+    @Localizable static final String _SPAWNING_CHANGED_ENABLED =
+            "Natural mob spawning in arena '{0:arena name}' changed to Enabled.";
+
+    @Localizable static final String _SPAWNING_CHANGED_DISABLED =
+            "Natural mob spawning in arena '{0: arena name}' changed to {RED}Disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
@@ -80,7 +88,6 @@ public class MobSpawnSubCommand extends AbstractPVCommand {
             else {
                 tellSuccess(sender, Lang.get(_SPAWNING_CHANGED_DISABLED, arena.getName()));
             }
-
         }
     }
 }

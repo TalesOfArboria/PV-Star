@@ -72,27 +72,17 @@ public class PVArenaSettings implements ArenaSettings {
         _typeDisplayName = _dataNode.getString("type-display");
     }
 
-    /*
-     * Determine if the arena is enabled.
-     */
     @Override
     public boolean isEnabled() {
         return _isEnabled && _arena.getRegion().isDefined() &&
                 _arena.getRegion().isWorldLoaded();
     }
 
-    /*
-     * Get the arenas config setting for the
-     * enabled state.
-     */
     @Override
     public boolean isConfigEnabled() {
         return _dataNode.getBoolean("enabled", DEFAULT_ENABLED_STATE);
     }
 
-    /*
-     * Set the arena enabled state.
-     */
     @Override
     public void setEnabled(boolean isEnabled) {
 
@@ -105,9 +95,6 @@ public class PVArenaSettings implements ArenaSettings {
         _dataNode.save();
     }
 
-    /*
-     * Set the arena enabled state without changing config.
-     */
     @Override
     public void setTransientEnabled(boolean isEnabled) {
 
@@ -140,29 +127,19 @@ public class PVArenaSettings implements ArenaSettings {
         }
     }
 
-    /*
-     * Determine if the arena is visible to players
-     * in arena lists and joinable via commands.
-     */
     @Override
     public final boolean isVisible() {
         return _isVisible;
     }
 
-    /*
-     * Set the arenas visibility to players.
-     */
     @Override
-    public final void setIsVisible(boolean isVisible) {
+    public final void setVisible(boolean isVisible) {
         _isVisible = isVisible;
 
         _dataNode.set("visible", isVisible);
         _dataNode.save();
     }
 
-    /*
-     * Get a custom type name for display.
-     */
     @Override
     public final String getTypeDisplayName() {
         return _typeDisplayName != null
@@ -170,9 +147,6 @@ public class PVArenaSettings implements ArenaSettings {
                 : "Arena";
     }
 
-    /*
-     * Set a custom type display name for the arena
-     */
     @Override
     public final void setTypeDisplayName(@Nullable String typeDisplayName) {
 
@@ -182,17 +156,11 @@ public class PVArenaSettings implements ArenaSettings {
         _dataNode.save();
     }
 
-    /*
-     * Get the minimum players needed to play the arena.
-     */
     @Override
     public int getMinPlayers() {
         return _minPlayers;
     }
 
-    /*
-     * Set the minimum players needed to play the arena.
-     */
     @Override
     public void setMinPlayers(int minPlayers) {
         _minPlayers = minPlayers;
@@ -200,17 +168,11 @@ public class PVArenaSettings implements ArenaSettings {
         save("min-players", minPlayers);
     }
 
-    /*
-     * Get the maximum players allowed in the arena.
-     */
     @Override
     public int getMaxPlayers() {
         return _maxPlayers;
     }
 
-    /*
-     * Set the maximum players allowed in the arena.
-     */
     @Override
     public void setMaxPlayers(int maxPlayers) {
         _maxPlayers = maxPlayers;
@@ -218,18 +180,11 @@ public class PVArenaSettings implements ArenaSettings {
         save("max-players", maxPlayers);
     }
 
-    /*
-     * Determine if natural mob spawns are enabled
-     * in the arena.
-     */
     @Override
     public boolean isMobSpawnEnabled() {
         return _isMobSpawnEnabled;
     }
 
-    /*
-     * Set flag for natural mob spawns in the arena.
-     */
     @Override
     public void setMobSpawnEnabled(boolean isEnabled) {
         _isMobSpawnEnabled = isEnabled;
@@ -237,10 +192,6 @@ public class PVArenaSettings implements ArenaSettings {
         save("mob-spawn", isEnabled);
     }
 
-    /*
-     * Get the location a player is teleported to when
-     * they are removed from the arena.
-     */
     @Override
     @Nullable
     public Location getRemoveLocation() {
@@ -254,10 +205,6 @@ public class PVArenaSettings implements ArenaSettings {
         return null;
     }
 
-    /*
-     * Set the location a player is teleported to when
-     * they are removed from the arena.
-     */
     @Override
     public void setRemoveLocation(@Nullable Location location) {
         _removeLocation = location;
@@ -265,12 +212,11 @@ public class PVArenaSettings implements ArenaSettings {
         save("remove-location", location);
     }
 
-    /*
+    /**
      * Save a setting.
      */
     protected void save(String nodeName, @Nullable Object value) {
         _dataNode.set(nodeName, value);
         _dataNode.save();
     }
-
 }

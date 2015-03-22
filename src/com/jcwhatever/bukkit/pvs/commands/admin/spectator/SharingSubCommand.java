@@ -46,10 +46,17 @@ import org.bukkit.command.CommandSender;
 
 public class SharingSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _SHARING_ENABLED = "Arena '{0}' spectator Inventory Sharing is enabled.";
-    @Localizable static final String _SHARING_DISABLED = "Arena '{0}' spectator Inventory Sharing is {RED}disabled.";
-    @Localizable static final String _SHARING_CHANGE_ENABLED = "Arena '{0}' spectator Inventory Sharing changed to enabled.";
-    @Localizable static final String _SHARING_CHANGE_DISABLED = "Arena '{0}' spectator Inventory Sharing changed to {RED}disabled.";
+    @Localizable static final String _SHARING_ENABLED =
+            "Arena '{0: arena name}' Spectator Inventory Sharing is enabled.";
+
+    @Localizable static final String _SHARING_DISABLED =
+            "Arena '{0: arena name}' Spectator Inventory Sharing is {RED}disabled.";
+
+    @Localizable static final String _SHARING_CHANGE_ENABLED =
+            "Arena '{0: arena name}' Spectator Inventory Sharing changed to enabled.";
+
+    @Localizable static final String _SHARING_CHANGE_DISABLED =
+            "Arena '{0: arena name}' Spectator Inventory Sharing changed to {RED}disabled.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

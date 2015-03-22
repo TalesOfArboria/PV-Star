@@ -54,7 +54,6 @@ import org.bukkit.inventory.InventoryHolder;
  */
 public class BukkitEventForwarder extends AbstractBukkitForwarder {
 
-
     /**
      * Constructor.
      *

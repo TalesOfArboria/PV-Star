@@ -27,11 +27,10 @@ package com.jcwhatever.bukkit.pvs.scripting;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 
-/*
- *
+/**
+ *Arena sub API.
  */
 public class ArenaApiObject implements IScriptApiObject {
-
 
     private boolean _isDisposed;
 

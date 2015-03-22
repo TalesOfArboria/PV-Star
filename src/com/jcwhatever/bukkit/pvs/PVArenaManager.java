@@ -61,7 +61,7 @@ public class PVArenaManager implements ArenaManager {
     private final Map<String, Class<? extends Arena>> _arenaTypes = new HashMap<>(20);
     private final IDataNode _dataNode;
     private final PVStar _pvStar;
-    private Map<String, Arena> _selectedArenas = new HashMap<>(20); // keyed to player name
+    private final Map<String, Arena> _selectedArenas = new HashMap<>(20); // keyed to player name
 
     public PVArenaManager(IDataNode dataNode) {
         _dataNode = dataNode;
@@ -103,12 +103,6 @@ public class PVArenaManager implements ArenaManager {
         }
     }
 
-    /**
-     * Change an arenas name.
-     *
-     * @param arenaId  The id of the arena.
-     * @param name     The new arena name.
-     */
     @Override
     public boolean setArenaName(UUID arenaId, String name) {
         PreCon.notNull(arenaId);
@@ -310,7 +304,6 @@ public class PVArenaManager implements ArenaManager {
             _arenaIdMap.put(arenaId, arena);
         }
     }
-
 
     @Nullable
     private Arena loadArena(String typeName) {

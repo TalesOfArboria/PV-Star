@@ -56,7 +56,8 @@ import java.util.List;
 public class TypesSubCommand extends AbstractPVCommand {
 
     @Localizable
-    static final String _PAGINATOR_TITLE = "Available Arena Extensions";
+    static final String _PAGINATOR_TITLE =
+            "Available Arena Extensions";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {

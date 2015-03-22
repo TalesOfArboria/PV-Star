@@ -47,34 +47,22 @@ public class PVExtensionTypeManager implements ExtensionTypeManager {
 
     private static final Map<String, Class<? extends ArenaExtension>> _extensionMap = new HashMap<>(25);
 
-    /*
-     * Get the names of available arena extensions
-     */
     @Override
     public Set<String> getExtensionNames() {
         return _extensionMap.keySet();
     }
 
-    /*
-     * Get available arena extensions
-     */
     @Override
     public List<Class<? extends ArenaExtension>> getExtensionClasses() {
         return new ArrayList<>( _extensionMap.values());
     }
 
-    /*
-     * Get a specific arena extension by name.
-     */
     @Nullable
     @Override
     public Class<? extends ArenaExtension> getExtensionClass(String name) {
         return _extensionMap.get(name.toLowerCase());
     }
 
-    /*
-     * Register an arena extension into the repository.
-     */
     @Override
     public void registerType(Class<? extends ArenaExtension> extension) {
         PreCon.notNull(extension);
@@ -90,10 +78,10 @@ public class PVExtensionTypeManager implements ExtensionTypeManager {
         String key = info.name().toLowerCase();
 
         if (_extensionMap.containsKey(key)) {
-            Msg.warning("An Arena Extension was registered that overwrites another extension. Extension name: {0}.", info.name());
+            Msg.warning("An Arena Extension was registered that overwrites another " +
+                    "extension. Extension name: {0}.", info.name());
         }
 
         _extensionMap.put(key, extension);
     }
-
 }

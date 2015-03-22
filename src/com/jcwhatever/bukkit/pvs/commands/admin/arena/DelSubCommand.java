@@ -50,9 +50,14 @@ import org.bukkit.command.CommandSender;
 
 public class DelSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _DISABLE_FIRST = "You must disable the arena before it can be deleted.";
-    @Localizable static final String _CONFIRM = "{WHITE}Please type '{YELLOW}/confirm{WHITE}' to delete arena '{0}'.";
-    @Localizable static final String _SUCCESS = "Arena '{0}' deleted.";
+    @Localizable static final String _DISABLE_FIRST =
+            "You must disable the arena before it can be deleted.";
+
+    @Localizable static final String _CONFIRM =
+            "{WHITE}Please type '{YELLOW}/confirm{WHITE}' to delete arena '{0: arena name}'.";
+
+    @Localizable static final String _SUCCESS =
+            "Arena '{0: arena name}' deleted.";
 
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
@@ -60,9 +65,8 @@ public class DelSubCommand extends AbstractPVCommand {
         String arenaName = args.getString("arenaName");
 
         final Arena arena = getArena(sender, arenaName);
-        if (arena == null) {
+        if (arena == null)
             return; // finish
-        }
 
         if (arena.getSettings().isEnabled()) {
             tellError(sender, Lang.get(_DISABLE_FIRST));
@@ -89,7 +93,6 @@ public class DelSubCommand extends AbstractPVCommand {
                     }
                 });
     }
-
 }
 
 

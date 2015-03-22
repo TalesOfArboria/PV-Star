@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
 
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IEventListener {
 
-    private LobbyManagerSettings _settings;
+    private final LobbyManagerSettings _settings;
 
     /*
      * Constructor.
@@ -65,17 +65,11 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         return PVStarAPI.getPlugin();
     }
 
-    /*
-     * Get lobby settings.
-     */
     @Override
     public LobbyManagerSettings getSettings() {
         return _settings;
     }
 
-    /*
-     * Get the next group of players that are all ready.
-     */
     @Override
     @Nullable
     public List<ArenaPlayer> getReadyGroup() {
@@ -83,10 +77,6 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         return _players.getReadyGroup(getArena().getSettings().getMinPlayers());
     }
 
-    /*
-     * Get the next group of players that meat minimum players
-     * and minimum auto start players settings.
-     */
     @Override
     @Nullable
     public List<ArenaPlayer> getNextGroup() {
@@ -98,36 +88,23 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         return _players.getNextGroup(minSize);
     }
 
-    /*
-     * Called to get a respawn location.
-     */
     @Nullable
     @Override
     protected Location onRespawnPlayer(ArenaPlayer player) {
         return getSpawnLocation(player);
     }
 
-    /*
-     * Called to get a spawn location on a player added to the arena.
-     */
     @Override
     protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
 
         return getSpawnLocation(player);
     }
 
-    /*
-     * Called before a player is removed from the lobby.
-     */
     @Override
     protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         // do nothing
     }
 
-    /*
-     * Called after a player is removed from the lobby in
-     * order to get a location to send the player.
-     */
     @Override
     protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
         return getArena().getSettings().getRemoveLocation();

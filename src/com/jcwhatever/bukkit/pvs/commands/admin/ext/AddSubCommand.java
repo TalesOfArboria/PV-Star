@@ -47,9 +47,14 @@ import org.bukkit.command.CommandSender;
 
 public class AddSubCommand extends AbstractPVCommand {
 
-    @Localizable static final String _EXT_NOT_FOUND = "An arena extension named '{0}' was not found.";
-    @Localizable static final String _FAILED =  "Failed to add extension '{0}' to arena '{1}'.";
-    @Localizable static final String _SUCCESS =  "Added extension '{0}' to arena '{1}'.";
+    @Localizable static final String _EXT_NOT_FOUND =
+            "An arena extension named '{0: extension name}' was not found.";
+
+    @Localizable static final String _FAILED =
+            "Failed to add extension '{0: extension name}' to arena '{1: arena name}'.";
+
+    @Localizable static final String _SUCCESS =
+            "Added extension '{0: extension name}' to arena '{1: arena name}'.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
