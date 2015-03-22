@@ -24,8 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs.listeners;
 
-import com.jcwhatever.nucleus.utils.language.Localizable;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.bukkit.pvs.Lang;
 import com.jcwhatever.bukkit.pvs.PVArenaPlayer;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
@@ -36,7 +34,10 @@ import com.jcwhatever.bukkit.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.bukkit.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.bukkit.pvs.api.utils.Msg;
+import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -47,6 +48,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -208,4 +210,28 @@ public class PlayerEventListener implements Listener {
         }
     }
 
+    /*
+     * Handle player immobilization
+     */
+    @EventHandler
+    private void onPlayerMove(PlayerMoveEvent event) {
+
+        PVArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        Arena arena = player.getArena();
+        if (arena == null)
+            return;
+
+        // player immobilization
+        if (player.isImmobilized()) {
+            Location fr = event.getFrom();
+            Location to = player.IMMOBILIZE_LOCATION;
+            to.setWorld(fr.getWorld());
+            to.setX(fr.getX());
+            to.setY(fr.getY());
+            to.setZ(fr.getZ());
+            to.setYaw(event.getTo().getYaw());
+            to.setPitch(event.getTo().getPitch());
+            event.setTo(to);
+        }
+    }
 }

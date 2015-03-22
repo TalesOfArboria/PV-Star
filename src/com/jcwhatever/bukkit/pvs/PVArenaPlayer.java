@@ -24,7 +24,6 @@
 
 package com.jcwhatever.bukkit.pvs;
 
-import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.bukkit.pvs.api.PVStarAPI;
 import com.jcwhatever.bukkit.pvs.api.arena.Arena;
 import com.jcwhatever.bukkit.pvs.api.arena.ArenaPlayer;
@@ -43,6 +42,7 @@ import com.jcwhatever.bukkit.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.bukkit.pvs.api.events.players.PlayerTeamPreChangeEvent;
+import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -53,7 +53,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -96,6 +95,8 @@ public class PVArenaPlayer implements ArenaPlayer {
     public static void dispose(ArenaPlayer player) {
         _playerMap.remove(player.getUniqueId());
     }
+
+    public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
 
     private Player _player;
     private boolean _isReady;
@@ -643,28 +644,6 @@ public class PVArenaPlayer implements ArenaPlayer {
                 if (player.getLives() < 1) {
                     arena.remove(player, RemovePlayerReason.LOSE);
                 }
-            }
-        }
-
-        /*
-         * Handle player immobilization
-         */
-        @EventHandler
-        private void onPlayerMove(PlayerMoveEvent event) {
-
-            ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
-            Arena arena = player.getArena();
-            if (arena == null)
-                return;
-
-            // player immobilization
-            if (player.isImmobilized()) {
-                Location fr = event.getFrom();
-                Location to = event.getTo();
-                to.setX(fr.getX());
-                to.setY(fr.getY());
-                to.setZ(fr.getZ());
-                event.setTo(to);
             }
         }
 
