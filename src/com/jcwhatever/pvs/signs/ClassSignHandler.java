@@ -24,17 +24,18 @@
 
 package com.jcwhatever.pvs.signs;
 
+import com.jcwhatever.nucleus.utils.MetaKey;
+import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
+import com.jcwhatever.nucleus.utils.kits.IKit;
+import com.jcwhatever.nucleus.utils.signs.SignContainer;
+import com.jcwhatever.nucleus.utils.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.text.TextColor;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
-import com.jcwhatever.nucleus.utils.kits.IKit;
-import com.jcwhatever.nucleus.utils.signs.SignContainer;
-import com.jcwhatever.nucleus.utils.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
-import com.jcwhatever.nucleus.utils.text.TextColor;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ import java.util.regex.Matcher;
 
 public class ClassSignHandler extends SignHandler {
 
-    private static final String PLAYER_CLASS_META = "ClassSignHandler.PLAYER_CLASS_META";
+    private static final MetaKey<String> PLAYER_CLASS_META = new MetaKey<>(String.class);
 
     /**
      * Constructor.

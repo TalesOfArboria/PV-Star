@@ -24,12 +24,13 @@
 
 package com.jcwhatever.pvs;
 
+import com.jcwhatever.nucleus.utils.MetaStore;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaPlayerGroup;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.bukkit.pvs.api.arena.PlayerMeta;
 import com.jcwhatever.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
@@ -42,7 +43,6 @@ import com.jcwhatever.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamPreChangeEvent;
-import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -66,7 +66,7 @@ import javax.annotation.Nullable;
 public class PVArenaPlayer implements ArenaPlayer {
 
     private static Map<UUID, PVArenaPlayer> _playerMap = new HashMap<>(100);
-    private static Map<UUID, PlayerMeta> _meta = new HashMap<UUID, PlayerMeta>(100);
+    private static Map<UUID, MetaStore> _meta = new HashMap<UUID, MetaStore>(100);
     private static BukkitPlayerListener _listener;
 
     /*
@@ -115,9 +115,9 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     // Meta data object to store extra meta. Disposed when
     // the player starts a new game.
-    private PlayerMeta _sessionMeta = new PVPlayerMeta();
+    private MetaStore _sessionMeta = new MetaStore();
 
-    private PlayerMeta _globalMeta = new PVPlayerMeta();
+    private MetaStore _globalMeta = new MetaStore();
 
     // private constructor
     private PVArenaPlayer(Player player) {
@@ -341,12 +341,12 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     @Override
-    public PlayerMeta getMeta(UUID arenaId) {
+    public MetaStore getMeta(UUID arenaId) {
         PreCon.notNull(arenaId);
 
-        PlayerMeta meta = _meta.get(arenaId);
+        MetaStore meta = _meta.get(arenaId);
         if (meta == null) {
-            meta = new PVPlayerMeta();
+            meta = new MetaStore();
             _meta.put(arenaId, meta);
         }
 
@@ -354,12 +354,12 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     @Override
-    public PlayerMeta getMeta() {
+    public MetaStore getMeta() {
         return _globalMeta;
     }
 
     @Override
-    public PlayerMeta getSessionMeta() {
+    public MetaStore getSessionMeta() {
         return _sessionMeta;
     }
 
@@ -385,7 +385,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         _isReady = false;
         _isImmobilized = false;
         _isInvulnerable = false;
-        _sessionMeta = new PVPlayerMeta();
+        _sessionMeta = new MetaStore();
         _lives = 0;
         _totalPoints = 0;
         _points = 0;
@@ -553,24 +553,5 @@ public class PVArenaPlayer implements ArenaPlayer {
             }
         }
 
-    }
-
-    /*
-     * Meta data storage for a player
-     */
-    public static class PVPlayerMeta implements PlayerMeta {
-
-        private Map<Object, Object> _metaMap = new HashMap<Object, Object>(50);
-
-        @Override
-        public void set(Object key, Object data) {
-            _metaMap.put(key, data);
-        }
-
-        @Override
-        public <T> T get(Object key) {
-            @SuppressWarnings("unchecked") T value = (T)_metaMap.get(key);
-            return value;
-        }
     }
 }
