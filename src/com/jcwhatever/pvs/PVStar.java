@@ -28,11 +28,16 @@ import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.commands.CommandDispatcher;
 import com.jcwhatever.nucleus.events.manager.EventManager;
-import com.jcwhatever.nucleus.utils.kits.KitManager;
+import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
+import com.jcwhatever.nucleus.scripting.IScriptApi;
+import com.jcwhatever.nucleus.scripting.SimpleScriptApi;
+import com.jcwhatever.nucleus.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.utils.Permissions;
-import com.jcwhatever.nucleus.utils.signs.SignManager;
-import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.kits.KitManager;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.signs.SignManager;
 import com.jcwhatever.pvs.api.IPVStar;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
@@ -64,6 +69,7 @@ import com.jcwhatever.pvs.stats.PVStatsManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 import java.util.List;
@@ -85,6 +91,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
     private BukkitEventForwarder _eventForwarder;
+    private IScriptApi _scriptApi;
     private boolean _isLoaded;
 
     @Override
@@ -240,8 +247,15 @@ public class PVStar extends NucleusPlugin implements IPVStar {
                 // arena event manager.
                 _eventForwarder = new BukkitEventForwarder(Nucleus.getEventManager());
 
+                _scriptApi = new SimpleScriptApi(PVStar.this, "pvstar", new IApiObjectCreator() {
+                    @Override
+                    public IDisposable create(Plugin plugin, IEvaluatedScript script) {
+                        return new PVStarScriptApi();
+                    }
+                });
+
                 // register script api
-                Nucleus.getScriptApiRepo().registerApiType(PVStarAPI.getPlugin(), PVStarScriptApi.class);
+                Nucleus.getScriptApiRepo().registerApi(_scriptApi);
 
                 Msg.info("Modules loaded.");
                 _isLoaded = true;
@@ -272,5 +286,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
             _eventForwarder.dispose();
             _eventForwarder = null;
         }
+
+        Nucleus.getScriptApiRepo().unregisterApi(_scriptApi);
     }
 }

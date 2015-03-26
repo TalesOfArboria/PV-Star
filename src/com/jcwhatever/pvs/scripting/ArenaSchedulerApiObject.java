@@ -24,15 +24,15 @@
 
 package com.jcwhatever.pvs.scripting;
 
+import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.nucleus.utils.scheduler.IScheduledTask;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.utils.ArenaScheduler;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.scheduler.IScheduledTask;
 
 /**
  * Script API to give access to the scheduler.
  */
-public class ArenaSchedulerApiObject implements IScriptApiObject {
+public class ArenaSchedulerApiObject implements IDisposable {
 
     private final Arena _arena;
 

@@ -24,10 +24,7 @@
 
 package com.jcwhatever.pvs.scripting;
 
-import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
-import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
-import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
@@ -36,7 +33,6 @@ import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,167 +40,143 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-@ScriptApiInfo(
-        variableName = "pvstar",
-        description = "Provides access to PV-Star scripting api."
-)
-public class PVStarScriptApi extends NucleusScriptApi {
+public class PVStarScriptApi implements IDisposable {
 
-    private static ApiObject _apiObject;
+    private Map<Arena, ArenaApiObject> _arenaApis = new HashMap<>(25);
+    private boolean _isDisposed;
 
-    /**
-     * Constructor.
-     *
-     * @param plugin The owning plugin
-     */
-    public PVStarScriptApi(Plugin plugin) {
-        super(plugin);
+    public final PlayersApiObject players = new PlayersApiObject();
 
-        _apiObject = new ApiObject();
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
     }
 
     @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        return _apiObject;
+    public void dispose() {
+
+        for (ArenaApiObject api : _arenaApis.values()) {
+            api.dispose();
+        }
+
+        _arenaApis.clear();
+
+        _isDisposed = true;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    /**
+     * Get an arena api by arena name.
+     *
+     * @param arenaName  The arena name.
+     *
+     * @return  Null if the arena is not found.
+     */
+    @Nullable
+    public ArenaApiObject getArenaApi(String arenaName) {
+        PreCon.notNullOrEmpty(arenaName);
 
-        private Map<Arena, ArenaApiObject> _arenaApis = new HashMap<>(25);
-        private boolean _isDisposed;
+        Arena arena = getArenaByName(arenaName);
+        if (arena == null)
+            return null;
 
-        public final PlayersApiObject players = new PlayersApiObject();
-
-        @Override
-        public boolean isDisposed() {
-            return _isDisposed;
-        }
-
-        @Override
-        public void dispose() {
-
-            for (ArenaApiObject api : _arenaApis.values()) {
-                api.dispose();
-            }
-
-            _arenaApis.clear();
-
-            _isDisposed = true;
-        }
-
-        /**
-         * Get an arena api by arena name.
-         *
-         * @param arenaName  The arena name.
-         *
-         * @return  Null if the arena is not found.
-         */
-        @Nullable
-        public ArenaApiObject getArenaApi(String arenaName) {
-            PreCon.notNullOrEmpty(arenaName);
-
-            Arena arena = getArenaByName(arenaName);
-            if (arena == null)
-                return null;
-
-            ArenaApiObject api = _arenaApis.get(arena);
-            if (api != null)
-                return api;
-
-            api = new ArenaApiObject(arena);
-            _arenaApis.put(arena, api);
-
+        ArenaApiObject api = _arenaApis.get(arena);
+        if (api != null)
             return api;
-        }
 
-        /**
-         * Get an arena object by name.
-         *
-         * @param name  The name of the arena.
-         */
-        @Nullable
-        public Arena getArenaByName(String name) {
-            PreCon.notNullOrEmpty(name);
+        api = new ArenaApiObject(arena);
+        _arenaApis.put(arena, api);
 
-            List<Arena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
-            return arenas.size() == 1 ? arenas.get(0) : null;
-        }
+        return api;
+    }
 
-        /**
-         * Get an arena object by unique id.
-         *
-         * @param arenaId  The id of the arena.
-         */
-        @Nullable
-        public Arena getArenaById(UUID arenaId) {
-            PreCon.notNull(arenaId);
+    /**
+     * Get an arena object by name.
+     *
+     * @param name  The name of the arena.
+     */
+    @Nullable
+    public Arena getArenaByName(String name) {
+        PreCon.notNullOrEmpty(name);
 
-            return PVStarAPI.getArenaManager().getArena(arenaId);
-        }
+        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
+        return arenas.size() == 1 ? arenas.get(0) : null;
+    }
 
-        /**
-         * Get an arena object by location.
-         *
-         * @param location  The location of the arena.
-         */
-        @Nullable
-        public Arena getArenaByLocation(Location location) {
-            PreCon.notNull(location);
+    /**
+     * Get an arena object by unique id.
+     *
+     * @param arenaId  The id of the arena.
+     */
+    @Nullable
+    public Arena getArenaById(UUID arenaId) {
+        PreCon.notNull(arenaId);
 
-            return PVStarAPI.getArenaManager().getArena(location);
-        }
+        return PVStarAPI.getArenaManager().getArena(arenaId);
+    }
 
-        /**
-         * Join a player to the specified arena.
-         *
-         * @param arena   The arena.
-         * @param player  The player.
-         *
-         * @return  True if player joined.
-         */
-        public boolean join(Arena arena, Object player) {
-            PreCon.notNull(arena);
-            PreCon.notNull(player);
+    /**
+     * Get an arena object by location.
+     *
+     * @param location  The location of the arena.
+     */
+    @Nullable
+    public Arena getArenaByLocation(Location location) {
+        PreCon.notNull(location);
 
-            ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        return PVStarAPI.getArenaManager().getArena(location);
+    }
 
-            return arena.join(p);
-        }
+    /**
+     * Join a player to the specified arena.
+     *
+     * @param arena   The arena.
+     * @param player  The player.
+     *
+     * @return  True if player joined.
+     */
+    public boolean join(Arena arena, Object player) {
+        PreCon.notNull(arena);
+        PreCon.notNull(player);
 
-        /**
-         * Remove a player from the specified arena.
-         *
-         * @param arena   The arena.
-         * @param player  The player.
-         *
-         * @return  True if player was removed.
-         */
-        public boolean leave(Arena arena, Object player) {
-            PreCon.notNull(arena);
-            PreCon.notNull(player);
+        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
-            ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        return arena.join(p);
+    }
 
-            return arena.remove(p, RemovePlayerReason.PLAYER_LEAVE);
-        }
+    /**
+     * Remove a player from the specified arena.
+     *
+     * @param arena   The arena.
+     * @param player  The player.
+     *
+     * @return  True if player was removed.
+     */
+    public boolean leave(Arena arena, Object player) {
+        PreCon.notNull(arena);
+        PreCon.notNull(player);
 
-        /**
-         * Forward the player from their current arena to the specified
-         * arena.
-         *
-         * @param toArena  The arena to forward to.
-         * @param player   The player to forward.
-         *
-         * @return  True if the player was forwarded.
-         */
-        public boolean forward(Arena toArena, Object player) {
-            PreCon.notNull(toArena);
-            PreCon.notNull(player);
+        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+
+        return arena.remove(p, RemovePlayerReason.PLAYER_LEAVE);
+    }
+
+    /**
+     * Forward the player from their current arena to the specified
+     * arena.
+     *
+     * @param toArena  The arena to forward to.
+     * @param player   The player to forward.
+     *
+     * @return  True if the player was forwarded.
+     */
+    public boolean forward(Arena toArena, Object player) {
+        PreCon.notNull(toArena);
+        PreCon.notNull(player);
 
 
-            ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
-            return p.getArena() != null &&
-                    p.getArena().getGameManager().forwardPlayer(p, toArena);
-        }
+        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        return p.getArena() != null &&
+                p.getArena().getGameManager().forwardPlayer(p, toArena);
     }
 }
+

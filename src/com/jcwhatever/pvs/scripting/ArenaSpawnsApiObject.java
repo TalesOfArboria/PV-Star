@@ -24,7 +24,7 @@
 
 package com.jcwhatever.pvs.scripting;
 
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 /**
  * Arena spawns sub API.
  */
-public class ArenaSpawnsApiObject implements IScriptApiObject {
+public class ArenaSpawnsApiObject implements IDisposable {
 
     private final Arena _arena;
 

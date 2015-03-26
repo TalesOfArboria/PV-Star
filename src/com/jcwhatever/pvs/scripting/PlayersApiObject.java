@@ -24,9 +24,9 @@
 
 package com.jcwhatever.pvs.scripting;
 
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 
@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
  * {@link org.bukkit.entity.Player} object and a PV-Star
  * {@link com.jcwhatever.pvs.api.arena.ArenaPlayer}.
  */
-public class PlayersApiObject implements IScriptApiObject {
+public class PlayersApiObject implements IDisposable {
 
     @Override
     public boolean isDisposed() {

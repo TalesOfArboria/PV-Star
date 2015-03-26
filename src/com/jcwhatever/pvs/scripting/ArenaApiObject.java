@@ -24,13 +24,13 @@
 
 package com.jcwhatever.pvs.scripting;
 
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.pvs.api.arena.Arena;
 
 /**
  *Arena sub API.
  */
-public class ArenaApiObject implements IScriptApiObject {
+public class ArenaApiObject implements IDisposable {
 
     private boolean _isDisposed;
 

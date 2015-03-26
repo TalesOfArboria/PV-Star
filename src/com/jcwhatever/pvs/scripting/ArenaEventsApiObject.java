@@ -24,22 +24,22 @@
 
 package com.jcwhatever.pvs.scripting;
 
-import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.nucleus.utils.observer.event.IEventSubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.IScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.ScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
+import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.Arena;
 
 import java.util.LinkedList;
 
 /**
  * Script API to attach events directly to an arena.
  */
-public class ArenaEventsApiObject implements IScriptApiObject {
+public class ArenaEventsApiObject implements IDisposable {
 
     private final LinkedList<IEventSubscriber> _subscribers = new LinkedList<>();
 
