@@ -44,7 +44,6 @@ import com.jcwhatever.pvs.api.utils.SpawnFilter;
 import com.jcwhatever.pvs.spawns.SpawnpointsCollection;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.events.manager.EventMethod;
-import com.jcwhatever.nucleus.storage.DataBatchOperation;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 
@@ -164,16 +163,9 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     @Override
     public void addSpawns(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
-
-        _dataNode.runBatchOperation(new DataBatchOperation() {
-
-            @Override
-            public void run(IDataNode dataNode) {
-                for (Spawnpoint spawn : spawns) {
-                    addSpawn(spawn);
-                }
-            }
-        });
+        for (Spawnpoint spawn : spawns) {
+            addSpawn(spawn);
+        }
     }
 
     @Override
@@ -200,14 +192,8 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     public void removeSpawns(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
-        _dataNode.runBatchOperation(new DataBatchOperation() {
-
-            @Override
-            public void run(IDataNode dataNode) {
-                for (Spawnpoint spawn : spawns)
-                    removeSpawn(spawn);
-            }
-        });
+        for (Spawnpoint spawn : spawns)
+            removeSpawn(spawn);
     }
 
     @Nullable
