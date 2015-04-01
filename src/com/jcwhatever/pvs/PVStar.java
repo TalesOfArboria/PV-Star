@@ -227,7 +227,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
                 _arenaManager.registerType(PVArena.class);
 
                 // load arenas, permissions batch for performance
-                Permissions.runBatchOperation(true, new Runnable() {
+                Permissions.runBatchOperation(new Runnable() {
 
                     @Override
                     public void run() {
