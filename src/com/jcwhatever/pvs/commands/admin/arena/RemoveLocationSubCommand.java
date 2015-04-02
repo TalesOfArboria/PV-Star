@@ -67,7 +67,7 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
         if (args.getString("current|select|info").equals("info")) {
 
             tell(sender, Lang.get(_VIEW_LOCATION, arena.getName()));
-            tell(sender, LocationUtils.locationToString(arena.getSettings().getRemoveLocation()));
+            tell(sender, LocationUtils.serialize(arena.getSettings().getRemoveLocation()));
         }
         else {
 
