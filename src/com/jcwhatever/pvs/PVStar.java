@@ -37,7 +37,6 @@ import com.jcwhatever.nucleus.utils.Permissions;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.kits.KitManager;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
-import com.jcwhatever.nucleus.utils.signs.SignManager;
 import com.jcwhatever.pvs.api.IPVStar;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
@@ -64,7 +63,10 @@ import com.jcwhatever.pvs.listeners.WorldEventListener;
 import com.jcwhatever.pvs.modules.ModuleLoader;
 import com.jcwhatever.pvs.points.PVPointsManager;
 import com.jcwhatever.pvs.scripting.PVStarScriptApi;
-import com.jcwhatever.pvs.signs.PVSignManager;
+import com.jcwhatever.pvs.signs.ClassSignHandler;
+import com.jcwhatever.pvs.signs.PveSignHandler;
+import com.jcwhatever.pvs.signs.PvpSignHandler;
+import com.jcwhatever.pvs.signs.ReadySignHandler;
 import com.jcwhatever.pvs.stats.PVStatsManager;
 
 import org.bukkit.ChatColor;
@@ -86,7 +88,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     private EventManager _eventManager;
     private StatsManager _statsManager;
     private PointsManager _pointsManager;
-    private SignManager _signManager;
     private PVExtensionTypeManager _extensionManager;
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
@@ -153,11 +154,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public SignManager getSignManager() {
-        return _signManager;
-    }
-
-    @Override
     public CommandDispatcher getCommandHandler() {
         return _commandHandler;
     }
@@ -195,13 +191,17 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     protected void onEnablePlugin() {
         PVStarAPI.setImplementation(this);
 
-        _signManager = new PVSignManager(this, getDataNode().getNode("signs"));
         _pointsManager = new PVPointsManager();
         _statsManager = new PVStatsManager();
         _eventManager = new EventManager(this);
         _extensionManager = new PVExtensionTypeManager();
         _spawnTypeManager = new PVSpawnTypeManager();
         _commandHelper = new PVCommandHelper();
+
+        Nucleus.getSignManager().registerHandler(new ClassSignHandler());
+        Nucleus.getSignManager().registerHandler(new PveSignHandler());
+        Nucleus.getSignManager().registerHandler(new PvpSignHandler());
+        Nucleus.getSignManager().registerHandler(new ReadySignHandler());
 
         // enable command
         _commandHandler = new PVCommandDispatcher(this);

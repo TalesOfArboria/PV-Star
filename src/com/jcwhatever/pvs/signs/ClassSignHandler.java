@@ -27,7 +27,7 @@ package com.jcwhatever.pvs.signs;
 import com.jcwhatever.nucleus.utils.MetaKey;
 import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
 import com.jcwhatever.nucleus.utils.kits.IKit;
-import com.jcwhatever.nucleus.utils.signs.SignContainer;
+import com.jcwhatever.nucleus.utils.signs.ISignContainer;
 import com.jcwhatever.nucleus.utils.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
@@ -74,12 +74,12 @@ public class ClassSignHandler extends SignHandler {
     }
 
     @Override
-    protected void onSignLoad(SignContainer sign) {
+    protected void onSignLoad(ISignContainer sign) {
         // do nothing
     }
 
     @Override
-    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player player, ISignContainer sign) {
         Arena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
         return arena != null
                 ? SignChangeResult.VALID
@@ -87,7 +87,7 @@ public class ClassSignHandler extends SignHandler {
     }
 
     @Override
-    protected SignClickResult onSignClick(Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
         ArenaPlayer player = PVArenaPlayer.get(p);
         Arena arena = player.getArena();
@@ -121,7 +121,7 @@ public class ClassSignHandler extends SignHandler {
     }
 
     @Override
-    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+    protected SignBreakResult onSignBreak(Player player, ISignContainer sign) {
         return SignBreakResult.ALLOW;
     }
 }

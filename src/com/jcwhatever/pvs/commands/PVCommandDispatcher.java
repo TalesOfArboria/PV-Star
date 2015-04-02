@@ -31,7 +31,6 @@ import com.jcwhatever.pvs.commands.admin.game.GameCommand;
 import com.jcwhatever.pvs.commands.admin.lobby.LobbyCommand;
 import com.jcwhatever.pvs.commands.admin.modules.ModulesCommand;
 import com.jcwhatever.pvs.commands.admin.points.PointsCommand;
-import com.jcwhatever.pvs.commands.admin.signs.SignsCommand;
 import com.jcwhatever.pvs.commands.admin.spawns.SpawnsCommand;
 import com.jcwhatever.pvs.commands.admin.spectator.SpectatorCommand;
 import com.jcwhatever.pvs.commands.users.JoinCommand;
@@ -62,7 +61,6 @@ public class PVCommandDispatcher extends CommandDispatcher {
         registerCommand(LobbyCommand.class);
         registerCommand(ModulesCommand.class);
         registerCommand(PointsCommand.class);
-        registerCommand(SignsCommand.class);
         registerCommand(SpawnsCommand.class);
         registerCommand(SpectatorCommand.class);
 

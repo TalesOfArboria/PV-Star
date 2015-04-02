@@ -24,6 +24,10 @@
 
 package com.jcwhatever.pvs.signs;
 
+import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.utils.signs.ISignContainer;
+import com.jcwhatever.nucleus.utils.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -31,10 +35,6 @@ import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.pvs.api.utils.Msg;
-import com.jcwhatever.nucleus.utils.signs.SignContainer;
-import com.jcwhatever.nucleus.utils.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.language.Localizable;
-import com.jcwhatever.nucleus.utils.text.TextColor;
 
 import org.bukkit.entity.Player;
 
@@ -71,12 +71,12 @@ public class ReadySignHandler extends SignHandler {
     }
 
     @Override
-    protected void onSignLoad(SignContainer sign) {
+    protected void onSignLoad(ISignContainer sign) {
         // do nothing
     }
 
     @Override
-    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player player, ISignContainer sign) {
 
         Arena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
         return arena != null
@@ -85,7 +85,7 @@ public class ReadySignHandler extends SignHandler {
     }
 
     @Override
-    protected SignClickResult onSignClick(Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
         ArenaPlayer player = PVArenaPlayer.get(p);
         Arena arena = player.getArena();
@@ -106,7 +106,7 @@ public class ReadySignHandler extends SignHandler {
     }
 
     @Override
-    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+    protected SignBreakResult onSignBreak(Player player, ISignContainer sign) {
         return SignBreakResult.ALLOW;
     }
 }

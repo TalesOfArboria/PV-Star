@@ -24,16 +24,16 @@
 
 package com.jcwhatever.pvs.signs;
 
+import com.jcwhatever.nucleus.utils.Scheduler;
+import com.jcwhatever.nucleus.utils.signs.ISignContainer;
+import com.jcwhatever.nucleus.utils.signs.SignHandler;
+import com.jcwhatever.nucleus.utils.text.TextColor;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
-import com.jcwhatever.nucleus.utils.signs.SignContainer;
-import com.jcwhatever.nucleus.utils.signs.SignHandler;
-import com.jcwhatever.nucleus.utils.Scheduler;
-import com.jcwhatever.nucleus.utils.text.TextColor;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
 
@@ -74,12 +74,12 @@ public class PveSignHandler extends SignHandler {
     }
 
     @Override
-    protected void onSignLoad(SignContainer sign) {
+    protected void onSignLoad(ISignContainer sign) {
         // do nothing
     }
 
     @Override
-    protected SignChangeResult onSignChange(Player p, SignContainer sign) {
+    protected SignChangeResult onSignChange(Player player, ISignContainer sign) {
         String rawName = sign.getRawLine(1);
 
         Matcher matcher = TextUtils.PATTERN_SPACE.matcher(rawName);
@@ -93,7 +93,7 @@ public class PveSignHandler extends SignHandler {
     }
 
     @Override
-    protected SignClickResult onSignClick(final Player p, SignContainer sign) {
+    protected SignClickResult onSignClick(final Player p, ISignContainer sign) {
         String rawName = sign.getRawLine(1);
         Matcher matcher = TextUtils.PATTERN_SPACE.matcher(rawName);
 
@@ -121,7 +121,7 @@ public class PveSignHandler extends SignHandler {
     }
 
     @Override
-    protected SignBreakResult onSignBreak(Player p, SignContainer sign) {
+    protected SignBreakResult onSignBreak(Player player, ISignContainer sign) {
         return SignBreakResult.ALLOW;
     }
 }
