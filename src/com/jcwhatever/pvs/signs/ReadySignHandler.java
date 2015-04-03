@@ -25,8 +25,8 @@
 package com.jcwhatever.pvs.signs;
 
 import com.jcwhatever.nucleus.utils.language.Localizable;
-import com.jcwhatever.nucleus.utils.signs.ISignContainer;
-import com.jcwhatever.nucleus.utils.signs.SignHandler;
+import com.jcwhatever.nucleus.managed.signs.ISignContainer;
+import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.PVArenaPlayer;
