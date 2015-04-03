@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.signs;
 
+import com.jcwhatever.nucleus.providers.kits.IKit;
+import com.jcwhatever.nucleus.utils.Kits;
 import com.jcwhatever.nucleus.utils.MetaKey;
 import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
-import com.jcwhatever.nucleus.utils.kits.IKit;
 import com.jcwhatever.nucleus.utils.signs.ISignContainer;
 import com.jcwhatever.nucleus.utils.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
@@ -105,7 +106,7 @@ public class ClassSignHandler extends SignHandler {
 
         if (currentClassName == null || !searchName.equals(currentClassName.toLowerCase())) {
 
-            IKit kit = PVStarAPI.getKitManager().get(searchName);
+            IKit kit = Kits.get(searchName);
 
             if (kit != null) {
                 InventoryUtils.clearAll(p.getInventory());

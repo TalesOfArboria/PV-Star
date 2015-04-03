@@ -35,7 +35,6 @@ import com.jcwhatever.nucleus.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.utils.Permissions;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.kits.KitManager;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.pvs.api.IPVStar;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -146,11 +145,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     @Override
     public PointsManager getPointsManager() {
         return _pointsManager;
-    }
-
-    @Override
-    public KitManager getKitManager() {
-        return Nucleus.getKitManager();
     }
 
     @Override
