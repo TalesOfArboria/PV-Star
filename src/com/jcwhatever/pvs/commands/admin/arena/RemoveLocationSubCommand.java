@@ -26,7 +26,7 @@ package com.jcwhatever.pvs.commands.admin.arena;
 
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.arguments.LocationResponse;
+import com.jcwhatever.nucleus.commands.arguments.ILocationHandler;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
@@ -71,10 +71,10 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
         }
         else {
 
-            args.getLocation(sender, "current|select|info", new LocationResponse() {
+            args.getLocation(sender, "current|select|info", new ILocationHandler() {
 
                 @Override
-                public void onLocationRetrieved(Player p, Location result) {
+                public void onLocationRetrieved(Player player, Location result) {
 
                     arena.getSettings().setRemoveLocation(result);
 
