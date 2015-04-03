@@ -24,7 +24,7 @@
 
 package com.jcwhatever.pvs;
 
-import com.jcwhatever.nucleus.utils.language.Localized;
+import com.jcwhatever.nucleus.managed.language.Localized;
 
 public class Lang {
 
@@ -36,6 +36,6 @@ public class Lang {
         if (pvStar == null)
             throw new RuntimeException("PV-Star instance not found.");
 
-        return pvStar.getLanguageManager().get(text, params);
+        return pvStar.getLanguageContext().get(text, params);
     }
 }

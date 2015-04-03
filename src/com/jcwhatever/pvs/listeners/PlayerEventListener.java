@@ -34,7 +34,7 @@ import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
-import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
