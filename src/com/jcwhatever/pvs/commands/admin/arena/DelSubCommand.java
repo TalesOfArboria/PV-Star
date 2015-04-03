@@ -27,15 +27,15 @@ package com.jcwhatever.pvs.commands.admin.arena;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
-import com.jcwhatever.nucleus.commands.response.CommandRequests;
+import com.jcwhatever.nucleus.commands.response.IRequestContext;
+import com.jcwhatever.nucleus.commands.response.ResponseRequestor;
 import com.jcwhatever.nucleus.commands.response.ResponseType;
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
-import com.jcwhatever.nucleus.utils.observer.result.Result;
 
 import org.bukkit.command.CommandSender;
 
@@ -75,23 +75,30 @@ public class DelSubCommand extends AbstractPVCommand {
 
         tell(sender, Lang.get(_CONFIRM, arena.getName()));
 
-        // get confirmation
-        CommandRequests.request(PVStarAPI.getPlugin(), "delete_" + arena.getName(), sender, ResponseType.CONFIRM)
-                .onSuccess(new FutureSubscriber<ResponseType>() {
-                    @Override
-                    public void on(Result<ResponseType> result) {
+        ResponseRequestor.contextBuilder(PVStarAPI.getPlugin())
+            .name("delete_" + arena.getName())
+            .timeout(15)
+            .response(ResponseType.CONFIRM)
+            .build(sender)
+            .onRespond(new UpdateSubscriber<IRequestContext>() {
+                @Override
+                public void on(IRequestContext context) {
 
-                        PVStarAPI.getArenaManager().removeArena(arena.getId());
+                    if (!ResponseType.CONFIRM.equals(context.getResponse()))
+                        return;
 
-                        Arena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
+                    PVStarAPI.getArenaManager().removeArena(arena.getId());
 
-                        if (selectedArena != null && selectedArena.equals(arena)) {
-                            PVStarAPI.getArenaManager().setSelectedArena(sender, null);
-                        }
+                    Arena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
 
-                        tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
+                    if (selectedArena != null && selectedArena.equals(arena)) {
+                        PVStarAPI.getArenaManager().setSelectedArena(sender, null);
                     }
-                });
+
+                    tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
+                }
+            })
+            .sendRequest();
     }
 }
 
