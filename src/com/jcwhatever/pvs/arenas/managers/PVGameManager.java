@@ -48,7 +48,7 @@ import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.settings.PVGameSettings;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.nucleus.utils.Scheduler;
+import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Explosive;

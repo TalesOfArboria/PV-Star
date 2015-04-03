@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.signs;
 
 import com.jcwhatever.nucleus.providers.kits.IKit;
-import com.jcwhatever.nucleus.utils.Kits;
+import com.jcwhatever.nucleus.providers.kits.Kits;
 import com.jcwhatever.nucleus.utils.MetaKey;
 import com.jcwhatever.nucleus.utils.inventory.InventoryUtils;
 import com.jcwhatever.nucleus.managed.signs.ISignContainer;
