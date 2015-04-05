@@ -39,7 +39,6 @@ public class GameCommand extends AbstractPVCommand {
 
         registerCommand(ArmorDamageSubCommand.class);
         registerCommand(AutostartCommand.class);
-        registerCommand(CleanupSubCommand.class);
         registerCommand(FallSubCommand.class);
         registerCommand(HungerSubCommand.class);
         registerCommand(LivesBehaviorSubCommand.class);

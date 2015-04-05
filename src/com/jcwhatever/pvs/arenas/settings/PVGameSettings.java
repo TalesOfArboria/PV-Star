@@ -102,11 +102,6 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
     }
 
     @Override
-    public boolean hasPostGameEntityCleanup() {
-        return _postGameCleanup;
-    }
-
-    @Override
     public void setPostGameEntityCleanup(boolean isEnabled) {
         _postGameCleanup = isEnabled;
 

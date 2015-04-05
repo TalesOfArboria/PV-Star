@@ -24,6 +24,9 @@
 
 package com.jcwhatever.pvs.arenas.managers;
 
+import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
@@ -46,14 +49,8 @@ import com.jcwhatever.pvs.api.events.team.TeamWinEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.settings.PVGameSettings;
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Explosive;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Projectile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -161,10 +158,6 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         getArena().getSpawnManager().clearReserved();
 
         _startTime = null;
-
-        if (getSettings().hasPostGameEntityCleanup()) {
-            getArena().getRegion().removeEntities(Projectile.class, Explosive.class, Item.class);
-        }
 
         getArena().getEventManager().call(this, new ArenaEndedEvent(getArena()));
 
