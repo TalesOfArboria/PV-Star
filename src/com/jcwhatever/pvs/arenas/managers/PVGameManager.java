@@ -161,6 +161,10 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
         getArena().getEventManager().call(this, new ArenaEndedEvent(getArena()));
 
+        for (ArenaPlayer player : getPlayers()) {
+            getArena().remove(player, RemovePlayerReason.GAME_ENDED);
+        }
+
         return true;
     }
 
