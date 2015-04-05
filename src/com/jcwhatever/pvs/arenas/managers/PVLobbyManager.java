@@ -29,6 +29,7 @@ import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.managers.GameManager;
 import com.jcwhatever.pvs.api.arena.managers.LobbyManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
@@ -43,7 +44,6 @@ import com.jcwhatever.pvs.arenas.settings.PVLobbySettings;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
-import java.util.List;
 import javax.annotation.Nullable;
 
 public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IEventListener {
@@ -72,14 +72,14 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
     @Override
     @Nullable
-    public List<ArenaPlayer> getReadyGroup() {
+    public ArenaPlayerCollection getReadyGroup() {
 
         return _players.getReadyGroup(getArena().getSettings().getMinPlayers());
     }
 
     @Override
     @Nullable
-    public List<ArenaPlayer> getNextGroup() {
+    public ArenaPlayerCollection getNextGroup() {
 
         int minSize = Math.max(
                 getArena().getSettings().getMinPlayers(),
@@ -130,7 +130,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         if (getSettings().hasAutoStart()) {
 
             // get the next group
-            List<ArenaPlayer> nextGroup = getNextGroup();
+            ArenaPlayerCollection nextGroup = getNextGroup();
 
             // group not found
             if (nextGroup == null || nextGroup.isEmpty())
@@ -161,7 +161,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
             return false;
 
         // check to see if there is a group that is ready
-        List<ArenaPlayer> ready = getArena().getLobbyManager().getReadyGroup();
+        ArenaPlayerCollection ready = getArena().getLobbyManager().getReadyGroup();
         if (ready == null || ready.isEmpty())
             return false;
 

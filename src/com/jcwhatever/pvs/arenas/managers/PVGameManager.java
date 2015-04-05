@@ -30,6 +30,7 @@ import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.managers.GameManager;
 import com.jcwhatever.pvs.api.arena.managers.LobbyManager;
@@ -48,15 +49,13 @@ import com.jcwhatever.pvs.api.events.team.TeamLoseEvent;
 import com.jcwhatever.pvs.api.events.team.TeamWinEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
 import com.jcwhatever.pvs.arenas.settings.PVGameSettings;
 
 import org.bukkit.Location;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import javax.annotation.Nullable;
 
 /**
@@ -117,12 +116,13 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         LobbyManager lobbyManager = getArena().getLobbyManager();
 
         // get default next group of players from lobby
-        List<ArenaPlayer> players = reason == ArenaStartReason.AUTO
+        ArenaPlayerCollection players = reason == ArenaStartReason.AUTO
                 ? lobbyManager.getNextGroup()
                 : lobbyManager.getReadyGroup();
 
         // create pre-start event
-        ArenaPreStartEvent preStartEvent = new ArenaPreStartEvent(getArena(), new HashSet<>(players), reason);
+        ArenaPreStartEvent preStartEvent = new ArenaPreStartEvent(getArena(),
+                new ArenaPlayerArrayList(players, true), reason);
 
         // call pre-start event
         if (getArena().getEventManager().call(this, preStartEvent).isCancelled())
@@ -230,7 +230,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (!isRunning())
             return false;
 
-        List<ArenaPlayer> winningTeam = new ArrayList<>(getPlayerCount());
+        ArenaPlayerCollection winningTeam = new ArenaPlayerArrayList(getPlayerCount());
 
         for (ArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
@@ -258,7 +258,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (!isRunning())
             return false;
 
-        List<ArenaPlayer> losingTeam = new ArrayList<>(getPlayerCount());
+        ArenaPlayerCollection losingTeam = new ArenaPlayerArrayList(getPlayerCount());
 
         for (ArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {

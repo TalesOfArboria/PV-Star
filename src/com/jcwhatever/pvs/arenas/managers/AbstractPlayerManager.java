@@ -29,6 +29,7 @@ import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaPlayersCollection;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.managers.PlayerManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
@@ -41,7 +42,6 @@ import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 
 import org.bukkit.Location;
 
-import java.util.List;
 import javax.annotation.Nullable;
 
 /**
@@ -74,7 +74,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final List<ArenaPlayer> getPlayers() {
+    public final ArenaPlayerCollection getPlayers() {
         return _players.getPlayers();
     }
 

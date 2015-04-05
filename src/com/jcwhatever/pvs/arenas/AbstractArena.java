@@ -39,6 +39,7 @@ import com.jcwhatever.pvs.PVArenaExtensionManager;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionManager;
@@ -319,7 +320,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
             maxPlayers = getSpawnManager().getLobbyOrGameSpawns().size();
         }
 
-        List<ArenaPlayer> players = getLobbyManager().getPlayers();
+        ArenaPlayerCollection players = getLobbyManager().getPlayers();
         if (players == null || players.isEmpty())
             return maxPlayers;
 

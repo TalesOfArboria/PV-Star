@@ -28,12 +28,12 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.arena.Arena;
 import com.jcwhatever.pvs.api.arena.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
 import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class PVArenaPlayerGroup implements ArenaPlayerGroup {
@@ -72,9 +72,9 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public List<ArenaPlayer> filterPlayers(Collection<ArenaPlayer> players) {
+    public ArenaPlayerCollection filterPlayers(Collection<ArenaPlayer> players) {
 
-        List<ArenaPlayer> result = new ArrayList<>(players.size());
+        ArenaPlayerCollection result = new ArenaPlayerArrayList(players.size());
 
         for (ArenaPlayer player : players) {
             if (!_players.contains(player))
@@ -126,15 +126,15 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public List<ArenaPlayer> getPlayers() {
-        return new ArrayList<>(_players);
+    public ArenaPlayerCollection getPlayers() {
+        return new ArenaPlayerArrayList(_players, false);
     }
 
     @Override
-    public List<ArenaPlayer> getPlayers(Arena arena) {
+    public ArenaPlayerCollection getPlayers(Arena arena) {
         PreCon.notNull(arena);
 
-        List<ArenaPlayer> result = new ArrayList<ArenaPlayer>(_players.size());
+        ArenaPlayerCollection result = new ArenaPlayerArrayList(_players.size());
 
         for (ArenaPlayer player : _players) {
             if (arena.equals(player.getArena())) {
