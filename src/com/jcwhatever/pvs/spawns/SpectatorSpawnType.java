@@ -34,7 +34,10 @@ import org.bukkit.entity.EntityType;
 import java.util.List;
 import javax.annotation.Nullable;
 
-
+/**
+ * A {@link SpawnType} that represents a spawn used to identify player
+ * spectator spawn locations.
+ */
 public class SpectatorSpawnType extends SpawnType {
 
     @Override
@@ -44,7 +47,7 @@ public class SpectatorSpawnType extends SpawnType {
 
     @Override
     public String getDescription() {
-        return "Represents a spawn used to identify spectator spawn in locations.";
+        return "Represents a spawn used to identify spectator spawn locations.";
     }
 
     @Override

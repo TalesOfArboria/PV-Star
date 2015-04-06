@@ -42,6 +42,9 @@ import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
 
+/**
+ * Abstract implementation to hold {@link Spawnpoint} elements.
+ */
 public abstract class SpawnpointsCollection {
 
     private final Map<String, Spawnpoint> _nameMap = new HashMap<>(25);

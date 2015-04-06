@@ -34,6 +34,10 @@ import org.bukkit.entity.EntityType;
 import java.util.List;
 import javax.annotation.Nullable;
 
+/**
+ * A {@link SpawnType} that represents a spawn used to identify player
+ * game spawn locations.
+ */
 public class GameSpawnType extends SpawnType {
 
     @Override

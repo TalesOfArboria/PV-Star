@@ -38,7 +38,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
- * Points manager implementation
+ * PVStar implementation of {@link IPointsManager}.
  */
 public class PVPointsManager implements IPointsManager {
 

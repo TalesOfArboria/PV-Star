@@ -40,6 +40,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * PVStar implementation of {@link IArenaStats}.
+ */
 public class PVArenaStats implements IArenaStats {
 
     private static Set<IDataNode> _nodesToSave = new HashSet<>(100);

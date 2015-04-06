@@ -43,6 +43,9 @@ import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
 
+/**
+ * Player "class" sign for distributing {@link IKit}.
+ */
 public class ClassSignHandler extends SignHandler {
 
     private static final MetaKey<String> PLAYER_CLASS_META = new MetaKey<>(String.class);

@@ -61,7 +61,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /**
- * Implementation of {@link IArenaPlayer}.
+ * PVStar implementation of {@link IArenaPlayer}.
  */
 public class PVArenaPlayer implements IArenaPlayer {
 
@@ -377,7 +377,8 @@ public class PVArenaPlayer implements IArenaPlayer {
     public void clearArena() {
 
         if (_arena != null && _arena.hasPlayer(this))
-            throw new RuntimeException("Cannot clear arena flag from player because the player is still in an arena.");
+            throw new IllegalStateException(
+                    "Cannot clear arena flag from player because the player is still in an arena.");
 
         _arena = null;
         _meta.clear();
@@ -398,7 +399,8 @@ public class PVArenaPlayer implements IArenaPlayer {
 
         // make sure player is actually in arena
         if (!arena.hasPlayer(this))
-            throw new RuntimeException("Cannot set current arena on player if the player is not in the arena.");
+            throw new IllegalStateException(
+                    "Cannot set current arena on player if the player is not in the arena.");
 
         _arena = arena;
         _lastJoin = new Date();
@@ -464,12 +466,14 @@ public class PVArenaPlayer implements IArenaPlayer {
         // null player group, check that player is not in any group
         if (playerGroup == null && _playerGroup != null) {
             if (_playerGroup.hasPlayer(this))
-                throw new RuntimeException("Cannot remove player group flag while a player is still in the group.");
+                throw new IllegalStateException(
+                        "Cannot remove player group flag while a player is still in the group.");
         }
 
         // make sure player is in group being set
         if (playerGroup != null && !playerGroup.hasPlayer(this)) {
-            throw new RuntimeException("Cannot set a player group flag for a group that the player is not in.");
+            throw new IllegalStateException(
+                    "Cannot set a player group flag for a group that the player is not in.");
         }
 
         _playerGroup = playerGroup;

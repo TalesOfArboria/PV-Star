@@ -42,6 +42,8 @@ import javax.annotation.Nullable;
 
 /**
  * Repository of arena extension types.
+ *
+ * <p>PVStar implementation of {@link IExtensionTypeManager}.</p>
  */
 public class PVExtensionTypeManager implements IExtensionTypeManager {
 

@@ -36,6 +36,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * PVStar implementation of {@link IArenaPlayerGroup}.
+ */
 public class PVArenaPlayerGroup implements IArenaPlayerGroup {
 
     private final Set<IArenaPlayer> _players = new HashSet<>(20);

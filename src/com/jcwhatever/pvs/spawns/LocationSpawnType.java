@@ -35,6 +35,10 @@ import org.bukkit.entity.EntityType;
 import java.util.List;
 import javax.annotation.Nullable;
 
+/**
+ * A {@link SpawnType} that represents a spawn used to identify
+ * a generic location.
+ */
 public class LocationSpawnType extends SpawnType {
 
     @Override

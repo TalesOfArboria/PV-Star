@@ -225,7 +225,8 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         for (IDataNode node : _dataNode) {
 
-            Class<? extends ArenaExtension> clazz = PVStarAPI.getExtensionManager().getExtensionClass(node.getName());
+            Class<? extends ArenaExtension> clazz =
+                    PVStarAPI.getExtensionManager().getExtensionClass(node.getName());
             if (clazz == null)
                 continue;
 

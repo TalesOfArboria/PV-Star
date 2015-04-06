@@ -54,7 +54,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /**
- * Arena Manager implementation.
+ * PVStar implementation of {@link IArenaManager}.
  */
 public class PVArenaManager implements IArenaManager {
 

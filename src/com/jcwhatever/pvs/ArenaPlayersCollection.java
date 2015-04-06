@@ -74,8 +74,8 @@ public class ArenaPlayersCollection {
     /**
      * Add player as well as the players group, if any.
      *
-     * If the player is not in a group, the player is added to one
-     * or a new one is created.
+     * <p>If the player is not in a group, the player is added to one
+     * or a new one is created.</p>
      */
     public void addPlayer(IArenaPlayer player) {
         PreCon.notNull(player);
@@ -109,8 +109,8 @@ public class ArenaPlayersCollection {
     /**
      * Remove a player from the collection.
      *
-     * If no more player from the removed players group are present, the players
-     * group is also removed.
+     * <p>If no more player from the removed players group are present, the players
+     * group is also removed.</p>
      */
     public void removePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         PreCon.notNull(player);
@@ -178,9 +178,8 @@ public class ArenaPlayersCollection {
     }
 
     /**
-     * Get all players in the group collection who are
-     * in the PlayerGroups arena and who are on the specified
-     * team.
+     * Get all players in the group collection who are in the PlayerGroups arena
+     * and who are on the specified team.
      */
     public List<IArenaPlayer> getTeam(ArenaTeam team) {
         PreCon.notNull(team);
@@ -196,8 +195,7 @@ public class ArenaPlayersCollection {
     }
 
     /**
-     * Get all teams in the group collection who are
-     * in the PlayerGroups arena.
+     * Get all teams in the group collection who are in the PlayerGroups arena.
      */
     public Set<ArenaTeam> getTeams() {
         Set<ArenaTeam> results = EnumSet.noneOf(ArenaTeam.class);
@@ -209,8 +207,8 @@ public class ArenaPlayersCollection {
     }
 
     /**
-     * Get a group from the group collection whose players
-     * that are in the PlayerGroups arena are all ready.
+     * Get a group from the group collection whose players that are in the PlayerGroups
+     * arena are all ready.
      */
     public IArenaPlayerCollection getReadyGroup() {
 
@@ -228,9 +226,8 @@ public class ArenaPlayersCollection {
     }
 
     /**
-     * Get a group from the group collection whose players
-     * that are in the PlayerGroups arena are all ready and
-     * the number of ready players meets a minimum amount.
+     * Get a group from the group collection whose players that are in the PlayerGroups
+     * arena are all ready and the number of ready players meets a minimum amount.
      */
     public IArenaPlayerCollection getReadyGroup(int minGroupSize) {
 
@@ -250,17 +247,15 @@ public class ArenaPlayersCollection {
     }
 
     /**
-     * Determine if there is a group that is ready to
-     * play in the PlayerGroups arena.
+     * Determine if there is a group that is ready to play in the PlayerGroups arena.
      */
     public boolean hasReadyGroup() {
         return getReadyGroup() != null;
     }
 
     /**
-     * Determine if there is a group that is ready to
-     * play in the PlayerGroups arena who meets the minimum
-     * size specified.
+     * Determine if there is a group that is ready to play in the PlayerGroups
+     * arena who meets the minimum size specified.
      */
     public boolean hasReadyGroup(int minGroupSize) {
         return getReadyGroup(minGroupSize) != null;
@@ -270,7 +265,7 @@ public class ArenaPlayersCollection {
      * Get the next group to play in the PlayerGroups arena who has players in the lobby
      * and meets the minimum number specified.
      *
-     * If no valid group is found, a ready group that does not meet the minimum amount is selected.
+     * <p>If no valid group is found, a ready group that does not meet the minimum amount is selected.</p>
      */
     @Nullable
     public IArenaPlayerCollection getNextGroup(int minSize) {

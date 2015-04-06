@@ -40,6 +40,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.regex.Matcher;
 
+/**
+ * An sign players can click to join an arena.
+ */
 public class PveSignHandler extends SignHandler {
 
     /**

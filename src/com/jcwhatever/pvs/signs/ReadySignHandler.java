@@ -38,6 +38,9 @@ import com.jcwhatever.pvs.api.utils.Msg;
 
 import org.bukkit.entity.Player;
 
+/**
+ * A sign players can click to declare themselves ready to play.
+ */
 public class ReadySignHandler extends SignHandler {
 
     @Localizable static final String _VOTE_NOT_IN_GAME = "You're not in a game.";

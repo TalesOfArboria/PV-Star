@@ -36,6 +36,9 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+/**
+ * PV-Star implementation of {@link PVStatsManager}.
+ */
 public class PVStatsManager implements IStatsManager {
 
     private final Map<UUID, IArenaStats> _arenaStats = new HashMap<>(50);

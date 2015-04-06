@@ -24,6 +24,9 @@
 
 package com.jcwhatever.pvs.signs;
 
+/**
+ * A sign players can click to join an arena.
+ */
 public class PvpSignHandler extends PveSignHandler {
 
     public PvpSignHandler() {

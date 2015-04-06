@@ -45,7 +45,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * Manages types of spawns
+ * PVStar implementation of {@link ISpawnTypeManager}.
  */
 public class PVSpawnTypeManager implements ISpawnTypeManager {
 
