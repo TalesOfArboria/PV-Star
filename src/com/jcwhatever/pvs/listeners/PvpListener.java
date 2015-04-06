@@ -28,7 +28,7 @@ import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
 import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
 import com.jcwhatever.nucleus.utils.materials.Materials;
 
@@ -65,7 +65,7 @@ public class PvpListener implements Listener {
         if (inHand == null)
             return;
 
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -95,7 +95,7 @@ public class PvpListener implements Listener {
             return;
 
         // get settings
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -134,7 +134,7 @@ public class PvpListener implements Listener {
 
 
         // get settings
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 

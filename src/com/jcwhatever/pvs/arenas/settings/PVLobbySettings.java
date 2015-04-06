@@ -25,12 +25,12 @@
 package com.jcwhatever.pvs.arenas.settings;
 
 import com.jcwhatever.pvs.api.arena.IArena;
-import com.jcwhatever.pvs.api.arena.settings.ILobbyManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.ILobbySettings;
 
 /**
  *Lobby manager settings implementation.
  */
-public class PVLobbySettings extends AbstractPlayerSettings implements ILobbyManagerSettings {
+public class PVLobbySettings extends AbstractPlayerSettings implements ILobbySettings {
 
     private boolean _isImmobilized = false;
     private int _minAutoStartPlayers = 4;

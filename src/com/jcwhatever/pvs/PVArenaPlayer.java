@@ -38,8 +38,8 @@ import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.pvs.api.arena.options.PointsBehavior;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.pvs.api.arena.options.TeamChangeReason;
-import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamChangedEvent;
@@ -329,7 +329,7 @@ public class PVArenaPlayer implements IArenaPlayer {
 
     @Override
     @Nullable
-    public IPlayerManagerSettings getRelatedSettings() {
+    public IPlayerSettings getRelatedSettings() {
         if (_arena == null)
             return null;
 
@@ -413,7 +413,7 @@ public class PVArenaPlayer implements IArenaPlayer {
         _arena = arena;
         _lastJoin = new Date();
 
-        IGameManagerSettings settings = arena.getGameManager().getSettings();
+        IGameSettings settings = arena.getGameManager().getSettings();
         LivesBehavior livesBehavior = settings.getLivesBehavior();
         PointsBehavior pointsBehavior = settings.getPointsBehavior();
 

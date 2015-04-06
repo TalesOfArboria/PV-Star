@@ -27,12 +27,12 @@ package com.jcwhatever.pvs.arenas.settings;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.pvs.api.arena.options.PointsBehavior;
-import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
 
 /**
  * Game manager settings implementation.
  */
-public class PVGameSettings extends AbstractPlayerSettings implements IGameManagerSettings {
+public class PVGameSettings extends AbstractPlayerSettings implements IGameSettings {
 
     private int _lives = 1;
     private int _points = 0;

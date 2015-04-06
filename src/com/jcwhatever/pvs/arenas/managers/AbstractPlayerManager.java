@@ -34,7 +34,7 @@ import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerAddedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreAddEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveEvent;
@@ -137,7 +137,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
 
             // reserve spawnpoint
             if (event.getSpawnLocation() instanceof Spawnpoint) {
-                IPlayerManagerSettings settings = player.getRelatedSettings();
+                IPlayerSettings settings = player.getRelatedSettings();
                 if (settings != null && settings.isPlayerSpawnsReserved()) {
 
                     getArena().getSpawnManager().reserveSpawn(player, (Spawnpoint)event.getSpawnLocation());

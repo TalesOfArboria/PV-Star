@@ -35,7 +35,7 @@ import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.ILobbyManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.ILobbySettings;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
 
 public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManager, IEventListener {
 
-    private final ILobbyManagerSettings _settings;
+    private final ILobbySettings _settings;
 
     /*
      * Constructor.
@@ -66,7 +66,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
     }
 
     @Override
-    public ILobbyManagerSettings getSettings() {
+    public ILobbySettings getSettings() {
         return _settings;
     }
 

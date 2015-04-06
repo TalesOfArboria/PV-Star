@@ -30,7 +30,7 @@ import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -180,7 +180,7 @@ public class PlayerEventListener implements Listener {
             return;
 
         // get settings
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -208,7 +208,7 @@ public class PlayerEventListener implements Listener {
         if (arena == null)
             return;
 
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 

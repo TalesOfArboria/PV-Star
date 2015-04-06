@@ -29,7 +29,7 @@ import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.managers.ISpectatorManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.ISpectatorManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.ISpectatorSettings;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.settings.PVSpectatorSettings;
@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  */
 public class PVSpectatorManager extends AbstractPlayerManager implements ISpectatorManager {
 
-    private final ISpectatorManagerSettings _settings;
+    private final ISpectatorSettings _settings;
 
     /*
      * Constructor.
@@ -55,7 +55,7 @@ public class PVSpectatorManager extends AbstractPlayerManager implements ISpecta
     }
 
     @Override
-    public ISpectatorManagerSettings getSettings() {
+    public ISpectatorSettings getSettings() {
         return _settings;
     }
 

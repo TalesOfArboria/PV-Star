@@ -37,7 +37,7 @@ import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
 import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.pvs.api.events.ArenaStartedEvent;
@@ -63,7 +63,7 @@ import javax.annotation.Nullable;
  */
 public class PVGameManager extends AbstractPlayerManager implements IGameManager {
 
-    private final IGameManagerSettings _settings;
+    private final IGameSettings _settings;
 
     private boolean _isRunning = false;
     private boolean _isGameOver = false;
@@ -95,7 +95,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
     }
 
     @Override
-    public IGameManagerSettings getSettings() {
+    public IGameSettings getSettings() {
         return _settings;
     }
 

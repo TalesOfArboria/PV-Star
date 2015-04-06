@@ -28,7 +28,7 @@ import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Chest;
@@ -64,7 +64,7 @@ public class SharingListener implements Listener {
         if (arena == null)
             return;
 
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -112,7 +112,7 @@ public class SharingListener implements Listener {
         if (arena == null)
             return;
 
-        IPlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
