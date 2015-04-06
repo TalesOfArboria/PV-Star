@@ -107,7 +107,7 @@ public class PVArenaPlayerGroup implements IArenaPlayerGroup {
         if (currentGroup != null)
             currentGroup.removePlayer(player);
 
-        player.setPlayerGroup(this);
+        ((PVArenaPlayer)player).setPlayerGroup(this);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class PVArenaPlayerGroup implements IArenaPlayerGroup {
         if (currentGroup != null && !currentGroup.equals(this))
             return;
 
-        player.setPlayerGroup(null);
+        ((PVArenaPlayer)player).setPlayerGroup(null);
     }
 
     @Override

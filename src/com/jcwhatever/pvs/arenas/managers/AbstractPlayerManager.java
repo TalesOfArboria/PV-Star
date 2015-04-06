@@ -27,6 +27,7 @@ package com.jcwhatever.pvs.arenas.managers;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaPlayersCollection;
+import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
@@ -103,7 +104,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
 
     @Override
     public final boolean addPlayer(IArenaPlayer player, AddPlayerReason reason) {
-        PreCon.notNull(player);
+        PreCon.isValid(player instanceof PVArenaPlayer);
         PreCon.notNull(reason);
 
         if (_players.hasPlayer(player))
@@ -121,7 +122,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
 
         _players.addPlayer(player);
 
-        player.setCurrentArena(_arena);
+        ((PVArenaPlayer)player).setCurrentArena(_arena);
 
         Location spawnPoint = onAddPlayer(player, reason);
 
@@ -155,7 +156,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
 
     @Override
     public final Result<Location> removePlayer(IArenaPlayer player, RemovePlayerReason reason) {
-        PreCon.notNull(player);
+        PreCon.isValid(player instanceof PVArenaPlayer);
         PreCon.notNull(reason);
 
         // make sure the manager has the player
@@ -181,7 +182,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
         // clear arena if leaving
         if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
 
-            player.clearArena();
+            ((PVArenaPlayer)player).clearArena();
         }
 
         Location restoreLocation = onRemovePlayer(player, reason);

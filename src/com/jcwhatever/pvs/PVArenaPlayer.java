@@ -374,7 +374,6 @@ public class PVArenaPlayer implements IArenaPlayer {
         _player.damage(_player.getMaxHealth());
     }
 
-    @Override
     public void clearArena() {
 
         if (_arena != null && _arena.hasPlayer(this))
@@ -391,7 +390,6 @@ public class PVArenaPlayer implements IArenaPlayer {
         _points = 0;
     }
 
-    @Override
     public void setCurrentArena(IArena arena) {
         PreCon.notNull(arena);
 
@@ -461,7 +459,6 @@ public class PVArenaPlayer implements IArenaPlayer {
         }
     }
 
-    @Override
     public void setPlayerGroup(@Nullable IArenaPlayerGroup playerGroup) {
 
         // null player group, check that player is not in any group
