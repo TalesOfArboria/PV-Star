@@ -273,7 +273,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         Collection<PVStarModule> modules = _moduleLoader.getModules();
 
         for (PVStarModule module : modules) {
-            module.dispose();
+            ModuleLoader.REGISTRATION.dispose(module);
         }
 
         if (_eventForwarder != null) {

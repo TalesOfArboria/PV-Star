@@ -33,6 +33,7 @@ import com.jcwhatever.nucleus.utils.file.FileUtils.DirectoryTraversal;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.modules.PVStarModule;
+import com.jcwhatever.pvs.api.modules.PVStarModule.PVStarModuleRegistration;
 import com.jcwhatever.pvs.api.utils.Msg;
 
 import org.bukkit.Bukkit;
@@ -60,6 +61,7 @@ import javax.annotation.Nullable;
 public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
     private static final String MODULE_MANIFEST = "module.yml";
+    public static final PVStarModuleRegistration REGISTRATION = new PVStarModuleRegistration();
 
     private final File _moduleFolder;
     private final Map<String, PVModuleInfo> _moduleInfo = new HashMap<>(50);
@@ -126,7 +128,7 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
 
                 // Enable Modules
                 for (PVStarModule module : getModules()) {
-                    module.enable();
+                    REGISTRATION.enable(module);
                     Msg.info("[{0}] Module enabled.", module.getName());
                 }
 
@@ -186,14 +188,19 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     @Override
     protected PVStarModule instantiateModule(Class<PVStarModule> clazz) {
 
+        PVStarModule module;
+
         try {
             Constructor<PVStarModule> constructor = clazz.getConstructor();
-            return constructor.newInstance();
+            module = constructor.newInstance();
         } catch (NoSuchMethodException | InvocationTargetException |
                 InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
         }
+
+        module.register(REGISTRATION);
+        return module;
     }
 
     @Override

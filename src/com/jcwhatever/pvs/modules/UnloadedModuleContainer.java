@@ -160,7 +160,7 @@ public class UnloadedModuleContainer implements INamedInsensitive, IDependantRun
 
     @Override
     public void run() {
-        _module.preEnable();
+        ModuleLoader.REGISTRATION.preEnable(_module);
     }
 
     private boolean isBukkitDependsLoaded(Set<String> depends) {
