@@ -28,6 +28,7 @@ import com.google.common.collect.MapMaker;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.providers.permissions.IPermission;
 import com.jcwhatever.nucleus.providers.permissions.Permissions;
 import com.jcwhatever.nucleus.storage.DataPath;
@@ -79,7 +80,7 @@ import java.util.UUID;
 /**
  * Abstract arena implementation.
  */
-public abstract class AbstractArena implements IArena, IEventListener {
+public abstract class AbstractArena implements IArena, IDisposable, IEventListener {
 
     @Localizable static final String _JOIN_LEAVE_CURRENT_FIRST =
             "You must leave the current arena before you can join another.";
@@ -127,7 +128,6 @@ public abstract class AbstractArena implements IArena, IEventListener {
 
     private boolean _isDisposed;
 
-    @Override
     public final void init(UUID id, String name) {
         PreCon.notNull(id);
         PreCon.notNullOrEmpty(name);

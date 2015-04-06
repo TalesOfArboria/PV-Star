@@ -24,21 +24,22 @@
 
 package com.jcwhatever.pvs;
 
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.providers.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.managers.IArenaManager;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.ArenaTypeInfo;
-import com.jcwhatever.nucleus.Nucleus;
-import com.jcwhatever.nucleus.storage.DataPath;
-import com.jcwhatever.nucleus.providers.storage.DataStorage;
-import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
+import com.jcwhatever.pvs.arenas.PVArena;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -219,10 +220,6 @@ public class PVArenaManager implements IArenaManager {
 
         typeName = typeName.toLowerCase();
 
-        IArena arena = loadArena("arena");
-        if (arena == null)
-            return null;
-
         UUID arenaId = UUID.randomUUID();
 
         IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
@@ -230,6 +227,7 @@ public class PVArenaManager implements IArenaManager {
         arenaNode.set("type", "arena");
         arenaNode.save();
 
+        PVArena arena = new PVArena();
         _arenaIdMap.put(arenaId, arena);
 
         arena.init(arenaId, arenaName);
@@ -244,7 +242,7 @@ public class PVArenaManager implements IArenaManager {
     public boolean removeArena(UUID arenaId) {
         PreCon.notNull(arenaId);
 
-        IArena arena = _arenaIdMap.remove(arenaId);
+        PVArena arena = (PVArena)_arenaIdMap.remove(arenaId);
         if (arena == null)
             return false;
 
@@ -291,36 +289,12 @@ public class PVArenaManager implements IArenaManager {
                 continue;
             }
 
-            IArena arena = loadArena(typeName);
-            if (arena == null) {
-                Msg.warning("Failed to load arena named '{0}' of type '{1}'.", arenaName, typeName);
-                continue;
-            }
-
+            PVArena arena = new PVArena();
             arena.init(arenaId, arenaName);
 
             _pvStar.getPointsManager().loadTypes(arena);
 
             _arenaIdMap.put(arenaId, arena);
         }
-    }
-
-    @Nullable
-    private IArena loadArena(String typeName) {
-
-        Class<? extends IArena> arenaClass = _arenaTypes.get(typeName.toLowerCase());
-        if (arenaClass == null)
-            return null;
-
-        IArena arena;
-
-        try {
-            arena = arenaClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return arena;
     }
 }
