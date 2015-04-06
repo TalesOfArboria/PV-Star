@@ -25,10 +25,10 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.pvs.PVArenaPlayer;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
 import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
 import com.jcwhatever.nucleus.utils.materials.Materials;
 
@@ -56,8 +56,8 @@ public class PvpListener implements Listener {
         if (!event.hasBlock())
             return;
 
-        ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
-        Arena arena = player.getArena();
+        IArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
@@ -65,7 +65,7 @@ public class PvpListener implements Listener {
         if (inHand == null)
             return;
 
-        PlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerManagerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -88,14 +88,14 @@ public class PvpListener implements Listener {
 
         Player p = (Player)entity;
 
-        ArenaPlayer player =PVArenaPlayer.get(p);
+        IArenaPlayer player =PVArenaPlayer.get(p);
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
         // get settings
-        PlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerManagerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -119,9 +119,9 @@ public class PvpListener implements Listener {
 
         Player p = (Player)entity;
 
-        ArenaPlayer player =PVArenaPlayer.get(p);
+        IArenaPlayer player =PVArenaPlayer.get(p);
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
@@ -134,7 +134,7 @@ public class PvpListener implements Listener {
 
 
         // get settings
-        PlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerManagerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -166,7 +166,7 @@ public class PvpListener implements Listener {
                 // check for team pvp
                 else //noinspection ConstantConditions
                     if (!settings.isTeamPvpEnabled()) {  // always true, statement is for readability
-                    ArenaPlayer damagerPlayer =PVArenaPlayer.get(p);
+                    IArenaPlayer damagerPlayer =PVArenaPlayer.get(p);
 
                     // prevent team pvp
                     if (damagerPlayer.getTeam() == player.getTeam() &&

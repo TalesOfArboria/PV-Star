@@ -31,8 +31,8 @@ import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 
 import org.bukkit.entity.Player;
@@ -86,7 +86,7 @@ public class PveSignHandler extends SignHandler {
 
         String arenaName = matcher.replaceAll("_");
 
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
         return arenas.size() == 1 ?
                 SignChangeResult.VALID :
                 SignChangeResult.INVALID;
@@ -99,18 +99,18 @@ public class PveSignHandler extends SignHandler {
 
         final String arenaName = matcher.replaceAll("_");
 
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
         if (arenas.size() != 1)
             return SignClickResult.IGNORED;
 
-        final Arena arena =  arenas.get(0);
+        final IArena arena =  arenas.get(0);
 
         Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
 
-                ArenaPlayer player = PVArenaPlayer.get(p);
+                IArenaPlayer player = PVArenaPlayer.get(p);
 
                 // Add player to arena
                 arena.join(player);

@@ -24,18 +24,18 @@
 
 package com.jcwhatever.pvs.arenas.settings;
 
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.settings.SpectatorManagerSettings;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.settings.ISpectatorManagerSettings;
 
 /**
  * Spectator manager settings implementation.
  */
-public class PVSpectatorSettings extends AbstractPlayerSettings implements SpectatorManagerSettings {
+public class PVSpectatorSettings extends AbstractPlayerSettings implements ISpectatorManagerSettings {
 
     /*
      * Constructor.
      */
-    public PVSpectatorSettings(Arena arena) {
+    public PVSpectatorSettings(IArena arena) {
         super(arena, "spectators");
     }
 }

@@ -30,10 +30,10 @@ import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.ArenaTeam.TeamDistributor;
-import com.jcwhatever.pvs.api.arena.managers.TeamManager;
+import com.jcwhatever.pvs.api.arena.managers.ITeamManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.pvs.api.arena.options.TeamChangeReason;
@@ -53,9 +53,9 @@ import javax.annotation.Nullable;
 /**
  * Team manager implementation.
  */
-public class PVTeamManager implements TeamManager, IEventListener {
+public class PVTeamManager implements ITeamManager, IEventListener {
 
-    private final Arena _arena;
+    private final IArena _arena;
     private final ElementCounter<ArenaTeam> _teams = new ElementCounter<>(RemovalPolicy.REMOVE);
     private final ElementCounter<ArenaTeam> _currentTeams = new ElementCounter<>(RemovalPolicy.REMOVE);
 
@@ -64,7 +64,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     /*
      * Constructor.
      */
-    public PVTeamManager (Arena arena) {
+    public PVTeamManager (IArena arena) {
         _arena = arena;
 
         arena.getEventManager().register(this);
@@ -78,7 +78,7 @@ public class PVTeamManager implements TeamManager, IEventListener {
     }
 
     @Override
-    public Arena getArena() {
+    public IArena getArena() {
         return _arena;
     }
 

@@ -30,7 +30,7 @@ import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
@@ -59,7 +59,7 @@ public class AddSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
         if (arena == null)
             return; // finish
 

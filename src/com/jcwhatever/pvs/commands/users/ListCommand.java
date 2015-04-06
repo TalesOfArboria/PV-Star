@@ -33,8 +33,8 @@ import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.settings.ArenaSettings;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.utils.Msg;
 
@@ -69,15 +69,15 @@ public class ListCommand extends AbstractPVCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArenas();
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArenas();
 
 
         String disabledLabel = Lang.get(_LABEL_DISABLED);
         String hiddenLabel = Lang.get(_LABEL_HIDDEN);
 
-        for (Arena arena : arenas) {
+        for (IArena arena : arenas) {
 
-            ArenaSettings settings = arena.getSettings();
+            IArenaSettings settings = arena.getSettings();
 
             if (settings.isEnabled() && settings.isVisible())
                 pagin.add(arena.getName(), settings.getTypeDisplayName());

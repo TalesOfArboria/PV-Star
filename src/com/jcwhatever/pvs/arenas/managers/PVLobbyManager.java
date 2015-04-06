@@ -27,15 +27,15 @@ package com.jcwhatever.pvs.arenas.managers;
 import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.managers.GameManager;
-import com.jcwhatever.pvs.api.arena.managers.LobbyManager;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
+import com.jcwhatever.pvs.api.arena.managers.IGameManager;
+import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.LobbyManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.ILobbyManagerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -46,14 +46,14 @@ import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
 
-public class PVLobbyManager extends AbstractPlayerManager implements LobbyManager, IEventListener {
+public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManager, IEventListener {
 
-    private final LobbyManagerSettings _settings;
+    private final ILobbyManagerSettings _settings;
 
     /*
      * Constructor.
      */
-    public PVLobbyManager(Arena arena) {
+    public PVLobbyManager(IArena arena) {
         super(arena);
 
         _settings = new PVLobbySettings(arena);
@@ -66,20 +66,20 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
     }
 
     @Override
-    public LobbyManagerSettings getSettings() {
+    public ILobbyManagerSettings getSettings() {
         return _settings;
     }
 
     @Override
     @Nullable
-    public ArenaPlayerCollection getReadyGroup() {
+    public IArenaPlayerCollection getReadyGroup() {
 
         return _players.getReadyGroup(getArena().getSettings().getMinPlayers());
     }
 
     @Override
     @Nullable
-    public ArenaPlayerCollection getNextGroup() {
+    public IArenaPlayerCollection getNextGroup() {
 
         int minSize = Math.max(
                 getArena().getSettings().getMinPlayers(),
@@ -90,23 +90,23 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
 
     @Nullable
     @Override
-    protected Location onRespawnPlayer(ArenaPlayer player) {
+    protected Location onRespawnPlayer(IArenaPlayer player) {
         return getSpawnLocation(player);
     }
 
     @Override
-    protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
+    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
 
         return getSpawnLocation(player);
     }
 
     @Override
-    protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         // do nothing
     }
 
     @Override
-    protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         return getArena().getSettings().getRemoveLocation();
     }
 
@@ -115,7 +115,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
      */
     private boolean tryAutoStart() {
 
-        GameManager gameManager = getArena().getGameManager();
+        IGameManager gameManager = getArena().getGameManager();
 
         // make sure game isn't already running
         if (gameManager.isRunning())
@@ -130,7 +130,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
         if (getSettings().hasAutoStart()) {
 
             // get the next group
-            ArenaPlayerCollection nextGroup = getNextGroup();
+            IArenaPlayerCollection nextGroup = getNextGroup();
 
             // group not found
             if (nextGroup == null || nextGroup.isEmpty())
@@ -161,7 +161,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
             return false;
 
         // check to see if there is a group that is ready
-        ArenaPlayerCollection ready = getArena().getLobbyManager().getReadyGroup();
+        IArenaPlayerCollection ready = getArena().getLobbyManager().getReadyGroup();
         if (ready == null || ready.isEmpty())
             return false;
 
@@ -177,7 +177,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements LobbyManage
      * Get a lobby spawn location for a player.
      */
     @Nullable
-    private Location getSpawnLocation(ArenaPlayer player) {
+    private Location getSpawnLocation(IArenaPlayer player) {
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomLobbySpawn(player.getTeam());
         if (spawnpoint == null) {
 

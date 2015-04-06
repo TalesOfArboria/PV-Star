@@ -30,8 +30,8 @@ import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.PVArenaPlayer;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
@@ -58,9 +58,9 @@ public class LeaveCommand extends AbstractPVCommand {
         CommandException.checkNotConsole(this, sender);
 
         Player p = (Player)sender;
-        ArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = PVArenaPlayer.get(p);
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
 
         if (arena == null) {
 

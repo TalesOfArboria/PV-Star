@@ -26,16 +26,16 @@ package com.jcwhatever.pvs.arenas.settings;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
 
 /**
  * Basic settings for player manager settings implementations
  */
-public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
+public abstract class AbstractPlayerSettings implements IPlayerManagerSettings {
 
     private final IDataNode _dataNode;
-    private final Arena _arena;
+    private final IArena _arena;
 
     private boolean _isPvpEnabled = true;
     private boolean _isTeamPvpEnabled = false;
@@ -51,7 +51,7 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
      * Constructor.
      * nodeName is the name of the settings node.
      */
-    public AbstractPlayerSettings(Arena arena, String nodeName) {
+    public AbstractPlayerSettings(IArena arena, String nodeName) {
         PreCon.notNull(arena);
         PreCon.notNullOrEmpty(nodeName);
 
@@ -70,7 +70,7 @@ public abstract class AbstractPlayerSettings implements PlayerManagerSettings {
     }
 
     @Override
-    public final Arena getArena() {
+    public final IArena getArena() {
         return _arena;
     }
 

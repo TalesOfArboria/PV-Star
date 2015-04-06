@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.spawns;
 
 
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 
 import org.bukkit.Location;
@@ -70,7 +70,7 @@ public class LobbySpawnType extends SpawnType {
 
     @Nullable
     @Override
-    public List<Entity> spawn(Arena arena, Location location, int count) {
+    public List<Entity> spawn(IArena arena, Location location, int count) {
         return null;
     }
 }

@@ -28,8 +28,8 @@ import com.jcwhatever.nucleus.events.manager.AbstractBukkitForwarder;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.utils.Msg;
 
 import org.bukkit.Location;
@@ -142,7 +142,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
     }
 
     private <T extends Event> void callEvent(Player p, T event) {
-        ArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = PVArenaPlayer.get(p);
         if (player.getArena() == null)
             return;
 
@@ -160,7 +160,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
 
     private <T extends Event> void callEvent(Location location, T event) {
 
-        Arena arena = PVStarAPI.getArenaManager().getArena(location);
+        IArena arena = PVStarAPI.getArenaManager().getArena(location);
         if (arena == null)
             return;
 

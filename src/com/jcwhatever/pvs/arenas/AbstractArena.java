@@ -37,21 +37,21 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.PVArenaExtensionManager;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionManager;
-import com.jcwhatever.pvs.api.arena.managers.GameManager;
-import com.jcwhatever.pvs.api.arena.managers.LobbyManager;
-import com.jcwhatever.pvs.api.arena.managers.PlayerManager;
-import com.jcwhatever.pvs.api.arena.managers.SpawnManager;
-import com.jcwhatever.pvs.api.arena.managers.SpectatorManager;
-import com.jcwhatever.pvs.api.arena.managers.TeamManager;
+import com.jcwhatever.pvs.api.arena.managers.IGameManager;
+import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
+import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
+import com.jcwhatever.pvs.api.arena.managers.ISpawnManager;
+import com.jcwhatever.pvs.api.arena.managers.ISpectatorManager;
+import com.jcwhatever.pvs.api.arena.managers.ITeamManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.ArenaSettings;
+import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.events.ArenaBusyEvent;
 import com.jcwhatever.pvs.api.events.ArenaDisposeEvent;
 import com.jcwhatever.pvs.api.events.ArenaIdleEvent;
@@ -79,7 +79,7 @@ import java.util.UUID;
 /**
  * Abstract arena implementation.
  */
-public abstract class AbstractArena implements Arena, IEventListener {
+public abstract class AbstractArena implements IArena, IEventListener {
 
     @Localizable static final String _JOIN_LEAVE_CURRENT_FIRST =
             "You must leave the current arena before you can join another.";
@@ -117,13 +117,13 @@ public abstract class AbstractArena implements Arena, IEventListener {
     private Map<String, IDataNode> _nodeMap =
             new MapMaker().weakValues().concurrencyLevel(1).initialCapacity(20).makeMap();
 
-    private GameManager _gameManager;
-    private LobbyManager _lobbyManager;
-    private SpectatorManager _spectatorManager;
-    private SpawnManager _spawnManager;
-    private TeamManager _teamManager;
+    private IGameManager _gameManager;
+    private ILobbyManager _lobbyManager;
+    private ISpectatorManager _spectatorManager;
+    private ISpawnManager _spawnManager;
+    private ITeamManager _teamManager;
     private ArenaExtensionManager _extensionManager;
-    private ArenaSettings _arenaSettings;
+    private IArenaSettings _arenaSettings;
 
     private boolean _isDisposed;
 
@@ -194,27 +194,27 @@ public abstract class AbstractArena implements Arena, IEventListener {
     }
 
     @Override
-    public final LobbyManager getLobbyManager() {
+    public final ILobbyManager getLobbyManager() {
         return _lobbyManager;
     }
 
     @Override
-    public final GameManager getGameManager() {
+    public final IGameManager getGameManager() {
         return _gameManager;
     }
 
     @Override
-    public final SpectatorManager getSpectatorManager() {
+    public final ISpectatorManager getSpectatorManager() {
         return _spectatorManager;
     }
 
     @Override
-    public final TeamManager getTeamManager() {
+    public final ITeamManager getTeamManager() {
         return _teamManager;
     }
 
     @Override
-    public final SpawnManager getSpawnManager() {
+    public final ISpawnManager getSpawnManager() {
         return _spawnManager;
     }
 
@@ -224,7 +224,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     }
 
     @Override
-    public final ArenaSettings getSettings() {
+    public final IArenaSettings getSettings() {
         return _arenaSettings;
     }
 
@@ -320,7 +320,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
             maxPlayers = getSpawnManager().getLobbyOrGameSpawns().size();
         }
 
-        ArenaPlayerCollection players = getLobbyManager().getPlayers();
+        IArenaPlayerCollection players = getLobbyManager().getPlayers();
         if (players == null || players.isEmpty())
             return maxPlayers;
 
@@ -328,7 +328,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     }
 
     @Override
-    public boolean hasPlayer(ArenaPlayer player) {
+    public boolean hasPlayer(IArenaPlayer player) {
 
         return getLobbyManager().hasPlayer(player) ||
                getGameManager().hasPlayer(player) ||
@@ -344,7 +344,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     }
 
     @Override
-    public boolean join(ArenaPlayer player) {
+    public boolean join(IArenaPlayer player) {
         PreCon.notNull(player);
 
         PlayerPreJoinEvent preJoinEvent = new PlayerPreJoinEvent(this, player);
@@ -372,7 +372,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
     }
 
     @Override
-    public boolean remove(ArenaPlayer player, RemovePlayerReason reason) {
+    public boolean remove(IArenaPlayer player, RemovePlayerReason reason) {
         PreCon.notNull(player);
         PreCon.notNull(reason);
         PreCon.isValid(reason != RemovePlayerReason.ARENA_RELATION_CHANGE);
@@ -382,7 +382,7 @@ public abstract class AbstractArena implements Arena, IEventListener {
         if (reason == RemovePlayerReason.LOSE && !getGameManager().hasPlayer(player))
             return false;
 
-        PlayerManager manager = player.getRelatedManager();
+        IPlayerManager manager = player.getRelatedManager();
         if (manager != null && manager.hasPlayer(player)) {
 
             Result<Location> restoreLocation = manager.removePlayer(player, reason);

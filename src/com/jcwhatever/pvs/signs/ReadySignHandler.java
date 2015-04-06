@@ -31,8 +31,8 @@ import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.pvs.api.utils.Msg;
 
@@ -78,7 +78,7 @@ public class ReadySignHandler extends SignHandler {
     @Override
     protected SignChangeResult onSignChange(Player player, ISignContainer sign) {
 
-        Arena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
+        IArena arena = PVStarAPI.getArenaManager().getArena(sign.getLocation());
         return arena != null
                 ? SignChangeResult.VALID
                 : SignChangeResult.INVALID;
@@ -87,8 +87,8 @@ public class ReadySignHandler extends SignHandler {
     @Override
     protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
-        ArenaPlayer player = PVArenaPlayer.get(p);
-        Arena arena = player.getArena();
+        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArena arena = player.getArena();
 
         if (arena == null || player.getArenaRelation() == ArenaPlayerRelation.SPECTATOR) {
             Msg.tellError(p, Lang.get(_VOTE_NOT_IN_GAME));

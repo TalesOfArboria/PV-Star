@@ -32,7 +32,7 @@ import com.jcwhatever.nucleus.utils.observer.script.IScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.ScriptEventSubscriber;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 
 import java.util.LinkedList;
 
@@ -43,10 +43,10 @@ public class ArenaEventsApiObject implements IDisposable {
 
     private final LinkedList<IEventSubscriber> _subscribers = new LinkedList<>();
 
-    private final Arena _arena;
+    private final IArena _arena;
     private boolean _isDisposed;
 
-    ArenaEventsApiObject(Arena arena) {
+    ArenaEventsApiObject(IArena arena) {
         _arena = arena;
     }
 

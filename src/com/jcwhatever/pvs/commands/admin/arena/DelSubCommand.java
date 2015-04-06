@@ -34,7 +34,7 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
@@ -64,7 +64,7 @@ public class DelSubCommand extends AbstractPVCommand {
 
         String arenaName = args.getString("arenaName");
 
-        final Arena arena = getArena(sender, arenaName);
+        final IArena arena = getArena(sender, arenaName);
         if (arena == null)
             return; // finish
 
@@ -89,7 +89,7 @@ public class DelSubCommand extends AbstractPVCommand {
 
                     PVStarAPI.getArenaManager().removeArena(arena.getId());
 
-                    Arena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
+                    IArena selectedArena = PVStarAPI.getArenaManager().getSelectedArena(sender);
 
                     if (selectedArena != null && selectedArena.equals(arena)) {
                         PVStarAPI.getArenaManager().setSelectedArena(sender, null);

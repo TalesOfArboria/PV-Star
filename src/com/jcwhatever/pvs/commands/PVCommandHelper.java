@@ -30,12 +30,12 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand.ArenaReturned;
-import com.jcwhatever.pvs.api.commands.CommandHelper;
+import com.jcwhatever.pvs.api.commands.ICommandHelper;
 import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
 
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class PVCommandHelper extends CommandUtils implements CommandHelper {
+public class PVCommandHelper extends CommandUtils implements ICommandHelper {
 
     @Localizable static final String _ARENA_NOT_SELECTED =
             "No arena selected. Use '/{plugin-command} arena select <arenaName>' first.";
@@ -78,8 +78,8 @@ public class PVCommandHelper extends CommandUtils implements CommandHelper {
      */
     @Nullable
     @Override
-    public Arena getSelectedArena(CommandSender sender, ArenaReturned returned) {
-        Arena arena;
+    public IArena getSelectedArena(CommandSender sender, ArenaReturned returned) {
+        IArena arena;
 
         if ((arena = PVStarAPI.getArenaManager().getSelectedArena(sender)) == null) {
             tellError(sender, Lang.get(_ARENA_NOT_SELECTED));
@@ -104,7 +104,7 @@ public class PVCommandHelper extends CommandUtils implements CommandHelper {
      */
     @Override
     @Nullable
-    public <T extends ArenaExtension> T getExtension(CommandSender sender, Arena arena, Class<T> clazz) {
+    public <T extends ArenaExtension> T getExtension(CommandSender sender, IArena arena, Class<T> clazz) {
 
         T extension = arena.getExtensionManager().get(clazz);
         if (extension == null) {
@@ -128,11 +128,11 @@ public class PVCommandHelper extends CommandUtils implements CommandHelper {
      */
     @Override
     @Nullable
-    public Arena getArena(CommandSender sender, String arenaName) {
+    public IArena getArena(CommandSender sender, String arenaName) {
         PreCon.notNull(sender);
         PreCon.notNullOrEmpty(arenaName);
 
-        List<Arena> results = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
+        List<IArena> results = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
 
         if (results.size() == 0) {
             results = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.BEGINS_WITH);
@@ -159,10 +159,10 @@ public class PVCommandHelper extends CommandUtils implements CommandHelper {
      */
     @Override
     @Nullable
-    public Arena getArena(String arenaName) {
+    public IArena getArena(String arenaName) {
         PreCon.notNullOrEmpty(arenaName);
 
-        List<Arena> results = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
+        List<IArena> results = PVStarAPI.getArenaManager().getArena(arenaName, NameMatchMode.CASE_INSENSITIVE);
 
         if (results.size() == 1) {
             return results.get(0);
@@ -190,7 +190,7 @@ public class PVCommandHelper extends CommandUtils implements CommandHelper {
 
         for (String arenaName : arenaNamesArray) {
 
-            Arena arena = getArena(sender, arenaName);
+            IArena arena = getArena(sender, arenaName);
             if (arena == null)
                 return null;
 

@@ -31,7 +31,7 @@ import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.stats.ArenaStats;
+import com.jcwhatever.pvs.api.stats.IArenaStats;
 import com.jcwhatever.pvs.api.stats.StatTracking.StatTrackType;
 import com.jcwhatever.pvs.api.stats.StatType;
 
@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class PVArenaStats implements ArenaStats {
+public class PVArenaStats implements IArenaStats {
 
     private static Set<IDataNode> _nodesToSave = new HashSet<>(100);
 

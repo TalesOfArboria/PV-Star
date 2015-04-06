@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -40,9 +40,9 @@ import java.util.List;
 public class WorldEventListener implements Listener {
 
     private void onWorldLoad(WorldLoadEvent event) {
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArenas();
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArenas();
 
-        for (Arena arena : arenas) {
+        for (IArena arena : arenas) {
             if (arena.getRegion().isDefined()) {
                 String worldName = arena.getRegion().getWorldName();
 
@@ -56,9 +56,9 @@ public class WorldEventListener implements Listener {
     }
 
     private void onWorldUnload(WorldUnloadEvent event) {
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArenas();
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArenas();
 
-        for (Arena arena : arenas) {
+        for (IArena arena : arenas) {
             if (arena.getRegion().isDefined()) {
                 World world = arena.getRegion().getWorld();
 

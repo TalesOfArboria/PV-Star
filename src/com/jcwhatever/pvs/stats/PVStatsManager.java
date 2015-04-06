@@ -25,9 +25,9 @@
 package com.jcwhatever.pvs.stats;
 
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.pvs.api.stats.ArenaStats;
+import com.jcwhatever.pvs.api.stats.IArenaStats;
 import com.jcwhatever.pvs.api.stats.StatType;
-import com.jcwhatever.pvs.api.stats.StatsManager;
+import com.jcwhatever.pvs.api.stats.IStatsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,9 +36,9 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class PVStatsManager implements StatsManager {
+public class PVStatsManager implements IStatsManager {
 
-    private final Map<UUID, ArenaStats> _arenaStats = new HashMap<>(50);
+    private final Map<UUID, IArenaStats> _arenaStats = new HashMap<>(50);
     private final Map<String, StatType> _typeMap = new HashMap<>(25);
 
     @Override
@@ -62,9 +62,9 @@ public class PVStatsManager implements StatsManager {
     }
 
     @Override
-    public ArenaStats getArenaStats(UUID arenaId) {
+    public IArenaStats getArenaStats(UUID arenaId) {
 
-        ArenaStats stats = _arenaStats.get(arenaId);
+        IArenaStats stats = _arenaStats.get(arenaId);
         if (stats == null) {
 
             stats = new PVArenaStats(arenaId);

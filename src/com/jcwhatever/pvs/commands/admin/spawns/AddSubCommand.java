@@ -31,7 +31,7 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
@@ -91,7 +91,7 @@ public class AddSubCommand extends AbstractPVCommand {
 
         Player p = (Player)sender;
 
-        Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
         if (arena == null)
             return; // finish
 

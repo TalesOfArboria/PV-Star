@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,7 +44,7 @@ public class MobEventListener implements Listener {
         if (event.getSpawnReason() != SpawnReason.NATURAL)
             return;
 
-        Arena arena = PVStarAPI.getArenaManager().getArena(event.getLocation());
+        IArena arena = PVStarAPI.getArenaManager().getArena(event.getLocation());
         if (arena == null)
             return;
 

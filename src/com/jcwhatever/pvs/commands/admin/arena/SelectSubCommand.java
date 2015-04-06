@@ -30,7 +30,7 @@ import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
@@ -54,7 +54,7 @@ public class SelectSubCommand extends AbstractPVCommand {
 
         String arenaName = args.getString("arenaName");
 
-        Arena arena = getArena(sender, arenaName);
+        IArena arena = getArena(sender, arenaName);
         if (arena == null)
             return; // finish
 

@@ -27,13 +27,13 @@ package com.jcwhatever.pvs.arenas.managers;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaPlayersCollection;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.managers.PlayerManager;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
+import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerAddedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreAddEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveEvent;
@@ -48,15 +48,15 @@ import javax.annotation.Nullable;
  * Abstract implementation for player managers
  * (Lobby, Game and Spectator Manager)
  */
-public abstract class AbstractPlayerManager implements PlayerManager {
+public abstract class AbstractPlayerManager implements IPlayerManager {
 
-    private final Arena _arena;
+    private final IArena _arena;
     protected final ArenaPlayersCollection _players;
 
     /*
      * Constructor.
      */
-    public AbstractPlayerManager(Arena arena) {
+    public AbstractPlayerManager(IArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;
@@ -64,7 +64,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final Arena getArena() {
+    public final IArena getArena() {
         return _arena;
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final ArenaPlayerCollection getPlayers() {
+    public final IArenaPlayerCollection getPlayers() {
         return _players.getPlayers();
     }
 
@@ -84,12 +84,12 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final boolean hasPlayer(ArenaPlayer player) {
+    public final boolean hasPlayer(IArenaPlayer player) {
         return _players.hasPlayer(player);
     }
 
     @Override
-    public final boolean respawnPlayer(ArenaPlayer player) {
+    public final boolean respawnPlayer(IArenaPlayer player) {
         if (!_players.hasPlayer(player))
             return false;
 
@@ -102,7 +102,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final boolean addPlayer(ArenaPlayer player, AddPlayerReason reason) {
+    public final boolean addPlayer(IArenaPlayer player, AddPlayerReason reason) {
         PreCon.notNull(player);
         PreCon.notNull(reason);
 
@@ -136,7 +136,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
 
             // reserve spawnpoint
             if (event.getSpawnLocation() instanceof Spawnpoint) {
-                PlayerManagerSettings settings = player.getRelatedSettings();
+                IPlayerManagerSettings settings = player.getRelatedSettings();
                 if (settings != null && settings.isPlayerSpawnsReserved()) {
 
                     getArena().getSpawnManager().reserveSpawn(player, (Spawnpoint)event.getSpawnLocation());
@@ -154,7 +154,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
     }
 
     @Override
-    public final Result<Location> removePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    public final Result<Location> removePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         PreCon.notNull(player);
         PreCon.notNull(reason);
 
@@ -202,7 +202,7 @@ public abstract class AbstractPlayerManager implements PlayerManager {
      * setting respawn location.
      */
     @Nullable
-    protected abstract Location onRespawnPlayer(ArenaPlayer player);
+    protected abstract Location onRespawnPlayer(IArenaPlayer player);
 
     /**
      * Invoked when a player is added.
@@ -210,12 +210,12 @@ public abstract class AbstractPlayerManager implements PlayerManager {
      * @return  The location the player should be spawned at or null to prevent teleport.
      */
     @Nullable
-    protected abstract Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason);
+    protected abstract Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason);
 
     /**
      * Invoked before a player is removed.
      */
-    protected abstract void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);
+    protected abstract void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason);
 
     /**
      * Invoked after a player is removed.
@@ -224,5 +224,5 @@ public abstract class AbstractPlayerManager implements PlayerManager {
      * prevent teleport.
      */
     @Nullable
-    protected abstract Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason);
+    protected abstract Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason);
 }

@@ -25,10 +25,10 @@
 package com.jcwhatever.pvs.arenas.managers;
 
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.managers.SpawnManager;
+import com.jcwhatever.pvs.api.arena.managers.ISpawnManager;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.pvs.api.events.players.PlayerRemovedEvent;
 import com.jcwhatever.pvs.api.events.spawns.ClearReservedSpawnsEvent;
@@ -60,16 +60,16 @@ import javax.annotation.Nullable;
 /**
  * Spawn manager implementation.
  */
-public class PVSpawnManager extends SpawnpointsCollection implements SpawnManager, IEventListener {
+public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManager, IEventListener {
 
     private final Map<UUID, Spawnpoint> _reserved = new HashMap<>(15); // key is player id
-    private final Arena _arena;
+    private final IArena _arena;
     private final IDataNode _dataNode;
 
     /*
      * Constructor.
      */
-    public PVSpawnManager(Arena arena) {
+    public PVSpawnManager(IArena arena) {
         _arena = arena;
         _dataNode = arena.getDataNode("spawns");
 
@@ -84,7 +84,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     }
 
     @Override
-    public Arena getArena() {
+    public IArena getArena() {
         return _arena;
     }
 
@@ -198,7 +198,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
 
     @Nullable
     @Override
-    public Spawnpoint getRandomSpawn(ArenaPlayer player) {
+    public Spawnpoint getRandomSpawn(IArenaPlayer player) {
 
         switch (player.getArenaRelation()) {
 
@@ -250,7 +250,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     }
 
     @Override
-    public void reserveSpawn(ArenaPlayer player, Spawnpoint spawn) {
+    public void reserveSpawn(IArenaPlayer player, Spawnpoint spawn) {
         PreCon.notNull(player);
         PreCon.notNull(spawn);
 
@@ -263,7 +263,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements SpawnManage
     }
 
     @Override
-    public void unreserveSpawn(ArenaPlayer player) {
+    public void unreserveSpawn(IArenaPlayer player) {
         PreCon.notNull(player);
 
         Spawnpoint spawn = _reserved.remove(player.getUniqueId());

@@ -27,8 +27,8 @@ package com.jcwhatever.pvs.scripting;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.stats.ArenaStats;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.stats.IArenaStats;
 import com.jcwhatever.pvs.api.stats.StatType;
 
 import javax.annotation.Nullable;
@@ -38,12 +38,12 @@ import javax.annotation.Nullable;
  */
 public class ArenaStatsApiObject implements IDisposable {
 
-    private Arena _arena;
+    private IArena _arena;
 
     /**
      * Constructor.
      */
-    ArenaStatsApiObject(Arena arena) {
+    ArenaStatsApiObject(IArena arena) {
         _arena = arena;
     }
 
@@ -75,7 +75,7 @@ public class ArenaStatsApiObject implements IDisposable {
     /**
      * Get statistics for the arena.
      */
-    public ArenaStats getStats() {
+    public IArenaStats getStats() {
         return PVStarAPI.getStatsManager().getArenaStats(_arena.getId());
     }
 }

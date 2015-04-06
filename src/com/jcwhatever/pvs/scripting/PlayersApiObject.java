@@ -28,14 +28,14 @@ import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 
 import org.bukkit.entity.Player;
 
 /**
  * Script API to help convert between a Bukkit
  * {@link org.bukkit.entity.Player} object and a PV-Star
- * {@link com.jcwhatever.pvs.api.arena.ArenaPlayer}.
+ * {@link IArenaPlayer}.
  */
 public class PlayersApiObject implements IDisposable {
 
@@ -51,11 +51,11 @@ public class PlayersApiObject implements IDisposable {
 
     /**
      * Ensure an object that represents a player is returned
-     * as an {@link ArenaPlayer} object.
+     * as an {@link IArenaPlayer} object.
      *
      * @param player  The player object.
      */
-    public ArenaPlayer get(Object player) {
+    public IArenaPlayer get(Object player) {
         PreCon.notNull(player);
 
         return PVStarAPI.getArenaPlayer(player);

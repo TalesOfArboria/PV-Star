@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
-import com.jcwhatever.pvs.api.arena.extensions.ExtensionTypeManager;
+import com.jcwhatever.pvs.api.arena.extensions.IExtensionTypeManager;
 import com.jcwhatever.pvs.api.exceptions.InvalidNameException;
 import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 /**
  * Repository of arena extension types.
  */
-public class PVExtensionTypeManager implements ExtensionTypeManager {
+public class PVExtensionTypeManager implements IExtensionTypeManager {
 
     private static final Map<String, Class<? extends ArenaExtension>> _extensionMap = new HashMap<>(25);
 

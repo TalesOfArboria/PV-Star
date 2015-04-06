@@ -26,8 +26,8 @@ package com.jcwhatever.pvs.arenas.settings;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.settings.ArenaSettings;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreEnableEvent;
@@ -39,11 +39,11 @@ import javax.annotation.Nullable;
 /**
  * Arena settings implementation.
  */
-public class PVArenaSettings implements ArenaSettings {
+public class PVArenaSettings implements IArenaSettings {
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
-    private final Arena _arena;
+    private final IArena _arena;
     private final IDataNode _dataNode;
 
     private int _minPlayers = 2;
@@ -57,7 +57,7 @@ public class PVArenaSettings implements ArenaSettings {
     /*
      * Constructor.
      */
-    public PVArenaSettings(Arena arena) {
+    public PVArenaSettings(IArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;

@@ -26,7 +26,7 @@ package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
-import com.jcwhatever.pvs.api.spawns.SpawnTypeManager;
+import com.jcwhatever.pvs.api.spawns.ISpawnTypeManager;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.spawns.GameSpawnType;
 import com.jcwhatever.pvs.spawns.LobbySpawnType;
@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 /**
  * Manages types of spawns
  */
-public class PVSpawnTypeManager implements SpawnTypeManager {
+public class PVSpawnTypeManager implements ISpawnTypeManager {
 
     public final LobbySpawnType _lobbySpawn = new LobbySpawnType();
     public final GameSpawnType _gameSpawn = new GameSpawnType();

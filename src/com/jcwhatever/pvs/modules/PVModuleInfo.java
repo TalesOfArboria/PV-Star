@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.utils.modules.YamlModuleInfo;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.modules.ModuleInfo;
+import com.jcwhatever.pvs.api.modules.IModuleInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +41,7 @@ import java.util.jar.JarFile;
  * Loads and stores module info from module.yml file
  * in the module jar file.
  */
-public class PVModuleInfo extends YamlModuleInfo implements ModuleInfo {
+public class PVModuleInfo extends YamlModuleInfo implements IModuleInfo {
 
     private String _version;
     private String _moduleClassName;

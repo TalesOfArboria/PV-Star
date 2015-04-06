@@ -32,9 +32,9 @@ import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.pvs.api.points.PointsHandler;
+import com.jcwhatever.pvs.api.points.IPointsHandler;
 import com.jcwhatever.pvs.api.points.PointsType;
 import com.jcwhatever.pvs.api.utils.Msg;
 
@@ -62,7 +62,7 @@ public class CurrentSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        Arena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
+        IArena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
         if (arena == null)
             return; // finished
 
@@ -74,7 +74,7 @@ public class CurrentSubCommand extends AbstractPVCommand {
 
         for (PointsType type : types) {
 
-            PointsHandler handler = type.getHandler(arena);
+            IPointsHandler handler = type.getHandler(arena);
             if (handler == null)
                 continue;
 

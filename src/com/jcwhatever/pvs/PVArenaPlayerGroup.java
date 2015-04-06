@@ -25,10 +25,10 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.ArenaPlayerGroup;
-import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
 
@@ -36,12 +36,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PVArenaPlayerGroup implements ArenaPlayerGroup {
+public class PVArenaPlayerGroup implements IArenaPlayerGroup {
 
-    private final Set<ArenaPlayer> _players = new HashSet<>(20);
+    private final Set<IArenaPlayer> _players = new HashSet<>(20);
 
     @Override
-    public boolean hasPlayer(ArenaPlayer player) {
+    public boolean hasPlayer(IArenaPlayer player) {
         PreCon.notNull(player);
 
         return _players.contains(player);
@@ -53,15 +53,15 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public int size(Arena arena) {
+    public int size(IArena arena) {
         return getPlayers(arena).size();
     }
 
     @Override
-    public boolean isReady(Collection<ArenaPlayer> players) {
+    public boolean isReady(Collection<IArenaPlayer> players) {
         PreCon.notNull(players);
 
-        for (ArenaPlayer player : players) {
+        for (IArenaPlayer player : players) {
             if (!_players.contains(player))
                 continue;
 
@@ -72,11 +72,11 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public ArenaPlayerCollection filterPlayers(Collection<ArenaPlayer> players) {
+    public IArenaPlayerCollection filterPlayers(Collection<IArenaPlayer> players) {
 
-        ArenaPlayerCollection result = new ArenaPlayerArrayList(players.size());
+        IArenaPlayerCollection result = new ArenaPlayerArrayList(players.size());
 
-        for (ArenaPlayer player : players) {
+        for (IArenaPlayer player : players) {
             if (!_players.contains(player))
                 continue;
 
@@ -91,19 +91,19 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
         PreCon.notNullOrEmpty(message);
         PreCon.notNull(params);
 
-        for (ArenaPlayer player : _players) {
+        for (IArenaPlayer player : _players) {
             Msg.tell(player.getPlayer(), message, params);
         }
     }
 
     @Override
-    public void addPlayer(ArenaPlayer player) {
+    public void addPlayer(IArenaPlayer player) {
         PreCon.isValid(player instanceof PVArenaPlayer);
 
         _players.add(player);
 
         // remove the player from their current group, if any
-        ArenaPlayerGroup currentGroup = player.getPlayerGroup();
+        IArenaPlayerGroup currentGroup = player.getPlayerGroup();
         if (currentGroup != null)
             currentGroup.removePlayer(player);
 
@@ -111,14 +111,14 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public void removePlayer(ArenaPlayer player) {
+    public void removePlayer(IArenaPlayer player) {
         PreCon.isValid(player instanceof PVArenaPlayer);
 
         _players.remove(player);
 
         // make sure the player is in the group before
         // setting player group to null on player
-        ArenaPlayerGroup currentGroup = player.getPlayerGroup();
+        IArenaPlayerGroup currentGroup = player.getPlayerGroup();
         if (currentGroup != null && !currentGroup.equals(this))
             return;
 
@@ -126,17 +126,17 @@ public class PVArenaPlayerGroup implements ArenaPlayerGroup {
     }
 
     @Override
-    public ArenaPlayerCollection getPlayers() {
+    public IArenaPlayerCollection getPlayers() {
         return new ArenaPlayerArrayList(_players, false);
     }
 
     @Override
-    public ArenaPlayerCollection getPlayers(Arena arena) {
+    public IArenaPlayerCollection getPlayers(IArena arena) {
         PreCon.notNull(arena);
 
-        ArenaPlayerCollection result = new ArenaPlayerArrayList(_players.size());
+        IArenaPlayerCollection result = new ArenaPlayerArrayList(_players.size());
 
-        for (ArenaPlayer player : _players) {
+        for (IArenaPlayer player : _players) {
             if (arena.equals(player.getArena())) {
                 result.add(player);
             }

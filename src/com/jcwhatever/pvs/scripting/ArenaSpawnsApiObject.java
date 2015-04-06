@@ -28,8 +28,8 @@ import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
@@ -43,12 +43,12 @@ import javax.annotation.Nullable;
  */
 public class ArenaSpawnsApiObject implements IDisposable {
 
-    private final Arena _arena;
+    private final IArena _arena;
 
     /**
      * Constructor.
      */
-    ArenaSpawnsApiObject(Arena arena) {
+    ArenaSpawnsApiObject(IArena arena) {
         _arena = arena;
     }
 
@@ -124,7 +124,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
      * @return  Null if the player is not in an arena.
      */
     @Nullable
-    public Spawnpoint getRandomSpawn(ArenaPlayer player) {
+    public Spawnpoint getRandomSpawn(IArenaPlayer player) {
         PreCon.notNull(player);
 
         return _arena.getSpawnManager().getRandomSpawn(player);
@@ -260,7 +260,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
         PreCon.notNull(player);
         PreCon.notNull(spawn);
 
-        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
         _arena.getSpawnManager().reserveSpawn(p, spawn);
     }
@@ -274,7 +274,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
     public void unreserveSpawn(Object player) {
         PreCon.notNull(player);
 
-        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
         _arena.getSpawnManager().unreserveSpawn(p);
     }

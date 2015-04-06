@@ -27,8 +27,8 @@ package com.jcwhatever.pvs.scripting;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 
 public class PVStarScriptApi implements IDisposable {
 
-    private Map<Arena, ArenaApiObject> _arenaApis = new HashMap<>(25);
+    private Map<IArena, ArenaApiObject> _arenaApis = new HashMap<>(25);
     private boolean _isDisposed;
 
     public final PlayersApiObject players = new PlayersApiObject();
@@ -75,7 +75,7 @@ public class PVStarScriptApi implements IDisposable {
     public ArenaApiObject getArenaApi(String arenaName) {
         PreCon.notNullOrEmpty(arenaName);
 
-        Arena arena = getArenaByName(arenaName);
+        IArena arena = getArenaByName(arenaName);
         if (arena == null)
             return null;
 
@@ -95,10 +95,10 @@ public class PVStarScriptApi implements IDisposable {
      * @param name  The name of the arena.
      */
     @Nullable
-    public Arena getArenaByName(String name) {
+    public IArena getArenaByName(String name) {
         PreCon.notNullOrEmpty(name);
 
-        List<Arena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArena(name, NameMatchMode.CASE_INSENSITIVE);
         return arenas.size() == 1 ? arenas.get(0) : null;
     }
 
@@ -108,7 +108,7 @@ public class PVStarScriptApi implements IDisposable {
      * @param arenaId  The id of the arena.
      */
     @Nullable
-    public Arena getArenaById(UUID arenaId) {
+    public IArena getArenaById(UUID arenaId) {
         PreCon.notNull(arenaId);
 
         return PVStarAPI.getArenaManager().getArena(arenaId);
@@ -120,7 +120,7 @@ public class PVStarScriptApi implements IDisposable {
      * @param location  The location of the arena.
      */
     @Nullable
-    public Arena getArenaByLocation(Location location) {
+    public IArena getArenaByLocation(Location location) {
         PreCon.notNull(location);
 
         return PVStarAPI.getArenaManager().getArena(location);
@@ -134,11 +134,11 @@ public class PVStarScriptApi implements IDisposable {
      *
      * @return  True if player joined.
      */
-    public boolean join(Arena arena, Object player) {
+    public boolean join(IArena arena, Object player) {
         PreCon.notNull(arena);
         PreCon.notNull(player);
 
-        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
         return arena.join(p);
     }
@@ -151,11 +151,11 @@ public class PVStarScriptApi implements IDisposable {
      *
      * @return  True if player was removed.
      */
-    public boolean leave(Arena arena, Object player) {
+    public boolean leave(IArena arena, Object player) {
         PreCon.notNull(arena);
         PreCon.notNull(player);
 
-        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
         return arena.remove(p, RemovePlayerReason.PLAYER_LEAVE);
     }
@@ -169,12 +169,12 @@ public class PVStarScriptApi implements IDisposable {
      *
      * @return  True if the player was forwarded.
      */
-    public boolean forward(Arena toArena, Object player) {
+    public boolean forward(IArena toArena, Object player) {
         PreCon.notNull(toArena);
         PreCon.notNull(player);
 
 
-        ArenaPlayer p = PVStarAPI.getArenaPlayer(player);
+        IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
         return p.getArena() != null &&
                 p.getArena().getGameManager().forwardPlayer(p, toArena);
     }

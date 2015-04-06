@@ -27,18 +27,18 @@ package com.jcwhatever.pvs;
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.ArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.managers.PlayerManager;
+import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.pvs.api.arena.options.PointsBehavior;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 import com.jcwhatever.pvs.api.arena.options.TeamChangeReason;
-import com.jcwhatever.pvs.api.arena.settings.GameManagerSettings;
-import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamChangedEvent;
@@ -61,9 +61,9 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /**
- * Implementation of {@link com.jcwhatever.pvs.api.arena.ArenaPlayer}.
+ * Implementation of {@link IArenaPlayer}.
  */
-public class PVArenaPlayer implements ArenaPlayer {
+public class PVArenaPlayer implements IArenaPlayer {
 
     private static Map<UUID, PVArenaPlayer> _playerMap = new HashMap<>(100);
     private static Map<UUID, MetaStore> _meta = new HashMap<UUID, MetaStore>(100);
@@ -91,7 +91,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     /*
      * Dispose the singleton instance of an arena player.
      */
-    public static void dispose(ArenaPlayer player) {
+    public static void dispose(IArenaPlayer player) {
         _playerMap.remove(player.getUniqueId());
     }
 
@@ -102,16 +102,16 @@ public class PVArenaPlayer implements ArenaPlayer {
     private boolean _isReady;
     private boolean _isImmobilized;
     private boolean _isInvulnerable;
-    private Arena _arena;
+    private IArena _arena;
     private ArenaTeam _team = ArenaTeam.NONE;
-    private ArenaPlayerGroup _playerGroup;
+    private IArenaPlayerGroup _playerGroup;
     private int _lives = 0;
     private int _totalPoints = 0;
     private int _points;
     private Date _lastJoin;
 
     // player to blame code induced death on
-    private ArenaPlayer _deathBlamePlayer;
+    private IArenaPlayer _deathBlamePlayer;
 
     // Meta data object to store extra meta. Disposed when
     // the player starts a new game.
@@ -153,7 +153,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     @Override
     @Nullable
-    public Arena getArena() {
+    public IArena getArena() {
         return _arena;
     }
 
@@ -179,7 +179,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         if (_arena == null)
             throw new RuntimeException("Cannot set team on a player that isn't in an arena.");
 
-        PlayerManager manager = getRelatedManager();
+        IPlayerManager manager = getRelatedManager();
         if (manager == null)
             return;
 
@@ -223,7 +223,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     @Override
     @Nullable
-    public ArenaPlayerGroup getPlayerGroup() {
+    public IArenaPlayerGroup getPlayerGroup() {
         return _playerGroup;
     }
 
@@ -246,7 +246,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             _arena.getEventManager().call(this, event);
 
             if (event.getMessage() != null) {
-                PlayerManager manager = getRelatedManager();
+                IPlayerManager manager = getRelatedManager();
                 if (manager != null) {
                     manager.tell(event.getMessage());
                 }
@@ -300,7 +300,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     @Override
     @Nullable
-    public PlayerManager getRelatedManager() {
+    public IPlayerManager getRelatedManager() {
         if (_arena == null)
             return null;
 
@@ -321,7 +321,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
     @Override
     @Nullable
-    public PlayerManagerSettings getRelatedSettings() {
+    public IPlayerManagerSettings getRelatedSettings() {
         if (_arena == null)
             return null;
 
@@ -369,7 +369,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     @Override
-    public void kill(@Nullable ArenaPlayer blame) {
+    public void kill(@Nullable IArenaPlayer blame) {
         _deathBlamePlayer = blame;
         _player.damage(_player.getMaxHealth());
     }
@@ -392,7 +392,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     @Override
-    public void setCurrentArena(Arena arena) {
+    public void setCurrentArena(IArena arena) {
         PreCon.notNull(arena);
 
         if (arena.equals(_arena))
@@ -405,7 +405,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         _arena = arena;
         _lastJoin = new Date();
 
-        GameManagerSettings settings = arena.getGameManager().getSettings();
+        IGameManagerSettings settings = arena.getGameManager().getSettings();
         LivesBehavior livesBehavior = settings.getLivesBehavior();
         PointsBehavior pointsBehavior = settings.getPointsBehavior();
 
@@ -462,7 +462,7 @@ public class PVArenaPlayer implements ArenaPlayer {
     }
 
     @Override
-    public void setPlayerGroup(@Nullable ArenaPlayerGroup playerGroup) {
+    public void setPlayerGroup(@Nullable IArenaPlayerGroup playerGroup) {
 
         // null player group, check that player is not in any group
         if (playerGroup == null && _playerGroup != null) {
@@ -487,7 +487,7 @@ public class PVArenaPlayer implements ArenaPlayer {
         if (_lives == lives || _arena == null)
             return;
 
-        PlayerManager manager = getRelatedManager();
+        IPlayerManager manager = getRelatedManager();
         if (manager == null)
             return;
 
@@ -514,7 +514,7 @@ public class PVArenaPlayer implements ArenaPlayer {
 
             PVArenaPlayer player = PVArenaPlayer.get(event.getEntity());
 
-            Arena arena = player.getArena();
+            IArena arena = player.getArena();
             if (arena == null)
                 return;
 
@@ -543,7 +543,7 @@ public class PVArenaPlayer implements ArenaPlayer {
             if (!(entity instanceof Player))
                 return;
 
-            ArenaPlayer player = PVArenaPlayer.get((Player)entity);
+            IArenaPlayer player = PVArenaPlayer.get((Player)entity);
             if (player.getArena() == null)
                 return;
 

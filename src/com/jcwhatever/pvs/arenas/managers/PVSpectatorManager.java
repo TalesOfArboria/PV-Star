@@ -24,12 +24,12 @@
 
 package com.jcwhatever.pvs.arenas.managers;
 
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.managers.SpectatorManager;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.managers.ISpectatorManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.SpectatorManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.ISpectatorManagerSettings;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.settings.PVSpectatorSettings;
@@ -41,47 +41,47 @@ import javax.annotation.Nullable;
 /**
  * Spectator manager implementation
  */
-public class PVSpectatorManager extends AbstractPlayerManager implements SpectatorManager {
+public class PVSpectatorManager extends AbstractPlayerManager implements ISpectatorManager {
 
-    private final SpectatorManagerSettings _settings;
+    private final ISpectatorManagerSettings _settings;
 
     /*
      * Constructor.
      */
-    public PVSpectatorManager(Arena arena) {
+    public PVSpectatorManager(IArena arena) {
         super(arena);
 
         _settings = new PVSpectatorSettings(arena);
     }
 
     @Override
-    public SpectatorManagerSettings getSettings() {
+    public ISpectatorManagerSettings getSettings() {
         return _settings;
     }
 
     @Nullable
     @Override
-    protected Location onRespawnPlayer(ArenaPlayer player) {
+    protected Location onRespawnPlayer(IArenaPlayer player) {
         return getSpawnLocation(player);
     }
 
     @Override
-    protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
+    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
         return getSpawnLocation(player);
     }
 
     @Override
-    protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         // do nothing
     }
 
     @Override
-    protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
         return getArena().getSettings().getRemoveLocation();
     }
 
     @Nullable
-    private Location getSpawnLocation(ArenaPlayer player) {
+    private Location getSpawnLocation(IArenaPlayer player) {
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomSpectatorSpawn(player.getTeam());
         if (spawnpoint == null) {
             Msg.warning("Failed to find a spectator spawn for a player in arena '{0}'.", getArena().getName());

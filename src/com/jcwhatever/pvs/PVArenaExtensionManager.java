@@ -30,7 +30,7 @@ import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionManager;
@@ -49,12 +49,12 @@ import javax.annotation.Nullable;
 
 public class PVArenaExtensionManager extends ArenaExtensionManager implements IEventListener {
 
-    private final Arena _arena;
+    private final IArena _arena;
     private final Set<ArenaExtension> _extensions = new HashSet<ArenaExtension>(15);
     private final Map<String, ArenaExtension> _loadedMap = new HashMap<String, ArenaExtension>(15);
     private final IDataNode _dataNode;
 
-    public PVArenaExtensionManager(Arena arena) {
+    public PVArenaExtensionManager(IArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;
@@ -71,7 +71,7 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
     }
 
     @Override
-    public Arena getArena() {
+    public IArena getArena() {
         return _arena;
     }
 

@@ -31,7 +31,7 @@ import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
@@ -60,7 +60,7 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
-        final Arena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "current|select|info"));
+        final IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "current|select|info"));
         if (arena == null)
             return; // finish
 

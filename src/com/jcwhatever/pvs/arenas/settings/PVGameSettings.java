@@ -24,15 +24,15 @@
 
 package com.jcwhatever.pvs.arenas.settings;
 
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.pvs.api.arena.options.PointsBehavior;
-import com.jcwhatever.pvs.api.arena.settings.GameManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
 
 /**
  * Game manager settings implementation.
  */
-public class PVGameSettings extends AbstractPlayerSettings implements GameManagerSettings {
+public class PVGameSettings extends AbstractPlayerSettings implements IGameManagerSettings {
 
     private int _lives = 1;
     private int _points = 0;
@@ -43,7 +43,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements GameManage
     /*
      * Constructor.
      */
-    public PVGameSettings(Arena arena) {
+    public PVGameSettings(IArena arena) {
         super(arena, "game");
 
         _lives = getDataNode().getInteger("lives", _lives);

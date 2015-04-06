@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
@@ -57,7 +57,7 @@ public class LivesBehaviorSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        Arena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "static|reset|additive|info"));
+        IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "static|reset|additive|info"));
         if (arena == null)
             return; // finish
 

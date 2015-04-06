@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.scripting;
 
 import com.jcwhatever.nucleus.mixins.IDisposable;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 
 /**
  *Arena sub API.
@@ -34,13 +34,13 @@ public class ArenaApiObject implements IDisposable {
 
     private boolean _isDisposed;
 
-    public final Arena arena;
+    public final IArena arena;
     public final ArenaEventsApiObject events;
     public final ArenaSchedulerApiObject scheduler;
     public final ArenaSpawnsApiObject spawns;
     public final ArenaStatsApiObject stats;
 
-    public ArenaApiObject(Arena arena) {
+    public ArenaApiObject(IArena arena) {
         this.arena = arena;
 
         events = new ArenaEventsApiObject(arena);

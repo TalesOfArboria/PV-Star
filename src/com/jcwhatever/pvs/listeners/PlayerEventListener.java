@@ -27,10 +27,10 @@ package com.jcwhatever.pvs.listeners;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.PlayerManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IPlayerManagerSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -66,7 +66,7 @@ public class PlayerEventListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerJoin(PlayerJoinEvent event) {
 
-        ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        IArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
         if (player.getArena() != null) {
             player.getArena().remove(player, RemovePlayerReason.LOGOUT);
         }
@@ -79,8 +79,8 @@ public class PlayerEventListener implements Listener {
     @EventHandler
     private void onPlayerKick(PlayerKickEvent event) {
 
-        final ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
-        final Arena arena = player.getArena();
+        final IArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        final IArena arena = player.getArena();
 
         if (arena != null) {
             arena.remove(player, RemovePlayerReason.LOGOUT);
@@ -92,9 +92,9 @@ public class PlayerEventListener implements Listener {
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
 
-        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        IArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
@@ -109,8 +109,8 @@ public class PlayerEventListener implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST)
     private void onPlayerRespawn(PlayerRespawnEvent event) {
 
-        ArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
-        Arena arena = player.getArena();
+        IArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        IArena arena = player.getArena();
 
         // respawn player in appropriate arena area.
         if (arena != null) {
@@ -133,8 +133,8 @@ public class PlayerEventListener implements Listener {
     @EventHandler(priority=EventPriority.LOWEST)
     private void onPlayerCommand(PlayerCommandPreprocessEvent event) {
 
-        ArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
-        Arena arena = player.getArena();
+        IArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        IArena arena = player.getArena();
 
         if (arena == null)
             return;
@@ -165,14 +165,14 @@ public class PlayerEventListener implements Listener {
             return;
 
         Player p = (Player)event.getEntity();
-        ArenaPlayer player =PVArenaPlayer.get(p);
+        IArenaPlayer player =PVArenaPlayer.get(p);
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
         // get settings
-        PlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerManagerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -194,13 +194,13 @@ public class PlayerEventListener implements Listener {
         if (!(event.getEntity() instanceof Player))
             return;
 
-        ArenaPlayer player =PVArenaPlayer.get((Player)event.getEntity());
+        IArenaPlayer player =PVArenaPlayer.get((Player)event.getEntity());
 
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 
-        PlayerManagerSettings settings = player.getRelatedSettings();
+        IPlayerManagerSettings settings = player.getRelatedSettings();
         if (settings == null)
             return;
 
@@ -217,7 +217,7 @@ public class PlayerEventListener implements Listener {
     private void onPlayerMove(PlayerMoveEvent event) {
 
         PVArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
-        Arena arena = player.getArena();
+        IArena arena = player.getArena();
         if (arena == null)
             return;
 

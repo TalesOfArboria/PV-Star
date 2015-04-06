@@ -24,8 +24,8 @@
 
 package com.jcwhatever.pvs.points;
 
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.points.PointsManager;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.points.IPointsManager;
 import com.jcwhatever.pvs.api.points.PointsType;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 /**
  * Points manager implementation
  */
-public class PVPointsManager implements PointsManager {
+public class PVPointsManager implements IPointsManager {
 
     private final Map<String, PointsType> _typeMap = new HashMap<>(25);
 
@@ -65,7 +65,7 @@ public class PVPointsManager implements PointsManager {
     }
 
     @Override
-    public List<PointsType> getTypes(Arena arena) {
+    public List<PointsType> getTypes(IArena arena) {
 
         // get the arenas points type node
         IDataNode dataNode = arena.getDataNode("points");
@@ -91,7 +91,7 @@ public class PVPointsManager implements PointsManager {
     }
 
     @Override
-    public void loadTypes(Arena arena) {
+    public void loadTypes(IArena arena) {
 
         IDataNode dataNode = arena.getDataNode("points");
 

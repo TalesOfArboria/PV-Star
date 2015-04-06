@@ -25,10 +25,10 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
-import com.jcwhatever.pvs.api.arena.managers.ArenaManager;
+import com.jcwhatever.pvs.api.arena.managers.IArenaManager;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -55,20 +55,20 @@ import javax.annotation.Nullable;
 /**
  * Arena Manager implementation.
  */
-public class PVArenaManager implements ArenaManager {
+public class PVArenaManager implements IArenaManager {
 
-    private final Map<UUID, Arena> _arenaIdMap = new HashMap<>(20);
-    private final Map<String, Class<? extends Arena>> _arenaTypes = new HashMap<>(20);
+    private final Map<UUID, IArena> _arenaIdMap = new HashMap<>(20);
+    private final Map<String, Class<? extends IArena>> _arenaTypes = new HashMap<>(20);
     private final IDataNode _dataNode;
     private final PVStar _pvStar;
-    private final Map<String, Arena> _selectedArenas = new HashMap<>(20); // keyed to player name
+    private final Map<String, IArena> _selectedArenas = new HashMap<>(20); // keyed to player name
 
     public PVArenaManager(IDataNode dataNode) {
         _dataNode = dataNode;
         _pvStar = PVStar.getPlugin(PVStar.class);
     }
 
-    public boolean registerType(Class<? extends Arena> arenaClass) {
+    public boolean registerType(Class<? extends IArena> arenaClass) {
         PreCon.notNull(arenaClass);
 
         ArenaTypeInfo typeInfo = arenaClass.getAnnotation(ArenaTypeInfo.class);
@@ -78,19 +78,19 @@ public class PVArenaManager implements ArenaManager {
         return _arenaTypes.put(typeInfo.typeName().toLowerCase(), arenaClass) != null;
     }
 
-    public List<Class<? extends Arena>> getArenaTypes() {
+    public List<Class<? extends IArena>> getArenaTypes() {
         return new ArrayList<>(_arenaTypes.values());
     }
 
     @Override
-    public Arena getSelectedArena(CommandSender sender) {
+    public IArena getSelectedArena(CommandSender sender) {
         PreCon.notNull(sender);
 
         return _selectedArenas.get(sender.getName());
     }
 
     @Override
-    public void setSelectedArena(CommandSender sender, Arena arena) {
+    public void setSelectedArena(CommandSender sender, IArena arena) {
         PreCon.notNull(sender);
         PreCon.notNull(arena);
 
@@ -108,7 +108,7 @@ public class PVArenaManager implements ArenaManager {
         PreCon.notNull(arenaId);
         PreCon.notNullOrEmpty(name);
 
-        Arena arena = _arenaIdMap.get(arenaId);
+        IArena arena = _arenaIdMap.get(arenaId);
         if (arena == null)
             return false;
 
@@ -123,7 +123,7 @@ public class PVArenaManager implements ArenaManager {
 
     @Override
     @Nullable
-    public Arena getArena(UUID arenaId) {
+    public IArena getArena(UUID arenaId) {
         PreCon.notNull(arenaId);
 
         return _arenaIdMap.get(arenaId);
@@ -131,10 +131,10 @@ public class PVArenaManager implements ArenaManager {
 
     @Override
     @Nullable
-    public Arena getArena(Player p) {
+    public IArena getArena(Player p) {
         PreCon.notNull(p);
 
-        ArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = PVArenaPlayer.get(p);
         if (player == null)
             return null;
 
@@ -143,7 +143,7 @@ public class PVArenaManager implements ArenaManager {
 
     @Override
     @Nullable
-    public Arena getArena(Location location) {
+    public IArena getArena(Location location) {
 
         List<ArenaRegion> regions = Nucleus.getRegionManager().getRegions(location, ArenaRegion.class);
         if (regions.isEmpty())
@@ -154,7 +154,7 @@ public class PVArenaManager implements ArenaManager {
     }
 
     @Override
-    public List<Arena> getArena(String arenaName, NameMatchMode matchMode) {
+    public List<IArena> getArena(String arenaName, NameMatchMode matchMode) {
         PreCon.notNullOrEmpty(arenaName);
         PreCon.notNull(matchMode);
 
@@ -172,9 +172,9 @@ public class PVArenaManager implements ArenaManager {
                 break;
         }
 
-        List<Arena> results = new ArrayList<>(5);
+        List<IArena> results = new ArrayList<>(5);
 
-        for (Arena arena : _arenaIdMap.values()) {
+        for (IArena arena : _arenaIdMap.values()) {
 
             switch (matchMode) {
                 case CASE_SENSITIVE:
@@ -202,7 +202,7 @@ public class PVArenaManager implements ArenaManager {
     }
 
     @Override
-    public List<Arena> getArenas() {
+    public List<IArena> getArenas() {
         return new ArrayList<>(_arenaIdMap.values());
     }
 
@@ -213,13 +213,13 @@ public class PVArenaManager implements ArenaManager {
 
     @Override
     @Nullable
-    public Arena addArena(String arenaName, String typeName) {
+    public IArena addArena(String arenaName, String typeName) {
         PreCon.notNullOrEmpty(arenaName);
         PreCon.notNullOrEmpty(typeName);
 
         typeName = typeName.toLowerCase();
 
-        Arena arena = loadArena("arena");
+        IArena arena = loadArena("arena");
         if (arena == null)
             return null;
 
@@ -244,7 +244,7 @@ public class PVArenaManager implements ArenaManager {
     public boolean removeArena(UUID arenaId) {
         PreCon.notNull(arenaId);
 
-        Arena arena = _arenaIdMap.remove(arenaId);
+        IArena arena = _arenaIdMap.remove(arenaId);
         if (arena == null)
             return false;
 
@@ -291,7 +291,7 @@ public class PVArenaManager implements ArenaManager {
                 continue;
             }
 
-            Arena arena = loadArena(typeName);
+            IArena arena = loadArena(typeName);
             if (arena == null) {
                 Msg.warning("Failed to load arena named '{0}' of type '{1}'.", arenaName, typeName);
                 continue;
@@ -306,13 +306,13 @@ public class PVArenaManager implements ArenaManager {
     }
 
     @Nullable
-    private Arena loadArena(String typeName) {
+    private IArena loadArena(String typeName) {
 
-        Class<? extends Arena> arenaClass = _arenaTypes.get(typeName.toLowerCase());
+        Class<? extends IArena> arenaClass = _arenaTypes.get(typeName.toLowerCase());
         if (arenaClass == null)
             return null;
 
-        Arena arena;
+        IArena arena;
 
         try {
             arena = arenaClass.newInstance();

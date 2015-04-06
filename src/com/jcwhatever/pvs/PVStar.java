@@ -38,17 +38,17 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.pvs.api.IPVStar;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.extensions.ExtensionTypeManager;
-import com.jcwhatever.pvs.api.arena.managers.ArenaManager;
-import com.jcwhatever.pvs.api.commands.CommandHelper;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.extensions.IExtensionTypeManager;
+import com.jcwhatever.pvs.api.arena.managers.IArenaManager;
+import com.jcwhatever.pvs.api.commands.ICommandHelper;
 import com.jcwhatever.pvs.api.events.PVStarLoadedEvent;
-import com.jcwhatever.pvs.api.modules.ModuleInfo;
+import com.jcwhatever.pvs.api.modules.IModuleInfo;
 import com.jcwhatever.pvs.api.modules.PVStarModule;
-import com.jcwhatever.pvs.api.points.PointsManager;
-import com.jcwhatever.pvs.api.spawns.SpawnTypeManager;
-import com.jcwhatever.pvs.api.stats.StatsManager;
+import com.jcwhatever.pvs.api.points.IPointsManager;
+import com.jcwhatever.pvs.api.spawns.ISpawnTypeManager;
+import com.jcwhatever.pvs.api.stats.IStatsManager;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.PVArena;
 import com.jcwhatever.pvs.commands.PVCommandDispatcher;
@@ -85,8 +85,8 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     private PVArenaManager _arenaManager;
     private PVCommandDispatcher _commandHandler;
     private EventManager _eventManager;
-    private StatsManager _statsManager;
-    private PointsManager _pointsManager;
+    private IStatsManager _statsManager;
+    private IPointsManager _pointsManager;
     private PVExtensionTypeManager _extensionManager;
     private PVSpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
@@ -110,11 +110,11 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public ArenaPlayer getArenaPlayer(Object player) {
+    public IArenaPlayer getArenaPlayer(Object player) {
         PreCon.notNull(player);
 
-        if (player instanceof ArenaPlayer)
-            return (ArenaPlayer) player;
+        if (player instanceof IArenaPlayer)
+            return (IArenaPlayer) player;
 
         Player p = PlayerUtils.getPlayer(player);
         PreCon.notNull(p);
@@ -123,27 +123,27 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public ArenaManager getArenaManager() {
+    public IArenaManager getArenaManager() {
         return _arenaManager;
     }
 
     @Override
-    public SpawnTypeManager getSpawnTypeManager() {
+    public ISpawnTypeManager getSpawnTypeManager() {
         return _spawnTypeManager;
     }
 
     @Override
-    public StatsManager getStatsManager() {
+    public IStatsManager getStatsManager() {
         return _statsManager;
     }
 
     @Override
-    public ExtensionTypeManager getExtensionManager() {
+    public IExtensionTypeManager getExtensionManager() {
         return _extensionManager;
     }
 
     @Override
-    public PointsManager getPointsManager() {
+    public IPointsManager getPointsManager() {
         return _pointsManager;
     }
 
@@ -153,7 +153,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public CommandHelper getCommandHelper() {
+    public ICommandHelper getCommandHelper() {
         return _commandHelper;
     }
 
@@ -177,7 +177,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
     @Override
     @Nullable
-    public ModuleInfo getModuleInfo(PVStarModule module) {
+    public IModuleInfo getModuleInfo(PVStarModule module) {
         return _moduleLoader.getModuleInfo(module);
     }
 
@@ -265,8 +265,8 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         _isLoaded = false;
 
         // end arenas
-        List<Arena> arenas = _arenaManager.getArenas();
-        for (Arena arena : arenas) {
+        List<IArena> arenas = _arenaManager.getArenas();
+        for (IArena arena : arenas) {
             arena.getGameManager().end();
         }
 

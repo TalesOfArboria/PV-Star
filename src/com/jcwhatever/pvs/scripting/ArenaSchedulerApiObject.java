@@ -26,7 +26,7 @@ package com.jcwhatever.pvs.scripting;
 
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.managed.scheduler.IScheduledTask;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.utils.ArenaScheduler;
 
 /**
@@ -34,12 +34,12 @@ import com.jcwhatever.pvs.api.utils.ArenaScheduler;
  */
 public class ArenaSchedulerApiObject implements IDisposable {
 
-    private final Arena _arena;
+    private final IArena _arena;
 
     /**
      * Constructor.
      */
-    ArenaSchedulerApiObject(Arena arena) {
+    ArenaSchedulerApiObject(IArena arena) {
         _arena = arena;
     }
 

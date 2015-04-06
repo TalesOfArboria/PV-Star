@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreJoinEvent;
@@ -62,7 +62,7 @@ public class PVArena extends AbstractArena {
         }
 
         // Make sure the player is not already in an arena
-        Arena currentArena = event.getPlayer().getArena();
+        IArena currentArena = event.getPlayer().getArena();
         if (currentArena != null) {
             event.rejectJoin(JoinRejectReason.IN_OTHER_ARENA, Lang.get(_JOIN_LEAVE_CURRENT_FIRST, getName()));
         }

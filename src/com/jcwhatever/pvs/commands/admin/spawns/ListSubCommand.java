@@ -34,7 +34,7 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
@@ -67,7 +67,7 @@ public class ListSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        Arena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
+        IArena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
         if (arena == null)
             return; // finish
 

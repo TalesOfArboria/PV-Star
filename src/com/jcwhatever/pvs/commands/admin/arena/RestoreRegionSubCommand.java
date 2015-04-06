@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.commands.admin.arena;
 
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.Arena;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
@@ -71,7 +71,7 @@ public class RestoreRegionSubCommand extends AbstractPVCommand {
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
-        final Arena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        final IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
         if (arena == null)
             return; // finished
 

@@ -28,16 +28,16 @@ import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.Arena;
-import com.jcwhatever.pvs.api.arena.ArenaPlayer;
-import com.jcwhatever.pvs.api.arena.collections.ArenaPlayerCollection;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.managers.GameManager;
-import com.jcwhatever.pvs.api.arena.managers.LobbyManager;
+import com.jcwhatever.pvs.api.arena.managers.IGameManager;
+import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
 import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.GameManagerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IGameManagerSettings;
 import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.pvs.api.events.ArenaStartedEvent;
@@ -61,9 +61,9 @@ import javax.annotation.Nullable;
 /**
  * Game manager implementation
  */
-public class PVGameManager extends AbstractPlayerManager implements GameManager {
+public class PVGameManager extends AbstractPlayerManager implements IGameManager {
 
-    private final GameManagerSettings _settings;
+    private final IGameManagerSettings _settings;
 
     private boolean _isRunning = false;
     private boolean _isGameOver = false;
@@ -72,7 +72,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     /*
      * Constructor.
      */
-    public PVGameManager(Arena arena) {
+    public PVGameManager(IArena arena) {
         super(arena);
 
         _settings = new PVGameSettings(arena);
@@ -95,7 +95,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     }
 
     @Override
-    public GameManagerSettings getSettings() {
+    public IGameManagerSettings getSettings() {
         return _settings;
     }
 
@@ -113,10 +113,10 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
         _startTime = new Date();
 
-        LobbyManager lobbyManager = getArena().getLobbyManager();
+        ILobbyManager lobbyManager = getArena().getLobbyManager();
 
         // get default next group of players from lobby
-        ArenaPlayerCollection players = reason == ArenaStartReason.AUTO
+        IArenaPlayerCollection players = reason == ArenaStartReason.AUTO
                 ? lobbyManager.getNextGroup()
                 : lobbyManager.getReadyGroup();
 
@@ -161,7 +161,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
         getArena().getEventManager().call(this, new ArenaEndedEvent(getArena()));
 
-        for (ArenaPlayer player : getPlayers()) {
+        for (IArenaPlayer player : getPlayers()) {
             getArena().remove(player, RemovePlayerReason.GAME_ENDED);
         }
 
@@ -169,7 +169,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     }
 
     @Override
-    public boolean forwardPlayer(ArenaPlayer player, Arena nextArena) {
+    public boolean forwardPlayer(IArenaPlayer player, IArena nextArena) {
         PreCon.notNull(player);
         PreCon.notNull(nextArena);
 
@@ -201,14 +201,14 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     }
 
     @Override
-    public boolean setWinner(ArenaPlayer player) {
+    public boolean setWinner(IArenaPlayer player) {
         PreCon.notNull(player);
 
         if (!isRunning())
             return false;
 
         if (player.getTeam() == ArenaTeam.NONE) {
-            for (ArenaPlayer otherPlayer : getPlayers()) {
+            for (IArenaPlayer otherPlayer : getPlayers()) {
                 if (!player.equals(otherPlayer)) {
                     callLoseEvent(player);
                 }
@@ -230,9 +230,9 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (!isRunning())
             return false;
 
-        ArenaPlayerCollection winningTeam = new ArenaPlayerArrayList(getPlayerCount());
+        IArenaPlayerCollection winningTeam = new ArenaPlayerArrayList(getPlayerCount());
 
-        for (ArenaPlayer player : getPlayers()) {
+        for (IArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
                 winningTeam.add(player);
                 callWinEvent(player);
@@ -258,9 +258,9 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
         if (!isRunning())
             return false;
 
-        ArenaPlayerCollection losingTeam = new ArenaPlayerArrayList(getPlayerCount());
+        IArenaPlayerCollection losingTeam = new ArenaPlayerArrayList(getPlayerCount());
 
-        for (ArenaPlayer player : getPlayers()) {
+        for (IArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
                 losingTeam.add(player);
                 removePlayer(player, RemovePlayerReason.LOSE);
@@ -275,7 +275,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
     @Nullable
     @Override
-    protected Location onRespawnPlayer(ArenaPlayer player) {
+    protected Location onRespawnPlayer(IArenaPlayer player) {
 
         // get random spawn for the team
         Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomGameSpawn(player.getTeam());
@@ -288,7 +288,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
 
     @Override
     @Nullable
-    protected Location onAddPlayer(ArenaPlayer player, AddPlayerReason reason) {
+    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
 
         if (!getArena().getSpawnManager().hasLobbySpawns())
             return null;
@@ -304,7 +304,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     }
 
     @Override
-    protected void onPreRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
 
         if (reason == RemovePlayerReason.LOSE ||
                 reason == RemovePlayerReason.KICK ||
@@ -315,7 +315,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     }
 
     @Override
-    protected Location onRemovePlayer(ArenaPlayer player, RemovePlayerReason reason) {
+    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
 
         Scheduler.runTaskLater(PVStarAPI.getPlugin(), 1, new Runnable() {
             @Override
@@ -331,12 +331,12 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     /*
      *  Transfer the next group of players from the lobby to here.
      */
-    private boolean transferPlayersFromLobby(Collection<ArenaPlayer> players) {
+    private boolean transferPlayersFromLobby(Collection<IArenaPlayer> players) {
 
-        LobbyManager lobbyManager = getArena().getLobbyManager();
+        ILobbyManager lobbyManager = getArena().getLobbyManager();
 
         // transfer players from lobby
-        for (ArenaPlayer player : players) {
+        for (IArenaPlayer player : players) {
 
             if (!lobbyManager.hasPlayer(player))
                 continue;
@@ -352,7 +352,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     /*
      * Call PlayerWinEvent and display message if any
      */
-    private void callWinEvent(ArenaPlayer player) {
+    private void callWinEvent(IArenaPlayer player) {
         PlayerWinEvent event = new PlayerWinEvent(getArena(), player, this, null);
         getArena().getEventManager().call(this, event);
 
@@ -364,7 +364,7 @@ public class PVGameManager extends AbstractPlayerManager implements GameManager 
     /*
      * Call PlayerLoseEvent and display message if any
      */
-    private void callLoseEvent(ArenaPlayer player) {
+    private void callLoseEvent(IArenaPlayer player) {
         PlayerLoseEvent event = new PlayerLoseEvent(getArena(), player, this, null);
         getArena().getEventManager().call(this, event);
 
