@@ -155,6 +155,11 @@ public class PVArenaPlayer implements IArenaPlayer {
     }
 
     @Override
+    public Location getLocation(Location output) {
+        return _player.getLocation(output);
+    }
+
+    @Override
     @Nullable
     public IArena getArena() {
         return _arena;
