@@ -31,17 +31,18 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.providers.permissions.IPermission;
 import com.jcwhatever.nucleus.providers.permissions.Permissions;
-import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.providers.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.PVArenaExtensionManager;
+import com.jcwhatever.pvs.PVArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
 import com.jcwhatever.pvs.api.arena.managers.IGameManager;
@@ -373,7 +374,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
 
     @Override
     public boolean remove(IArenaPlayer player, RemovePlayerReason reason) {
-        PreCon.notNull(player);
+        PreCon.isValid(player instanceof PVArenaPlayer);
         PreCon.notNull(reason);
         PreCon.isValid(reason != RemovePlayerReason.ARENA_RELATION_CHANGE);
         PreCon.isValid(reason != RemovePlayerReason.FORWARDING);
@@ -395,7 +396,12 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
                 if (leaveEvent.isRestoring() &&
                         leaveEvent.getRestoreLocation() != null) {
 
-                    player.getPlayer().teleport(leaveEvent.getRestoreLocation());
+                    if (player.getPlayer().isDead()) {
+                        ((PVArenaPlayer)player).setDeathRespawnLocation(leaveEvent.getRestoreLocation());
+                    }
+                    else {
+                        player.getPlayer().teleport(leaveEvent.getRestoreLocation());
+                    }
                 }
 
                 return true;

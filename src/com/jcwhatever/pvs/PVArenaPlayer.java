@@ -26,11 +26,12 @@ package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
-import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
 import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
 import com.jcwhatever.pvs.api.arena.options.LivesBehavior;
@@ -98,6 +99,7 @@ public class PVArenaPlayer implements IArenaPlayer {
     public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
 
     private final Player _player;
+    private final Location _deathRespawnLocation = new Location(null, 0, 0, 0);
 
     private boolean _isReady;
     private boolean _isImmobilized;
@@ -109,6 +111,7 @@ public class PVArenaPlayer implements IArenaPlayer {
     private int _totalPoints = 0;
     private int _points;
     private Date _lastJoin;
+
 
     // player to blame code induced death on
     private IArenaPlayer _deathBlamePlayer;
@@ -479,6 +482,46 @@ public class PVArenaPlayer implements IArenaPlayer {
         _playerGroup = playerGroup;
     }
 
+    /**
+     * Copy the values of the location the player should respawn at after death
+     * into an output {@link Location}.
+     *
+     * <p>Retrieving the location also causes it to be reset.</p>
+     *
+     * @param output  The output {@link Location}.
+     *
+     * @return  The output {@link Location} or null if not set.
+     */
+    @Nullable
+    public Location getDeathRespawnLocation(Location output) {
+        PreCon.notNull(output);
+
+        if (_deathRespawnLocation.getWorld() == null)
+            return null;
+
+        Location result = LocationUtils.copy(_deathRespawnLocation, output);
+
+        // reset location by setting world to null
+        _deathRespawnLocation.setWorld(null);
+
+        return result;
+    }
+
+    /**
+     * Set the location the player should respawn at when they next respawn
+     * due to death.
+     *
+     * @param location  The location to set.
+     */
+    public void setDeathRespawnLocation(@Nullable Location location) {
+        if (location == null) {
+            // reset location by setting world to null
+            _deathRespawnLocation.setWorld(null);
+        }
+        else {
+            LocationUtils.copy(location, _deathRespawnLocation);
+        }
+    }
 
     /*
      *  Set the player lives and run event

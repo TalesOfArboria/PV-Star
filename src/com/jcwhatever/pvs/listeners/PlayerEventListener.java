@@ -60,6 +60,8 @@ public class PlayerEventListener implements Listener {
     @Localizable static final String _COMMAND_NOT_IN_ARENA =
             "{RED}You can't use that command in the arena!";
 
+    private static final Location DEATH_RESPAWN_LOCATION = new Location(null, 0, 0, 0);
+
     /**
      * Ensure player data disposal on join.
      */
@@ -109,7 +111,7 @@ public class PlayerEventListener implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST)
     private void onPlayerRespawn(PlayerRespawnEvent event) {
 
-        IArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        PVArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
         IArena arena = player.getArena();
 
         // respawn player in appropriate arena area.
@@ -124,6 +126,12 @@ public class PlayerEventListener implements Listener {
             arena.getEventManager().call(this, respawnEvent);
 
             event.setRespawnLocation(respawnEvent.getRespawnLocation());
+        }
+        else {
+            Location respawnLocation = player.getDeathRespawnLocation(DEATH_RESPAWN_LOCATION);
+            if (respawnLocation != null) {
+                event.setRespawnLocation(respawnLocation);
+            }
         }
     }
 
