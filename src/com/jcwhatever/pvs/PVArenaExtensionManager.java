@@ -156,8 +156,6 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
         extNode.set("enabled", true);
         extNode.save();
 
-        REGISTRATION.attach(extension);
-
         @SuppressWarnings("unchecked")
         T result = (T)extension;
 
@@ -213,7 +211,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
         }
 
         extension.register(REGISTRATION);
-        REGISTRATION.init(extension, info, getArena());
+        REGISTRATION.attach(extension, info, getArena());
 
         _extensions.add(extension);
         _loadedMap.put(info.name().toLowerCase(), extension);
