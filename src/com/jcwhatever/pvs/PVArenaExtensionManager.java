@@ -24,7 +24,6 @@
 
 package com.jcwhatever.pvs;
 
-import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
@@ -32,10 +31,9 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
+import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension.ArenaExtensionRegistration;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
-import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionManager;
-import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
-import com.jcwhatever.pvs.api.events.ArenaEnabledEvent;
+import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
 import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
 
 import org.bukkit.plugin.Plugin;
@@ -46,14 +44,23 @@ import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
 
+/**
+ * PVStar implementation of {@link IArenaExtensionManager}.
+ */
+public class PVArenaExtensionManager implements IArenaExtensionManager, IEventListener {
 
-public class PVArenaExtensionManager extends ArenaExtensionManager implements IEventListener {
+    private static final ArenaExtensionRegistration REGISTRATION = new ArenaExtensionRegistration();
 
     private final IArena _arena;
     private final Set<ArenaExtension> _extensions = new HashSet<ArenaExtension>(15);
     private final Map<String, ArenaExtension> _loadedMap = new HashMap<String, ArenaExtension>(15);
     private final IDataNode _dataNode;
 
+    /**
+     * Constructor.
+     *
+     * @param arena  The owning arena.
+     */
     public PVArenaExtensionManager(IArena arena) {
         PreCon.notNull(arena);
 
@@ -149,36 +156,12 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
         extNode.set("enabled", true);
         extNode.save();
 
-        extension.enable();
+        REGISTRATION.attach(extension);
 
         @SuppressWarnings("unchecked")
         T result = (T)extension;
 
         return result;
-    }
-
-    @Override
-    public boolean enableExtension(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        ArenaExtension extension = get(name);
-        if (extension == null)
-            return false;
-
-        extension.enable();
-        return true;
-    }
-
-    @Override
-    public boolean disableExtension(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        ArenaExtension extension = get(name);
-        if (extension == null)
-            return false;
-
-        extension.disable();
-        return true;
     }
 
     @Override
@@ -198,13 +181,12 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
 
         name = name.toLowerCase();
 
-        ArenaExtension module = _loadedMap.remove(name);
-        if (module == null)
+        ArenaExtension extension = _loadedMap.remove(name);
+        if (extension == null)
             return false;
 
-        module.disable();
-        module.dispose();
-        _extensions.remove(module);
+        REGISTRATION.remove(extension);
+        _extensions.remove(extension);
 
         return true;
     }
@@ -230,7 +212,8 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
             return null;
         }
 
-        initExtension(extension, info);
+        extension.register(REGISTRATION);
+        REGISTRATION.init(extension, info, getArena());
 
         _extensions.add(extension);
         _loadedMap.put(info.name().toLowerCase(), extension);
@@ -242,36 +225,11 @@ public class PVArenaExtensionManager extends ArenaExtensionManager implements IE
 
         for (IDataNode node : _dataNode) {
 
-            boolean isEnabled = node.getBoolean("enabled");
-
             Class<? extends ArenaExtension> clazz = PVStarAPI.getExtensionManager().getExtensionClass(node.getName());
             if (clazz == null)
                 continue;
 
-            ArenaExtension extension = loadExtension(clazz);
-            if (extension == null)
-                continue;
-
-            if (isEnabled && getArena().getSettings().isEnabled())
-                extension.enable();
-        }
-    }
-
-    @EventMethod
-    private void onArenaEnable(@SuppressWarnings("unused") ArenaEnabledEvent event) {
-
-        // Enable all extensions when arena is enabled.
-        for (ArenaExtension extension : _extensions) {
-            extension.enable();
-        }
-    }
-
-    @EventMethod
-    private void onArenaDisable(@SuppressWarnings("unused") ArenaDisabledEvent event) {
-
-        // Disable all extensions when arena is disabled.
-        for (ArenaExtension extension : _extensions) {
-            extension.disable();
+            loadExtension(clazz);
         }
     }
 }

@@ -42,7 +42,7 @@ import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
-import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionManager;
+import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
 import com.jcwhatever.pvs.api.arena.managers.IGameManager;
 import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
 import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
@@ -122,7 +122,7 @@ public abstract class AbstractArena implements IArena, IEventListener {
     private ISpectatorManager _spectatorManager;
     private ISpawnManager _spawnManager;
     private ITeamManager _teamManager;
-    private ArenaExtensionManager _extensionManager;
+    private IArenaExtensionManager _extensionManager;
     private IArenaSettings _arenaSettings;
 
     private boolean _isDisposed;
@@ -219,7 +219,7 @@ public abstract class AbstractArena implements IArena, IEventListener {
     }
 
     @Override
-    public final ArenaExtensionManager getExtensionManager() {
+    public final IArenaExtensionManager getExtensionManager() {
         return _extensionManager;
     }
 
