@@ -230,7 +230,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
         if (!isRunning())
             return false;
 
-        IArenaPlayerCollection winningTeam = new ArenaPlayerArrayList(getPlayerCount());
+        IArenaPlayerCollection winningTeam = new ArenaPlayerArrayList(getPlayers().size());
 
         for (IArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
@@ -258,7 +258,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
         if (!isRunning())
             return false;
 
-        IArenaPlayerCollection losingTeam = new ArenaPlayerArrayList(getPlayerCount());
+        IArenaPlayerCollection losingTeam = new ArenaPlayerArrayList(getPlayers().size());
 
         for (IArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {

@@ -80,11 +80,6 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
     }
 
     @Override
-    public final int getPlayerCount() {
-        return _players.size();
-    }
-
-    @Override
     public final boolean hasPlayer(IArenaPlayer player) {
         return _players.hasPlayer(player);
     }
