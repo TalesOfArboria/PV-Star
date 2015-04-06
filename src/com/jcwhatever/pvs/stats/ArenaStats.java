@@ -43,7 +43,7 @@ import java.util.UUID;
 /**
  * PVStar implementation of {@link IArenaStats}.
  */
-public class PVArenaStats implements IArenaStats {
+public class ArenaStats implements IArenaStats {
 
     private static Set<IDataNode> _nodesToSave = new HashSet<>(100);
 
@@ -57,7 +57,7 @@ public class PVArenaStats implements IArenaStats {
 
     private final UUID _arenaId;
 
-    public PVArenaStats(UUID arenaId) {
+    public ArenaStats(UUID arenaId) {
         PreCon.notNull(arenaId);
 
         _arenaId = arenaId;

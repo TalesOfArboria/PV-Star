@@ -91,7 +91,7 @@ public class AddSubCommand extends AbstractPVCommand {
 
         Player p = (Player)sender;
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
@@ -111,13 +111,13 @@ public class AddSubCommand extends AbstractPVCommand {
 
             Location loc = p.getLocation();
 
-            Spawnpoint current = arena.getSpawnManager().getSpawn(name);
+            Spawnpoint current = arena.getSpawns().get(name);
             if (current != null) {
                 tellError(sender, Lang.get(_ALREADY_EXISTS, name));
                 return; // finish
             }
 
-            arena.getSpawnManager().addSpawn(new Spawnpoint(name, spawnType, team, loc));
+            arena.getSpawns().add(new Spawnpoint(name, spawnType, team, loc));
 
             tellSuccess(sender, Lang.get(_SUCCESS, name, arena.getName()));
             tell(sender, TextUtils.formatLocation(loc, true));

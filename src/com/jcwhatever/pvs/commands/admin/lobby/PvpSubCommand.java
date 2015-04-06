@@ -67,7 +67,7 @@ public class PvpSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().isPvpEnabled();
+            boolean isEnabled = arena.getLobby().getSettings().isPvpEnabled();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_PVP_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class PvpSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setPvpEnabled(isEnabled);
+            arena.getLobby().getSettings().setPvpEnabled(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_PVP_CHANGE_ENABLED , arena.getName()));

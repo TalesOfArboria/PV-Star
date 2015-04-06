@@ -63,14 +63,14 @@ public class LivesBehaviorSubCommand extends AbstractPVCommand {
 
         if (args.getString("static|reset|additive|info").equals("info")) {
 
-            LivesBehavior behavior = arena.getGameManager().getSettings().getLivesBehavior();
+            LivesBehavior behavior = arena.getGame().getSettings().getLivesBehavior();
             tell(sender, Lang.get(_BEHAVIOR_INFO, arena.getName(), behavior));
         }
         else {
 
             LivesBehavior behavior = args.getEnum("static|reset|additive|info", LivesBehavior.class);
 
-            arena.getGameManager().getSettings().setLivesBehavior(behavior);
+            arena.getGame().getSettings().setLivesBehavior(behavior);
 
             tellSuccess(sender, Lang.get(_BEHAVIOR_SET, arena.getName(), behavior));
         }

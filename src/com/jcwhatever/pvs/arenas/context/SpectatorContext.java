@@ -22,16 +22,20 @@
  */
 
 
-package com.jcwhatever.pvs.arenas.managers;
+package com.jcwhatever.pvs.arenas.context;
 
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.managers.ISpectatorManager;
-import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.pvs.api.arena.context.ISpectatorContext;
+import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.ISpectatorSettings;
-import com.jcwhatever.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToSpectatorEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromSpectatorEvent;
+import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.arenas.managers.SpawnManager;
 import com.jcwhatever.pvs.arenas.settings.PVSpectatorSettings;
 
 import org.bukkit.Location;
@@ -41,17 +45,22 @@ import javax.annotation.Nullable;
 /**
  * Spectator manager implementation
  */
-public class PVSpectatorManager extends AbstractPlayerManager implements ISpectatorManager {
+public class SpectatorContext extends AbstractContextManager implements ISpectatorContext {
 
     private final ISpectatorSettings _settings;
 
     /*
      * Constructor.
      */
-    public PVSpectatorManager(IArena arena) {
+    public SpectatorContext(AbstractArena arena) {
         super(arena);
 
         _settings = new PVSpectatorSettings(arena);
+    }
+
+    @Override
+    public ArenaContext getContext() {
+        return ArenaContext.SPECTATOR;
     }
 
     @Override
@@ -59,35 +68,40 @@ public class PVSpectatorManager extends AbstractPlayerManager implements ISpecta
         return _settings;
     }
 
+    @Override
+    protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
+
+        return SpawnManager.getRespawnLocation(
+                this, ArenaContext.SPECTATOR, new Location(null, 0, 0, 0));
+    }
+
     @Nullable
     @Override
-    protected Location onRespawnPlayer(IArenaPlayer player) {
-        return getSpawnLocation(player);
+    protected PlayerAddedToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
+
+        PlayerAddedToSpectatorEvent event = new PlayerAddedToSpectatorEvent(contextEvent);
+
+        getArena().getEventManager().call(this, event);
+
+        return event;
     }
 
     @Override
-    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
-        return getSpawnLocation(player);
-    }
-
-    @Override
-    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
         // do nothing
     }
 
     @Override
-    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
+    protected Location onRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
+
+        IArena arena = getArena();
+
+        PlayerRemovedFromSpectatorEvent event = new PlayerRemovedFromSpectatorEvent(
+                arena, player, this,  getContext(), reason);
+
+        arena.getEventManager().call(this, event);
+
         return getArena().getSettings().getRemoveLocation();
-    }
-
-    @Nullable
-    private Location getSpawnLocation(IArenaPlayer player) {
-        Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomSpectatorSpawn(player.getTeam());
-        if (spawnpoint == null) {
-            Msg.warning("Failed to find a spectator spawn for a player in arena '{0}'.", getArena().getName());
-            return null;
-        }
-
-        return spawnpoint;
     }
 }

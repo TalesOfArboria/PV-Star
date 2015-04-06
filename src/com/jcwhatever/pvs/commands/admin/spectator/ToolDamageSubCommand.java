@@ -67,7 +67,7 @@ public class ToolDamageSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getSpectatorManager().getSettings().isToolsDamageable();
+            boolean isEnabled = arena.getSpectators().getSettings().isToolsDamageable();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_TOOL_DAMAGE_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class ToolDamageSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getSpectatorManager().getSettings().setToolsDamageable(isEnabled);
+            arena.getSpectators().getSettings().setToolsDamageable(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_TOOL_DAMAGE_CHANGE_ENABLED, arena.getName()));

@@ -67,7 +67,7 @@ public class TeamPvpSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().isTeamPvpEnabled();
+            boolean isEnabled = arena.getLobby().getSettings().isTeamPvpEnabled();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_TEAM_PVP_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class TeamPvpSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setTeamPvpEnabled(isEnabled);
+            arena.getLobby().getSettings().setTeamPvpEnabled(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_TEAM_PVP_CHANGE_ENABLED, arena.getName()));

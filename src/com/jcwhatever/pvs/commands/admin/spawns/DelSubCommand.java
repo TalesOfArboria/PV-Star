@@ -55,19 +55,19 @@ public class DelSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
         String name = args.getString("name");
 
-        Spawnpoint spawnpoint = arena.getSpawnManager().getSpawn(name);
+        Spawnpoint spawnpoint = arena.getSpawns().get(name);
         if (spawnpoint == null) {
             tellError(sender, Lang.get(_FAILED, name, arena.getName()));
             return; // finish
         }
 
-        arena.getSpawnManager().removeSpawn(spawnpoint);
+        arena.getSpawns().remove(spawnpoint);
         tellSuccess(sender, Lang.get(_SUCCESS, name, arena.getName()));
     }
 }

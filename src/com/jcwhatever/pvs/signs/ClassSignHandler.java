@@ -32,11 +32,11 @@ import com.jcwhatever.nucleus.managed.signs.ISignContainer;
 import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -93,12 +93,12 @@ public class ClassSignHandler extends SignHandler {
     @Override
     protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         IArena arena = player.getArena();
         if (arena == null)
             return SignClickResult.IGNORED;
 
-        if (player.getArenaRelation() != ArenaPlayerRelation.LOBBY)
+        if (player.getContext() != ArenaContext.LOBBY)
             return SignClickResult.IGNORED;
 
         String className = sign.getRawLine(1);
@@ -117,7 +117,7 @@ public class ClassSignHandler extends SignHandler {
                 kit.give(p);
 
                 //noinspection ConstantConditions
-                player.getRelatedManager().tell(ChatColor.GREEN + p.getName() + " is a " + className + '.');
+                player.getContextManager().tell(ChatColor.GREEN + p.getName() + " is a " + className + '.');
             }
         }
 

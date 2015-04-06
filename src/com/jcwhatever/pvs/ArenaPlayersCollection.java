@@ -25,18 +25,17 @@
 package com.jcwhatever.pvs;
 
 
-import com.jcwhatever.nucleus.utils.performance.EntryCache;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.performance.EntryCache;
+import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.exceptions.PlayerGroupExpectedException;
-import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
+import com.jcwhatever.pvs.api.utils.Msg;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -100,7 +99,7 @@ public class ArenaPlayersCollection {
             }
 
             // add new player to new group
-            IArenaPlayerGroup group = new PVArenaPlayerGroup();
+            IArenaPlayerGroup group = new ArenaPlayerGroup();
             group.addPlayer(player);
             _groups.add(group);
         }
@@ -112,7 +111,7 @@ public class ArenaPlayersCollection {
      * <p>If no more player from the removed players group are present, the players
      * group is also removed.</p>
      */
-    public void removePlayer(IArenaPlayer player, RemovePlayerReason reason) {
+    public void removePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
         PreCon.notNull(player);
 
         _cachedNextGroup.reset();
@@ -121,12 +120,13 @@ public class ArenaPlayersCollection {
         _players.remove(player);
 
         IArenaPlayerGroup group = player.getPlayerGroup();
-        if (group == null) {
-            throw new PlayerGroupExpectedException();
-        }
+        if (group == null)
+            throw new NullPointerException(
+                    "Player was expected to be in a player group but was not.");
 
-        if (reason != RemovePlayerReason.FORWARDING &&
-                reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+
+        if (reason != RemoveFromContextReason.FORWARDING &&
+                reason != RemoveFromContextReason.CONTEXT_CHANGE) {
             group.removePlayer(player);
         }
 

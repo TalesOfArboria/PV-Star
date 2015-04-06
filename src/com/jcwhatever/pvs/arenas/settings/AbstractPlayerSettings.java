@@ -27,12 +27,12 @@ package com.jcwhatever.pvs.arenas.settings;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.arena.IArena;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 
 /**
  * Basic settings for player manager settings implementations
  */
-public abstract class AbstractPlayerSettings implements IPlayerSettings {
+public abstract class AbstractPlayerSettings implements IContextSettings {
 
     private final IDataNode _dataNode;
     private final IArena _arena;

@@ -84,7 +84,7 @@ public class ListSubCommand extends AbstractPVCommand {
 
             if (type == null || type == spawnType) {
 
-                List<Spawnpoint> spawns = arena.getSpawnManager().getSpawns(spawnType);
+                List<Spawnpoint> spawns = arena.getSpawns().getAll(spawnType);
                 if (spawns == null)
                     continue;
 

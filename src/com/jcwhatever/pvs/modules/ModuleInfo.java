@@ -41,7 +41,7 @@ import java.util.jar.JarFile;
  * Loads and stores module info from module.yml file
  * in the module jar file.
  */
-public class PVModuleInfo extends YamlModuleInfo implements IModuleInfo {
+public class ModuleInfo extends YamlModuleInfo implements IModuleInfo {
 
     private String _version;
     private String _moduleClassName;
@@ -56,7 +56,7 @@ public class PVModuleInfo extends YamlModuleInfo implements IModuleInfo {
     /*
      * Constructor. Pass in module.yml text string.
      */
-    public PVModuleInfo(JarFile jarFile) {
+    public ModuleInfo(JarFile jarFile) {
         super(PVStarAPI.getPlugin(), "module.yml", jarFile);
     }
 

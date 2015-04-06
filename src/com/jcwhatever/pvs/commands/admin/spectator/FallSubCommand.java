@@ -67,7 +67,7 @@ public class FallSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getSpectatorManager().getSettings().hasFallDamage();
+            boolean isEnabled = arena.getSpectators().getSettings().hasFallDamage();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_HUNGER_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class FallSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getSpectatorManager().getSettings().setFallDamage(isEnabled);
+            arena.getSpectators().getSettings().setFallDamage(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_HUNGER_CHANGE_ENABLED, arena.getName()));

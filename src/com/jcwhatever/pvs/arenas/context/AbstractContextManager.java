@@ -22,24 +22,24 @@
  */
 
 
-package com.jcwhatever.pvs.arenas.managers;
+package com.jcwhatever.pvs.arenas.context;
 
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaPlayersCollection;
-import com.jcwhatever.pvs.PVArenaPlayer;
-import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.managers.IPlayerManager;
-import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerPreAddEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.pvs.api.arena.context.IContextManager;
+import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
+import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerPreAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveFromContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromContextEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
+import com.jcwhatever.pvs.arenas.AbstractArena;
 
 import org.bukkit.Location;
 
@@ -49,15 +49,15 @@ import javax.annotation.Nullable;
  * Abstract implementation for player managers
  * (Lobby, Game and Spectator Manager)
  */
-public abstract class AbstractPlayerManager implements IPlayerManager {
+public abstract class AbstractContextManager implements IContextManager {
 
-    private final IArena _arena;
+    private final AbstractArena _arena;
     protected final ArenaPlayersCollection _players;
 
     /*
      * Constructor.
      */
-    public AbstractPlayerManager(IArena arena) {
+    public AbstractContextManager(AbstractArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;
@@ -65,7 +65,7 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
     }
 
     @Override
-    public final IArena getArena() {
+    public final AbstractArena getArena() {
         return _arena;
     }
 
@@ -79,27 +79,8 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
         return _players.getPlayers();
     }
 
-    @Override
-    public final boolean hasPlayer(IArenaPlayer player) {
-        return _players.hasPlayer(player);
-    }
-
-    @Override
-    public final boolean respawnPlayer(IArenaPlayer player) {
-        if (!_players.hasPlayer(player))
-            return false;
-
-        Location respawnLocation = onRespawnPlayer(player);
-        if (respawnLocation == null)
-            return false;
-
-        player.getPlayer().teleport(respawnLocation);
-        return true;
-    }
-
-    @Override
-    public final boolean addPlayer(IArenaPlayer player, AddPlayerReason reason) {
-        PreCon.isValid(player instanceof PVArenaPlayer);
+    public final boolean addPlayer(IArenaPlayer player, AddToContextReason reason) {
+        PreCon.isValid(player instanceof ArenaPlayer);
         PreCon.notNull(reason);
 
         if (_players.hasPlayer(player))
@@ -108,110 +89,111 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
         if (!getArena().getSettings().isEnabled())
             return false;
 
-        if (reason != AddPlayerReason.ARENA_RELATION_CHANGE) {
+        if (reason != AddToContextReason.CONTEXT_CHANGE) {
 
             if (_arena.getEventManager().call(this,
-                    new PlayerPreAddEvent(_arena, player, this, reason)).isCancelled())
+                    new PlayerPreAddToContextEvent(_arena, player, this, reason)).isCancelled())
                 return false;
         }
 
         _players.addPlayer(player);
 
-        ((PVArenaPlayer)player).setCurrentArena(_arena);
+        ((ArenaPlayer)player).setCurrentArena(_arena);
 
-        Location spawnPoint = onAddPlayer(player, reason);
+        Location spawnPoint = onPrePlayerAdd(player, reason);
 
-        PlayerAddedEvent event = new PlayerAddedEvent(_arena, player, this, reason, spawnPoint, null);
+        PlayerAddedToContextEvent contextEvent = new PlayerAddedToContextEvent(
+                _arena, player, this, getContext(), reason, spawnPoint, null);
 
-        _arena.getEventManager().call(this, event);
+        _arena.getEventManager().call(this, contextEvent);
+
+        contextEvent = onPlayerAdded(player, reason, contextEvent);
 
         // teleport player to spawn location from event
-        if (event.getSpawnLocation() != null) {
+        if (contextEvent.getSpawnLocation() != null) {
 
-            player.getPlayer().teleport(event.getSpawnLocation());
+            player.getPlayer().teleport(contextEvent.getSpawnLocation());
 
             // reserve spawnpoint
-            if (event.getSpawnLocation() instanceof Spawnpoint) {
-                IPlayerSettings settings = player.getRelatedSettings();
+            if (contextEvent.getSpawnLocation() instanceof Spawnpoint) {
+                IContextSettings settings = player.getContextSettings();
                 if (settings != null && settings.isPlayerSpawnsReserved()) {
 
-                    getArena().getSpawnManager().reserveSpawn(player, (Spawnpoint)event.getSpawnLocation());
+                    getArena().getSpawns().reserve(player, (Spawnpoint) contextEvent.getSpawnLocation());
 
                 }
             }
         }
 
         // display message from event
-        if (event.getMessage() != null) {
-            tell(event.getMessage());
+        if (contextEvent.getMessage() != null) {
+            tell(contextEvent.getMessage());
         }
 
         return true;
     }
 
-    @Override
-    public final Result<Location> removePlayer(IArenaPlayer player, RemovePlayerReason reason) {
-        PreCon.isValid(player instanceof PVArenaPlayer);
+    public final Result<Location> removePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
+        PreCon.isValid(player instanceof ArenaPlayer);
         PreCon.notNull(reason);
 
         // make sure the manager has the player
         if (!_players.hasPlayer(player))
             return new Result<>(false);
 
-        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+        if (reason != RemoveFromContextReason.CONTEXT_CHANGE) {
 
             // call pre remove event to see if the remove event is cancelled
             if (_arena.getEventManager().call(this,
-                    new PlayerPreRemoveEvent(_arena, player, this, reason))
+                    new PlayerPreRemoveFromContextEvent(_arena, player, this, reason))
                     .isCancelled())
                 return new Result<>(false);
         }
 
         onPreRemovePlayer(player, reason);
 
-        getArena().getSpawnManager().unreserveSpawn(player);
+        getArena().getSpawns().unreserve(player);
 
         // remove player from collection
         _players.removePlayer(player, reason);
 
         // clear arena if leaving
-        if (reason != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+        if (reason != RemoveFromContextReason.CONTEXT_CHANGE) {
 
-            ((PVArenaPlayer)player).clearArena();
+            ((ArenaPlayer)player).clearArena();
         }
 
         Location restoreLocation = onRemovePlayer(player, reason);
 
         // call player removed event
 
-        PlayerRemovedEvent removedEvent =
-                new PlayerRemovedEvent(_arena, player, this, reason);
+        PlayerRemovedFromContextEvent removedEvent =
+                new PlayerRemovedFromContextEvent(_arena, player, this, getContext(), reason);
         _arena.getEventManager().call(this, removedEvent);
 
         return new Result<>(true, restoreLocation);
     }
 
     /**
-     * Invoked when a player is respawned.
-     *
-     * @return  The location the player should be respawned at or null to prevent
-     * setting respawn location.
-     */
-    @Nullable
-    protected abstract Location onRespawnPlayer(IArenaPlayer player);
-
-    /**
-     * Invoked when a player is added.
+     * Invoked before a player is added.
      *
      * @return  The location the player should be spawned at or null to prevent teleport.
      */
     @Nullable
-    protected abstract Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason);
+    protected abstract Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason);
+
+    /**
+     * Invoked after a player is added.
+     *
+     * @return  The context event to retrieve modified event values from.
+     */
+    protected abstract PlayerAddedToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent event);
 
     /**
      * Invoked before a player is removed.
      */
-    protected abstract void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason);
+    protected abstract void onPreRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason);
 
     /**
      * Invoked after a player is removed.
@@ -220,5 +202,5 @@ public abstract class AbstractPlayerManager implements IPlayerManager {
      * prevent teleport.
      */
     @Nullable
-    protected abstract Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason);
+    protected abstract Location onRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason);
 }

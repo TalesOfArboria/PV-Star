@@ -67,7 +67,7 @@ public class HungerSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().isHungerEnabled();
+            boolean isEnabled = arena.getLobby().getSettings().isHungerEnabled();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_HUNGER_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class HungerSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setHungerEnabled(isEnabled);
+            arena.getLobby().getSettings().setHungerEnabled(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_HUNGER_CHANGE_ENABLED, arena.getName()));

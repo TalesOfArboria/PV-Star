@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.pvs.arenas.managers;
+package com.jcwhatever.pvs.arenas.context;
 
 import com.jcwhatever.nucleus.events.manager.EventMethod;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
@@ -30,15 +30,19 @@ import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.managers.IGameManager;
-import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
-import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
+import com.jcwhatever.pvs.api.arena.context.IGameContext;
+import com.jcwhatever.pvs.api.arena.context.ILobbyContext;
+import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.ILobbySettings;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToLobbyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
-import com.jcwhatever.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromLobbyEvent;
+import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.arenas.managers.SpawnManager;
 import com.jcwhatever.pvs.arenas.settings.PVLobbySettings;
 
 import org.bukkit.Location;
@@ -46,18 +50,23 @@ import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
 
-public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManager, IEventListener {
+public class LobbyContext extends AbstractContextManager implements ILobbyContext, IEventListener {
 
     private final ILobbySettings _settings;
 
     /*
      * Constructor.
      */
-    public PVLobbyManager(IArena arena) {
+    public LobbyContext(AbstractArena arena) {
         super(arena);
 
         _settings = new PVLobbySettings(arena);
         arena.getEventManager().register(this);
+    }
+
+    @Override
+    public ArenaContext getContext() {
+        return ArenaContext.LOBBY;
     }
 
     @Override
@@ -88,26 +97,40 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
         return _players.getNextGroup(minSize);
     }
 
+    @Override
+    protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
+
+        return SpawnManager.getRespawnLocation(
+                this, ArenaContext.LOBBY, new Location(null, 0, 0, 0));
+    }
+
     @Nullable
     @Override
-    protected Location onRespawnPlayer(IArenaPlayer player) {
-        return getSpawnLocation(player);
+    protected PlayerAddedToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
+
+        PlayerAddedToLobbyEvent event = new PlayerAddedToLobbyEvent(contextEvent);
+        getArena().getEventManager().call(this, event);
+
+        return event;
     }
 
     @Override
-    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
-
-        return getSpawnLocation(player);
-    }
-
-    @Override
-    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
         // do nothing
     }
 
     @Override
-    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
-        return getArena().getSettings().getRemoveLocation();
+    protected Location onRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
+
+        IArena arena = getArena();
+
+        PlayerRemovedFromLobbyEvent event = new PlayerRemovedFromLobbyEvent(
+                arena, player, this,  getContext(), reason);
+
+        arena.getEventManager().call(this, event);
+
+        return arena.getSettings().getRemoveLocation();
     }
 
     /*
@@ -115,7 +138,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
      */
     private boolean tryAutoStart() {
 
-        IGameManager gameManager = getArena().getGameManager();
+        IGameContext gameManager = getArena().getGame();
 
         // make sure game isn't already running
         if (gameManager.isRunning())
@@ -141,7 +164,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
                 return false;
 
             // start
-            return getArena().getGameManager().start(ArenaStartReason.AUTO);
+            return getArena().getGame().start(ArenaStartReason.AUTO);
         }
 
         return false;
@@ -153,7 +176,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
     private boolean tryReadyStart() {
 
         // make sure game isn't running
-        if (getArena().getGameManager().isRunning())
+        if (getArena().getGame().isRunning())
             return false;
 
         // make sure arena isn't busy
@@ -161,7 +184,7 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
             return false;
 
         // check to see if there is a group that is ready
-        IArenaPlayerCollection ready = getArena().getLobbyManager().getReadyGroup();
+        IArenaPlayerCollection ready = getArena().getLobby().getReadyGroup();
         if (ready == null || ready.isEmpty())
             return false;
 
@@ -169,29 +192,9 @@ public class PVLobbyManager extends AbstractPlayerManager implements ILobbyManag
         // players requirement
         return ready.size() >= getArena().getSettings().getMinPlayers() &&
                 // start
-                getArena().getGameManager().start(ArenaStartReason.PLAYERS_READY);
+                getArena().getGame().start(ArenaStartReason.PLAYERS_READY);
 
     }
-
-    /*
-     * Get a lobby spawn location for a player.
-     */
-    @Nullable
-    private Location getSpawnLocation(IArenaPlayer player) {
-        Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomLobbySpawn(player.getTeam());
-        if (spawnpoint == null) {
-
-            spawnpoint = getArena().getSpawnManager().getRandomGameSpawn(player.getTeam());
-            if (spawnpoint == null) {
-
-                Msg.warning("Failed to find a lobby spawn for a player in arena '{0}'.", getArena().getName());
-                return null;
-            }
-        }
-
-        return spawnpoint;
-    }
-
 
     // try ready start when a player is ready
     @EventMethod

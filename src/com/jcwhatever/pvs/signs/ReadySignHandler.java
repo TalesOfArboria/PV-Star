@@ -29,11 +29,11 @@ import com.jcwhatever.nucleus.managed.signs.ISignContainer;
 import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.utils.Msg;
 
 import org.bukkit.entity.Player;
@@ -90,15 +90,15 @@ public class ReadySignHandler extends SignHandler {
     @Override
     protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         IArena arena = player.getArena();
 
-        if (arena == null || player.getArenaRelation() == ArenaPlayerRelation.SPECTATOR) {
+        if (arena == null || player.getContext() == ArenaContext.SPECTATOR) {
             Msg.tellError(p, Lang.get(_VOTE_NOT_IN_GAME));
             return SignClickResult.IGNORED;
         }
 
-        if (player.getArenaRelation() == ArenaPlayerRelation.GAME) {
+        if (player.getContext() == ArenaContext.GAME) {
             Msg.tellError(p, Lang.get(_VOTE_GAME_ALREADY_STARTED));
             return SignClickResult.IGNORED;
         }

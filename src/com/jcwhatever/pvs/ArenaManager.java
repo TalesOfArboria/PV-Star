@@ -36,10 +36,9 @@ import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.managers.IArenaManager;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
-import com.jcwhatever.pvs.api.exceptions.MissingTypeInfoException;
 import com.jcwhatever.pvs.api.utils.Msg;
+import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.arenas.ArenaTypeInfo;
-import com.jcwhatever.pvs.arenas.PVArena;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -56,7 +55,7 @@ import javax.annotation.Nullable;
 /**
  * PVStar implementation of {@link IArenaManager}.
  */
-public class PVArenaManager implements IArenaManager {
+public class ArenaManager implements IArenaManager {
 
     private final Map<UUID, IArena> _arenaIdMap = new HashMap<>(20);
     private final Map<String, Class<? extends IArena>> _arenaTypes = new HashMap<>(20);
@@ -64,7 +63,7 @@ public class PVArenaManager implements IArenaManager {
     private final PVStar _pvStar;
     private final Map<String, IArena> _selectedArenas = new HashMap<>(20); // keyed to player name
 
-    public PVArenaManager(IDataNode dataNode) {
+    public ArenaManager(IDataNode dataNode) {
         _dataNode = dataNode;
         _pvStar = PVStar.getPlugin(PVStar.class);
     }
@@ -73,8 +72,11 @@ public class PVArenaManager implements IArenaManager {
         PreCon.notNull(arenaClass);
 
         ArenaTypeInfo typeInfo = arenaClass.getAnnotation(ArenaTypeInfo.class);
-        if (typeInfo == null)
-            throw new MissingTypeInfoException(arenaClass);
+        if (typeInfo == null) {
+            throw new IllegalArgumentException(
+                    "Expected but did not find proper type info annotation on " +
+                            "class: " + arenaClass.getName());
+        }
 
         return _arenaTypes.put(typeInfo.typeName().toLowerCase(), arenaClass) != null;
     }
@@ -135,7 +137,7 @@ public class PVArenaManager implements IArenaManager {
     public IArena getArena(Player p) {
         PreCon.notNull(p);
 
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         if (player == null)
             return null;
 
@@ -227,7 +229,7 @@ public class PVArenaManager implements IArenaManager {
         arenaNode.set("type", "arena");
         arenaNode.save();
 
-        PVArena arena = new PVArena();
+        Arena arena = new Arena();
         _arenaIdMap.put(arenaId, arena);
 
         arena.init(arenaId, arenaName);
@@ -242,7 +244,7 @@ public class PVArenaManager implements IArenaManager {
     public boolean removeArena(UUID arenaId) {
         PreCon.notNull(arenaId);
 
-        PVArena arena = (PVArena)_arenaIdMap.remove(arenaId);
+        Arena arena = (Arena)_arenaIdMap.remove(arenaId);
         if (arena == null)
             return false;
 
@@ -289,7 +291,7 @@ public class PVArenaManager implements IArenaManager {
                 continue;
             }
 
-            PVArena arena = new PVArena();
+            Arena arena = new Arena();
             arena.init(arenaId, arenaName);
 
             _pvStar.getPointsManager().loadTypes(arena);

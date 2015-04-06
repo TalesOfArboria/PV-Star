@@ -59,7 +59,7 @@ public class AddSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
@@ -70,7 +70,7 @@ public class AddSubCommand extends AbstractPVCommand {
             return; // finish
         }
 
-        ArenaExtension extension = arena.getExtensionManager().add(extName);
+        ArenaExtension extension = arena.getExtensions().add(extName);
         if (extension == null) {
             tellError(sender, Lang.get(_FAILED, extName, arena.getName()));
             return; // finish

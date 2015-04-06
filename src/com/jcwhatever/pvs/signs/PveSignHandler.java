@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.managed.signs.ISignContainer;
 import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -113,7 +113,7 @@ public class PveSignHandler extends SignHandler {
             @Override
             public void run() {
 
-                IArenaPlayer player = PVArenaPlayer.get(p);
+                IArenaPlayer player = ArenaPlayer.get(p);
 
                 // Add player to arena
                 arena.join(player);

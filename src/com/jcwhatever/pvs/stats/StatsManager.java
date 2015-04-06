@@ -37,9 +37,9 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /**
- * PV-Star implementation of {@link PVStatsManager}.
+ * PV-Star implementation of {@link StatsManager}.
  */
-public class PVStatsManager implements IStatsManager {
+public class StatsManager implements IStatsManager {
 
     private final Map<UUID, IArenaStats> _arenaStats = new HashMap<>(50);
     private final Map<String, StatType> _typeMap = new HashMap<>(25);
@@ -70,7 +70,7 @@ public class PVStatsManager implements IStatsManager {
         IArenaStats stats = _arenaStats.get(arenaId);
         if (stats == null) {
 
-            stats = new PVArenaStats(arenaId);
+            stats = new ArenaStats(arenaId);
 
             _arenaStats.put(arenaId, stats);
         }

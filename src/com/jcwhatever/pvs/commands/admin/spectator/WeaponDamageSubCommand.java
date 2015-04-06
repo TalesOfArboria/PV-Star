@@ -67,7 +67,7 @@ public class WeaponDamageSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getSpectatorManager().getSettings().isWeaponsDamageable();
+            boolean isEnabled = arena.getSpectators().getSettings().isWeaponsDamageable();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_WEAPON_DAMAGE_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class WeaponDamageSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getSpectatorManager().getSettings().setWeaponsDamageable(isEnabled);
+            arena.getSpectators().getSettings().setWeaponsDamageable(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_WEAPON_DAMAGE_CHANGE_ENABLED, arena.getName()));

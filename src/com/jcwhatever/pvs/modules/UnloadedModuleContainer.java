@@ -44,13 +44,13 @@ import java.util.Set;
 public class UnloadedModuleContainer implements INamedInsensitive, IDependantRunnable {
 
     private final PVStarModule _module;
-    private final PVModuleInfo _moduleInfo;
+    private final ModuleInfo _moduleInfo;
     private final ModuleLoader _loader;
 
     /**
      * Constructor.
      */
-    public UnloadedModuleContainer(ModuleLoader loader, PVStarModule module, PVModuleInfo moduleInfo) {
+    public UnloadedModuleContainer(ModuleLoader loader, PVStarModule module, ModuleInfo moduleInfo) {
         PreCon.notNull(loader);
         PreCon.notNull(module);
         PreCon.notNull(moduleInfo);

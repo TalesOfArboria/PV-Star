@@ -64,7 +64,7 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     public static final PVStarModuleRegistration REGISTRATION = new PVStarModuleRegistration();
 
     private final File _moduleFolder;
-    private final Map<String, PVModuleInfo> _moduleInfo = new HashMap<>(50);
+    private final Map<String, ModuleInfo> _moduleInfo = new HashMap<>(50);
     private final Map<String, UnloadedModuleContainer> _unloadedModules = new HashMap<>(50);
 
     private boolean _isModulesLoaded;
@@ -158,7 +158,7 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
         super.addModule(info, instance);
 
         _unloadedModules.put(info.getSearchName(),
-                new UnloadedModuleContainer(this, instance, (PVModuleInfo)info));
+                new UnloadedModuleContainer(this, instance, (ModuleInfo)info));
     }
 
     @Override
@@ -169,7 +169,7 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
     @Override
     protected String getModuleClassName(JarFile jarFile) {
 
-        PVModuleInfo info = new PVModuleInfo(jarFile);
+        ModuleInfo info = new ModuleInfo(jarFile);
         if (!info.isValid())
             return null;
 

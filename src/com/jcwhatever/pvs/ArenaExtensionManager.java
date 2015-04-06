@@ -34,7 +34,7 @@ import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension.ArenaExtensionRegistration;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
-import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
+import com.jcwhatever.pvs.exceptions.MissingExtensionAnnotation;
 
 import org.bukkit.plugin.Plugin;
 
@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 /**
  * PVStar implementation of {@link IArenaExtensionManager}.
  */
-public class PVArenaExtensionManager implements IArenaExtensionManager, IEventListener {
+public class ArenaExtensionManager implements IArenaExtensionManager, IEventListener {
 
     private static final ArenaExtensionRegistration REGISTRATION = new ArenaExtensionRegistration();
 
@@ -61,7 +61,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
      *
      * @param arena  The owning arena.
      */
-    public PVArenaExtensionManager(IArena arena) {
+    public ArenaExtensionManager(IArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;
@@ -95,7 +95,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(clazz);
+            throw new MissingExtensionAnnotation(clazz);
 
         return _loadedMap.containsKey(info.name().toLowerCase());
     }
@@ -121,7 +121,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(clazz);
+            throw new MissingExtensionAnnotation(clazz);
 
         ArenaExtension module = _loadedMap.get(info.name().toLowerCase());
         if (module == null)
@@ -146,7 +146,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(clazz);
+            throw new MissingExtensionAnnotation(clazz);
 
         ArenaExtension extension = loadExtension(clazz);
         if (extension == null)
@@ -168,7 +168,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(clazz);
+            throw new MissingExtensionAnnotation(clazz);
 
         return remove(info.name());
     }
@@ -194,7 +194,7 @@ public class PVArenaExtensionManager implements IArenaExtensionManager, IEventLi
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(clazz);
+            throw new MissingExtensionAnnotation(clazz);
 
         ArenaExtension extension = _loadedMap.get(info.name().toLowerCase());
         if (extension != null)

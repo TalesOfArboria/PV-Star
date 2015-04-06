@@ -24,13 +24,20 @@
 
 package com.jcwhatever.pvs.arenas.managers;
 
+import com.jcwhatever.nucleus.events.manager.EventMethod;
+import com.jcwhatever.nucleus.events.manager.IEventListener;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Rand;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.managers.ISpawnManager;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
-import com.jcwhatever.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromContextEvent;
 import com.jcwhatever.pvs.api.events.spawns.ClearReservedSpawnsEvent;
 import com.jcwhatever.pvs.api.events.spawns.ReserveSpawnEvent;
 import com.jcwhatever.pvs.api.events.spawns.SpawnAddedEvent;
@@ -40,16 +47,14 @@ import com.jcwhatever.pvs.api.events.spawns.SpawnRemovedEvent;
 import com.jcwhatever.pvs.api.events.spawns.UnreserveSpawnEvent;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.pvs.api.utils.SpawnFilter;
+import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.arenas.context.AbstractContextManager;
 import com.jcwhatever.pvs.spawns.SpawnpointsCollection;
-import com.jcwhatever.nucleus.events.manager.IEventListener;
-import com.jcwhatever.nucleus.events.manager.EventMethod;
-import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +65,33 @@ import javax.annotation.Nullable;
 /**
  * Spawn manager implementation.
  */
-public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManager, IEventListener {
+public class SpawnManager extends SpawnpointsCollection implements ISpawnManager, IEventListener {
+
+    @Nullable
+    public static Location getRespawnLocation(
+            AbstractContextManager manager, ArenaContext context, Location output) {
+
+        PreCon.notNull(manager);
+        PreCon.notNull(context);
+        PreCon.notNull(output);
+
+        AbstractArena arena = manager.getArena();
+
+        List<Spawnpoint> spawns = arena.getSpawns().getAll(context);
+
+        if (spawns.isEmpty() && context == ArenaContext.LOBBY) {
+            spawns = arena.getSpawns().getAll(ArenaContext.GAME);
+        }
+
+        if (spawns.isEmpty())
+            return null;
+
+        Location respawnLocation = Rand.get(spawns);
+        if (respawnLocation == null)
+            return null;
+
+        return LocationUtils.copy(respawnLocation, output);
+    }
 
     private final Map<UUID, Spawnpoint> _reserved = new HashMap<>(15); // key is player id
     private final IArena _arena;
@@ -69,7 +100,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
     /*
      * Constructor.
      */
-    public PVSpawnManager(IArena arena) {
+    public SpawnManager(IArena arena) {
         _arena = arena;
         _dataNode = arena.getDataNode("spawns");
 
@@ -90,61 +121,71 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
 
     @Override
     public boolean hasLobbySpawns() {
-        return !getSpawns(PVStarAPI.getSpawnTypeManager().getLobbySpawnType()).isEmpty();
+        return !getAll(PVStarAPI.getSpawnTypeManager().getLobbySpawnType()).isEmpty();
     }
 
     @Override
     public boolean hasGameSpawns() {
-        return !getSpawns(PVStarAPI.getSpawnTypeManager().getGameSpawnType()).isEmpty();
+        return !getAll(PVStarAPI.getSpawnTypeManager().getGameSpawnType()).isEmpty();
     }
 
     @Override
     public boolean hasSpectatorSpawns() {
-        return !getSpawns(PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType()).isEmpty();
+        return !getAll(PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType()).isEmpty();
     }
 
     @Override
-    public List<Spawnpoint> getLobbyOrGameSpawns() {
+    public List<Spawnpoint> getAll(ArenaContext context) {
 
-        SpawnType lobbyType = PVStarAPI.getSpawnTypeManager().getLobbySpawnType();
+        switch (context) {
+            case LOBBY:
+                return getAll(
+                        PVStarAPI.getSpawnTypeManager().getLobbySpawnType());
 
-        List<Spawnpoint> spawns = getSpawns(lobbyType);
+            case GAME:
+                return getAll(
+                        PVStarAPI.getSpawnTypeManager().getGameSpawnType());
 
-        if (spawns.size() == 0) {
-            SpawnType gameType = PVStarAPI.getSpawnTypeManager().getGameSpawnType();
-            spawns = getSpawns(gameType);
+            case SPECTATOR:
+                return getAll(
+                        PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType());
+
+            default:
+                return null;
         }
-
-        return spawns;
     }
 
     @Override
-    public List<Spawnpoint> getLobbySpawns() {
-        return getSpawns(
-                PVStarAPI.getSpawnTypeManager().getLobbySpawnType());
+    public List<Spawnpoint> getAll(ArenaTeam team, ArenaContext context) {
+        PreCon.notNull(team);
+        PreCon.notNull(context);
+
+        SpawnType type;
+
+        switch (context) {
+            case LOBBY:
+                type = PVStarAPI.getSpawnTypeManager().getLobbySpawnType();
+                break;
+            case GAME:
+                type = PVStarAPI.getSpawnTypeManager().getGameSpawnType();
+                break;
+            case SPECTATOR:
+                type = PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType();
+                break;
+            default:
+                return new ArrayList<>(0);
+        }
+        return getAll(type, team);
     }
 
     @Override
-    public List<Spawnpoint> getGameSpawns() {
-        return getSpawns(
-                PVStarAPI.getSpawnTypeManager().getGameSpawnType());
-    }
-
-    @Override
-    public List<Spawnpoint> getSpectatorSpawns() {
-        return getSpawns(
-                PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType());
-    }
-
-
-    @Override
-    public boolean addSpawn(Spawnpoint spawn) {
+    public boolean add(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isSpawnAdded = !getArena().getEventManager().call(this, new SpawnPreAddEvent(getArena(), spawn)).isCancelled()
-                && super.addSpawn(spawn);
+        SpawnPreAddEvent event = new SpawnPreAddEvent(getArena(), spawn);
+        getArena().getEventManager().call(this, event);
 
-        if (!isSpawnAdded)
+        if (event.isCancelled() || !super.add(spawn))
             return false;
 
         IDataNode node = _dataNode.getNode(spawn.getName());
@@ -161,21 +202,21 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
     }
 
     @Override
-    public void addSpawns(final Collection<? extends Spawnpoint> spawns) {
+    public void addAll(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
         for (Spawnpoint spawn : spawns) {
-            addSpawn(spawn);
+            add(spawn);
         }
     }
 
     @Override
-    public boolean removeSpawn(Spawnpoint spawn) {
+    public boolean remove(Spawnpoint spawn) {
         PreCon.notNull(spawn);
 
-        boolean isRemoved = !getArena().getEventManager().call(this, new SpawnPreRemoveEvent(getArena(), spawn)).isCancelled()
-                && super.removeSpawn(spawn);
+        SpawnPreRemoveEvent preEvent = new SpawnPreRemoveEvent(getArena(), spawn);
+        getArena().getEventManager().call(this, preEvent);
 
-        if (!isRemoved)
+        if (preEvent.isCancelled() || !super.remove(spawn))
             return false;
 
         IDataNode node = _dataNode.getNode(spawn.getName());
@@ -185,107 +226,62 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
         getArena().getEventManager().call(this, new SpawnRemovedEvent(getArena(), spawn));
 
         return true;
-
     }
 
     @Override
-    public void removeSpawns(final Collection<? extends Spawnpoint> spawns) {
+    public void removeAll(final Collection<? extends Spawnpoint> spawns) {
         PreCon.notNull(spawns);
 
         for (Spawnpoint spawn : spawns)
-            removeSpawn(spawn);
-    }
-
-    @Nullable
-    @Override
-    public Spawnpoint getRandomSpawn(IArenaPlayer player) {
-
-        switch (player.getArenaRelation()) {
-
-            case LOBBY:
-                return getRandomLobbySpawn(player.getTeam());
-            case GAME:
-                return getRandomGameSpawn(player.getTeam());
-            case SPECTATOR:
-                return getRandomSpectatorSpawn(player.getTeam());
-            default:
-                return null;
-        }
-    }
-
-    @Nullable
-    @Override
-    public Spawnpoint getRandomLobbySpawn(ArenaTeam team) {
-
-        // get lobby spawns
-        List<Spawnpoint> spawns = getSpawns(
-                PVStarAPI.getSpawnTypeManager().getLobbySpawnType(), team);
-
-        if (spawns == null || spawns.size() == 0) {
-
-            // use game spawns if there are no lobby spawns
-            spawns = getSpawns(
-                    PVStarAPI.getSpawnTypeManager().getGameSpawnType(), team);
-
-            if (spawns == null || spawns.size() == 0) {
-                return null;
-            }
-        }
-
-        return SpawnFilter.getRandomSpawn(spawns);
-    }
-
-    @Nullable
-    @Override
-    public Spawnpoint getRandomGameSpawn(ArenaTeam team) {
-        return SpawnFilter.getRandomSpawn(
-                PVStarAPI.getSpawnTypeManager().getGameSpawnType(), team, this.getSpawns());
-    }
-
-    @Nullable
-    @Override
-    public Spawnpoint getRandomSpectatorSpawn(ArenaTeam team) {
-        return SpawnFilter.getRandomSpawn(
-                PVStarAPI.getSpawnTypeManager().getLobbySpawnType(), team, this.getSpawns());
+            remove(spawn);
     }
 
     @Override
-    public void reserveSpawn(IArenaPlayer player, Spawnpoint spawn) {
+    public void reserve(IArenaPlayer player, Spawnpoint spawn) {
         PreCon.notNull(player);
         PreCon.notNull(spawn);
 
-        if (getArena().getEventManager().call(this, new ReserveSpawnEvent(getArena(), player, spawn)).isCancelled())
+        ReserveSpawnEvent event = new ReserveSpawnEvent(getArena(), player, spawn);
+        getArena().getEventManager().call(this, event);
+
+        if (event.isCancelled())
             return;
 
         // remove spawn to prevent it's use
-        super.removeSpawn(spawn);
+        super.remove(spawn);
         _reserved.put(player.getUniqueId(), spawn);
     }
 
     @Override
-    public void unreserveSpawn(IArenaPlayer player) {
+    public void unreserve(IArenaPlayer player) {
         PreCon.notNull(player);
 
         Spawnpoint spawn = _reserved.remove(player.getUniqueId());
         if (spawn == null)
             return;
 
-        if (getArena().getEventManager().call(this, new UnreserveSpawnEvent(getArena(), player, spawn)).isCancelled()) {
+        UnreserveSpawnEvent event = new UnreserveSpawnEvent(getArena(), player, spawn);
+        getArena().getEventManager().call(this, event);
+
+        if (event.isCancelled()) {
             _reserved.put(player.getUniqueId(), spawn);
             return;
         }
 
-        super.addSpawn(spawn);
+        super.add(spawn);
     }
 
     @Override
     public void clearReserved() {
 
-        if (getArena().getEventManager().call(this, new ClearReservedSpawnsEvent(getArena())).isCancelled())
+        ClearReservedSpawnsEvent event = new ClearReservedSpawnsEvent(getArena());
+        getArena().getEventManager().call(this, event);
+
+        if (event.isCancelled())
             return;
 
         for (Spawnpoint spawn : _reserved.values()) {
-            super.addSpawn(spawn);
+            super.add(spawn);
         }
 
         _reserved.clear();
@@ -317,7 +313,7 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
 
             Spawnpoint spawnpoint = new Spawnpoint(spawnNode.getName(), type, team, location);
 
-            super.addSpawn(spawnpoint);
+            super.add(spawnpoint);
         }
     }
 
@@ -325,11 +321,11 @@ public class PVSpawnManager extends SpawnpointsCollection implements ISpawnManag
      * Un-reserve a spawn when a player leaves.
      */
     @EventMethod
-    private void onPlayerRemoved(PlayerRemovedEvent event) {
+    private void onPlayerRemoved(PlayerRemovedFromContextEvent event) {
 
-        if (event.getReason() == RemovePlayerReason.ARENA_RELATION_CHANGE)
+        if (event.getReason() == RemoveFromContextReason.CONTEXT_CHANGE)
             return;
 
-        unreserveSpawn(event.getPlayer());
+        unreserve(event.getPlayer());
     }
 }

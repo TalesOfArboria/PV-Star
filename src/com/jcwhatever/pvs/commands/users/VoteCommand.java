@@ -29,10 +29,10 @@ import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.options.ArenaPlayerRelation;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
@@ -59,15 +59,15 @@ public class VoteCommand extends AbstractPVCommand {
 
         Player p = (Player)sender;
 
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         IArena arena = player.getArena();
 
-        if (arena == null || player.getArenaRelation() == ArenaPlayerRelation.SPECTATOR) {
+        if (arena == null || player.getContext() == ArenaContext.SPECTATOR) {
             tellError(p, Lang.get(_VOTE_NOT_IN_GAME));
             return; // finish
         }
 
-        if (player.getArenaRelation() == ArenaPlayerRelation.GAME) {
+        if (player.getContext() == ArenaContext.GAME) {
             tellError(p, Lang.get(_VOTE_GAME_ALREADY_STARTED));
             return; // finish
         }

@@ -36,7 +36,7 @@ import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand.ArenaReturned;
 import com.jcwhatever.pvs.api.commands.ICommandHelper;
-import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
+import com.jcwhatever.pvs.exceptions.MissingExtensionAnnotation;
 
 import org.bukkit.command.CommandSender;
 
@@ -86,7 +86,7 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
             return null;
         }
 
-        if (returned == ArenaReturned.NOT_RUNNNING && arena.getGameManager().isRunning()) {
+        if (returned == ArenaReturned.NOT_RUNNING && arena.getGame().isRunning()) {
             tellError(sender, Lang.get(_WAIT_TILL_FINISHED));
             return null;
         }
@@ -106,12 +106,12 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
     @Nullable
     public <T extends ArenaExtension> T getExtension(CommandSender sender, IArena arena, Class<T> clazz) {
 
-        T extension = arena.getExtensionManager().get(clazz);
+        T extension = arena.getExtensions().get(clazz);
         if (extension == null) {
 
             ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
             if (info == null)
-                throw new MissingExtensionAnnotationException(clazz);
+                throw new MissingExtensionAnnotation(clazz);
 
             tellError(sender, Lang.get(_EXTENSION_NOT_FOUND, info.name(), arena.getName()));
             return null; // finish

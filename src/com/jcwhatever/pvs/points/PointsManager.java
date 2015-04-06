@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 /**
  * PVStar implementation of {@link IPointsManager}.
  */
-public class PVPointsManager implements IPointsManager {
+public class PointsManager implements IPointsManager {
 
     private final Map<String, PointsType> _typeMap = new HashMap<>(25);
 

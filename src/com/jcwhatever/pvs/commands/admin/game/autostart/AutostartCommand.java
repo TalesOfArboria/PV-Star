@@ -67,13 +67,13 @@ public class AutostartCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().hasAutoStart();
+            boolean isEnabled = arena.getLobby().getSettings().hasAutoStart();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_AUTOSTART_ENABLED, arena.getName()));
@@ -86,7 +86,7 @@ public class AutostartCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setAutoStart(isEnabled);
+            arena.getLobby().getSettings().setAutoStart(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_AUTOSTART_CHANGE_ENABLED, arena.getName()));

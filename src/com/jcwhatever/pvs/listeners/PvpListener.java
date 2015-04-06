@@ -24,11 +24,11 @@
 
 package com.jcwhatever.pvs.listeners;
 
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
 import com.jcwhatever.nucleus.utils.materials.Materials;
 
@@ -56,7 +56,7 @@ public class PvpListener implements Listener {
         if (!event.hasBlock())
             return;
 
-        IArenaPlayer player = PVArenaPlayer.get(event.getPlayer());
+        IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
         IArena arena = player.getArena();
         if (arena == null)
             return;
@@ -65,7 +65,7 @@ public class PvpListener implements Listener {
         if (inHand == null)
             return;
 
-        IPlayerSettings settings = player.getRelatedSettings();
+        IContextSettings settings = player.getContextSettings();
         if (settings == null)
             return;
 
@@ -88,14 +88,14 @@ public class PvpListener implements Listener {
 
         Player p = (Player)entity;
 
-        IArenaPlayer player =PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
 
         IArena arena = player.getArena();
         if (arena == null)
             return;
 
         // get settings
-        IPlayerSettings settings = player.getRelatedSettings();
+        IContextSettings settings = player.getContextSettings();
         if (settings == null)
             return;
 
@@ -119,14 +119,14 @@ public class PvpListener implements Listener {
 
         Player p = (Player)entity;
 
-        IArenaPlayer player =PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
 
         IArena arena = player.getArena();
         if (arena == null)
             return;
 
         // no damage when game is over
-        if (arena.getGameManager().isGameOver()) {
+        if (arena.getGame().isGameOver()) {
             event.setDamage(0.0);
             event.setCancelled(true);
             return;
@@ -134,7 +134,7 @@ public class PvpListener implements Listener {
 
 
         // get settings
-        IPlayerSettings settings = player.getRelatedSettings();
+        IContextSettings settings = player.getContextSettings();
         if (settings == null)
             return;
 
@@ -166,7 +166,7 @@ public class PvpListener implements Listener {
                 // check for team pvp
                 else //noinspection ConstantConditions
                     if (!settings.isTeamPvpEnabled()) {  // always true, statement is for readability
-                    IArenaPlayer damagerPlayer =PVArenaPlayer.get(p);
+                    IArenaPlayer damagerPlayer = ArenaPlayer.get(p);
 
                     // prevent team pvp
                     if (damagerPlayer.getTeam() == player.getTeam() &&

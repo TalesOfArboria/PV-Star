@@ -50,7 +50,7 @@ import com.jcwhatever.pvs.api.points.IPointsManager;
 import com.jcwhatever.pvs.api.spawns.ISpawnTypeManager;
 import com.jcwhatever.pvs.api.stats.IStatsManager;
 import com.jcwhatever.pvs.api.utils.Msg;
-import com.jcwhatever.pvs.arenas.PVArena;
+import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.commands.PVCommandDispatcher;
 import com.jcwhatever.pvs.commands.PVCommandHelper;
 import com.jcwhatever.pvs.listeners.BukkitEventForwarder;
@@ -60,13 +60,13 @@ import com.jcwhatever.pvs.listeners.PvpListener;
 import com.jcwhatever.pvs.listeners.SharingListener;
 import com.jcwhatever.pvs.listeners.WorldEventListener;
 import com.jcwhatever.pvs.modules.ModuleLoader;
-import com.jcwhatever.pvs.points.PVPointsManager;
+import com.jcwhatever.pvs.points.PointsManager;
 import com.jcwhatever.pvs.scripting.PVStarScriptApi;
 import com.jcwhatever.pvs.signs.ClassSignHandler;
 import com.jcwhatever.pvs.signs.PveSignHandler;
 import com.jcwhatever.pvs.signs.PvpSignHandler;
 import com.jcwhatever.pvs.signs.ReadySignHandler;
-import com.jcwhatever.pvs.stats.PVStatsManager;
+import com.jcwhatever.pvs.stats.StatsManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -82,13 +82,13 @@ import javax.annotation.Nullable;
 public class PVStar extends NucleusPlugin implements IPVStar {
 
     private ModuleLoader _moduleLoader;
-    private PVArenaManager _arenaManager;
+    private ArenaManager _arenaManager;
     private PVCommandDispatcher _commandHandler;
     private EventManager _eventManager;
     private IStatsManager _statsManager;
     private IPointsManager _pointsManager;
-    private PVExtensionTypeManager _extensionManager;
-    private PVSpawnTypeManager _spawnTypeManager;
+    private ExtensionTypeManager _extensionManager;
+    private SpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
     private BukkitEventForwarder _eventForwarder;
     private IScriptApi _scriptApi;
@@ -119,7 +119,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         Player p = PlayerUtils.getPlayer(player);
         PreCon.notNull(p);
 
-        return PVArenaPlayer.get(p);
+        return ArenaPlayer.get(p);
     }
 
     @Override
@@ -185,11 +185,11 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     protected void onEnablePlugin() {
         PVStarAPI.setImplementation(this);
 
-        _pointsManager = new PVPointsManager();
-        _statsManager = new PVStatsManager();
+        _pointsManager = new PointsManager();
+        _statsManager = new StatsManager();
         _eventManager = new EventManager(this);
-        _extensionManager = new PVExtensionTypeManager();
-        _spawnTypeManager = new PVSpawnTypeManager();
+        _extensionManager = new ExtensionTypeManager();
+        _spawnTypeManager = new SpawnTypeManager();
         _commandHelper = new PVCommandHelper();
 
         Nucleus.getSignManager().registerHandler(new ClassSignHandler());
@@ -215,10 +215,10 @@ public class PVStar extends NucleusPlugin implements IPVStar {
             public void run() {
 
                 // load arenas
-                _arenaManager = new PVArenaManager(getDataNode().getNode("arenas"));
+                _arenaManager = new ArenaManager(getDataNode().getNode("arenas"));
 
                 // register built in arenas
-                _arenaManager.registerType(PVArena.class);
+                _arenaManager.registerType(Arena.class);
 
                 // load arenas, permissions batch for performance
                 Permissions.runBatchOperation(new Runnable() {
@@ -267,7 +267,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         // end arenas
         List<IArena> arenas = _arenaManager.getArenas();
         for (IArena arena : arenas) {
-            arena.getGameManager().end();
+            arena.getGame().end();
         }
 
         Collection<PVStarModule> modules = _moduleLoader.getModules();

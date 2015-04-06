@@ -67,7 +67,7 @@ public class SharingSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().isSharingEnabled();
+            boolean isEnabled = arena.getLobby().getSettings().isSharingEnabled();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_SHARING_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class SharingSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setSharingEnabled(isEnabled);
+            arena.getLobby().getSettings().setSharingEnabled(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_SHARING_CHANGE_ENABLED, arena.getName()));

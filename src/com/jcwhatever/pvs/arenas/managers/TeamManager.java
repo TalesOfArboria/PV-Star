@@ -34,11 +34,12 @@ import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.ArenaTeam.TeamDistributor;
 import com.jcwhatever.pvs.api.arena.managers.ITeamManager;
-import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.options.TeamChangeReason;
-import com.jcwhatever.pvs.api.events.players.PlayerPreAddEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerRemovedEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerPreAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromContextEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.pvs.api.events.spawns.SpawnAddedEvent;
 import com.jcwhatever.pvs.api.events.spawns.SpawnRemovedEvent;
@@ -53,7 +54,7 @@ import javax.annotation.Nullable;
 /**
  * Team manager implementation.
  */
-public class PVTeamManager implements ITeamManager, IEventListener {
+public class TeamManager implements ITeamManager, IEventListener {
 
     private final IArena _arena;
     private final ElementCounter<ArenaTeam> _teams = new ElementCounter<>(RemovalPolicy.REMOVE);
@@ -64,7 +65,7 @@ public class PVTeamManager implements ITeamManager, IEventListener {
     /*
      * Constructor.
      */
-    public PVTeamManager (IArena arena) {
+    public TeamManager(IArena arena) {
         _arena = arena;
 
         arena.getEventManager().register(this);
@@ -83,7 +84,7 @@ public class PVTeamManager implements ITeamManager, IEventListener {
     }
 
     @Override
-    public Set<ArenaTeam> getTeams() {
+    public Set<ArenaTeam> getAvailable() {
         return _teams.getElements();
     }
 
@@ -124,7 +125,7 @@ public class PVTeamManager implements ITeamManager, IEventListener {
      */
     protected TeamDistributor getTeamDistributor() {
         if (_teamDistributor == null)
-            _teamDistributor = new TeamDistributor(getTeams());
+            _teamDistributor = new TeamDistributor(getAvailable());
 
         return _teamDistributor;
     }
@@ -133,10 +134,10 @@ public class PVTeamManager implements ITeamManager, IEventListener {
      * Set a players team when they are added to an arena.
      */
     @EventMethod(priority = EventSubscriberPriority.FIRST)
-    private void onPlayerAdd(PlayerPreAddEvent event) {
+    private void onPlayerAdd(PlayerPreAddToContextEvent event) {
 
-        if (event.getReason() != AddPlayerReason.FORWARDING &&
-                event.getReason() != AddPlayerReason.ARENA_RELATION_CHANGE) {
+        if (event.getReason() != AddToContextReason.FORWARDING &&
+                event.getReason() != AddToContextReason.CONTEXT_CHANGE) {
 
             ArenaTeam team = nextTeam();
             if (team != null) {
@@ -155,10 +156,10 @@ public class PVTeamManager implements ITeamManager, IEventListener {
      * Ensures an even distribution of teams.
      */
     @EventMethod(priority = EventSubscriberPriority.FIRST)
-    private void onPlayerRemove(PlayerRemovedEvent event) {
+    private void onPlayerRemove(PlayerRemovedFromContextEvent event) {
 
-        if (event.getReason() != RemovePlayerReason.FORWARDING &&
-                event.getReason() != RemovePlayerReason.ARENA_RELATION_CHANGE) {
+        if (event.getReason() != RemoveFromContextReason.FORWARDING &&
+                event.getReason() != RemoveFromContextReason.CONTEXT_CHANGE) {
 
             ArenaTeam team = event.getPlayer().getTeam();
 
@@ -220,7 +221,7 @@ public class PVTeamManager implements ITeamManager, IEventListener {
     // load settings
     private void loadSettings() {
 
-        List<Spawnpoint> spawnpoints = getArena().getSpawnManager().getGameSpawns();
+        List<Spawnpoint> spawnpoints = getArena().getSpawns().getAll(ArenaContext.GAME);
 
         for (Spawnpoint spawn : spawnpoints) {
             if (spawn.getTeam() == ArenaTeam.NONE)

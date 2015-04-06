@@ -27,7 +27,7 @@ package com.jcwhatever.pvs.commands.users;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
@@ -62,7 +62,7 @@ public class JoinCommand extends AbstractPVCommand {
             return; // finish
         }
 
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
 
         // Add player to arena
         arena.join(player);

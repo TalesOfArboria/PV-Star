@@ -27,10 +27,12 @@ package com.jcwhatever.pvs.scripting;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Rand;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.ArenaTeam;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 
@@ -69,50 +71,42 @@ public class ArenaSpawnsApiObject implements IDisposable {
      * Determine if there are lobby spawns available.
      */
     public boolean hasLobbySpawns() {
-        return _arena.getSpawnManager().hasLobbySpawns();
+        return _arena.getSpawns().hasLobbySpawns();
     }
 
     /**
      * Determine if there are game spawns available.
      */
     public boolean hasGameSpawns() {
-        return _arena.getSpawnManager().hasGameSpawns();
+        return _arena.getSpawns().hasGameSpawns();
     }
 
     /**
      * Determine if there are spectator spawns available.
      */
     public boolean hasSpectatorSpawns() {
-        return _arena.getSpawnManager().hasSpectatorSpawns();
-    }
-
-    /**
-     * Get all lobby spawn points. If there are no
-     * lobby spawns, returns all game spawns.
-     */
-    public List<Spawnpoint> getLobbyOrGameSpawn() {
-        return _arena.getSpawnManager().getLobbyOrGameSpawns();
+        return _arena.getSpawns().hasSpectatorSpawns();
     }
 
     /**
      * Get all game spawn points.
      */
     public List<Spawnpoint> getGameSpawns() {
-        return _arena.getSpawnManager().getGameSpawns();
+        return _arena.getSpawns().getAll(ArenaContext.GAME);
     }
 
     /**
      * Get all lobby spawn points.
      */
     public List<Spawnpoint> getLobbySpawns() {
-        return _arena.getSpawnManager().getLobbySpawns();
+        return _arena.getSpawns().getAll(ArenaContext.LOBBY);
     }
 
     /**
      * Get all spectator spawn points.
      */
     public List<Spawnpoint> getSpectatorSpawns() {
-        return _arena.getSpawnManager().getSpectatorSpawns();
+        return _arena.getSpawns().getAll(ArenaContext.SPECTATOR);
     }
 
     /**
@@ -127,7 +121,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
     public Spawnpoint getRandomSpawn(IArenaPlayer player) {
         PreCon.notNull(player);
 
-        return _arena.getSpawnManager().getRandomSpawn(player);
+        return Rand.get(_arena.getSpawns().getAll(player.getContext()));
     }
 
     /**
@@ -141,7 +135,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         ArenaTeam team = getEnum(teamName, ArenaTeam.class);
 
-        return _arena.getSpawnManager().getRandomLobbySpawn(team);
+        return Rand.get(_arena.getSpawns().getAll(team, ArenaContext.LOBBY));
     }
 
     /**
@@ -155,7 +149,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         ArenaTeam team = getEnum(teamName, ArenaTeam.class);
 
-        return _arena.getSpawnManager().getRandomGameSpawn(team);
+        return Rand.get(_arena.getSpawns().getAll(team, ArenaContext.GAME));
     }
 
     /**
@@ -169,7 +163,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         ArenaTeam team = getEnum(teamName, ArenaTeam.class);
 
-        return _arena.getSpawnManager().getRandomSpectatorSpawn(team);
+        return Rand.get(_arena.getSpawns().getAll(team, ArenaContext.SPECTATOR));
     }
 
     /**
@@ -181,14 +175,14 @@ public class ArenaSpawnsApiObject implements IDisposable {
     public Spawnpoint getSpawn(String name) {
         PreCon.notNullOrEmpty(name);
 
-        return _arena.getSpawnManager().getSpawn(name);
+        return _arena.getSpawns().get(name);
     }
 
     /**
      * Get all spawnpoints
      */
     public List<Spawnpoint> getSpawns() {
-        return _arena.getSpawnManager().getSpawns();
+        return _arena.getSpawns().getAll();
     }
 
     /**
@@ -199,7 +193,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
     public List<Spawnpoint> getSpawnsByNames(String spawnNames) {
         PreCon.notNullOrEmpty(spawnNames);
 
-        return _arena.getSpawnManager().getSpawns(spawnNames);
+        return _arena.getSpawns().getAll(spawnNames);
     }
 
     /**
@@ -214,7 +208,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
         if (type == null)
             return new ArrayList<>(0);
 
-        return _arena.getSpawnManager().getSpawns(type);
+        return _arena.getSpawns().getAll(type);
     }
 
     /**
@@ -227,7 +221,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         ArenaTeam team = getEnum(teamName, ArenaTeam.class);
 
-        return _arena.getSpawnManager().getSpawns(team);
+        return _arena.getSpawns().getAll(team);
     }
 
     /**
@@ -246,7 +240,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         ArenaTeam team = getEnum(teamName, ArenaTeam.class);
 
-        return _arena.getSpawnManager().getSpawns(type, team);
+        return _arena.getSpawns().getAll(type, team);
     }
 
     /**
@@ -262,7 +256,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
-        _arena.getSpawnManager().reserveSpawn(p, spawn);
+        _arena.getSpawns().reserve(p, spawn);
     }
 
     /**
@@ -276,7 +270,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
 
         IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
-        _arena.getSpawnManager().unreserveSpawn(p);
+        _arena.getSpawns().unreserve(p);
     }
 
     /**
@@ -284,7 +278,7 @@ public class ArenaSpawnsApiObject implements IDisposable {
      * spawnpoint getter methods.
      */
     public void clearReserved() {
-        _arena.getSpawnManager().clearReserved();
+        _arena.getSpawns().clearReserved();
     }
 
     // convert enum constant name into enum constant

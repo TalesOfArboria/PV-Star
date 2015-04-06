@@ -61,14 +61,14 @@ public class PointsSubCommand extends AbstractPVCommand {
 
         if (args.getString("amount").equals("info")) {
 
-            int points = arena.getGameManager().getSettings().getStartPoints();
+            int points = arena.getGame().getSettings().getStartPoints();
             tell(sender, Lang.get(_POINTS_INFO, arena.getName(), points));
         }
         else {
 
             int points = args.getInteger("amount");
 
-            arena.getGameManager().getSettings().setStartPoints(points);
+            arena.getGame().getSettings().setStartPoints(points);
 
             tellSuccess(sender, Lang.get(_POINTS_SET, arena.getName(), points));
         }

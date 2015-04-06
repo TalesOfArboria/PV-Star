@@ -62,7 +62,7 @@ public class DelSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
@@ -73,13 +73,13 @@ public class DelSubCommand extends AbstractPVCommand {
             return; // finish
         }
 
-        ArenaExtension extension = arena.getExtensionManager().get(extName);
+        ArenaExtension extension = arena.getExtensions().get(extName);
         if (extension == null) {
             tellError(sender, Lang.get(_EXT_NOT_IN_ARENA, extName, arena.getName()));
             return; // finish
         }
 
-        if (!arena.getExtensionManager().remove(extName)) {
+        if (!arena.getExtensions().remove(extName)) {
             tellError(sender, Lang.get(_FAILED, extName, arena.getName()));
             return; // finish
         }

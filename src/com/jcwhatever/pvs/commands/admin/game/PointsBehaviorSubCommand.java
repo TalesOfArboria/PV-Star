@@ -64,14 +64,14 @@ public class PointsBehaviorSubCommand extends AbstractPVCommand {
 
         if (args.getString("static|reset|additive|info").equals("info")) {
 
-            PointsBehavior behavior = arena.getGameManager().getSettings().getPointsBehavior();
+            PointsBehavior behavior = arena.getGame().getSettings().getPointsBehavior();
             tell(sender, Lang.get(_POINTS_INFO, arena.getName(), behavior));
         }
         else {
 
             PointsBehavior behavior = args.getEnum("static|reset|additive|info", PointsBehavior.class);
 
-            arena.getGameManager().getSettings().setPointsBehavior(behavior);
+            arena.getGame().getSettings().setPointsBehavior(behavior);
 
             tellSuccess(sender, Lang.get(_POINTS_SET, arena.getName(), behavior));
         }

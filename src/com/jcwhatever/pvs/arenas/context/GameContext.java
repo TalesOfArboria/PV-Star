@@ -22,34 +22,41 @@
  */
 
 
-package com.jcwhatever.pvs.arenas.managers;
+package com.jcwhatever.pvs.arenas.context;
 
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
-import com.jcwhatever.pvs.api.arena.ArenaTeam;
-import com.jcwhatever.pvs.api.arena.managers.IGameManager;
-import com.jcwhatever.pvs.api.arena.managers.ILobbyManager;
-import com.jcwhatever.pvs.api.arena.options.AddPlayerReason;
+import com.jcwhatever.pvs.api.arena.context.IGameContext;
+import com.jcwhatever.pvs.api.arena.context.ILobbyContext;
+import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
+import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
+import com.jcwhatever.pvs.api.arena.options.PlayerJoinArenaReason;
+import com.jcwhatever.pvs.api.arena.options.PlayerLeaveArenaReason;
+import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
 import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.pvs.api.events.ArenaStartedEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerJoinedEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddedToGameEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerJoinedArenaEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerLoseEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerPreJoinEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerPreJoinArenaEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromGameEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerWinEvent;
 import com.jcwhatever.pvs.api.events.team.TeamLoseEvent;
 import com.jcwhatever.pvs.api.events.team.TeamWinEvent;
-import com.jcwhatever.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
+import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.arenas.Arena;
+import com.jcwhatever.pvs.arenas.managers.SpawnManager;
 import com.jcwhatever.pvs.arenas.settings.PVGameSettings;
 
 import org.bukkit.Location;
@@ -61,7 +68,7 @@ import javax.annotation.Nullable;
 /**
  * Game manager implementation
  */
-public class PVGameManager extends AbstractPlayerManager implements IGameManager {
+public class GameContext extends AbstractContextManager implements IGameContext {
 
     private final IGameSettings _settings;
 
@@ -72,10 +79,15 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
     /*
      * Constructor.
      */
-    public PVGameManager(IArena arena) {
+    public GameContext(AbstractArena arena) {
         super(arena);
 
         _settings = new PVGameSettings(arena);
+    }
+
+    @Override
+    public ArenaContext getContext() {
+        return ArenaContext.GAME;
     }
 
     @Override
@@ -113,7 +125,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
 
         _startTime = new Date();
 
-        ILobbyManager lobbyManager = getArena().getLobbyManager();
+        ILobbyContext lobbyManager = getArena().getLobby();
 
         // get default next group of players from lobby
         IArenaPlayerCollection players = reason == ArenaStartReason.AUTO
@@ -122,7 +134,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
 
         // create pre-start event
         ArenaPreStartEvent preStartEvent = new ArenaPreStartEvent(getArena(),
-                new ArenaPlayerArrayList(players, true), reason);
+                new ArenaPlayerArrayList(players, false), reason);
 
         // call pre-start event
         if (getArena().getEventManager().call(this, preStartEvent).isCancelled())
@@ -155,14 +167,14 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
         _isRunning = false;
         _isGameOver = false;
 
-        getArena().getSpawnManager().clearReserved();
+        getArena().getSpawns().clearReserved();
 
         _startTime = null;
 
         getArena().getEventManager().call(this, new ArenaEndedEvent(getArena()));
 
         for (IArenaPlayer player : getPlayers()) {
-            getArena().remove(player, RemovePlayerReason.GAME_ENDED);
+            getArena().remove(player, PlayerLeaveArenaReason.GAME_ENDED);
         }
 
         return true;
@@ -171,30 +183,34 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
     @Override
     public boolean forwardPlayer(IArenaPlayer player, IArena nextArena) {
         PreCon.notNull(player);
-        PreCon.notNull(nextArena);
+        PreCon.isValid(nextArena instanceof Arena);
 
-        if (!nextArena.getSettings().isEnabled())
+        Arena arena = (Arena)nextArena;
+
+        if (!arena.getSettings().isEnabled())
             return false;
 
-        Result<Location> result = removePlayer(player, RemovePlayerReason.FORWARDING);
+        Result<Location> result = removePlayer(player, RemoveFromContextReason.FORWARDING);
         if (!result.isSuccess())
             return false;
 
-        PlayerPreJoinEvent preJoin = new PlayerPreJoinEvent(nextArena, player);
+        PlayerPreJoinArenaEvent preJoin = new PlayerPreJoinArenaEvent(
+                arena, player, PlayerJoinArenaReason.FORWARDING);
 
-        nextArena.getEventManager().call(this, preJoin);
+        arena.getEventManager().call(this, preJoin);
 
         if (preJoin.isCancelled())
             return false;
 
-        boolean isAdded = nextArena.getGameManager().isRunning()
-                ? nextArena.getGameManager().addPlayer(player, AddPlayerReason.FORWARDING)
-                : nextArena.getLobbyManager().addPlayer(player, AddPlayerReason.FORWARDING);
+        boolean isAdded = nextArena.getGame().isRunning()
+                ? arena.getGame().addPlayer(player, AddToContextReason.FORWARDING)
+                : arena.getLobby().addPlayer(player, AddToContextReason.FORWARDING);
 
         if (isAdded) {
-            PlayerJoinedEvent joined = new PlayerJoinedEvent(nextArena, player, player.getRelatedManager());
+            PlayerJoinedArenaEvent joined = new PlayerJoinedArenaEvent(
+                    arena, player, PlayerJoinArenaReason.FORWARDING, player.getContextManager());
 
-            nextArena.getEventManager().call(this, joined);
+            arena.getEventManager().call(this, joined);
         }
 
         return true;
@@ -263,7 +279,7 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
         for (IArenaPlayer player : getPlayers()) {
             if (player.getTeam() == team) {
                 losingTeam.add(player);
-                removePlayer(player, RemovePlayerReason.LOSE);
+                removePlayer(player, RemoveFromContextReason.LOSE);
             }
         }
 
@@ -273,49 +289,38 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
         return true;
     }
 
+    @Override
+    @Nullable
+    protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
+
+        return SpawnManager.getRespawnLocation(
+                this, ArenaContext.GAME, new Location(null, 0, 0, 0));
+    }
+
     @Nullable
     @Override
-    protected Location onRespawnPlayer(IArenaPlayer player) {
+    protected PlayerAddedToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
 
-        // get random spawn for the team
-        Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomGameSpawn(player.getTeam());
-        if (spawnpoint == null) {
-            Msg.warning("Failed to find a game spawn for a player in arena '{0}'.", getArena().getName());
-            return null;
-        }
-        return spawnpoint;
+        PlayerAddedToGameEvent event = new PlayerAddedToGameEvent(contextEvent);
+        getArena().getEventManager().call(this, event);
+
+        return event;
     }
 
     @Override
-    @Nullable
-    protected Location onAddPlayer(IArenaPlayer player, AddPlayerReason reason) {
+    protected void onPreRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
 
-        if (!getArena().getSpawnManager().hasLobbySpawns())
-            return null;
-
-        // get random spawn for the team
-        Spawnpoint spawnpoint = getArena().getSpawnManager().getRandomGameSpawn(player.getTeam());
-        if (spawnpoint == null) {
-            Msg.warning("Failed to find a game spawn for a player in arena '{0}'.", getArena().getName());
-            return null;
-        }
-
-        return spawnpoint;
-    }
-
-    @Override
-    protected void onPreRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
-
-        if (reason == RemovePlayerReason.LOSE ||
-                reason == RemovePlayerReason.KICK ||
-                reason == RemovePlayerReason.LOGOUT) {
+        if (reason == RemoveFromContextReason.LOSE ||
+                reason == RemoveFromContextReason.KICK ||
+                reason == RemoveFromContextReason.LOGOUT) {
 
             callLoseEvent(player);
         }
     }
 
     @Override
-    protected Location onRemovePlayer(IArenaPlayer player, RemovePlayerReason reason) {
+    protected Location onRemovePlayer(IArenaPlayer player, RemoveFromContextReason reason) {
 
         Scheduler.runTaskLater(PVStarAPI.getPlugin(), 1, new Runnable() {
             @Override
@@ -325,7 +330,14 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
             }
         });
 
-        return getArena().getSettings().getRemoveLocation();
+        IArena arena = getArena();
+
+        PlayerRemovedFromGameEvent event = new PlayerRemovedFromGameEvent(
+                arena, player, this, getContext(), reason);
+
+        arena.getEventManager().call(this, event);
+
+        return arena.getSettings().getRemoveLocation();
     }
 
     /*
@@ -333,17 +345,17 @@ public class PVGameManager extends AbstractPlayerManager implements IGameManager
      */
     private boolean transferPlayersFromLobby(Collection<IArenaPlayer> players) {
 
-        ILobbyManager lobbyManager = getArena().getLobbyManager();
+        LobbyContext lobbyManager = getArena().getLobby();
 
         // transfer players from lobby
         for (IArenaPlayer player : players) {
 
-            if (!lobbyManager.hasPlayer(player))
+            if (!lobbyManager.getPlayers().contains(player))
                 continue;
 
-            lobbyManager.removePlayer(player, RemovePlayerReason.ARENA_RELATION_CHANGE);
+            lobbyManager.removePlayer(player, RemoveFromContextReason.CONTEXT_CHANGE);
 
-            addPlayer(player, AddPlayerReason.ARENA_RELATION_CHANGE);
+            addPlayer(player, AddToContextReason.CONTEXT_CHANGE);
         }
 
         return true;

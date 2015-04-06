@@ -71,7 +71,7 @@ public class RestoreRegionSubCommand extends AbstractPVCommand {
     @Override
     public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
 
-        final IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        final IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finished
 

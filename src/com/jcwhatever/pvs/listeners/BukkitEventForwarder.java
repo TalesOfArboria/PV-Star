@@ -26,7 +26,7 @@ package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.nucleus.events.manager.AbstractBukkitForwarder;
 import com.jcwhatever.nucleus.events.manager.EventManager;
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -142,7 +142,7 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
     }
 
     private <T extends Event> void callEvent(Player p, T event) {
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         if (player.getArena() == null)
             return;
 

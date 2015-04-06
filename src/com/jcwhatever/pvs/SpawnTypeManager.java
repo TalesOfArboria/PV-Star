@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 /**
  * PVStar implementation of {@link ISpawnTypeManager}.
  */
-public class PVSpawnTypeManager implements ISpawnTypeManager {
+public class SpawnTypeManager implements ISpawnTypeManager {
 
     public final LobbySpawnType _lobbySpawn = new LobbySpawnType();
     public final GameSpawnType _gameSpawn = new GameSpawnType();
@@ -58,7 +58,7 @@ public class PVSpawnTypeManager implements ISpawnTypeManager {
     /*
      * Constructor.
      */
-    public PVSpawnTypeManager() {
+    public SpawnTypeManager() {
         registerType(_gameSpawn);
         registerType(_lobbySpawn);
         registerType(_spectatorSpawn);

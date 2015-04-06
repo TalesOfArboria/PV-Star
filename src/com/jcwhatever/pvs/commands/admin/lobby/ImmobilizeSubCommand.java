@@ -67,7 +67,7 @@ public class ImmobilizeSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getLobbyManager().getSettings().isImmobilized();
+            boolean isEnabled = arena.getLobby().getSettings().isImmobilized();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_IMMOBILIZE_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class ImmobilizeSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getLobbyManager().getSettings().setImmobilized(isEnabled);
+            arena.getLobby().getSettings().setImmobilized(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_IMMOBILIZE_CHANGE_ENABLED, arena.getName()));

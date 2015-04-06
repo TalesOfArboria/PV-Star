@@ -67,7 +67,7 @@ public class ArmorDamageSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getGameManager().getSettings().isArmorDamageable();
+            boolean isEnabled = arena.getGame().getSettings().isArmorDamageable();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_ARMOR_DAMAGE_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class ArmorDamageSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getGameManager().getSettings().setArmorDamageable(isEnabled);
+            arena.getGame().getSettings().setArmorDamageable(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_ARMOR_DAMAGE_CHANGE_ENABLED, arena.getName()));

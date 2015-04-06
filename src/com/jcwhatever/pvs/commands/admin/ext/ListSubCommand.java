@@ -69,7 +69,7 @@ public class ListSubCommand extends AbstractPVCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE, arena.getName()));
 
-        Set<ArenaExtension> extensions = arena.getExtensionManager().getAll();
+        Set<ArenaExtension> extensions = arena.getExtensions().getAll();
 
         for (ArenaExtension extension : extensions) {
             pagin.add(extension.getName(), extension.getDescription());

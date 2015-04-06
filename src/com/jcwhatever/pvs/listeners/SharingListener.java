@@ -24,11 +24,11 @@
 
 package com.jcwhatever.pvs.listeners;
 
-import com.jcwhatever.pvs.PVArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
-import com.jcwhatever.pvs.api.arena.settings.IPlayerSettings;
+import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Chest;
@@ -58,13 +58,13 @@ public class SharingListener implements Listener {
             return;
 
         final Player p = (Player)humanEntity;
-        IArenaPlayer player = PVArenaPlayer.get(p);
+        IArenaPlayer player = ArenaPlayer.get(p);
         IArena arena = player.getArena();
 
         if (arena == null)
             return;
 
-        IPlayerSettings settings = player.getRelatedSettings();
+        IContextSettings settings = player.getContextSettings();
         if (settings == null)
             return;
 
@@ -106,13 +106,13 @@ public class SharingListener implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST)
     private void onPlayerDropItem(PlayerDropItemEvent event) {
 
-        IArenaPlayer player =PVArenaPlayer.get(event.getPlayer());
+        IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
 
         IArena arena = player.getArena();
         if (arena == null)
             return;
 
-        IPlayerSettings settings = player.getRelatedSettings();
+        IContextSettings settings = player.getContextSettings();
         if (settings == null)
             return;
 

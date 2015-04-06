@@ -54,20 +54,20 @@ public class MinPlayersSubCommand extends AbstractPVCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNNING);
+        IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
             return; // finish
 
         if (args.getString("amount").equals("info")) {
 
-            int min = arena.getLobbyManager().getSettings().getMinAutoStartPlayers();
+            int min = arena.getLobby().getSettings().getMinAutoStartPlayers();
             tell(sender, Lang.get(_MIN_PLAYERS_INFO, arena.getName(), min));
         }
         else {
 
             int min = args.getInteger("amount");
 
-            arena.getLobbyManager().getSettings().setMinAutoStartPlayers(min);
+            arena.getLobby().getSettings().setMinAutoStartPlayers(min);
 
             tellSuccess(sender, Lang.get(_MIN_PLAYERS_SET, arena.getName(), min));
         }

@@ -67,7 +67,7 @@ public class ReserveSpawnsSubCommand extends AbstractPVCommand {
 
         if (args.getString("on|off|info").equals("info")) {
 
-            boolean isEnabled = arena.getGameManager().getSettings().isPlayerSpawnsReserved();
+            boolean isEnabled = arena.getGame().getSettings().isPlayerSpawnsReserved();
 
             if (isEnabled) {
                 tell(sender, Lang.get(_RESERVE_ENABLED, arena.getName()));
@@ -80,7 +80,7 @@ public class ReserveSpawnsSubCommand extends AbstractPVCommand {
 
             boolean isEnabled = args.getBoolean("on|off|info");
 
-            arena.getGameManager().getSettings().setPlayerSpawnsReserved(isEnabled);
+            arena.getGame().getSettings().setPlayerSpawnsReserved(isEnabled);
 
             if (isEnabled) {
                 tellSuccess(sender, Lang.get(_RESERVE_CHANGE_ENABLED, arena.getName()));

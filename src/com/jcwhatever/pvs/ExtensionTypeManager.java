@@ -29,8 +29,7 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.extensions.IExtensionTypeManager;
-import com.jcwhatever.pvs.api.exceptions.InvalidNameException;
-import com.jcwhatever.pvs.api.exceptions.MissingExtensionAnnotationException;
+import com.jcwhatever.pvs.exceptions.MissingExtensionAnnotation;
 import com.jcwhatever.pvs.api.utils.Msg;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ import javax.annotation.Nullable;
  *
  * <p>PVStar implementation of {@link IExtensionTypeManager}.</p>
  */
-public class PVExtensionTypeManager implements IExtensionTypeManager {
+public class ExtensionTypeManager implements IExtensionTypeManager {
 
     private static final Map<String, Class<? extends ArenaExtension>> _extensionMap = new HashMap<>(25);
 
@@ -71,10 +70,11 @@ public class PVExtensionTypeManager implements IExtensionTypeManager {
 
         ArenaExtensionInfo info = extension.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
-            throw new MissingExtensionAnnotationException(extension);
+            throw new MissingExtensionAnnotation(extension);
 
         if (!TextUtils.isValidName(info.name(), 32)) {
-            throw new InvalidNameException("Arena Extension with an invalid name was detected: " + info.name());
+            throw new IllegalArgumentException(
+                    "Arena Extension with an invalid name was detected: " + info.name());
         }
 
         String key = info.name().toLowerCase();

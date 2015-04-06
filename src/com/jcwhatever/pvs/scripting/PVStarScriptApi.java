@@ -30,7 +30,6 @@ import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
-import com.jcwhatever.pvs.api.arena.options.RemovePlayerReason;
 
 import org.bukkit.Location;
 
@@ -157,7 +156,7 @@ public class PVStarScriptApi implements IDisposable {
 
         IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
 
-        return arena.remove(p, RemovePlayerReason.PLAYER_LEAVE);
+        return p.leaveArena();
     }
 
     /**
@@ -176,7 +175,7 @@ public class PVStarScriptApi implements IDisposable {
 
         IArenaPlayer p = PVStarAPI.getArenaPlayer(player);
         return p.getArena() != null &&
-                p.getArena().getGameManager().forwardPlayer(p, toArena);
+                p.getArena().getGame().forwardPlayer(p, toArena);
     }
 }
 

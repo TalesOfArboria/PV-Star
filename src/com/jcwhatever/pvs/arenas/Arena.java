@@ -31,14 +31,14 @@ import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerPreJoinEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerPreJoinArenaEvent;
 
 import org.bukkit.plugin.Plugin;
 
 @ArenaTypeInfo(
         typeName="arena",
         description="A basic arena.")
-public class PVArena extends AbstractArena {
+public class Arena extends AbstractArena {
 
     @Override
     public Plugin getPlugin() {
@@ -54,7 +54,7 @@ public class PVArena extends AbstractArena {
      *  Handle player join event
      */
     @EventMethod(priority = EventSubscriberPriority.FIRST)
-    private void onPlayerPreJoin(PlayerPreJoinEvent event) {
+    private void onPlayerPreJoin(PlayerPreJoinArenaEvent event) {
 
         // check player permission
         if (!event.getPlayer().getPlayer().hasPermission(getPermission().getName())) {
@@ -84,7 +84,7 @@ public class PVArena extends AbstractArena {
 
         // make sure game isn't already running, placed here
         // so the functionality can be changed/replaced/removed.
-        if (getGameManager().isRunning()) {
+        if (getGame().isRunning()) {
             event.rejectJoin(JoinRejectReason.ARENA_RUNNING, Lang.get(_ARENA_RUNNING, getName()));
         }
     }
@@ -94,6 +94,6 @@ public class PVArena extends AbstractArena {
      */
     @EventMethod
     private void onArenaDisabled(@SuppressWarnings("unused") ArenaDisabledEvent event) {
-        getGameManager().end();
+        getGame().end();
     }
 }

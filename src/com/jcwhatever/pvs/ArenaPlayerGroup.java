@@ -39,7 +39,7 @@ import java.util.Set;
 /**
  * PVStar implementation of {@link IArenaPlayerGroup}.
  */
-public class PVArenaPlayerGroup implements IArenaPlayerGroup {
+public class ArenaPlayerGroup implements IArenaPlayerGroup {
 
     private final Set<IArenaPlayer> _players = new HashSet<>(20);
 
@@ -101,7 +101,7 @@ public class PVArenaPlayerGroup implements IArenaPlayerGroup {
 
     @Override
     public void addPlayer(IArenaPlayer player) {
-        PreCon.isValid(player instanceof PVArenaPlayer);
+        PreCon.isValid(player instanceof ArenaPlayer);
 
         _players.add(player);
 
@@ -110,12 +110,12 @@ public class PVArenaPlayerGroup implements IArenaPlayerGroup {
         if (currentGroup != null)
             currentGroup.removePlayer(player);
 
-        ((PVArenaPlayer)player).setPlayerGroup(this);
+        ((ArenaPlayer)player).setPlayerGroup(this);
     }
 
     @Override
     public void removePlayer(IArenaPlayer player) {
-        PreCon.isValid(player instanceof PVArenaPlayer);
+        PreCon.isValid(player instanceof ArenaPlayer);
 
         _players.remove(player);
 
@@ -125,7 +125,7 @@ public class PVArenaPlayerGroup implements IArenaPlayerGroup {
         if (currentGroup != null && !currentGroup.equals(this))
             return;
 
-        ((PVArenaPlayer)player).setPlayerGroup(null);
+        ((ArenaPlayer)player).setPlayerGroup(null);
     }
 
     @Override
