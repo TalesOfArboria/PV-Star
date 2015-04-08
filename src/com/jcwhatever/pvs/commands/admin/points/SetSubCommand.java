@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.points;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -48,7 +49,7 @@ import org.bukkit.command.CommandSender;
                 "amount= The amount received or deducted. Use a negative number to deduct. " +
                         "Leave blank to see current setting."})
 
-public class SetSubCommand extends AbstractPVCommand {
+public class SetSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _TYPE_NOT_FOUND =
             "A points type named '{0: points type name}' was not found.";
@@ -63,7 +64,7 @@ public class SetSubCommand extends AbstractPVCommand {
             "Points type in arena '{0: arena name}' changed to {1: points type name}.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "amount"));
         if (arena == null)

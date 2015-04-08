@@ -24,7 +24,6 @@
 
 package com.jcwhatever.pvs.commands;
 
-import com.jcwhatever.nucleus.commands.CommandUtils;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
@@ -36,6 +35,7 @@ import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand.ArenaReturned;
 import com.jcwhatever.pvs.api.commands.ICommandHelper;
+import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.exceptions.MissingExtensionAnnotation;
 
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class PVCommandHelper extends CommandUtils implements ICommandHelper {
+public class PVCommandHelper implements ICommandHelper {
 
     @Localizable static final String _ARENA_NOT_SELECTED =
             "No arena selected. Use '/{plugin-command} arena select <arenaName>' first.";
@@ -63,14 +63,6 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
             "{0: extension name} is not installed in arena '{1: arena name}'.";
 
     /**
-     * Constructor.
-     *
-     */
-    public PVCommandHelper() {
-        super(PVStarAPI.getPlugin());
-    }
-
-    /**
      * Get the command senders currently selected arena.
      *
      * @param sender    The command sender to check and display error messages to.
@@ -82,12 +74,12 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
         IArena arena;
 
         if ((arena = PVStarAPI.getArenaManager().getSelectedArena(sender)) == null) {
-            tellError(sender, Lang.get(_ARENA_NOT_SELECTED));
+            Msg.tellError(sender, Lang.get(_ARENA_NOT_SELECTED));
             return null;
         }
 
         if (returned == ArenaReturned.NOT_RUNNING && arena.getGame().isRunning()) {
-            tellError(sender, Lang.get(_WAIT_TILL_FINISHED));
+            Msg.tellError(sender, Lang.get(_WAIT_TILL_FINISHED));
             return null;
         }
 
@@ -113,7 +105,7 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
             if (info == null)
                 throw new MissingExtensionAnnotation(clazz);
 
-            tellError(sender, Lang.get(_EXTENSION_NOT_FOUND, info.name(), arena.getName()));
+            Msg.tellError(sender, Lang.get(_EXTENSION_NOT_FOUND, info.name(), arena.getName()));
             return null; // finish
         }
 
@@ -139,14 +131,14 @@ public class PVCommandHelper extends CommandUtils implements ICommandHelper {
         }
 
         if (results.size() == 0) {
-            tellError(sender, Lang.get(_ARENA_NOT_EXISTS, arenaName));
+            Msg.tellError(sender, Lang.get(_ARENA_NOT_EXISTS, arenaName));
         }
         else if (results.size() == 1) {
             return results.get(0);
         }
         else {
-            tellError(sender, Lang.get(_MULTIPLE_ARENAS, "{YELLOW}" + arenaName));
-            tell(sender, TextUtils.concat(results, ", "));
+            Msg.tellError(sender, Lang.get(_MULTIPLE_ARENAS, "{YELLOW}" + arenaName));
+            Msg.tell(sender, TextUtils.concat(results, ", "));
         }
 
         return null;

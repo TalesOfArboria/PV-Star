@@ -24,17 +24,18 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.IArena;
-import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.observer.result.FutureResultAgent.Future;
 import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
 import com.jcwhatever.nucleus.utils.observer.result.Result;
 import com.jcwhatever.nucleus.utils.performance.queued.QueueTask;
+import com.jcwhatever.pvs.Lang;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
 
@@ -45,7 +46,7 @@ import java.io.IOException;
         command="saveregion",
         description="Save the selected arenas region to disk.")
 
-public class SaveRegionSubCommand extends AbstractPVCommand {
+public class SaveRegionSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _SAVING =
             "The region for arena '{0: arena name}' is being saved...";
@@ -60,7 +61,7 @@ public class SaveRegionSubCommand extends AbstractPVCommand {
             "The region for arena '{0: arena name}' has been saved.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(final CommandSender sender, ICommandArguments args) throws CommandException {
 
         final IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)

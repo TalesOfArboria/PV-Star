@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.users;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -46,12 +47,12 @@ import org.bukkit.permissions.PermissionDefault;
         paramDescriptions = {
                 "arenaName= The name of the arena to join."})
 
-public class JoinCommand extends AbstractPVCommand {
+public class JoinCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         Player p = (Player)sender;
 

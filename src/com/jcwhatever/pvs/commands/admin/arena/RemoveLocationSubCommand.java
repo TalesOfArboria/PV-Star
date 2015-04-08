@@ -24,16 +24,17 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.arguments.ILocationHandler;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.arguments.ILocationHandler;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -49,7 +50,7 @@ import org.bukkit.entity.Player;
         paramDescriptions = {
                 "current|select|info= Leave blank to see current setting. {LOCATION}"})
 
-public class RemoveLocationSubCommand extends AbstractPVCommand {
+public class RemoveLocationSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _VIEW_LOCATION =
             "Remove location for arena '{0: arena name}' is:";
@@ -58,7 +59,7 @@ public class RemoveLocationSubCommand extends AbstractPVCommand {
             "Remove location for arena '{0: arena name}' set to:\n{WHITE}{1: location}";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(final CommandSender sender, ICommandArguments args) throws CommandException {
 
         final IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "current|select|info"));
         if (arena == null)

@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -44,13 +45,13 @@ import org.bukkit.command.CommandSender;
         paramDescriptions = {
                 "arenaName= The name of the arena to select."})
 
-public class SelectSubCommand extends AbstractPVCommand {
+public class SelectSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _SUCCESS =
             "'{0: arena name}' is your selected arena.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         String arenaName = args.getString("arenaName");
 

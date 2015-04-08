@@ -24,16 +24,17 @@
 
 package com.jcwhatever.pvs.commands.admin.spawns;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
-import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
@@ -53,7 +54,7 @@ import org.bukkit.entity.Player;
                 "type= The name of the spawn type.",
                 "team= Optional. The name of the team the spawn is for. Default is 'none'."})
 
-public class AddSubCommand extends AbstractPVCommand {
+public class AddSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _INVALID_SPAWN_TYPE =
             "'{0: spawn type name}' is not a valid spawn type.";
@@ -74,9 +75,9 @@ public class AddSubCommand extends AbstractPVCommand {
             "Spawnpoint '{0: spawn name}' added to arena '{1: arena name}'.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         String name = args.getName("name");
         String type = args.getName("type", 32);

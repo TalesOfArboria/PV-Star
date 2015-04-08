@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.points;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -45,7 +46,7 @@ import org.bukkit.command.CommandSender;
         paramDescriptions = {
                 "typeName= The name of the points type to remove."})
 
-public class DelSubCommand extends AbstractPVCommand {
+public class DelSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _TYPE_NOT_FOUND =
             "A points type named '{0: points type name}' was not found.";
@@ -54,7 +55,7 @@ public class DelSubCommand extends AbstractPVCommand {
             "Points type '{0: points type name}' removed from arena '{1: arena name}'.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)

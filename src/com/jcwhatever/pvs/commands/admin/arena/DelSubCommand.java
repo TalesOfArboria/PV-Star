@@ -24,12 +24,13 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
-import com.jcwhatever.nucleus.commands.response.IRequestContext;
-import com.jcwhatever.nucleus.commands.response.ResponseRequestor;
-import com.jcwhatever.nucleus.commands.response.ResponseType;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.response.IRequestContext;
+import com.jcwhatever.nucleus.managed.commands.response.ResponseRequestor;
+import com.jcwhatever.nucleus.managed.commands.response.ResponseType;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.pvs.Lang;
@@ -48,7 +49,7 @@ import org.bukkit.command.CommandSender;
         paramDescriptions = {
                 "arenaName= The name of the arena to delete."})
 
-public class DelSubCommand extends AbstractPVCommand {
+public class DelSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _DISABLE_FIRST =
             "You must disable the arena before it can be deleted.";
@@ -60,7 +61,7 @@ public class DelSubCommand extends AbstractPVCommand {
             "Arena '{0: arena name}' deleted.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(final CommandSender sender, ICommandArguments args) throws CommandException {
 
         String arenaName = args.getString("arenaName");
 

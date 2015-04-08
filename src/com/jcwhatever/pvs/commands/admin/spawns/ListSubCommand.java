@@ -25,9 +25,10 @@
 package com.jcwhatever.pvs.commands.admin.spawns;
 
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
@@ -56,7 +57,7 @@ import java.util.List;
                 "type= Optional. Specify the name of the spawn type to filter the results by.",
                 "search= Optional. Specify a search filter."})
 
-public class ListSubCommand extends AbstractPVCommand {
+public class ListSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE =
             "{0: arena name} Spawnpoints";
@@ -65,7 +66,7 @@ public class ListSubCommand extends AbstractPVCommand {
     @Localizable static final String _LABEL_TEAM = "Team";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
         if (arena == null)

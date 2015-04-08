@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -39,7 +40,7 @@ import org.bukkit.command.CommandSender;
         command="disable",
         description="Disable the currently selected arena.")
 
-public class DisableSubCommand extends AbstractPVCommand {
+public class DisableSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _ALREADY_DISABLED =
             "Arena '{0: arena name}' is already disabled.";
@@ -51,7 +52,7 @@ public class DisableSubCommand extends AbstractPVCommand {
             "Arena '{0: arena name}' disabled.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(final CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)

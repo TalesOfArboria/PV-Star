@@ -24,12 +24,13 @@
 
 package com.jcwhatever.pvs.commands.users;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.ArenaContext;
@@ -44,7 +45,7 @@ import org.bukkit.permissions.PermissionDefault;
         description="Vote to start the arena you're in.",
         permissionDefault= PermissionDefault.TRUE)
 
-public class VoteCommand extends AbstractPVCommand {
+public class VoteCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _VOTE_NOT_IN_GAME =
             "You're not in a game.";
@@ -53,9 +54,9 @@ public class VoteCommand extends AbstractPVCommand {
             "The game has already started.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         Player p = (Player)sender;
 

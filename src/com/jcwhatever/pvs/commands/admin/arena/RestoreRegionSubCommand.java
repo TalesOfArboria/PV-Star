@@ -24,18 +24,19 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.IArena;
-import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.regions.BuildMethod;
 import com.jcwhatever.nucleus.utils.observer.result.FutureResultAgent.Future;
 import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
 import com.jcwhatever.nucleus.utils.observer.result.Result;
 import com.jcwhatever.nucleus.utils.performance.queued.QueueTask;
+import com.jcwhatever.pvs.Lang;
+import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.command.CommandSender;
 
@@ -51,7 +52,7 @@ import java.io.IOException;
                 "fast|balanced|performance= Optional. Use one of the values to " +
                         "set the build mode. Default is 'performance'."})
 
-public class RestoreRegionSubCommand extends AbstractPVCommand {
+public class RestoreRegionSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _CANNOT_RESTORE =
             "The region for arena '{0: arena name}' is not saved.";
@@ -69,7 +70,7 @@ public class RestoreRegionSubCommand extends AbstractPVCommand {
             "The region for arena '{0: arena name}' has been restored.";
 
     @Override
-    public void execute(final CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(final CommandSender sender, ICommandArguments args) throws CommandException {
 
         final IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)

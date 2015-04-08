@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.spectator;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -44,7 +45,7 @@ import org.bukkit.command.CommandSender;
                 "on|off|info= Use 'on' to turn on, 'off' to turn off, " +
                         "'info' or leave blank to see current setting."})
 
-public class SharingSubCommand extends AbstractPVCommand {
+public class SharingSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _SHARING_ENABLED =
             "Arena '{0: arena name}' Spectator Inventory Sharing is enabled.";
@@ -59,7 +60,7 @@ public class SharingSubCommand extends AbstractPVCommand {
             "Arena '{0: arena name}' Spectator Inventory Sharing changed to {RED}disabled.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "on|off|info"));
         if (arena == null)

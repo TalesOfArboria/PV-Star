@@ -24,14 +24,15 @@
 
 package com.jcwhatever.pvs.commands.admin.arena;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.providers.regionselect.IRegionSelection;
 import com.jcwhatever.pvs.Lang;
-import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 import org.bukkit.Location;
@@ -44,15 +45,15 @@ import org.bukkit.entity.Player;
         description="Sets the region of the selected arena using your current " +
                 "region selection.")
 
-public class SetRegionSubCommand extends AbstractPVCommand {
+public class SetRegionSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _SUCCESS =
             "Region for arena '{0: arena name}' has been set.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)

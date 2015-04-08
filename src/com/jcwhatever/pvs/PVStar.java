@@ -26,13 +26,12 @@ package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
-import com.jcwhatever.nucleus.commands.CommandDispatcher;
 import com.jcwhatever.nucleus.events.manager.EventManager;
-import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.managed.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi.IApiObjectCreator;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.providers.permissions.Permissions;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
@@ -51,8 +50,19 @@ import com.jcwhatever.pvs.api.spawns.ISpawnTypeManager;
 import com.jcwhatever.pvs.api.stats.IStatsManager;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.Arena;
-import com.jcwhatever.pvs.commands.PVCommandDispatcher;
 import com.jcwhatever.pvs.commands.PVCommandHelper;
+import com.jcwhatever.pvs.commands.admin.arena.ArenaCommand;
+import com.jcwhatever.pvs.commands.admin.ext.ExtCommand;
+import com.jcwhatever.pvs.commands.admin.game.GameCommand;
+import com.jcwhatever.pvs.commands.admin.lobby.LobbyCommand;
+import com.jcwhatever.pvs.commands.admin.modules.ModulesCommand;
+import com.jcwhatever.pvs.commands.admin.points.PointsCommand;
+import com.jcwhatever.pvs.commands.admin.spawns.SpawnsCommand;
+import com.jcwhatever.pvs.commands.admin.spectator.SpectatorCommand;
+import com.jcwhatever.pvs.commands.users.JoinCommand;
+import com.jcwhatever.pvs.commands.users.LeaveCommand;
+import com.jcwhatever.pvs.commands.users.ListCommand;
+import com.jcwhatever.pvs.commands.users.VoteCommand;
 import com.jcwhatever.pvs.listeners.BukkitEventForwarder;
 import com.jcwhatever.pvs.listeners.MobEventListener;
 import com.jcwhatever.pvs.listeners.PlayerEventListener;
@@ -83,7 +93,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
     private ModuleLoader _moduleLoader;
     private ArenaManager _arenaManager;
-    private PVCommandDispatcher _commandHandler;
     private EventManager _eventManager;
     private IStatsManager _statsManager;
     private IPointsManager _pointsManager;
@@ -148,11 +157,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
-    public CommandDispatcher getCommandHandler() {
-        return _commandHandler;
-    }
-
-    @Override
     public ICommandHelper getCommandHelper() {
         return _commandHelper;
     }
@@ -197,9 +201,21 @@ public class PVStar extends NucleusPlugin implements IPVStar {
         Nucleus.getSignManager().registerHandler(new PvpSignHandler());
         Nucleus.getSignManager().registerHandler(new ReadySignHandler());
 
-        // enable command
-        _commandHandler = new PVCommandDispatcher(this);
-        registerCommands(_commandHandler);
+        // admin commands
+        registerCommand(ArenaCommand.class);
+        registerCommand(ExtCommand.class);
+        registerCommand(GameCommand.class);
+        registerCommand(LobbyCommand.class);
+        registerCommand(ModulesCommand.class);
+        registerCommand(PointsCommand.class);
+        registerCommand(SpawnsCommand.class);
+        registerCommand(SpectatorCommand.class);
+
+        // user commands
+        registerCommand(JoinCommand.class);
+        registerCommand(LeaveCommand.class);
+        registerCommand(ListCommand.class);
+        registerCommand(VoteCommand.class);
 
         Msg.info("Loading modules...");
 

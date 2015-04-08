@@ -24,7 +24,7 @@
 
 package com.jcwhatever.pvs.commands.admin.points;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 
 @CommandInfo(

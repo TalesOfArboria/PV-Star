@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.ext;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
@@ -52,13 +53,13 @@ import java.util.Set;
                 "search= Optional. Specify a search filter."
         })
 
-public class ListSubCommand extends AbstractPVCommand {
+public class ListSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE =
             "Extensions in arena '{0: arena name}'";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.ALWAYS);
         if (arena == null)

@@ -24,12 +24,13 @@
 
 package com.jcwhatever.pvs.commands.users;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
@@ -43,7 +44,7 @@ import org.bukkit.permissions.PermissionDefault;
         description="Leave the arena.",
         permissionDefault= PermissionDefault.TRUE)
 
-public class LeaveCommand extends AbstractPVCommand {
+public class LeaveCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _NOT_IN_ARENA =
             "You're not in an arena.";
@@ -52,9 +53,9 @@ public class LeaveCommand extends AbstractPVCommand {
             "Thanks for playing!";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         Player p = (Player)sender;
         IArenaPlayer player = ArenaPlayer.get(p);

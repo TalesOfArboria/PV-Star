@@ -24,9 +24,10 @@
 
 package com.jcwhatever.pvs.commands.admin.ext;
 
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -45,7 +46,7 @@ import org.bukkit.command.CommandSender;
         paramDescriptions = {
                 "extName= The name of the arena extension to remove."})
 
-public class DelSubCommand extends AbstractPVCommand {
+public class DelSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _EXT_NOT_FOUND =
             "An arena extension named '{0: extension name}' was not found.";
@@ -60,7 +61,7 @@ public class DelSubCommand extends AbstractPVCommand {
             "Removed extension '{0: extension name}' from arena '{1: arena name}'.";
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
         IArena arena = getSelectedArena(sender, ArenaReturned.NOT_RUNNING);
         if (arena == null)
