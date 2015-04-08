@@ -58,10 +58,8 @@ public class EnableSubCommand extends AbstractPVCommand implements IExecutableCo
         if (arena == null)
             return; // finished
 
-        if (arena.getSettings().isEnabled()) {
-            tellError(sender, Lang.get(_ALREADY_ENABLED, arena.getName()));
-            return; // finished
-        }
+        if (arena.getSettings().isEnabled())
+            throw new CommandException(Lang.get(_ALREADY_ENABLED, arena.getName()));
 
         arena.getSettings().setEnabled(true);
 
@@ -69,7 +67,7 @@ public class EnableSubCommand extends AbstractPVCommand implements IExecutableCo
             tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
         }
         else {
-            tellError(sender, Lang.get(_FAILED, arena.getName()));
+            throw new CommandException(Lang.get(_FAILED, arena.getName()));
         }
     }
 }

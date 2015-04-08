@@ -63,10 +63,8 @@ public class DelSubCommand extends AbstractPVCommand implements IExecutableComma
         String name = args.getString("name");
 
         Spawnpoint spawnpoint = arena.getSpawns().get(name);
-        if (spawnpoint == null) {
-            tellError(sender, Lang.get(_FAILED, name, arena.getName()));
-            return; // finish
-        }
+        if (spawnpoint == null)
+            throw new CommandException(Lang.get(_FAILED, name, arena.getName()));
 
         arena.getSpawns().remove(spawnpoint);
         tellSuccess(sender, Lang.get(_SUCCESS, name, arena.getName()));

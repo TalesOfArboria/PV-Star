@@ -66,16 +66,12 @@ public class AddSubCommand extends AbstractPVCommand implements IExecutableComma
 
         String extName = args.getName("extName");
 
-        if (PVStarAPI.getExtensionManager().getExtensionClass(extName) == null) {
-            tellError(sender, Lang.get(_EXT_NOT_FOUND, extName));
-            return; // finish
-        }
+        if (PVStarAPI.getExtensionManager().getExtensionClass(extName) == null)
+            throw new CommandException(Lang.get(_EXT_NOT_FOUND, extName));
 
         ArenaExtension extension = arena.getExtensions().add(extName);
-        if (extension == null) {
-            tellError(sender, Lang.get(_FAILED, extName, arena.getName()));
-            return; // finish
-        }
+        if (extension == null)
+            throw new CommandException(Lang.get(_FAILED, extName, arena.getName()));
 
         tellSuccess(sender, Lang.get(_SUCCESS, extension.getName(), arena.getName()));
     }

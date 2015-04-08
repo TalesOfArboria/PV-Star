@@ -75,8 +75,7 @@ public class SaveRegionSubCommand extends AbstractPVCommand implements IExecutab
             future = arena.getRegion().saveData();
         } catch (IOException e) {
             e.printStackTrace();
-            tellError(sender, Lang.get(_FAILED));
-            return;
+            throw new CommandException(Lang.get(_FAILED));
         }
 
         future.onError(new FutureSubscriber<QueueTask>() {

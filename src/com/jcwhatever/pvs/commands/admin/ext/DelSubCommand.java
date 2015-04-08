@@ -69,21 +69,15 @@ public class DelSubCommand extends AbstractPVCommand implements IExecutableComma
 
         String extName = args.getName("extName");
 
-        if (PVStarAPI.getExtensionManager().getExtensionClass(extName) == null) {
-            tellError(sender, Lang.get(_EXT_NOT_FOUND, extName));
-            return; // finish
-        }
+        if (PVStarAPI.getExtensionManager().getExtensionClass(extName) == null)
+            throw new CommandException(Lang.get(_EXT_NOT_FOUND, extName));
 
         ArenaExtension extension = arena.getExtensions().get(extName);
-        if (extension == null) {
-            tellError(sender, Lang.get(_EXT_NOT_IN_ARENA, extName, arena.getName()));
-            return; // finish
-        }
+        if (extension == null)
+            throw new CommandException(Lang.get(_EXT_NOT_IN_ARENA, extName, arena.getName()));
 
-        if (!arena.getExtensions().remove(extName)) {
-            tellError(sender, Lang.get(_FAILED, extName, arena.getName()));
-            return; // finish
-        }
+        if (!arena.getExtensions().remove(extName))
+            throw new CommandException(Lang.get(_FAILED, extName, arena.getName()));
 
         tellSuccess(sender, Lang.get(_SUCCESS, extName, arena.getName()));
     }

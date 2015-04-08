@@ -69,10 +69,8 @@ public class DelSubCommand extends AbstractPVCommand implements IExecutableComma
         if (arena == null)
             return; // finish
 
-        if (arena.getSettings().isEnabled()) {
-            tellError(sender, Lang.get(_DISABLE_FIRST));
-            return; // finish
-        }
+        if (arena.getSettings().isEnabled())
+            throw new CommandException(Lang.get(_DISABLE_FIRST));
 
         tell(sender, Lang.get(_CONFIRM, arena.getName()));
 

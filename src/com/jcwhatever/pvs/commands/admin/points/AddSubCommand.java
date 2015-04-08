@@ -61,10 +61,8 @@ public class AddSubCommand extends AbstractPVCommand implements IExecutableComma
         String typeName = args.getName("typeName", 32);
 
         PointsType type = PVStarAPI.getPointsManager().getType(typeName);
-        if (type == null) {
-            tellError(sender, Lang.get(_TYPE_NOT_FOUND, typeName));
-            return; // finished
-        }
+        if (type == null)
+            throw new CommandException(Lang.get(_TYPE_NOT_FOUND, typeName));
 
         type.add(arena);
 

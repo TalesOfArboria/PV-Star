@@ -59,10 +59,8 @@ public class DisableSubCommand extends AbstractPVCommand implements IExecutableC
             return; // finish
 
 
-        if (!arena.getSettings().isEnabled()) {
-            tellError(sender, Lang.get(_ALREADY_DISABLED, arena.getName()));
-            return; // finish
-        }
+        if (!arena.getSettings().isEnabled())
+            throw new CommandException(Lang.get(_ALREADY_DISABLED, arena.getName()));
 
         arena.getSettings().setEnabled(false);
 

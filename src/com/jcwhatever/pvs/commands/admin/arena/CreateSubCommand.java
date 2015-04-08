@@ -65,15 +65,12 @@ public class CreateSubCommand extends AbstractPVCommand implements IExecutableCo
         String type = "Arena";
 
         IArena arena = getArena(name);
-
-        if (arena != null) {
-            tellError(sender, Lang.get(_ARENA_ALREADY_EXISTS, name));
-            return; // finish
-        }
+        if (arena != null)
+            throw new CommandException(Lang.get(_ARENA_ALREADY_EXISTS, name));
 
         arena = PVStarAPI.getArenaManager().addArena(name, type);
         if (arena == null) {
-            tellError(sender, Lang.get(_FAILED));
+            throw new CommandException(Lang.get(_FAILED));
         }
         else {
             PVStarAPI.getArenaManager().setSelectedArena(sender, arena);

@@ -63,15 +63,11 @@ public class VoteCommand extends AbstractPVCommand implements IExecutableCommand
         IArenaPlayer player = ArenaPlayer.get(p);
         IArena arena = player.getArena();
 
-        if (arena == null || player.getContext() == ArenaContext.SPECTATOR) {
-            tellError(p, Lang.get(_VOTE_NOT_IN_GAME));
-            return; // finish
-        }
+        if (arena == null || player.getContext() == ArenaContext.SPECTATOR)
+            throw new CommandException(Lang.get(_VOTE_NOT_IN_GAME));
 
-        if (player.getContext() == ArenaContext.GAME) {
-            tellError(p, Lang.get(_VOTE_GAME_ALREADY_STARTED));
-            return; // finish
-        }
+        if (player.getContext() == ArenaContext.GAME)
+            throw new CommandException(Lang.get(_VOTE_GAME_ALREADY_STARTED));
 
         player.setReady(true);
     }

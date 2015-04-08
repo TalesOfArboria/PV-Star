@@ -76,10 +76,8 @@ public class RestoreRegionSubCommand extends AbstractPVCommand implements IExecu
         if (arena == null)
             return; // finished
 
-        if (!arena.getRegion().canRestore()) {
-            tellError(sender, Lang.get(_CANNOT_RESTORE, arena.getName()));
-            return; // finished
-        }
+        if (!arena.getRegion().canRestore())
+            throw new CommandException(Lang.get(_CANNOT_RESTORE, arena.getName()));
 
         BuildMethod method = args.getEnum("fast|balanced|performance", BuildMethod.class);
 
@@ -91,8 +89,7 @@ public class RestoreRegionSubCommand extends AbstractPVCommand implements IExecu
             future = arena.getRegion().restoreData(method);
         } catch (IOException e) {
             e.printStackTrace();
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
+            throw new CommandException(Lang.get(_FAILED));
         }
 
         future.onError(

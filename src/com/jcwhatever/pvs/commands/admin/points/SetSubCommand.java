@@ -73,16 +73,12 @@ public class SetSubCommand extends AbstractPVCommand implements IExecutableComma
         String typeName = args.getName("typeName", 32);
 
         PointsType type = PVStarAPI.getPointsManager().getType(typeName);
-        if (type == null) {
-            tellError(sender, Lang.get(_TYPE_NOT_FOUND, typeName));
-            return; // finished
-        }
+        if (type == null)
+            throw new CommandException(Lang.get(_TYPE_NOT_FOUND, typeName));
 
         IPointsHandler handler = type.getHandler(arena);
-        if (handler == null) {
-            tellError(sender, Lang.get(_TYPE_NOT_ADDED, type.getName(), arena.getName()));
-            return; // finished
-        }
+        if (handler == null)
+            throw new CommandException(Lang.get(_TYPE_NOT_ADDED, type.getName(), arena.getName()));
 
         if (args.getString("amount").equals("info")) {
 
@@ -97,7 +93,6 @@ public class SetSubCommand extends AbstractPVCommand implements IExecutableComma
             handler.setPoints(points);
 
             tellSuccess(sender, Lang.get(_CHANGED, arena.getName(), points));
-
         }
     }
 }

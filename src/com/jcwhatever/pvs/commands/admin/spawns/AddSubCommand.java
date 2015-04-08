@@ -85,10 +85,8 @@ public class AddSubCommand extends AbstractPVCommand implements IExecutableComma
 
         SpawnType spawnType = PVStarAPI.getSpawnTypeManager().getType(type);
 
-        if (spawnType == null) {
-            tellError(sender, Lang.get(_INVALID_SPAWN_TYPE), type);
-            return; // finish
-        }
+        if (spawnType == null)
+            throw new CommandException(Lang.get(_INVALID_SPAWN_TYPE), type);
 
         Player p = (Player)sender;
 
@@ -98,32 +96,26 @@ public class AddSubCommand extends AbstractPVCommand implements IExecutableComma
 
         ArenaRegion region = arena.getRegion();
 
-        if (!region.isDefined()) {
-            tellError(sender, Lang.get(_REGION_UNDEFINED));
-            return; // finish
-        }
+        if (!region.isDefined())
+            throw new CommandException(Lang.get(_REGION_UNDEFINED));
 
-        if (!region.getWorld().getName().equals(p.getLocation().getWorld().getName())) {
-            tellError(sender, Lang.get(_DIFFERENT_WORLD));
-            return; // finish
-        }
+        if (!region.getWorld().getName().equals(p.getLocation().getWorld().getName()))
+            throw new CommandException(Lang.get(_DIFFERENT_WORLD));
 
         if (region.contains(p.getLocation())) {
 
             Location loc = p.getLocation();
 
             Spawnpoint current = arena.getSpawns().get(name);
-            if (current != null) {
-                tellError(sender, Lang.get(_ALREADY_EXISTS, name));
-                return; // finish
-            }
+            if (current != null)
+                throw new CommandException(Lang.get(_ALREADY_EXISTS, name));
 
             arena.getSpawns().add(new Spawnpoint(name, spawnType, team, loc));
 
             tellSuccess(sender, Lang.get(_SUCCESS, name, arena.getName()));
             tell(sender, TextUtils.formatLocation(loc, true));
         } else {
-            tellError(sender, Lang.get(_OUTSIDE_REGION));
+            throw new CommandException(Lang.get(_OUTSIDE_REGION));
         }
     }
 }

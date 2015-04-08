@@ -61,12 +61,8 @@ public class LeaveCommand extends AbstractPVCommand implements IExecutableComman
         IArenaPlayer player = ArenaPlayer.get(p);
 
         IArena arena = player.getArena();
-
-        if (arena == null) {
-
-            tellError(p, Lang.get(_NOT_IN_ARENA));
-            return; // finish
-        }
+        if (arena == null)
+            throw new CommandException(Lang.get(_NOT_IN_ARENA));
 
         if (player.leaveArena())
             tellSuccess(p, Lang.get(_SUCCESS));

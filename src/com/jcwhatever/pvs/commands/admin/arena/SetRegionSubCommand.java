@@ -62,8 +62,6 @@ public class SetRegionSubCommand extends AbstractPVCommand implements IExecutabl
         Player p = (Player)sender;
 
         IRegionSelection sel = getRegionSelection(p);
-        if (sel == null)
-            return; // finish
 
         Location locationA = sel.getP1();
         Location locationB = sel.getP2();
