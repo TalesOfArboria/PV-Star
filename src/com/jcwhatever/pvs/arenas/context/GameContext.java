@@ -293,6 +293,11 @@ public class GameContext extends AbstractContextManager implements IGameContext 
     @Nullable
     protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
 
+        // lobby and game spawns are the same if there are no game spawns.
+        if (!getArena().getSpawns().hasLobbySpawns())
+            return null;
+
+        // get a game spawn location
         return SpawnManager.getRespawnLocation(
                 this, ArenaContext.GAME, new Location(null, 0, 0, 0));
     }
@@ -371,7 +376,6 @@ public class GameContext extends AbstractContextManager implements IGameContext 
         if (event.getWinMessage() != null)
             tell(event.getWinMessage());
     }
-
 
     /*
      * Call PlayerLoseEvent and display message if any
