@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
 import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.nucleus.regions.BuildMethod;
+import com.jcwhatever.nucleus.regions.file.IRegionFileLoader.LoadSpeed;
 import com.jcwhatever.nucleus.utils.observer.future.FutureSubscriber;
 import com.jcwhatever.nucleus.utils.observer.future.IFuture;
 import com.jcwhatever.nucleus.utils.observer.future.IFuture.FutureStatus;
@@ -79,14 +79,14 @@ public class RestoreRegionSubCommand extends AbstractPVCommand implements IExecu
         if (!arena.getRegion().canRestore())
             throw new CommandException(Lang.get(_CANNOT_RESTORE, arena.getName()));
 
-        BuildMethod method = args.getEnum("fast|balanced|performance", BuildMethod.class);
+        LoadSpeed speed = args.getEnum("fast|balanced|performance", LoadSpeed.class);
 
         tell(sender, Lang.get(_RESTORING, arena.getName()));
 
         IFuture future;
 
         try {
-            future = arena.getRegion().restoreData(method);
+            future = arena.getRegion().restoreData(speed);
         } catch (IOException e) {
             e.printStackTrace();
             throw new CommandException(Lang.get(_FAILED));
