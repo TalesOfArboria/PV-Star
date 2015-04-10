@@ -168,7 +168,7 @@ public class PlayerEventListener implements Listener {
     /*
       Handle player hunger
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerHunger(FoodLevelChangeEvent event) {
 
         if (!(event.getEntity() instanceof Player))
@@ -196,7 +196,7 @@ public class PlayerEventListener implements Listener {
     /*
       Handle player fall damage
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerFall(EntityDamageEvent event) {
         if (event.getCause() != DamageCause.FALL)
             return;
@@ -223,7 +223,7 @@ public class PlayerEventListener implements Listener {
     /*
      * Handle player immobilization
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerMove(PlayerMoveEvent event) {
 
         ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
