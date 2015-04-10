@@ -24,8 +24,7 @@
 
 package com.jcwhatever.pvs.listeners;
 
-import com.jcwhatever.nucleus.events.manager.AbstractBukkitForwarder;
-import com.jcwhatever.nucleus.events.manager.EventManager;
+import com.jcwhatever.nucleus.events.manager.BukkitEventForwarder;
 import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -37,6 +36,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -52,20 +52,18 @@ import org.bukkit.inventory.InventoryHolder;
 /**
  * Forward Bukkit events to the appropriate arena.
  */
-public class BukkitEventForwarder extends AbstractBukkitForwarder {
+public class ArenaEventForwarder extends BukkitEventForwarder {
 
     /**
      * Constructor.
-     *
-     * <p>Automatically attaches forwarder to the specified source event manager.</p>
-     *
-     * @param source The event manager source that Bukkit events are handled from.
-     *               Typically this will be the global event manager since it is the
-     *               only manager that receives bukkit events as part of its normal
-     *               operation.
      */
-    public BukkitEventForwarder(EventManager source) {
-        super(PVStarAPI.getPlugin(), source);
+    public ArenaEventForwarder() {
+        super(PVStarAPI.getPlugin(), EventPriority.HIGHEST);
+    }
+
+    @Override
+    protected void onEvent(Event event) {
+        // do nothing
     }
 
     @Override
@@ -130,11 +128,6 @@ public class BukkitEventForwarder extends AbstractBukkitForwarder {
         else {
             Msg.debug("Failed to forward bukkit EntityEvent event because it has no entity.");
         }
-    }
-
-    @Override
-    protected void onOtherEvent(Event event) {
-        // do nothing
     }
 
     private <T extends Event> void callEvent(Block block, T event) {

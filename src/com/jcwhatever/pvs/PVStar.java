@@ -26,6 +26,7 @@ package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
+import com.jcwhatever.nucleus.events.manager.BukkitEventForwarder;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.managed.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
@@ -63,7 +64,7 @@ import com.jcwhatever.pvs.commands.users.JoinCommand;
 import com.jcwhatever.pvs.commands.users.LeaveCommand;
 import com.jcwhatever.pvs.commands.users.ListCommand;
 import com.jcwhatever.pvs.commands.users.VoteCommand;
-import com.jcwhatever.pvs.listeners.BukkitEventForwarder;
+import com.jcwhatever.pvs.listeners.ArenaEventForwarder;
 import com.jcwhatever.pvs.listeners.MobEventListener;
 import com.jcwhatever.pvs.listeners.PlayerEventListener;
 import com.jcwhatever.pvs.listeners.PvpListener;
@@ -99,7 +100,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     private ExtensionTypeManager _extensionManager;
     private SpawnTypeManager _spawnTypeManager;
     private PVCommandHelper _commandHelper;
-    private BukkitEventForwarder _eventForwarder;
+    private ArenaEventForwarder _eventForwarder;
     private IScriptApi _scriptApi;
     private boolean _isLoaded;
 
@@ -255,7 +256,8 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
                 // forward global Bukkit events to the appropriate
                 // arena event manager.
-                _eventForwarder = new BukkitEventForwarder(Nucleus.getEventManager());
+                _eventForwarder = new ArenaEventForwarder();
+                BukkitEventForwarder.registerBukkitEvents(_eventForwarder);
 
                 _scriptApi = new SimpleScriptApi(PVStar.this, "pvstar", new IApiObjectCreator() {
                     @Override
