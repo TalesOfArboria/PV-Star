@@ -29,10 +29,9 @@ import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
 import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.nucleus.utils.observer.result.FutureResultAgent.Future;
-import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
-import com.jcwhatever.nucleus.utils.observer.result.Result;
-import com.jcwhatever.nucleus.utils.performance.queued.QueueTask;
+import com.jcwhatever.nucleus.utils.observer.future.FutureSubscriber;
+import com.jcwhatever.nucleus.utils.observer.future.IFuture;
+import com.jcwhatever.nucleus.utils.observer.future.IFuture.FutureStatus;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
@@ -40,6 +39,7 @@ import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 @CommandInfo(
         parent="arena",
@@ -69,7 +69,7 @@ public class SaveRegionSubCommand extends AbstractPVCommand implements IExecutab
 
         tell(sender, Lang.get(_SAVING, arena.getName()));
 
-        Future<QueueTask> future;
+        IFuture future;
 
         try {
             future = arena.getRegion().saveData();
@@ -78,21 +78,21 @@ public class SaveRegionSubCommand extends AbstractPVCommand implements IExecutab
             throw new CommandException(Lang.get(_FAILED));
         }
 
-        future.onError(new FutureSubscriber<QueueTask>() {
+        future.onError(new FutureSubscriber() {
             @Override
-            public void on(Result<QueueTask> result) {
-                tellError(sender, Lang.get(_FAILED, result.getMessage()));
+            public void on(FutureStatus status, @Nullable String message) {
+                tellError(sender, Lang.get(_FAILED, message));
             }
         })
-        .onCancel(new FutureSubscriber<QueueTask>() {
+        .onCancel(new FutureSubscriber() {
             @Override
-            public void on(Result<QueueTask> result) {
-                tell(sender, Lang.get(_CANCELLED, result.getMessage()));
+            public void on(FutureStatus status, @Nullable String message) {
+                tell(sender, Lang.get(_CANCELLED, message));
             }
         })
-        .onSuccess(new FutureSubscriber<QueueTask>() {
+        .onSuccess(new FutureSubscriber() {
             @Override
-            public void on(Result<QueueTask> result) {
+            public void on(FutureStatus status, @Nullable String message) {
                 tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
             }
         });
