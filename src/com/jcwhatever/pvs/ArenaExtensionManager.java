@@ -148,7 +148,7 @@ public class ArenaExtensionManager implements IArenaExtensionManager, IEventList
         if (info == null)
             throw new MissingExtensionAnnotation(clazz);
 
-        ArenaExtension extension = loadExtension(clazz);
+        ArenaExtension extension = loadExtension(clazz, true);
         if (extension == null)
             return null;
 
@@ -190,7 +190,7 @@ public class ArenaExtensionManager implements IArenaExtensionManager, IEventList
     }
 
     @Nullable
-    private ArenaExtension loadExtension(Class<? extends ArenaExtension> clazz) {
+    private ArenaExtension loadExtension(Class<? extends ArenaExtension> clazz, boolean isInitialAttach) {
 
         ArenaExtensionInfo info = clazz.getAnnotation(ArenaExtensionInfo.class);
         if (info == null)
@@ -210,13 +210,36 @@ public class ArenaExtensionManager implements IArenaExtensionManager, IEventList
             return null;
         }
 
-        extension.register(REGISTRATION);
-        REGISTRATION.attach(extension, info, getArena());
-
         _extensions.add(extension);
         _loadedMap.put(info.name().toLowerCase(), extension);
 
+        extension.register(REGISTRATION);
+        REGISTRATION.attach(extension, info, getArena(), isInitialAttach);
+
+        if (_arena.getSettings().isEnabled())
+            REGISTRATION.enable(extension);
+
         return extension;
+    }
+
+    /**
+     * Enable all extensions.
+     */
+    public void enable() {
+        for (ArenaExtension extension :_extensions) {
+            REGISTRATION.enable(extension);
+            _loadedMap.put(extension.getName().toLowerCase(), extension);
+        }
+    }
+
+    /**
+     * Disable all extensions.
+     */
+    public void disable() {
+        for (ArenaExtension extension : _loadedMap.values()) {
+            REGISTRATION.disable(extension);
+        }
+        _loadedMap.clear();
     }
 
     private void load() {
@@ -228,7 +251,7 @@ public class ArenaExtensionManager implements IArenaExtensionManager, IEventList
             if (clazz == null)
                 continue;
 
-            loadExtension(clazz);
+            loadExtension(clazz, false);
         }
     }
 }
