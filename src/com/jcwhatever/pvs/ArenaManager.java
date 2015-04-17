@@ -25,6 +25,7 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.collections.players.PlayerMap;
 import com.jcwhatever.nucleus.providers.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.IDataNode;
@@ -61,7 +62,7 @@ public class ArenaManager implements IArenaManager {
     private final Map<String, Class<? extends IArena>> _arenaTypes = new HashMap<>(20);
     private final IDataNode _dataNode;
     private final PVStar _pvStar;
-    private final Map<String, IArena> _selectedArenas = new HashMap<>(20); // keyed to player name
+    private final Map<UUID, IArena> _selectedArenas = new PlayerMap<IArena>(PVStarAPI.getPlugin(), 10);
 
     public ArenaManager(IDataNode dataNode) {
         _dataNode = dataNode;
@@ -93,16 +94,18 @@ public class ArenaManager implements IArenaManager {
     }
 
     @Override
-    public void setSelectedArena(CommandSender sender, IArena arena) {
+    public void setSelectedArena(CommandSender sender, @Nullable IArena arena) {
         PreCon.notNull(sender);
-        PreCon.notNull(arena);
 
         if (sender instanceof Player) {
             Player p = (Player)sender;
             if (!p.isOp())
                 return;
 
-            _selectedArenas.put(p.getName(), arena);
+            if (arena == null)
+                _selectedArenas.remove(p.getUniqueId());
+            else
+                _selectedArenas.put(p.getUniqueId(), arena);
         }
     }
 
