@@ -26,11 +26,11 @@ package com.jcwhatever.pvs.arenas.settings;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaEnabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreEnableEvent;
+import com.jcwhatever.pvs.arenas.AbstractArena;
 
 import org.bukkit.Location;
 
@@ -43,7 +43,7 @@ public class PVArenaSettings implements IArenaSettings {
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
 
-    private final IArena _arena;
+    private final AbstractArena _arena;
     private final IDataNode _dataNode;
 
     private int _minPlayers = 2;
@@ -57,7 +57,7 @@ public class PVArenaSettings implements IArenaSettings {
     /*
      * Constructor.
      */
-    public PVArenaSettings(IArena arena) {
+    public PVArenaSettings(AbstractArena arena) {
         PreCon.notNull(arena);
 
         _arena = arena;
@@ -118,11 +118,13 @@ public class PVArenaSettings implements IArenaSettings {
 
             _isEnabled = true;
 
+            _arena.getExtensions().enable();
             _arena.getEventManager().call(this, new ArenaEnabledEvent(_arena));
         }
         else {
             _isEnabled = false;
 
+            _arena.getExtensions().disable();
             _arena.getEventManager().call(this, new ArenaDisabledEvent(_arena));
         }
     }

@@ -44,14 +44,10 @@ import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
-import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
-import com.jcwhatever.pvs.api.arena.managers.ISpawnManager;
-import com.jcwhatever.pvs.api.arena.managers.ITeamManager;
 import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.arena.options.PlayerJoinArenaReason;
 import com.jcwhatever.pvs.api.arena.options.PlayerLeaveArenaReason;
-import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.events.ArenaBusyEvent;
 import com.jcwhatever.pvs.api.events.ArenaDisposeEvent;
 import com.jcwhatever.pvs.api.events.ArenaIdleEvent;
@@ -121,10 +117,10 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
     private GameContext _gameManager;
     private LobbyContext _lobbyManager;
     private SpectatorContext _spectatorManager;
-    private ISpawnManager _spawnManager;
-    private ITeamManager _teamManager;
-    private IArenaExtensionManager _extensionManager;
-    private IArenaSettings _arenaSettings;
+    private SpawnManager _spawnManager;
+    private TeamManager _teamManager;
+    private ArenaExtensionManager _extensionManager;
+    private PVArenaSettings _arenaSettings;
 
     private boolean _isDisposed;
 
@@ -209,22 +205,22 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
     }
 
     @Override
-    public final ITeamManager getTeams() {
+    public final TeamManager getTeams() {
         return _teamManager;
     }
 
     @Override
-    public final ISpawnManager getSpawns() {
+    public final SpawnManager getSpawns() {
         return _spawnManager;
     }
 
     @Override
-    public final IArenaExtensionManager getExtensions() {
+    public final ArenaExtensionManager getExtensions() {
         return _extensionManager;
     }
 
     @Override
-    public final IArenaSettings getSettings() {
+    public final PVArenaSettings getSettings() {
         return _arenaSettings;
     }
 
