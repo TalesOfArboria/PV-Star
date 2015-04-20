@@ -63,6 +63,7 @@ public class ArenaManager implements IArenaManager {
     private final IDataNode _dataNode;
     private final PVStar _pvStar;
     private final Map<UUID, IArena> _selectedArenas = new PlayerMap<IArena>(PVStarAPI.getPlugin(), 10);
+    private IArena _consoleArena;
 
     public ArenaManager(IDataNode dataNode) {
         _dataNode = dataNode;
@@ -87,10 +88,14 @@ public class ArenaManager implements IArenaManager {
     }
 
     @Override
+    @Nullable
     public IArena getSelectedArena(CommandSender sender) {
         PreCon.notNull(sender);
 
-        return _selectedArenas.get(sender.getName());
+        if (sender instanceof Player)
+            return _selectedArenas.get(((Player) sender).getUniqueId());
+
+        return _consoleArena;
     }
 
     @Override
@@ -106,6 +111,9 @@ public class ArenaManager implements IArenaManager {
                 _selectedArenas.remove(p.getUniqueId());
             else
                 _selectedArenas.put(p.getUniqueId(), arena);
+        }
+        else {
+            _consoleArena = arena;
         }
     }
 
