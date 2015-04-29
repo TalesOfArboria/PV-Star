@@ -94,7 +94,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
     private ModuleLoader _moduleLoader;
     private ArenaManager _arenaManager;
-    private EventManager _eventManager;
+    private PVEventManager _eventManager;
     private IStatsManager _statsManager;
     private IPointsManager _pointsManager;
     private ExtensionTypeManager _extensionManager;
@@ -192,7 +192,7 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
         _pointsManager = new PointsManager();
         _statsManager = new StatsManager();
-        _eventManager = new EventManager(this);
+        _eventManager = new PVEventManager();
         _extensionManager = new ExtensionTypeManager();
         _spawnTypeManager = new SpawnTypeManager();
         _commandHelper = new PVCommandHelper();

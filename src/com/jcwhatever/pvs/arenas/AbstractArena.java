@@ -25,7 +25,6 @@
 package com.jcwhatever.pvs.arenas;
 
 import com.google.common.collect.MapMaker;
-import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.mixins.IDisposable;
@@ -38,6 +37,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaExtensionManager;
 import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.PVEventManager;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -107,7 +107,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
     private IDataNode _dataNode;
     private File _dataFolder;
 
-    private EventManager _eventManager;
+    private PVEventManager _eventManager;
     private ArenaRegion _region;
     private IPermission _permission;
 
@@ -138,7 +138,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
         _searchName = name.toLowerCase();
         _typeInfo = getClass().getAnnotation(ArenaTypeInfo.class);
 
-        _eventManager = new EventManager(PVStarAPI.getPlugin(), PVStarAPI.getEventManager());
+        _eventManager = new PVEventManager(PVStarAPI.getEventManager());
 
         _dataNode = DataStorage.get(PVStarAPI.getPlugin(), new DataPath("arenas." + id.toString()));
         _dataNode.load();
@@ -185,7 +185,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
     }
 
     @Override
-    public final EventManager getEventManager() {
+    public final PVEventManager getEventManager() {
         return _eventManager;
     }
 
@@ -419,7 +419,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
 
         getEventManager().call(this, new ArenaDisposeEvent(this));
 
-        getEventManager().dispose();
+        getEventManager().forceDispose();
 
         getRegion().dispose();
 
