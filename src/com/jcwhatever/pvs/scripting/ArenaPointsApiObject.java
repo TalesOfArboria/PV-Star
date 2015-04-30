@@ -25,30 +25,35 @@
 package com.jcwhatever.pvs.scripting;
 
 import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.points.IPointsHandler;
+import com.jcwhatever.pvs.api.points.PointsType;
 
 /**
- *Arena sub API.
+ * Points API object
  */
-public class ArenaApiObject implements IDisposable {
+public class ArenaPointsApiObject implements IDisposable {
+
+    private final IArena _arena;
 
     private boolean _isDisposed;
 
-    public final IArena arena;
-    public final ArenaEventsApiObject events;
-    public final ArenaSchedulerApiObject scheduler;
-    public final ArenaSpawnsApiObject spawns;
-    public final ArenaStatsApiObject stats;
-    public final ArenaPointsApiObject points;
+    public ArenaPointsApiObject(IArena arena) {
+        _arena = arena;
+    }
 
-    public ArenaApiObject(IArena arena) {
-        this.arena = arena;
+    public void increment(int amount) {
 
-        events = new ArenaEventsApiObject(arena);
-        scheduler = new ArenaSchedulerApiObject(arena);
-        spawns = new ArenaSpawnsApiObject(arena);
-        stats = new ArenaStatsApiObject(arena);
-        points = new ArenaPointsApiObject(arena);
+        PointsType type = PVStarAPI.getPointsManager().getType("Points");
+        assert type != null;
+
+        type.add(_arena);
+
+        IPointsHandler handler = type.getHandler(_arena);
+        assert handler != null;
+
+        handler.setPoints(handler.getPoints() + amount);
     }
 
     @Override
@@ -58,13 +63,6 @@ public class ArenaApiObject implements IDisposable {
 
     @Override
     public void dispose() {
-
-        events.dispose();
-        scheduler.dispose();
-        spawns.dispose();
-        stats.dispose();
-        points.dispose();
-
         _isDisposed = true;
     }
 }

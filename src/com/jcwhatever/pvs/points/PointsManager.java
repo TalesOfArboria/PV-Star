@@ -44,6 +44,10 @@ public class PointsManager implements IPointsManager {
 
     private final Map<String, PointsType> _typeMap = new HashMap<>(25);
 
+    public PointsManager() {
+        registerType(new GenericPointsType());
+    }
+
     @Override
     public boolean registerType(PointsType type) {
         PreCon.notNull(type);
