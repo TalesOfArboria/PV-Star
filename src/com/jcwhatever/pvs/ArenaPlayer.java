@@ -672,7 +672,7 @@ public class ArenaPlayer implements IArenaPlayer {
 
             double health = event.getEntity().getHealth();
 
-            if (Double.compare(health, 0.0D) == 0 || health < 0.0D) {
+            if (health > 0.0D) {
 
                 // decrement player lives
                 player.setLives(player._lives - 1);
@@ -689,8 +689,9 @@ public class ArenaPlayer implements IArenaPlayer {
         /*
          * Handle player damage and invulnerability.
          */
-        @EventHandler(priority= EventPriority.HIGHEST)
+        @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
         private void onPlayerDamage(EntityDamageEvent event) {
+
             Entity entity = event.getEntity();
             if (!(entity instanceof Player))
                 return;

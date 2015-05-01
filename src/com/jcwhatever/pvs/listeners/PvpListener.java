@@ -50,7 +50,7 @@ public class PvpListener implements Listener {
     /*
         Handle player item repair
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     private void onPlayerInteract(PlayerInteractEvent event) {
 
         if (!event.hasBlock())
@@ -78,7 +78,7 @@ public class PvpListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onArmorDamage(EntityDamageEvent event) {
 
         Entity entity = event.getEntity();
@@ -109,7 +109,7 @@ public class PvpListener implements Listener {
     /*
       Handle PVP
     */
-    @EventHandler(priority= EventPriority.NORMAL)
+    @EventHandler(priority= EventPriority.NORMAL, ignoreCancelled = true)
     private void onPVP(EntityDamageByEntityEvent event) {
 
         Entity entity = event.getEntity();
@@ -179,9 +179,6 @@ public class PvpListener implements Listener {
 
                 }
             }
-
-
         }
     }
-
 }

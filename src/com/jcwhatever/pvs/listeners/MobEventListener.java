@@ -38,7 +38,7 @@ public class MobEventListener implements Listener {
     /*
      Handle natural mob spawning
      */
-    @EventHandler(priority= EventPriority.HIGHEST)
+    @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
     private void onNaturalSpawn(CreatureSpawnEvent event) {
 
         if (event.getSpawnReason() != SpawnReason.NATURAL)
