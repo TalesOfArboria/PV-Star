@@ -35,6 +35,7 @@ import com.jcwhatever.pvs.api.stats.IArenaStats;
 import com.jcwhatever.pvs.api.stats.StatTracking.StatTrackType;
 import com.jcwhatever.pvs.api.stats.StatType;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -135,10 +136,20 @@ public class ArenaStats implements IArenaStats {
     }
 
     @Override
-    public Set<String> getRawPlayerIds(StatType type) {
-        IDataNode node = getNode(type);
+    public Collection<String> getRawPlayerIds(StatType type) {
+        PreCon.notNull(type);
 
+        IDataNode node = getNode(type);
         return node.getSubNodeNames();
+    }
+
+    @Override
+    public <T extends Collection<String>> T getRawPlayerIds(StatType type, T output) {
+        PreCon.notNull(type);
+        PreCon.notNull(output);
+
+        IDataNode node = getNode(type);
+        return node.getSubNodeNames(output);
     }
 
     private static class SaveTask implements Runnable {
