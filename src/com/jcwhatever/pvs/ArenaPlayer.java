@@ -672,17 +672,17 @@ public class ArenaPlayer implements IArenaPlayer {
 
             double health = event.getEntity().getHealth();
 
-            if (health > 0.0D) {
+            if (health > 0.0D)
+                return;
 
-                // decrement player lives
-                player.setLives(player._lives - 1);
+            // decrement player lives
+            player.setLives(player._lives - 1);
 
-                player._deathBlamePlayer = null;
+            player._deathBlamePlayer = null;
 
-                // remove player from arena if no more lives
-                if (player.getLives() < 1) {
-                    arena.remove(player, PlayerLeaveArenaReason.LOSE);
-                }
+            // remove player from arena if no more lives
+            if (player.getLives() < 1) {
+                arena.remove(player, PlayerLeaveArenaReason.LOSE);
             }
         }
 

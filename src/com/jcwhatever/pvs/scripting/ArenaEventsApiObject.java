@@ -72,7 +72,9 @@ public class ArenaEventsApiObject implements IDisposable {
      * Register an {@link IScriptEventSubscriber} event handler with the arena.
      *
      * @param eventName  The event type.
-     * @param priority   The event priority.
+     * @param priority   The event priority. "invokeForCancelled" can be specified.
+     *                   i.e. "NORMAL:invokeForCancelled". By default, handlers are not
+     *                   invoked if the event is cancelled by another handler.
      * @param handler    The event handler.
      */
     public void on(String eventName, String priority, final IScriptEventSubscriber handler) {
@@ -81,11 +83,11 @@ public class ArenaEventsApiObject implements IDisposable {
         PreCon.notNull(handler);
 
         String[] priorityComp = TextUtils.PATTERN_COLON.split(priority);
-        boolean ignoreCancelled = false;
+        boolean ignoreCancelled = true;
 
         if (priorityComp.length == 2) {
-            if (priorityComp[1].equalsIgnoreCase("ignoreCancelled")) {
-                ignoreCancelled = true;
+            if (priorityComp[1].equalsIgnoreCase("invokeForCancelled")) {
+                ignoreCancelled = false;
                 priority = priorityComp[0];
             }
         }
@@ -101,7 +103,7 @@ public class ArenaEventsApiObject implements IDisposable {
         @SuppressWarnings("unchecked")
         ScriptEventSubscriber subscriber = new ScriptEventSubscriber(handler);
         subscriber.setPriority(eventPriority);
-        subscriber.setCancelIgnored(ignoreCancelled);
+        subscriber.setInvokedForCancelled(!ignoreCancelled);
 
         Class<?> eventClass;
 
