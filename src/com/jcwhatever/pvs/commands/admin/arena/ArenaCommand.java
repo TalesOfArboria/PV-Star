@@ -40,6 +40,7 @@ public class ArenaCommand extends AbstractPVCommand {
         registerCommand(DelSubCommand.class);
         registerCommand(DisableSubCommand.class);
         registerCommand(EnableSubCommand.class);
+        registerCommand(HideSubCommand.class);
         registerCommand(RemoveLocationSubCommand.class);
         registerCommand(RestoreRegionSubCommand.class);
         registerCommand(SaveRegionSubCommand.class);
@@ -48,6 +49,7 @@ public class ArenaCommand extends AbstractPVCommand {
         registerCommand(MobSpawnSubCommand.class);
         registerCommand(SelectSubCommand.class);
         registerCommand(SetRegionSubCommand.class);
+        registerCommand(ShowSubCommand.class);
         registerCommand(TypeNameSubCommand.class);
     }
 }
