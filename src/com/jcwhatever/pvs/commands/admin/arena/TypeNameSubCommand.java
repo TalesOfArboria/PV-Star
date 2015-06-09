@@ -55,7 +55,7 @@ public class TypeNameSubCommand extends AbstractPVCommand implements IExecutable
     @Override
     public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "min"));
+        IArena arena = getSelectedArena(sender, ArenaReturned.getInfoToggled(args, "name"));
         if (arena == null)
             return; // finish
 
