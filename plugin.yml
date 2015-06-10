@@ -1,7 +1,7 @@
 name: PV-Star
 author: JCThePants
 main: com.jcwhatever.pvs.PVStar
-version: 0.0-beta
+version: 0.1-beta
 depend: [NucleusFramework]
 commands:
     pv:
