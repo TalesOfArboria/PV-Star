@@ -35,14 +35,13 @@ import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension.ArenaExtensionRegi
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.arena.extensions.IArenaExtensionManager;
 import com.jcwhatever.pvs.exceptions.MissingExtensionAnnotation;
-
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 /**
  * PVStar implementation of {@link IArenaExtensionManager}.
@@ -185,6 +184,10 @@ public class ArenaExtensionManager implements IArenaExtensionManager, IEventList
 
         REGISTRATION.remove(extension);
         _extensions.remove(extension);
+
+        IDataNode extNode = _dataNode.getNode(name);
+        extNode.remove();
+        extNode.save();
 
         return true;
     }
