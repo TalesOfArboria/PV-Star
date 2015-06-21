@@ -36,6 +36,7 @@ import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaExtensionManager;
+import com.jcwhatever.pvs.ArenaManager;
 import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.PVEventManager;
 import com.jcwhatever.pvs.api.PVStarAPI;
@@ -245,6 +246,7 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
 
         _name = name;
         _searchName = _name.toLowerCase();
+        ((ArenaManager)PVStarAPI.getArenaManager()).saveArenaName(this);
     }
 
     @Override

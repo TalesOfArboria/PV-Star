@@ -40,18 +40,17 @@ import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.arenas.ArenaTypeInfo;
-
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 /**
  * PVStar implementation of {@link IArenaManager}.
@@ -126,14 +125,15 @@ public class ArenaManager implements IArenaManager {
         if (arena == null)
             return false;
 
-        IDataNode arenaNode = _dataNode.getNode(arenaId.toString());
-        arenaNode.set("name", name);
-        arenaNode.save();
-
         arena.setName(name);
         return true;
     }
 
+    public void saveArenaName(IArena arena) {
+        IDataNode arenaNode = _dataNode.getNode(arena.getId().toString());
+        arenaNode.set("name", arena.getName());
+        arenaNode.save();
+    }
 
     @Override
     @Nullable
