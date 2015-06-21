@@ -37,7 +37,7 @@ public class ExtCommand extends AbstractPVCommand {
         super();
 
         registerCommand(AddSubCommand.class);
-        registerCommand(DelSubCommand.class);
+        registerCommand(RemoveSubCommand.class);
         registerCommand(ListSubCommand.class);
         registerCommand(TypesSubCommand.class);
     }

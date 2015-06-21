@@ -39,14 +39,14 @@ import org.bukkit.command.CommandSender;
 
 @CommandInfo(
         parent="ext",
-        command="del",
+        command="remove",
         staticParams = { "extName" },
         description="Remove an extension from the currently selected arena.",
 
         paramDescriptions = {
                 "extName= The name of the arena extension to remove."})
 
-public class DelSubCommand extends AbstractPVCommand implements IExecutableCommand {
+public class RemoveSubCommand extends AbstractPVCommand implements IExecutableCommand {
 
     @Localizable static final String _EXT_NOT_FOUND =
             "An arena extension named '{0: extension name}' was not found.";
