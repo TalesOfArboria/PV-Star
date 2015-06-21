@@ -24,6 +24,7 @@
 
 package com.jcwhatever.pvs;
 
+import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
@@ -50,7 +51,6 @@ import com.jcwhatever.pvs.api.events.players.PlayerTeamPreChangeEvent;
 import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.context.AbstractContextManager;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -61,11 +61,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 /**
  * PVStar implementation of {@link IArenaPlayer}.
@@ -661,12 +661,12 @@ public class ArenaPlayer implements IArenaPlayer {
         /*
          * Handle player deaths within arenas.
          */
-        @EventHandler(priority = EventPriority.LOWEST)
+        @EventHandler(priority = EventPriority.MONITOR)
         private void onPlayerDeath(PlayerDeathEvent event) {
 
-            ArenaPlayer player = ArenaPlayer.get(event.getEntity());
+            final ArenaPlayer player = ArenaPlayer.get(event.getEntity());
 
-            AbstractArena arena = player.getArena();
+            final AbstractArena arena = player.getArena();
             if (arena == null)
                 return;
 
@@ -682,7 +682,12 @@ public class ArenaPlayer implements IArenaPlayer {
 
             // remove player from arena if no more lives
             if (player.getLives() < 1) {
-                arena.remove(player, PlayerLeaveArenaReason.LOSE);
+                Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        arena.remove(player, PlayerLeaveArenaReason.LOSE);
+                    }
+                });
             }
         }
 
