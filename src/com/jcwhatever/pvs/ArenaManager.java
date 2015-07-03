@@ -103,8 +103,6 @@ public class ArenaManager implements IArenaManager {
 
         if (sender instanceof Player) {
             Player p = (Player)sender;
-            if (!p.isOp())
-                return;
 
             if (arena == null)
                 _selectedArenas.remove(p.getUniqueId());
