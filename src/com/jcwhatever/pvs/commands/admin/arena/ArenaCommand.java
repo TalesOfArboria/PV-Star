@@ -39,6 +39,7 @@ public class ArenaCommand extends AbstractPVCommand {
         registerCommand(CreateSubCommand.class);
         registerCommand(DelSubCommand.class);
         registerCommand(DisableSubCommand.class);
+        registerCommand(DropsCleanupSubCommand.class);
         registerCommand(EnableSubCommand.class);
         registerCommand(HideSubCommand.class);
         registerCommand(RemoveLocationSubCommand.class);

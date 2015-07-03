@@ -29,10 +29,14 @@ import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.options.DropsCleanup;
 import com.jcwhatever.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
+import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
+import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreJoinArenaEvent;
 
+import org.bukkit.entity.Item;
 import org.bukkit.plugin.Plugin;
 
 @ArenaTypeInfo(
@@ -95,5 +99,21 @@ public class Arena extends AbstractArena {
     @EventMethod
     private void onArenaDisabled(@SuppressWarnings("unused") ArenaDisabledEvent event) {
         getGame().end();
+    }
+
+    @EventMethod(priority = EventSubscriberPriority.WATCHER)
+    private void onArenaStart(@SuppressWarnings("unused") ArenaPreStartEvent event) {
+        if (getSettings().getDropsCleanup() == DropsCleanup.BEFORE)
+            cleanupDrops();
+    }
+
+    @EventMethod(priority = EventSubscriberPriority.WATCHER)
+    private void onArenaEnd(@SuppressWarnings("unused") ArenaEndedEvent event) {
+        if (getSettings().getDropsCleanup() == DropsCleanup.AFTER)
+            cleanupDrops();
+    }
+
+    private void cleanupDrops() {
+        getRegion().removeEntities(Item.class);
     }
 }

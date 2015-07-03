@@ -26,6 +26,7 @@ package com.jcwhatever.pvs.arenas.settings;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.pvs.api.arena.options.DropsCleanup;
 import com.jcwhatever.pvs.api.arena.settings.IArenaSettings;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaEnabledEvent;
@@ -52,7 +53,9 @@ public class PVArenaSettings implements IArenaSettings {
     private boolean _isEnabled;
     private boolean _isMobSpawnEnabled = false;
     private Location _removeLocation;
+    private DropsCleanup _dropsCleanup = DropsCleanup.OFF;
     private String _typeDisplayName;
+
 
     /*
      * Constructor.
@@ -69,6 +72,7 @@ public class PVArenaSettings implements IArenaSettings {
         _isVisible = _dataNode.getBoolean("visible", _isVisible);
         _isMobSpawnEnabled = _dataNode.getBoolean("mob-spawn", _isMobSpawnEnabled);
         _removeLocation = _dataNode.getLocation("remove-location", _removeLocation);
+        _dropsCleanup = _dataNode.getEnum("drops-cleanup", _dropsCleanup, DropsCleanup.class);
         _typeDisplayName = _dataNode.getString("type-display");
     }
 
@@ -91,8 +95,7 @@ public class PVArenaSettings implements IArenaSettings {
 
         setTransientEnabled(isEnabled);
 
-        _dataNode.set("enabled", _isEnabled);
-        _dataNode.save();
+        save("enabled", _isEnabled);
     }
 
     @Override
@@ -136,10 +139,7 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public final void setVisible(boolean isVisible) {
-        _isVisible = isVisible;
-
-        _dataNode.set("visible", isVisible);
-        _dataNode.save();
+        save("visible", _isVisible = isVisible);
     }
 
     @Override
@@ -151,11 +151,7 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public final void setTypeDisplayName(@Nullable String typeDisplayName) {
-
-        _typeDisplayName = typeDisplayName;
-
-        _dataNode.set("type-display", typeDisplayName);
-        _dataNode.save();
+        save("type-display", _typeDisplayName = typeDisplayName);
     }
 
     @Override
@@ -165,9 +161,9 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public void setMinPlayers(int minPlayers) {
-        _minPlayers = minPlayers;
+        PreCon.positiveNumber(minPlayers);
 
-        save("min-players", minPlayers);
+        save("min-players", _minPlayers = minPlayers);
     }
 
     @Override
@@ -177,9 +173,9 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public void setMaxPlayers(int maxPlayers) {
-        _maxPlayers = maxPlayers;
+        PreCon.greaterThanZero(maxPlayers);
 
-        save("max-players", maxPlayers);
+        save("max-players", _maxPlayers = maxPlayers);
     }
 
     @Override
@@ -189,9 +185,7 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public void setMobSpawnEnabled(boolean isEnabled) {
-        _isMobSpawnEnabled = isEnabled;
-
-        save("mob-spawn", isEnabled);
+        save("mob-spawn", _isMobSpawnEnabled = isEnabled);
     }
 
     @Override
@@ -209,9 +203,19 @@ public class PVArenaSettings implements IArenaSettings {
 
     @Override
     public void setRemoveLocation(@Nullable Location location) {
-        _removeLocation = location;
+        save("remove-location", _removeLocation = location);
+    }
 
-        save("remove-location", location);
+    @Override
+    public DropsCleanup getDropsCleanup() {
+        return _dropsCleanup;
+    }
+
+    @Override
+    public void setDropsCleanup(DropsCleanup cleanup) {
+        PreCon.notNull(cleanup);
+
+        save("drops-cleanup", _dropsCleanup = cleanup);
     }
 
     /**
