@@ -71,8 +71,7 @@ public class SpectatorContext extends AbstractContextManager implements ISpectat
     @Override
     protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
 
-        return SpawnManager.getRespawnLocation(
-                this, ArenaContext.SPECTATOR, new Location(null, 0, 0, 0));
+        return SpawnManager.getRespawnLocation(this, ArenaContext.SPECTATOR);
     }
 
     @Nullable

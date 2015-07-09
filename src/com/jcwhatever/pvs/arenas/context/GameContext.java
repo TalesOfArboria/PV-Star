@@ -58,12 +58,11 @@ import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
 import com.jcwhatever.pvs.arenas.settings.PVGameSettings;
-
 import org.bukkit.Location;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Date;
-import javax.annotation.Nullable;
 
 /**
  * Game manager implementation
@@ -298,8 +297,7 @@ public class GameContext extends AbstractContextManager implements IGameContext 
             return null;
 
         // get a game spawn location
-        return SpawnManager.getRespawnLocation(
-                this, ArenaContext.GAME, new Location(null, 0, 0, 0));
+        return SpawnManager.getRespawnLocation(this, ArenaContext.GAME);
     }
 
     @Nullable

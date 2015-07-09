@@ -29,7 +29,6 @@ import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Rand;
-import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -50,17 +49,16 @@ import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.context.AbstractContextManager;
 import com.jcwhatever.pvs.spawns.SpawnpointsCollection;
-
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 /**
  * Spawn manager implementation.
@@ -68,12 +66,10 @@ import javax.annotation.Nullable;
 public class SpawnManager extends SpawnpointsCollection implements ISpawnManager, IEventListener {
 
     @Nullable
-    public static Location getRespawnLocation(
-            AbstractContextManager manager, ArenaContext context, Location output) {
+    public static Spawnpoint getRespawnLocation(AbstractContextManager manager, ArenaContext context) {
 
         PreCon.notNull(manager);
         PreCon.notNull(context);
-        PreCon.notNull(output);
 
         AbstractArena arena = manager.getArena();
 
@@ -86,11 +82,7 @@ public class SpawnManager extends SpawnpointsCollection implements ISpawnManager
         if (spawns.isEmpty())
             return null;
 
-        Location respawnLocation = Rand.get(spawns);
-        if (respawnLocation == null)
-            return null;
-
-        return LocationUtils.copy(respawnLocation, output);
+        return Rand.get(spawns);
     }
 
     private final Map<UUID, Spawnpoint> _reserved = new HashMap<>(15); // key is player id

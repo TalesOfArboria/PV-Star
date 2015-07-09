@@ -100,8 +100,7 @@ public class LobbyContext extends AbstractContextManager implements ILobbyContex
     @Override
     protected Location onPrePlayerAdd(IArenaPlayer player, AddToContextReason reason) {
 
-        return SpawnManager.getRespawnLocation(
-                this, ArenaContext.LOBBY, new Location(null, 0, 0, 0));
+        return SpawnManager.getRespawnLocation(this, ArenaContext.LOBBY);
     }
 
     @Nullable

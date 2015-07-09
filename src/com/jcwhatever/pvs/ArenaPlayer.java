@@ -596,8 +596,7 @@ public class ArenaPlayer implements IArenaPlayer {
         if (manager == null)
             return null;
 
-        Location location = SpawnManager.getRespawnLocation(
-                manager, getContext(), new Location(null, 0, 0, 0));
+        Location location = SpawnManager.getRespawnLocation(manager, getContext());
 
         if (location == null)
             return null;
