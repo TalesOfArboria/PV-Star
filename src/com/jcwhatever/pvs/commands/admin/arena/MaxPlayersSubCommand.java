@@ -60,7 +60,7 @@ public class MaxPlayersSubCommand extends AbstractPVCommand implements IExecutab
             return; // finish
 
         if (args.getString("max").equals("info")) {
-            tell(sender, Lang.get(_VIEW_MAX, arena.getName(), arena.getSettings().getMinPlayers()));
+            tell(sender, Lang.get(_VIEW_MAX, arena.getName(), arena.getSettings().getMaxPlayers()));
         }
         else {
             int max = args.getInteger("max");
