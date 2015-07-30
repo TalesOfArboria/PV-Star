@@ -279,6 +279,24 @@ public class SpawnManager extends SpawnpointsCollection implements ISpawnManager
         _reserved.clear();
     }
 
+    @Override
+    public int totalReserved() {
+        return _reserved.size();
+    }
+
+    @Override
+    public int totalReserved(SpawnType spawnType) {
+        PreCon.notNull(spawnType);
+
+        int result = 0;
+
+        for (Spawnpoint spawn : _reserved.values()) {
+            if (spawn.getSpawnType().equals(spawnType))
+                result++;
+        }
+        return result;
+    }
+
     /*
      * Load spawn manager settings.
      */

@@ -65,7 +65,6 @@ import com.jcwhatever.pvs.arenas.context.SpectatorContext;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
 import com.jcwhatever.pvs.arenas.managers.TeamManager;
 import com.jcwhatever.pvs.arenas.settings.PVArenaSettings;
-
 import org.bukkit.Location;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -315,10 +314,15 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
 
         // if spawns are reserved, the max players is the number of spawns
         if (getLobby().getSettings().isPlayerSpawnsReserved()) {
-            maxPlayers = getSpawns().getAll(ArenaContext.LOBBY).size();
+            int slotsLeft = getSpawns().getAll(ArenaContext.LOBBY).size();
 
-            if (maxPlayers == 0)
-                maxPlayers = getSpawns().getAll(ArenaContext.GAME).size();
+            if (slotsLeft == 0 &&
+                    getSpawns().totalReserved(
+                            PVStarAPI.getSpawnTypeManager().getLobbySpawnType()) == 0) {
+                slotsLeft = getSpawns().getAll(ArenaContext.GAME).size();
+            }
+
+            return slotsLeft;
         }
 
         IArenaPlayerCollection players = getLobby().getPlayers();
