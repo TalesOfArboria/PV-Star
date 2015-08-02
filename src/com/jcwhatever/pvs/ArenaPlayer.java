@@ -144,6 +144,7 @@ public class ArenaPlayer implements IArenaPlayer {
 
         _arena = arena;
         _lastJoin = new Date();
+        _sessionMeta = new MetaStore();
 
         IGameSettings settings = arena.getGame().getSettings();
         LivesBehavior livesBehavior = settings.getLivesBehavior();
