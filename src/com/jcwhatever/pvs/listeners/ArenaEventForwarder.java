@@ -54,6 +54,8 @@ import org.bukkit.inventory.InventoryHolder;
  */
 public class ArenaEventForwarder extends BukkitEventForwarder {
 
+    private static final Location LOCATION = new Location(null, 0, 0, 0);
+
     /**
      * Constructor.
      */
@@ -131,7 +133,7 @@ public class ArenaEventForwarder extends BukkitEventForwarder {
     }
 
     private <T extends Event> void callEvent(Block block, T event) {
-        callEvent(block.getLocation(), event);
+        callEvent(block.getLocation(LOCATION), event);
     }
 
     private <T extends Event> void callEvent(Player p, T event) {
@@ -147,7 +149,7 @@ public class ArenaEventForwarder extends BukkitEventForwarder {
             callEvent((Player)entity, event);
         }
         else {
-            callEvent(entity.getLocation(), event);
+            callEvent(entity.getLocation(LOCATION), event);
         }
     }
 
