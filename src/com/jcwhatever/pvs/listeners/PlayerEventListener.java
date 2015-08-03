@@ -35,10 +35,10 @@ import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.PlayerLeaveArenaReason;
 import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerCommandEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.AbstractArena;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -157,7 +157,12 @@ public class PlayerEventListener implements Listener {
 
         String command = matcher.replaceFirst("").toLowerCase();
 
-        if (!pvStarCommands.contains(command)) {
+        PlayerCommandEvent cmdEvent = new PlayerCommandEvent(
+                arena, player, player.getContextManager(), command, !pvStarCommands.contains(command));
+
+        arena.getEventManager().call(this, cmdEvent);
+
+        if (cmdEvent.isCancelled()) {
             event.setMessage("/");
             event.setCancelled(true);
             Msg.tell(event.getPlayer(), Lang.get(_COMMAND_NOT_IN_ARENA));
