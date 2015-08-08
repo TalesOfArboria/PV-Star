@@ -24,18 +24,17 @@
 
 package com.jcwhatever.pvs.modules;
 
+import com.jcwhatever.nucleus.utils.DependencyRunner;
+import com.jcwhatever.nucleus.utils.DependencyRunner.IFinishHandler;
+import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.file.FileUtils.DirectoryTraversal;
 import com.jcwhatever.nucleus.utils.modules.ClassLoadMethod;
 import com.jcwhatever.nucleus.utils.modules.IModuleInfo;
 import com.jcwhatever.nucleus.utils.modules.JarModuleLoader;
-import com.jcwhatever.nucleus.utils.DependencyRunner;
-import com.jcwhatever.nucleus.utils.DependencyRunner.IFinishHandler;
-import com.jcwhatever.nucleus.utils.file.FileUtils.DirectoryTraversal;
-import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.modules.PVStarModule;
 import com.jcwhatever.pvs.api.modules.PVStarModule.PVStarModuleRegistration;
 import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +44,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -53,7 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import javax.annotation.Nullable;
 
 /**
  * Loads and stores PV-Star modules.
@@ -135,6 +134,10 @@ public class ModuleLoader extends JarModuleLoader<PVStarModule> {
                 _isModulesLoaded = true;
 
                 onModulesEnabled.run();
+
+                for (PVStarModule module : getModules()) {
+                    REGISTRATION.arenasEnabled(module);
+                }
 
                 HandlerList.unregisterAll(_kickPlayersListener);
             }
