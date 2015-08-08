@@ -78,14 +78,13 @@ import com.jcwhatever.pvs.signs.PveSignHandler;
 import com.jcwhatever.pvs.signs.PvpSignHandler;
 import com.jcwhatever.pvs.signs.ReadySignHandler;
 import com.jcwhatever.pvs.stats.StatsManager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-import javax.annotation.Nullable;
 
 /**
  * PV-Star plugin implementation.
@@ -134,36 +133,57 @@ public class PVStar extends NucleusPlugin implements IPVStar {
 
     @Override
     public IArenaManager getArenaManager() {
+        if (_arenaManager == null)
+            throw new IllegalStateException("Arena Manager is not ready yet.");
+
         return _arenaManager;
     }
 
     @Override
     public ISpawnTypeManager getSpawnTypeManager() {
+        if (_spawnTypeManager == null)
+            throw new IllegalStateException("Spawn Type Manager is not ready yet.");
+
         return _spawnTypeManager;
     }
 
     @Override
     public IStatsManager getStatsManager() {
+        if (_statsManager == null)
+            throw new IllegalStateException("Stats Manager is not ready yet.");
+
         return _statsManager;
     }
 
     @Override
     public IExtensionTypeManager getExtensionManager() {
+        if (_extensionManager == null)
+            throw new IllegalStateException("Extension Manager is not ready yet.");
+
         return _extensionManager;
     }
 
     @Override
     public IPointsManager getPointsManager() {
+        if (_pointsManager == null)
+            throw new IllegalStateException("Points Manager is not ready yet.");
+
         return _pointsManager;
     }
 
     @Override
     public ICommandHelper getCommandHelper() {
+        if (_commandHelper == null)
+            throw new IllegalStateException("Command Helper is not ready yet.");
+
         return _commandHelper;
     }
 
     @Override
     public EventManager getEventManager() {
+        if (_eventManager == null)
+            throw new IllegalStateException("Event Manager is not ready yet.");
+
         return _eventManager;
     }
 
