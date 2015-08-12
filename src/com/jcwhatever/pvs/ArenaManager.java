@@ -37,6 +37,7 @@ import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.managers.IArenaManager;
 import com.jcwhatever.pvs.api.arena.options.NameMatchMode;
+import com.jcwhatever.pvs.api.events.ArenaCreatedEvent;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.arenas.ArenaTypeInfo;
@@ -245,6 +246,9 @@ public class ArenaManager implements IArenaManager {
         arena.getSettings().setTypeDisplayName(typeName);
 
         _pvStar.getPointsManager().loadTypes(arena);
+
+        ArenaCreatedEvent event = new ArenaCreatedEvent(arena);
+        PVStarAPI.getEventManager().call(this, event);
 
         return arena;
     }
