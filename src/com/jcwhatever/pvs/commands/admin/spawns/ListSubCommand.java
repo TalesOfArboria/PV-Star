@@ -101,6 +101,10 @@ public class ListSubCommand extends AbstractPVCommand implements IExecutableComm
     }
 
     private void showSpawns(String subHeader, ChatPaginator pagin, List<Spawnpoint> spawns) {
+
+        if (spawns.isEmpty())
+            return;
+
         pagin.addFormatted(FormatTemplate.SUB_HEADER, subHeader);
 
         String typeLabel = Lang.get(_LABEL_TYPE);
