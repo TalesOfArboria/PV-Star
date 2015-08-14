@@ -210,9 +210,9 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     protected void onEnablePlugin() {
         PVStarAPI.setImplementation(this);
 
-        _pointsManager = new PointsManager();
-        _statsManager = new StatsManager();
         _eventManager = new PVEventManager();
+        _pointsManager = new PointsManager();
+        _statsManager = new StatsManager(getDataNode().getNode("stats"));
         _extensionManager = new ExtensionTypeManager();
         _spawnTypeManager = new SpawnTypeManager();
         _commandHelper = new PVCommandHelper();
