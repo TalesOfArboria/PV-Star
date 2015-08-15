@@ -73,7 +73,7 @@ public class SqlArenaPlayerStats implements IPlayerStats {
 
     @Override
     public void addScore(StatType type, double amount) {
-        _arenaStats.add(type, _playerId, amount);
+        _arenaStats.addScore(_playerId, type, amount);
     }
 
     @Override

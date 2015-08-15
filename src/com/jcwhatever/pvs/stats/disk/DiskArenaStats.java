@@ -36,6 +36,7 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.stats.IArenaStats;
 import com.jcwhatever.pvs.api.stats.IPlayerStats;
+import com.jcwhatever.pvs.api.stats.StatType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -86,6 +87,15 @@ public class DiskArenaStats implements IArenaStats {
         IPlayerStats stats = getLocal(playerId);
 
         return FutureResultAgent.successResult(stats);
+    }
+
+    @Override
+    public void addScore(UUID playerId, StatType type, double amount) {
+        PreCon.notNull(playerId);
+        PreCon.notNull(type);
+
+        IPlayerStats stats = getLocal(playerId);
+        stats.addScore(type, amount);
     }
 
     List<IPlayerStats> getPlayerStats() {

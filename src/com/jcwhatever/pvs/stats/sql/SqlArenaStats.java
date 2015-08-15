@@ -146,22 +146,9 @@ public class SqlArenaStats implements IArenaStats {
     }
 
     @Override
-    public int hashCode() {
-        return _arenaId.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof SqlArenaStats) {
-            SqlArenaStats other = (SqlArenaStats)obj;
-            return other._arenaId.equals(_arenaId);
-        }
-        return false;
-    }
-
-    void add(final StatType type, final UUID playerId, double amount) {
-        PreCon.notNull(type);
+    public void addScore(UUID playerId, StatType type, double amount) {
         PreCon.notNull(playerId);
+        PreCon.notNull(type);
 
         ISqlTransaction transaction = _table.getDatabase().createTransaction();
 
@@ -191,6 +178,20 @@ public class SqlArenaStats implements IArenaStats {
         getDbValues(playerId, transaction);
 
         transaction.execute();
+    }
+
+    @Override
+    public int hashCode() {
+        return _arenaId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SqlArenaStats) {
+            SqlArenaStats other = (SqlArenaStats)obj;
+            return other._arenaId.equals(_arenaId);
+        }
+        return false;
     }
 
     private void getDbValues(final UUID playerId, ISqlTransaction transaction) {
