@@ -194,9 +194,8 @@ public class SqlStatFilter extends AbstractStatsFilter implements IStatsFilter {
                                 .select("playerId", orderColumn)
                                 .where(_table, "statName").isEqualTo(statName)
                                 .and(_table, "arenaId").isEqualTo(arenaId)
-                                .and(_table, orderColumn).isGreaterThanColumn(temp, "order" + j)
                                 .ifExists()
-                                .set(temp, "order" + j).equalsColumn(_table, orderColumn)
+                                .set(temp, "order" + j).largerColumn(_table, orderColumn)
                                 .addToTransaction(transaction);
                         break;
                     case MIN:
@@ -206,14 +205,9 @@ public class SqlStatFilter extends AbstractStatsFilter implements IStatsFilter {
 
                                 .where(_table, "statName").isEqualTo(statName)
                                 .and(_table, "arenaId").isEqualTo(arenaId)
-                                .and(_table, orderColumn).isLessThanColumn(temp, "order" + j)
-
-                                .or(_table, "statName").isEqualTo(statName)
-                                .and(_table, "arenaId").isEqualTo(arenaId)
-                                .and(temp, "order" + j).isEqualTo(0.0D)
 
                                 .ifExists()
-                                .set(temp, "order" + j).equalsColumn(_table, orderColumn)
+                                .set(temp, "order" + j).smallerColumn(_table, orderColumn)
                                 .addToTransaction(transaction);
                         break;
 
