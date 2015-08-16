@@ -92,8 +92,8 @@ public class SqlStatFilter extends AbstractStatsFilter implements IStatsFilter {
                             StatParam param = getStat(i);
 
                             SqlOrder order = param.statType.getOrder() == StatOrder.ASCENDING
-                                    ? SqlOrder.ASCENDING
-                                    : SqlOrder.DESCENDING;
+                                    ? SqlOrder.DESCENDING
+                                    : SqlOrder.ASCENDING;
 
                             results[i] = new SqlColumnOrder(temp, "order" + i, order);
                         }
