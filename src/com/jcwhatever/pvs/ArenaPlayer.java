@@ -51,6 +51,7 @@ import com.jcwhatever.pvs.api.events.players.PlayerTeamPreChangeEvent;
 import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.context.AbstractContextManager;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
+import com.jcwhatever.pvs.stats.SessionStatTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -105,6 +106,7 @@ public class ArenaPlayer implements IArenaPlayer {
     public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
     private final Player _player;
     private final Location _deathRespawnLocation = new Location(null, 0, 0, 0);
+    private final SessionStatTracker _sessionStats = new SessionStatTracker(this);
 
     private boolean _isReady;
     private boolean _isImmobilized;
@@ -437,6 +439,11 @@ public class ArenaPlayer implements IArenaPlayer {
         }
         _points += amount;
         return _points;
+    }
+
+    @Override
+    public SessionStatTracker getSessionStats() {
+        return _sessionStats;
     }
 
     @Override

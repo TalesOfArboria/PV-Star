@@ -27,6 +27,7 @@ package com.jcwhatever.pvs.arenas.context;
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
+import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -193,6 +194,8 @@ public class GameContext extends AbstractContextManager implements IGameContext 
         if (!result.isSuccess())
             return false;
 
+        ((ArenaPlayer)player).clearArena();
+
         PlayerPreJoinArenaEvent preJoin = new PlayerPreJoinArenaEvent(
                 arena, player, PlayerJoinArenaReason.FORWARDING);
 
@@ -279,6 +282,7 @@ public class GameContext extends AbstractContextManager implements IGameContext 
             if (player.getTeam() == team) {
                 losingTeam.add(player);
                 removePlayer(player, RemoveFromContextReason.LOSE);
+                ((ArenaPlayer)player).clearArena();
             }
         }
 

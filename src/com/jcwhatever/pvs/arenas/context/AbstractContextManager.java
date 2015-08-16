@@ -157,12 +157,6 @@ public abstract class AbstractContextManager implements IContextManager {
         // remove player from collection
         _players.removePlayer(player, reason);
 
-        // clear arena if leaving
-        if (reason != RemoveFromContextReason.CONTEXT_CHANGE) {
-
-            ((ArenaPlayer)player).clearArena();
-        }
-
         Location restoreLocation = onRemovePlayer(player, reason);
 
         // call player removed event

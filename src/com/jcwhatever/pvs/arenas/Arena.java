@@ -34,10 +34,16 @@ import com.jcwhatever.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
 import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerJoinedArenaEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerLeaveArenaEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreJoinArenaEvent;
-
+import com.jcwhatever.pvs.api.stats.IArenaStats;
+import com.jcwhatever.pvs.stats.SessionStatTracker;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Collection;
+import java.util.UUID;
 
 @ArenaTypeInfo(
         typeName="arena",
@@ -93,9 +99,29 @@ public class Arena extends AbstractArena {
         }
     }
 
-    /*
-     * Handle arena disabled
-     */
+    // reset players statistics
+    @EventMethod
+    private void onPlayerJoin(PlayerJoinedArenaEvent event) {
+        ((SessionStatTracker)event.getPlayer().getSessionStats()).reset();
+    }
+
+    // record players statistics
+    @EventMethod
+    private void onPlayerLeave(PlayerLeaveArenaEvent event) {
+
+        Collection<SessionStatTracker.StatScore> scores =
+                ((SessionStatTracker)event.getPlayer().getSessionStats()).getScores();
+
+        IArenaStats stats = PVStarAPI.getStatsManager().getArenaStats(getId());
+        UUID playerId = event.getPlayer().getUniqueId();
+
+        for (SessionStatTracker.StatScore score : scores) {
+
+            stats.addScore(playerId, score.statType, score.score);
+        }
+    }
+
+    // Handle arena disabled
     @EventMethod
     private void onArenaDisabled(@SuppressWarnings("unused") ArenaDisabledEvent event) {
         getGame().end();

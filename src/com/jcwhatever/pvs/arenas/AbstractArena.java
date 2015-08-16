@@ -391,6 +391,8 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
 
                 getEventManager().call(this, leaveEvent);
 
+                ((ArenaPlayer)player).clearArena();
+
                 if (leaveEvent.isRestoring() &&
                         leaveEvent.getRestoreLocation() != null) {
 
