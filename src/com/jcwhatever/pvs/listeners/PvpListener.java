@@ -24,6 +24,7 @@
 
 package com.jcwhatever.pvs.listeners;
 
+import com.jcwhatever.nucleus.utils.entity.EntityUtils;
 import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -51,30 +52,65 @@ public class PvpListener implements Listener {
         Handle player item repair
      */
     @EventHandler(ignoreCancelled = true)
-    private void onPlayerInteract(PlayerInteractEvent event) {
+    private void onToolDamage(PlayerInteractEvent event) {
 
         if (!event.hasBlock())
             return;
 
-        IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
-        IArena arena = player.getArena();
+        IArenaPlayer arenaPlayer = ArenaPlayer.get(event.getPlayer());
+        IArena arena = arenaPlayer.getArena();
         if (arena == null)
             return;
 
-        ItemStack inHand = event.getPlayer().getItemInHand();
-        if (inHand == null)
+        IContextSettings settings = arenaPlayer.getContextSettings();
+        if (settings == null)
             return;
 
-        IContextSettings settings = player.getContextSettings();
-        if (settings == null)
+        if (settings.isToolsDamageable())
+            return;
+
+        ItemStack inHand = event.getPlayer().getItemInHand();
+        if (inHand == null || inHand.getType() == Material.AIR)
             return;
 
         Material material = inHand.getType();
 
-        if ((Materials.isMiningTool(material) && !settings.isToolsDamageable())
-                || (Materials.isWeapon(material) && !settings.isWeaponsDamageable())) {
+        if ((Materials.isMiningTool(material))) {
+            inHand.setDurability((short) -1);
+        }
+    }
 
-            event.setCancelled(true);
+    /*
+        Handle player item repair
+     */
+    @EventHandler(ignoreCancelled = true)
+    private void onWeaponDamage(EntityDamageByEntityEvent event) {
+
+        Entity damager = EntityUtils.getDamager(event.getDamager());
+        if (!(damager instanceof Player))
+            return;
+
+        Player player = (Player)damager;
+
+        IArenaPlayer arenaPlayer = ArenaPlayer.get(player);
+        IArena arena = arenaPlayer.getArena();
+        if (arena == null)
+            return;
+
+        IContextSettings settings = arenaPlayer.getContextSettings();
+        if (settings == null)
+            return;
+
+        if (settings.isWeaponsDamageable())
+            return;
+
+        ItemStack inHand = player.getItemInHand();
+        if (inHand == null || inHand.getType() == Material.AIR)
+            return;
+
+        Material material = inHand.getType();
+        if (Materials.isWeapon(material)) {
+            inHand.setDurability((short) -1);
         }
     }
 
