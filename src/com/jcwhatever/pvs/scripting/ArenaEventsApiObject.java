@@ -34,16 +34,17 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Script API to attach events directly to an arena.
  */
 public class ArenaEventsApiObject implements IDisposable {
 
-    private final LinkedList<IEventSubscriber> _subscribers = new LinkedList<>();
-
+    private final Deque<IEventSubscriber> _subscribers = new ArrayDeque<>(25);
     private final IArena _arena;
+
     private boolean _isDisposed;
 
     ArenaEventsApiObject(IArena arena) {
