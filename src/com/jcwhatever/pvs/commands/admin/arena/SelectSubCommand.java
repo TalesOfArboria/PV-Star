@@ -28,13 +28,17 @@ import com.jcwhatever.nucleus.managed.commands.CommandInfo;
 import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
 import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.mixins.ITabCompletable;
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-
 import org.bukkit.command.CommandSender;
+
+import java.util.Collection;
+import java.util.List;
 
 @CommandInfo(
         parent="arena",
@@ -45,7 +49,8 @@ import org.bukkit.command.CommandSender;
         paramDescriptions = {
                 "arenaName= The name of the arena to select."})
 
-public class SelectSubCommand extends AbstractPVCommand implements IExecutableCommand {
+public class SelectSubCommand extends AbstractPVCommand
+        implements IExecutableCommand, ITabCompletable {
 
     @Localizable static final String _SUCCESS =
             "'{0: arena name}' is your selected arena.";
@@ -62,5 +67,16 @@ public class SelectSubCommand extends AbstractPVCommand implements IExecutableCo
         PVStarAPI.getArenaManager().setSelectedArena(sender, arena);
 
         tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
+    }
+
+    @Override
+    public void onTabComplete(CommandSender sender, String[] arguments, Collection<String> completions) {
+        List<IArena> arenas = PVStarAPI.getArenaManager().getArenas();
+        tabCompleteSearch(arguments, arenas, completions, new CollectionUtils.ISearchTextGetter<IArena>() {
+            @Override
+            public String getText(IArena element) {
+                return element.getName();
+            }
+        });
     }
 }
