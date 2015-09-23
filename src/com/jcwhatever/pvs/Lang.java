@@ -25,13 +25,14 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.managed.language.Localized;
+import com.jcwhatever.nucleus.utils.text.components.IChatMessage;
 
 public class Lang {
 
     private Lang() {}
 
     @Localized
-    public static String get(String text, Object... params) {
+    public static IChatMessage get(CharSequence text, Object... params) {
         PVStar pvStar = PVStar.getPlugin(PVStar.class);
         if (pvStar == null)
             throw new RuntimeException("PV-Star instance not found.");

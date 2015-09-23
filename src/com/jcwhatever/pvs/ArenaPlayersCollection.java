@@ -37,12 +37,12 @@ import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
 import com.jcwhatever.pvs.api.utils.Msg;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 /**
  * {@link IArenaPlayerGroup} collection.
@@ -155,7 +155,7 @@ public class ArenaPlayersCollection {
     /**
      * Tell all players in the collection a message.
      */
-    public void tell(String message, Object... params) {
+    public void tell(CharSequence message, Object... params) {
         PreCon.notNullOrEmpty(message);
 
         for (IArenaPlayer player : _players) {

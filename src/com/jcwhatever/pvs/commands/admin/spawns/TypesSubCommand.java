@@ -35,8 +35,6 @@ import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -61,7 +59,7 @@ public class TypesSubCommand extends AbstractPVCommand implements IExecutableCom
     @Override
     public void execute(CommandSender sender, ICommandArguments args) throws CommandException {
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         List<SpawnType> types = PVStarAPI.getSpawnTypeManager().getSpawnTypes();
 

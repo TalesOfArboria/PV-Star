@@ -37,8 +37,6 @@ import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.points.IPointsHandler;
 import com.jcwhatever.pvs.api.points.PointsType;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -69,7 +67,7 @@ public class CurrentSubCommand extends AbstractPVCommand implements IExecutableC
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE, arena.getName()));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE, arena.getName()));
 
         List<PointsType> types = PVStarAPI.getPointsManager().getTypes(arena);
 

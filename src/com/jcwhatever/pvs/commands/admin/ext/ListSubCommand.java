@@ -35,8 +35,6 @@ import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.Set;
@@ -68,7 +66,7 @@ public class ListSubCommand extends AbstractPVCommand implements IExecutableComm
         int page = args.getInteger("page");
 
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE, arena.getName()));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE, arena.getName()));
 
         Set<ArenaExtension> extensions = arena.getExtensions().getAll();
 

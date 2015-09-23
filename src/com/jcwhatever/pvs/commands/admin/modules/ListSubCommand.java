@@ -35,8 +35,6 @@ import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.modules.PVStarModule;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -63,7 +61,7 @@ public class ListSubCommand extends AbstractPVCommand implements IExecutableComm
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         List<PVStarModule> modules = PVStarAPI.getPlugin().getModules();
 

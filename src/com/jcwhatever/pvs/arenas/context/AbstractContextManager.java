@@ -70,7 +70,7 @@ public abstract class AbstractContextManager implements IContextManager {
     }
 
     @Override
-    public final void tell(String message, Object... params) {
+    public final void tell(CharSequence message, Object... params) {
         _players.tell(message, params);
     }
 

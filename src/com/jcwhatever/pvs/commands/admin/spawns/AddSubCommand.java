@@ -86,7 +86,7 @@ public class AddSubCommand extends AbstractPVCommand implements IExecutableComma
         SpawnType spawnType = PVStarAPI.getSpawnTypeManager().getType(type);
 
         if (spawnType == null)
-            throw new CommandException(Lang.get(_INVALID_SPAWN_TYPE), type);
+            throw new CommandException(Lang.get(_INVALID_SPAWN_TYPE, type));
 
         Player p = (Player)sender;
 

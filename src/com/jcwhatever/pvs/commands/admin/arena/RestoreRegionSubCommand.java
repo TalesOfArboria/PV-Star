@@ -36,11 +36,10 @@ import com.jcwhatever.nucleus.utils.observer.future.IFuture.FutureStatus;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-
 import org.bukkit.command.CommandSender;
 
-import java.io.IOException;
 import javax.annotation.Nullable;
+import java.io.IOException;
 
 @CommandInfo(
         parent="arena",
@@ -95,19 +94,19 @@ public class RestoreRegionSubCommand extends AbstractPVCommand implements IExecu
         future
                 .onError(new FutureSubscriber() {
                     @Override
-                    public void on(FutureStatus status, @Nullable String message) {
+                    public void on(FutureStatus status, @Nullable CharSequence message) {
                         tellError(sender, Lang.get(_FAILED, message));
                     }
                 })
                 .onCancel(new FutureSubscriber() {
                     @Override
-                    public void on(FutureStatus status, @Nullable String message) {
+                    public void on(FutureStatus status, @Nullable CharSequence message) {
                         tell(sender, Lang.get(_CANCELLED, message));
                     }
                 })
                 .onSuccess(new FutureSubscriber() {
                     @Override
-                    public void on(FutureStatus status, @Nullable String message) {
+                    public void on(FutureStatus status, @Nullable CharSequence message) {
                         tellSuccess(sender, Lang.get(_SUCCESS, arena.getName()));
                     }
                 });

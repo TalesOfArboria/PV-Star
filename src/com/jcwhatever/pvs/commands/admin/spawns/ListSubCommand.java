@@ -33,14 +33,13 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
+import com.jcwhatever.nucleus.utils.text.components.IChatMessage;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
 import com.jcwhatever.pvs.api.spawns.SpawnType;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -78,7 +77,7 @@ public class ListSubCommand extends AbstractPVCommand implements IExecutableComm
 
         SpawnType type = PVStarAPI.getSpawnTypeManager().getType(typeName);
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE, arena.getName()));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE, arena.getName()));
 
         List<SpawnType> spawnTypes = PVStarAPI.getSpawnTypeManager().getSpawnTypes();
         for (SpawnType spawnType : spawnTypes) {
@@ -107,12 +106,12 @@ public class ListSubCommand extends AbstractPVCommand implements IExecutableComm
 
         pagin.addFormatted(FormatTemplate.SUB_HEADER, subHeader);
 
-        String typeLabel = Lang.get(_LABEL_TYPE);
-        String teamLabel = Lang.get(_LABEL_TEAM);
+        String typeLabel = Lang.get(_LABEL_TYPE).toString();
+        String teamLabel = Lang.get(_LABEL_TEAM).toString();
 
         for (Spawnpoint spawn : spawns) {
 
-            String formatted = TextUtils.format("{YELLOW}{0}{GRAY} - {1}:{2}, {3}:{4}",
+            IChatMessage formatted = TextUtils.format("{YELLOW}{0}{GRAY} - {1}:{2}, {3}:{4}",
                     spawn.getName(), typeLabel, spawn.getSpawnType().getName(), teamLabel, spawn.getTeam().name());
 
             pagin.addFormatted(FormatTemplate.RAW, formatted);

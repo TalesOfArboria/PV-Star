@@ -36,8 +36,6 @@ import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtension;
 import com.jcwhatever.pvs.api.arena.extensions.ArenaExtensionInfo;
 import com.jcwhatever.pvs.api.commands.AbstractPVCommand;
-import com.jcwhatever.pvs.api.utils.Msg;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -65,7 +63,7 @@ public class TypesSubCommand extends AbstractPVCommand implements IExecutableCom
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         List<Class<? extends ArenaExtension>> classes = PVStarAPI.getExtensionManager().getExtensionClasses();
         for (Class<? extends ArenaExtension> extClass : classes) {
