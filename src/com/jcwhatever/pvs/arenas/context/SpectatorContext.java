@@ -31,8 +31,8 @@ import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.ISpectatorSettings;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToSpectatorEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToSpectatorEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromSpectatorEvent;
 import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
@@ -76,10 +76,10 @@ public class SpectatorContext extends AbstractContextManager implements ISpectat
 
     @Nullable
     @Override
-    protected PlayerAddedToContextEvent onPlayerAdded(
-            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
+    protected PlayerAddToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddToContextEvent contextEvent) {
 
-        PlayerAddedToSpectatorEvent event = new PlayerAddedToSpectatorEvent(contextEvent);
+        PlayerAddToSpectatorEvent event = new PlayerAddToSpectatorEvent(contextEvent);
 
         getArena().getEventManager().call(this, event);
 

@@ -25,6 +25,7 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.Rand;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.pvs.ArenaPlayer;
@@ -35,6 +36,7 @@ import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.options.PlayerLeaveArenaReason;
 import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerArenaSpawnedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerCommandEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
@@ -111,10 +113,10 @@ public class PlayerEventListener implements Listener {
         Handle arena respawning
      */
     @EventHandler(priority=EventPriority.HIGHEST)
-    private void onPlayerRespawn(PlayerRespawnEvent event) {
+    private void onPlayerRespawn(final PlayerRespawnEvent event) {
 
-        ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
-        IArena arena = player.getArena();
+        final ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        final IArena arena = player.getArena();
 
         // respawn player in appropriate arena area.
         if (arena != null) {
@@ -122,12 +124,20 @@ public class PlayerEventListener implements Listener {
             if (spawn == null)
                 return;
 
-            PlayerArenaRespawnEvent respawnEvent =
-                    new PlayerArenaRespawnEvent(arena, player, player.getContextManager(), spawn);
-
+            PlayerArenaRespawnEvent respawnEvent = new PlayerArenaRespawnEvent(
+                    arena, player, player.getContextManager(), spawn);
             arena.getEventManager().call(this, respawnEvent);
 
             event.setRespawnLocation(respawnEvent.getRespawnLocation());
+
+            Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
+                            arena, player, player.getContextManager(), event.getRespawnLocation());
+                    arena.getEventManager().call(this, spawnEvent);
+                }
+            });
         }
         else {
             Location respawnLocation = player.getDeathRespawnLocation(DEATH_RESPAWN_LOCATION);

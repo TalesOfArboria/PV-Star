@@ -25,6 +25,7 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
+import com.jcwhatever.nucleus.managed.teleport.Teleporter;
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
@@ -43,6 +44,7 @@ import com.jcwhatever.pvs.api.arena.options.TeamChangeReason;
 import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
 import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
 import com.jcwhatever.pvs.api.events.players.PlayerArenaRespawnEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerArenaSpawnedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerContextChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
@@ -609,11 +611,18 @@ public class ArenaPlayer implements IArenaPlayer {
         if (location == null)
             return null;
 
-        PlayerArenaRespawnEvent event = new PlayerArenaRespawnEvent(_arena, this, manager, location);
-        _arena.getEventManager().call(this, event);
+        PlayerArenaRespawnEvent respawnEvent = new PlayerArenaRespawnEvent(
+                _arena, this, manager, location);
+        _arena.getEventManager().call(this, respawnEvent);
 
-        _player.teleport(event.getRespawnLocation());
-        return location;
+        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation())) {
+            PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
+                    _arena, this, manager, respawnEvent.getRespawnLocation());
+            _arena.getEventManager().call(this, spawnEvent);
+            return location;
+        }
+
+        return null;
     }
 
     @Override

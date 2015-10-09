@@ -45,8 +45,8 @@ import com.jcwhatever.pvs.api.arena.settings.IGameSettings;
 import com.jcwhatever.pvs.api.events.ArenaEndedEvent;
 import com.jcwhatever.pvs.api.events.ArenaPreStartEvent;
 import com.jcwhatever.pvs.api.events.ArenaStartedEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToGameEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToGameEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerJoinedArenaEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerLoseEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreJoinArenaEvent;
@@ -306,10 +306,10 @@ public class GameContext extends AbstractContextManager implements IGameContext 
 
     @Nullable
     @Override
-    protected PlayerAddedToContextEvent onPlayerAdded(
-            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
+    protected PlayerAddToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddToContextEvent contextEvent) {
 
-        PlayerAddedToGameEvent event = new PlayerAddedToGameEvent(contextEvent);
+        PlayerAddToGameEvent event = new PlayerAddToGameEvent(contextEvent);
         getArena().getEventManager().call(this, event);
 
         return event;

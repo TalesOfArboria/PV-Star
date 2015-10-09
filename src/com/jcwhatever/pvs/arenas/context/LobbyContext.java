@@ -37,8 +37,8 @@ import com.jcwhatever.pvs.api.arena.options.ArenaContext;
 import com.jcwhatever.pvs.api.arena.options.ArenaStartReason;
 import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.ILobbySettings;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToLobbyEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToLobbyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromLobbyEvent;
 import com.jcwhatever.pvs.arenas.AbstractArena;
@@ -105,10 +105,10 @@ public class LobbyContext extends AbstractContextManager implements ILobbyContex
 
     @Nullable
     @Override
-    protected PlayerAddedToContextEvent onPlayerAdded(
-            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent contextEvent) {
+    protected PlayerAddToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddToContextEvent contextEvent) {
 
-        PlayerAddedToLobbyEvent event = new PlayerAddedToLobbyEvent(contextEvent);
+        PlayerAddToLobbyEvent event = new PlayerAddToLobbyEvent(contextEvent);
         getArena().getEventManager().call(this, event);
 
         return event;

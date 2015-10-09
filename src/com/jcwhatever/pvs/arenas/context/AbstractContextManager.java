@@ -24,23 +24,24 @@
 
 package com.jcwhatever.pvs.arenas.context;
 
+import com.jcwhatever.nucleus.managed.teleport.Teleporter;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.pvs.ArenaPlayersCollection;
 import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.ArenaPlayersCollection;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.context.IContextManager;
 import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
 import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.arena.settings.IContextSettings;
-import com.jcwhatever.pvs.api.events.players.PlayerAddedToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerAddToContextEvent;
+import com.jcwhatever.pvs.api.events.players.PlayerArenaSpawnedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreAddToContextEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveFromContextEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromContextEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.arenas.AbstractArena;
-
 import org.bukkit.Location;
 
 import javax.annotation.Nullable;
@@ -102,17 +103,19 @@ public abstract class AbstractContextManager implements IContextManager {
 
         Location spawnPoint = onPrePlayerAdd(player, reason);
 
-        PlayerAddedToContextEvent contextEvent = new PlayerAddedToContextEvent(
+        PlayerAddToContextEvent contextEvent = new PlayerAddToContextEvent(
                 _arena, player, this, getContext(), reason, spawnPoint, null);
-
         _arena.getEventManager().call(this, contextEvent);
 
         contextEvent = onPlayerAdded(player, reason, contextEvent);
 
         // teleport player to spawn location from event
-        if (contextEvent.getSpawnLocation() != null) {
+        if (contextEvent.getSpawnLocation() != null
+                && Teleporter.teleport(player.getPlayer(), contextEvent.getSpawnLocation())) {
 
-            player.getPlayer().teleport(contextEvent.getSpawnLocation());
+            PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
+                    _arena, player, this, contextEvent.getSpawnLocation());
+            _arena.getEventManager().call(this, spawnEvent);
 
             // reserve spawnpoint
             if (contextEvent.getSpawnLocation() instanceof Spawnpoint) {
@@ -181,8 +184,8 @@ public abstract class AbstractContextManager implements IContextManager {
      *
      * @return  The context event to retrieve modified event values from.
      */
-    protected abstract PlayerAddedToContextEvent onPlayerAdded(
-            IArenaPlayer player, AddToContextReason reason, PlayerAddedToContextEvent event);
+    protected abstract PlayerAddToContextEvent onPlayerAdded(
+            IArenaPlayer player, AddToContextReason reason, PlayerAddToContextEvent event);
 
     /**
      * Invoked before a player is removed.
