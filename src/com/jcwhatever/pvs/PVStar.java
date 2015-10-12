@@ -26,7 +26,6 @@ package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
-import com.jcwhatever.nucleus.events.manager.BukkitEventForwarder;
 import com.jcwhatever.nucleus.events.manager.EventManager;
 import com.jcwhatever.nucleus.managed.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
@@ -277,7 +276,6 @@ public class PVStar extends NucleusPlugin implements IPVStar {
                 // forward global Bukkit events to the appropriate
                 // arena event manager.
                 _eventForwarder = new ArenaEventForwarder();
-                BukkitEventForwarder.registerBukkitEvents(_eventForwarder);
 
                 _scriptApi = new SimpleScriptApi(PVStar.this, "pvstar", new IApiObjectCreator() {
                     @Override
