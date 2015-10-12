@@ -40,6 +40,7 @@ public class ArenaApiObject implements IDisposable {
     public final ArenaSpawnsApiObject spawns;
     public final ArenaStatsApiObject stats;
     public final ArenaPointsApiObject points;
+    public final ArenaSoundsApiObject sounds;
 
     public ArenaApiObject(IArena arena) {
         this.arena = arena;
@@ -49,6 +50,7 @@ public class ArenaApiObject implements IDisposable {
         spawns = new ArenaSpawnsApiObject(arena);
         stats = new ArenaStatsApiObject(arena);
         points = new ArenaPointsApiObject(arena);
+        sounds = new ArenaSoundsApiObject(arena);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class ArenaApiObject implements IDisposable {
         spawns.dispose();
         stats.dispose();
         points.dispose();
+        sounds.dispose();
 
         _isDisposed = true;
     }
