@@ -111,7 +111,7 @@ public abstract class AbstractContextManager implements IContextManager {
 
         // teleport player to spawn location from event
         if (contextEvent.getSpawnLocation() != null
-                && Teleporter.teleport(player.getPlayer(), contextEvent.getSpawnLocation())) {
+                && Teleporter.teleport(player.getPlayer(), contextEvent.getSpawnLocation()).isSuccess()) {
 
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, player, this, contextEvent.getSpawnLocation());

@@ -615,7 +615,7 @@ public class ArenaPlayer implements IArenaPlayer {
                 _arena, this, manager, location);
         _arena.getEventManager().call(this, respawnEvent);
 
-        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation())) {
+        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation()).isSuccess()) {
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, this, manager, respawnEvent.getRespawnLocation());
             _arena.getEventManager().call(this, spawnEvent);
