@@ -24,6 +24,7 @@
 
 package com.jcwhatever.pvs.arenas.settings;
 
+import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -46,6 +47,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
     private boolean _isWeaponsDamageable = true;
     private boolean _hasFallDamage = true;
     private boolean _isSpawnsReserved = false;
+    private TeleportMode _teleportMode = TeleportMode.TARGET_ONLY;
 
     /*
      * Constructor.
@@ -67,6 +69,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
         _isToolsDamageable = _dataNode.getBoolean("tools-damage", _isToolsDamageable);
         _hasFallDamage = _dataNode.getBoolean("fall-damage", _hasFallDamage);
         _isSpawnsReserved = _dataNode.getBoolean("spawns-reserved", _isSpawnsReserved);
+        _teleportMode = _dataNode.getEnum("teleport-mode", _teleportMode, TeleportMode.class);
     }
 
     @Override
@@ -86,9 +89,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setPvpEnabled(boolean isEnabled) {
-        _isPvpEnabled = isEnabled;
-
-        save("pvp", isEnabled);
+        save("pvp", _isPvpEnabled = isEnabled);
     }
 
     @Override
@@ -98,9 +99,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setTeamPvpEnabled(boolean isEnabled) {
-        _isTeamPvpEnabled = isEnabled;
-
-        save("team-pvp", isEnabled);
+        save("team-pvp", _isTeamPvpEnabled = isEnabled);
     }
 
     @Override
@@ -110,9 +109,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setSharingEnabled(boolean isEnabled) {
-        _isSharingEnabled = isEnabled;
-
-        save("sharing", isEnabled);
+        save("sharing", _isSharingEnabled = isEnabled);
     }
 
     @Override
@@ -122,9 +119,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setHungerEnabled(boolean isEnabled) {
-        _isHungerEnabled = isEnabled;
-
-        save("hunger", isEnabled);
+        save("hunger", _isHungerEnabled = isEnabled);
     }
 
     @Override
@@ -134,9 +129,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setArmorDamageable(boolean isDamageable) {
-        _isArmorDamageable = isDamageable;
-
-        save("armor-damage", isDamageable);
+        save("armor-damage", _isArmorDamageable = isDamageable);
     }
 
     @Override
@@ -146,9 +139,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setWeaponsDamageable(boolean isDamageable) {
-        _isWeaponsDamageable = isDamageable;
-
-        save("weapons-damage", isDamageable);
+        save("weapons-damage", _isWeaponsDamageable = isDamageable);
     }
 
     @Override
@@ -158,9 +149,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setToolsDamageable(boolean isDamageable) {
-        _isToolsDamageable = isDamageable;
-
-        save("tools-damage", isDamageable);
+        save("tools-damage", _isToolsDamageable = isDamageable);
     }
 
     @Override
@@ -170,9 +159,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setFallDamage(boolean hasFallDamage) {
-        _hasFallDamage = hasFallDamage;
-
-        save("fall-damage", hasFallDamage);
+        save("fall-damage", _hasFallDamage = hasFallDamage);
     }
 
     @Override
@@ -182,9 +169,19 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
 
     @Override
     public void setPlayerSpawnsReserved(boolean isEnabled) {
-        _isSpawnsReserved = isEnabled;
+        save("spawns-reserved", _isSpawnsReserved = isEnabled);
+    }
 
-        save("spawns-reserved", isEnabled);
+    @Override
+    public TeleportMode getTeleportMode() {
+        return _teleportMode;
+    }
+
+    @Override
+    public void setTeleportMode(TeleportMode mode) {
+        PreCon.notNull(mode);
+
+        save("teleport-mode", _teleportMode = mode);
     }
 
     /**

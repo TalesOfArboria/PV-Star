@@ -42,6 +42,7 @@ public class LobbyCommand extends AbstractPVCommand {
         registerCommand(ReserveSpawnsSubCommand.class);
         registerCommand(SharingSubCommand.class);
         registerCommand(TeamPvpSubCommand.class);
+        registerCommand(TeleportModeSubCommand.class);
         registerCommand(HungerSubCommand.class);
         registerCommand(ImmobilizeSubCommand.class);
         registerCommand(ToolDamageSubCommand.class);

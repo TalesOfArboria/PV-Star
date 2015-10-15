@@ -24,6 +24,7 @@
 
 package com.jcwhatever.pvs.arenas.context;
 
+import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
 import com.jcwhatever.nucleus.managed.teleport.Teleporter;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
@@ -109,9 +110,11 @@ public abstract class AbstractContextManager implements IContextManager {
 
         contextEvent = onPlayerAdded(player, reason, contextEvent);
 
+        TeleportMode teleportMode = getSettings().getTeleportMode();
+        Location location = contextEvent.getSpawnLocation();
         // teleport player to spawn location from event
         if (contextEvent.getSpawnLocation() != null
-                && Teleporter.teleport(player.getPlayer(), contextEvent.getSpawnLocation()).isSuccess()) {
+                && Teleporter.teleport(player.getPlayer(), location, teleportMode).isSuccess()) {
 
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, player, this, contextEvent.getSpawnLocation());

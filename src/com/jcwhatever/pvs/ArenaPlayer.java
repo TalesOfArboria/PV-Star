@@ -25,6 +25,7 @@
 package com.jcwhatever.pvs;
 
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
+import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
 import com.jcwhatever.nucleus.managed.teleport.Teleporter;
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -615,7 +616,9 @@ public class ArenaPlayer implements IArenaPlayer {
                 _arena, this, manager, location);
         _arena.getEventManager().call(this, respawnEvent);
 
-        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation()).isSuccess()) {
+        TeleportMode mode = manager.getSettings().getTeleportMode();
+
+        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation(), mode).isSuccess()) {
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, this, manager, respawnEvent.getRespawnLocation());
             _arena.getEventManager().call(this, spawnEvent);

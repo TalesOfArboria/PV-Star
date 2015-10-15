@@ -49,6 +49,7 @@ public class GameCommand extends AbstractPVCommand {
         registerCommand(ReserveSpawnsSubCommand.class);
         registerCommand(SharingSubCommand.class);
         registerCommand(TeamPvpSubCommand.class);
+        registerCommand(TeleportModeSubCommand.class);
         registerCommand(ToolDamageSubCommand.class);
         registerCommand(WeaponDamageSubCommand.class);
     }
