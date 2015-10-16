@@ -36,6 +36,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
     private int _lives = 1;
     private int _points = 0;
+    private int _endDelayTicks = 0;
     private boolean _postGameCleanup = true;
     private LivesBehavior _livesBehavior = LivesBehavior.ADDITIVE;
     private PointsBehavior _pointsBehavior = PointsBehavior.STATIC;
@@ -48,6 +49,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
         _lives = getDataNode().getInteger("lives", _lives);
         _points = getDataNode().getInteger("points", _points);
+        _endDelayTicks = getDataNode().getInteger("end-delay-ticks", _endDelayTicks);
         _postGameCleanup = getDataNode().getBoolean("post-game-cleanup", _postGameCleanup);
         _livesBehavior = getDataNode().getEnum("lives-behavior", _livesBehavior, LivesBehavior.class);
         _pointsBehavior = getDataNode().getEnum("points-behavior", _pointsBehavior, PointsBehavior.class);
@@ -60,9 +62,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
     @Override
     public void setStartLives(int lives) {
-        _lives = lives;
-
-        save("lives", lives);
+        save("lives", _lives = lives);
     }
 
     @Override
@@ -72,9 +72,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
     @Override
     public void setStartPoints(int points) {
-        _points = points;
-
-        save("points", points);
+        save("points", _points = points);
     }
 
     @Override
@@ -84,9 +82,7 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
     @Override
     public void setLivesBehavior(LivesBehavior behavior) {
-        _livesBehavior = behavior;
-
-        save("lives-behavior", behavior);
+        save("lives-behavior", _livesBehavior = behavior);
     }
 
     @Override
@@ -96,15 +92,21 @@ public class PVGameSettings extends AbstractPlayerSettings implements IGameSetti
 
     @Override
     public void setPointsBehavior(PointsBehavior behavior) {
-        _pointsBehavior = behavior;
-
-        save("points-behavior", behavior);
+        save("points-behavior", _pointsBehavior = behavior);
     }
 
     @Override
     public void setPostGameEntityCleanup(boolean isEnabled) {
-        _postGameCleanup = isEnabled;
+        save("post-game-cleanup", _postGameCleanup = isEnabled);
+    }
 
-        save("post-game-cleanup", isEnabled);
+    @Override
+    public int getEndDelayTicks() {
+        return _endDelayTicks;
+    }
+
+    @Override
+    public void setEndDelayTicks(int delayTicks) {
+        save("end-delay-ticks", _endDelayTicks = delayTicks);
     }
 }

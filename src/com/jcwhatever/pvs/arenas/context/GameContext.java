@@ -237,7 +237,18 @@ public class GameContext extends AbstractContextManager implements IGameContext 
 
         callWinEvent(player);
 
-        end();
+        int delay = getSettings().getEndDelayTicks();
+        if (delay <= 0) {
+            end();
+        }
+        else {
+            Scheduler.runTaskLater(PVStarAPI.getPlugin(), delay, new Runnable() {
+                @Override
+                public void run() {
+                    end();
+                }
+            });
+        }
         return true;
     }
 
@@ -266,7 +277,18 @@ public class GameContext extends AbstractContextManager implements IGameContext 
         if (winEvent.getWinMessage() != null)
             tell(winEvent.getWinMessage());
 
-        end();
+        int delay = getSettings().getEndDelayTicks();
+        if (delay <= 0) {
+            end();
+        }
+        else {
+            Scheduler.runTaskLater(PVStarAPI.getPlugin(), delay, new Runnable() {
+                @Override
+                public void run() {
+                    end();
+                }
+            });
+        }
         return true;
     }
 
