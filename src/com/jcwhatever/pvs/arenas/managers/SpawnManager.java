@@ -128,6 +128,7 @@ public class SpawnManager extends SpawnpointsCollection implements ISpawnManager
 
     @Override
     public List<Spawnpoint> getAll(ArenaContext context) {
+        PreCon.notNull(context);
 
         switch (context) {
             case LOBBY:
@@ -143,7 +144,7 @@ public class SpawnManager extends SpawnpointsCollection implements ISpawnManager
                         PVStarAPI.getSpawnTypeManager().getSpectatorSpawnType());
 
             default:
-                return null;
+                return new ArrayList<>(0);
         }
     }
 
