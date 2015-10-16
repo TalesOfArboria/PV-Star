@@ -47,6 +47,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
     private boolean _isWeaponsDamageable = true;
     private boolean _hasFallDamage = true;
     private boolean _isSpawnsReserved = false;
+    private int _maxDeathTicks = 20 * 20;
     private TeleportMode _teleportMode = TeleportMode.TARGET_ONLY;
 
     /*
@@ -69,6 +70,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
         _isToolsDamageable = _dataNode.getBoolean("tools-damage", _isToolsDamageable);
         _hasFallDamage = _dataNode.getBoolean("fall-damage", _hasFallDamage);
         _isSpawnsReserved = _dataNode.getBoolean("spawns-reserved", _isSpawnsReserved);
+        _maxDeathTicks = _dataNode.getInteger("max-death-ticks", _maxDeathTicks);
         _teleportMode = _dataNode.getEnum("teleport-mode", _teleportMode, TeleportMode.class);
     }
 
@@ -182,6 +184,16 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
         PreCon.notNull(mode);
 
         save("teleport-mode", _teleportMode = mode);
+    }
+
+    @Override
+    public int getMaxDeathTicks() {
+        return _maxDeathTicks;
+    }
+
+    @Override
+    public void setMaxDeathTicks(int ticks) {
+        save("max-death-ticks", _maxDeathTicks = ticks);
     }
 
     /**

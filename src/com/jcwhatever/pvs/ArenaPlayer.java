@@ -24,6 +24,9 @@
 
 package com.jcwhatever.pvs;
 
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.events.respacks.MissingRequiredResourcePackEvent;
+import com.jcwhatever.nucleus.events.respacks.MissingRequiredResourcePackEvent.Action;
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
 import com.jcwhatever.nucleus.managed.teleport.Teleporter;
@@ -31,7 +34,9 @@ import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
+import com.jcwhatever.pvs.api.arena.ArenaRegion;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
+import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
 import com.jcwhatever.pvs.api.arena.context.IContextManager;
@@ -68,42 +73,47 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * PVStar implementation of {@link IArenaPlayer}.
  */
 public class ArenaPlayer implements IArenaPlayer {
 
-    private static final Map<UUID, ArenaPlayer> _playerMap = new HashMap<>(100);
-    private static final Map<UUID, MetaStore> _meta = new HashMap<UUID, MetaStore>(100);
-    private static BukkitPlayerListener _listener;
+    private static final Map<UUID, ArenaPlayer> PLAYER_MAP = new HashMap<>(100);
+    private static final Map<UUID, MetaStore> META = new HashMap<UUID, MetaStore>(100);
+    private static BukkitPlayerListener LISTENER;
+    private static DeathChecker DEATH_CHECKER;
 
     /*
      * Get a singleton wrapper instance.
      */
-    public static ArenaPlayer get(Player p) {
+    public static ArenaPlayer get(Player player) {
 
-        ArenaPlayer player = _playerMap.get(p.getUniqueId());
-        if (player == null) {
-            player = new ArenaPlayer(p);
-            _playerMap.put(p.getUniqueId(), player);
+        ArenaPlayer arenaPlayer = PLAYER_MAP.get(player.getUniqueId());
+        if (arenaPlayer == null) {
+            arenaPlayer = new ArenaPlayer(player);
+            PLAYER_MAP.put(player.getUniqueId(), arenaPlayer);
         }
 
-        if (_listener == null) {
-            _listener = new BukkitPlayerListener();
-            Bukkit.getPluginManager().registerEvents(_listener, PVStarAPI.getPlugin());
+        if (LISTENER == null) {
+            LISTENER = new BukkitPlayerListener();
+            Bukkit.getPluginManager().registerEvents(LISTENER, PVStarAPI.getPlugin());
         }
 
-        return player;
+        return arenaPlayer;
     }
 
     /*
      * Dispose the singleton instance of an arena player.
      */
     public static void dispose(IArenaPlayer player) {
-        _playerMap.remove(player.getUniqueId());
+        PLAYER_MAP.remove(player.getUniqueId());
     }
 
     public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
@@ -121,6 +131,7 @@ public class ArenaPlayer implements IArenaPlayer {
     private int _totalPoints = 0;
     private int _points;
     private Date _lastJoin;
+    private long _deathTick = -1;
     // player to blame code induced death on
     private IArenaPlayer _deathBlamePlayer;
     // Meta data object to store extra meta. Disposed when the player starts a new game.
@@ -134,6 +145,11 @@ public class ArenaPlayer implements IArenaPlayer {
      */
     private ArenaPlayer(Player player) {
         _player = player;
+
+        if (DEATH_CHECKER == null) {
+            DEATH_CHECKER = new DeathChecker();
+            Scheduler.runTaskRepeat(PVStarAPI.getPlugin(), 1, 1, DEATH_CHECKER);
+        }
     }
 
     /**
@@ -213,7 +229,7 @@ public class ArenaPlayer implements IArenaPlayer {
     public void clearArena() {
 
         _arena = null;
-        _meta.clear();
+        META.clear();
         _isReady = false;
         _isImmobilized = false;
         _isInvulnerable = false;
@@ -569,10 +585,10 @@ public class ArenaPlayer implements IArenaPlayer {
     public MetaStore getMeta(UUID arenaId) {
         PreCon.notNull(arenaId);
 
-        MetaStore meta = _meta.get(arenaId);
+        MetaStore meta = META.get(arenaId);
         if (meta == null) {
             meta = new MetaStore();
-            _meta.put(arenaId, meta);
+            META.put(arenaId, meta);
         }
 
         return meta;
@@ -672,6 +688,55 @@ public class ArenaPlayer implements IArenaPlayer {
         _lives = event.getNewLives();
     }
 
+    private static class DeathChecker implements Runnable {
+
+        final Map<ArenaPlayer, Void> dead = new WeakHashMap<>(10);
+        long tickCount = 0;
+
+        @Override
+        public void run() {
+
+            tickCount++;
+
+            Iterator<Entry<ArenaPlayer, Void>> iterator = dead.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+
+                ArenaPlayer player = iterator.next().getKey();
+                if (player._deathTick < 0) {
+                    iterator.remove();
+                    continue;
+                }
+
+                if (!player.getPlayer().isDead()) {
+                    player._deathTick = -1;
+                    iterator.remove();
+                    continue;
+                }
+
+                IArena arena = player.getArena();
+                if (arena == null) {
+                    player._deathTick = -1;
+                    iterator.remove();
+                    continue;
+                }
+
+                AbstractContextManager context = player.getContextManager();
+                if (context == null) {
+                    player._deathTick = -1;
+                    iterator.remove();
+                    continue;
+                }
+
+                int maxTicks = context.getSettings().getMaxDeathTicks();
+
+                if (tickCount - player._deathTick > maxTicks) {
+                    player.kick();
+                }
+            }
+        }
+    }
+
     /*
      * Bukkit event listener. Interprets Bukkit events into PV-Star player events.
      */
@@ -708,12 +773,20 @@ public class ArenaPlayer implements IArenaPlayer {
                     }
                 });
             }
+            else {
+                // add to death checker
+                AbstractContextManager context = player.getContextManager();
+                if (context != null && context.getSettings().getMaxDeathTicks() > 0) {
+                    player._deathTick = DEATH_CHECKER.tickCount;
+                    DEATH_CHECKER.dead.put(player, null);
+                }
+            }
         }
 
         /*
          * Handle player damage and invulnerability.
          */
-        @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
+        @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
         private void onPlayerDamage(EntityDamageEvent event) {
 
             Entity entity = event.getEntity();
@@ -730,5 +803,31 @@ public class ArenaPlayer implements IArenaPlayer {
             }
         }
 
+        /*
+         * Make sure player is sent to remove location if required resource pack
+         * is not loaded.
+         */
+        @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+        private void onMissingResourcePack(MissingRequiredResourcePackEvent event) {
+
+            IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+            IArena arena = player.getArena();
+            if (arena == null) {
+
+                List<ArenaRegion> regions = Nucleus.getRegionManager().getRegions(
+                        player.getLocation(), ArenaRegion.class);
+
+                if (regions.size() > 0) {
+                    arena = regions.get(0).getArena();
+
+                    LocationUtils.copy(arena.getSettings().getRemoveLocation(), event.getRelocation());
+                    event.setAction(Action.RELOCATE);
+                }
+                return;
+            }
+
+            player.kick();
+            event.setAction(Action.IGNORE);
+        }
     }
 }

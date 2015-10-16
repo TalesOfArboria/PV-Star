@@ -39,6 +39,7 @@ public class SpectatorCommand extends AbstractPVCommand {
         registerCommand(ArmorDamageSubCommand.class);
         registerCommand(FallSubCommand.class);
         registerCommand(HungerSubCommand.class);
+        registerCommand(MaxDeathTicksSubCommand.class);
         registerCommand(PvpSubCommand.class);
         registerCommand(SharingSubCommand.class);
         registerCommand(TeleportModeSubCommand.class);
