@@ -42,6 +42,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
     private boolean _isTeamPvpEnabled = false;
     private boolean _isSharingEnabled = true;
     private boolean _isHungerEnabled = true;
+    private boolean _isAutoHealEnabled = true;
     private boolean _isArmorDamageable = true;
     private boolean _isToolsDamageable = true;
     private boolean _isWeaponsDamageable = true;
@@ -65,6 +66,7 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
         _isTeamPvpEnabled = _dataNode.getBoolean("team-pvp", _isTeamPvpEnabled);
         _isSharingEnabled = _dataNode.getBoolean("sharing", _isSharingEnabled);
         _isHungerEnabled = _dataNode.getBoolean("hunger", _isHungerEnabled);
+        _isAutoHealEnabled = _dataNode.getBoolean("auto-heal", _isAutoHealEnabled);
         _isArmorDamageable = _dataNode.getBoolean("armor-damage", _isArmorDamageable);
         _isWeaponsDamageable = _dataNode.getBoolean("weapons-damage", _isWeaponsDamageable);
         _isToolsDamageable = _dataNode.getBoolean("tools-damage", _isToolsDamageable);
@@ -122,6 +124,16 @@ public abstract class AbstractPlayerSettings implements IContextSettings {
     @Override
     public void setHungerEnabled(boolean isEnabled) {
         save("hunger", _isHungerEnabled = isEnabled);
+    }
+
+    @Override
+    public boolean isAutoHealEnabled() {
+        return _isAutoHealEnabled;
+    }
+
+    @Override
+    public void setAutoHealEnabled(boolean isEnabled) {
+        save("auto-heal", _isAutoHealEnabled = isEnabled);
     }
 
     @Override

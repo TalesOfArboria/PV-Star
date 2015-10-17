@@ -37,6 +37,7 @@ public class LobbyCommand extends AbstractPVCommand {
         super();
 
         registerCommand(ArmorDamageSubCommand.class);
+        registerCommand(AutoHealSubCommand.class);
         registerCommand(FallSubCommand.class);
         registerCommand(PvpSubCommand.class);
         registerCommand(ReserveSpawnsSubCommand.class);

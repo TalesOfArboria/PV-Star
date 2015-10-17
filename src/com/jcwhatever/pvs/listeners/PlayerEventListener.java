@@ -48,6 +48,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -204,6 +206,34 @@ public class PlayerEventListener implements Listener {
         // prevent hunger
         if (!settings.isHungerEnabled()) {
             event.setFoodLevel(20);
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void onPlayerAutoHeal(EntityRegainHealthEvent event) {
+        if (event.getRegainReason() != RegainReason.REGEN &&
+                event.getRegainReason() != RegainReason.MAGIC_REGEN &&
+                event.getRegainReason() != RegainReason.SATIATED)
+            return;
+
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        Player p = (Player)event.getEntity();
+        IArenaPlayer player = ArenaPlayer.get(p);
+
+        IArena arena = player.getArena();
+        if (arena == null)
+            return;
+
+        // get settings
+        IContextSettings settings = player.getContextSettings();
+        if (settings == null)
+            return;
+
+        // prevent auto heal
+        if (!settings.isAutoHealEnabled()) {
             event.setCancelled(true);
         }
     }
