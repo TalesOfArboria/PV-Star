@@ -282,7 +282,7 @@ public class PlayerEventListener implements Listener {
             Location to = player.IMMOBILIZE_LOCATION;
             to.setWorld(fr.getWorld());
             to.setX(fr.getX());
-            to.setY(fr.getY());
+            to.setY(event.getTo().getY());
             to.setZ(fr.getZ());
             to.setYaw(event.getTo().getYaw());
             to.setPitch(event.getTo().getPitch());
