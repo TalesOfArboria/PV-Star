@@ -30,6 +30,7 @@ import com.jcwhatever.nucleus.providers.sql.ISqlQueryResult;
 import com.jcwhatever.nucleus.providers.sql.ISqlResult;
 import com.jcwhatever.nucleus.providers.sql.ISqlTable;
 import com.jcwhatever.nucleus.providers.sql.observer.SqlAutoCloseSubscriber;
+import com.jcwhatever.nucleus.providers.sql.observer.SqlSubscriber;
 import com.jcwhatever.nucleus.providers.sql.statement.ISqlTransaction;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.future.FutureResultAgent;
@@ -200,7 +201,7 @@ public class SqlArenaStats implements IArenaStats {
                 .where("arenaId").isEqualTo(_arenaId)
                 .and("playerId").isEqualTo(playerId)
                 .addToTransaction(transaction)
-                .onSuccess(new SqlAutoCloseSubscriber() {
+                .onSuccess(new SqlSubscriber() {
                     @Override
                     public void onResult(@Nullable ISqlResult result, @Nullable String message) {
 
