@@ -30,6 +30,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.pvs.api.arena.IArena;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -128,6 +129,9 @@ public class ArenaSoundsApiObject  implements IDisposable {
             Player player = PlayerUtils.getPlayer(locationObj);
             if (player != null) {
                 location = player.getLocation(LOCATION);
+            }
+            else if (locationObj instanceof Entity) {
+                location = ((Entity) locationObj).getLocation(LOCATION);
             }
         }
 
