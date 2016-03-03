@@ -33,7 +33,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Script Api to handle sending sound effects to players in the arena.
@@ -41,6 +43,7 @@ import java.util.Collection;
 public class ArenaSoundsApiObject  implements IDisposable {
 
     private static final Location LOCATION = new Location(null, 0, 0, 0);
+    private static final List<Player> PLAYERS = new ArrayList<>(10);
 
     private final IArena _arena;
 
@@ -62,10 +65,12 @@ public class ArenaSoundsApiObject  implements IDisposable {
         PreCon.notNull(locationObj);
         PreCon.notNullOrEmpty(soundName);
 
-        playEffect(locationObj, soundName,
-                _arena.getGame().getPlayers().asPlayers(),
-                _arena.getLobby().getPlayers().asPlayers(),
-                _arena.getSpectators().getPlayers().asPlayers());
+        _arena.getGame().getPlayers().toBukkit(PLAYERS);
+        _arena.getLobby().getPlayers().toBukkit(PLAYERS);
+        _arena.getSpectators().getPlayers().toBukkit(PLAYERS);
+
+        playEffect(locationObj, soundName, PLAYERS);
+        PLAYERS.clear();
     }
 
     /**
@@ -80,9 +85,11 @@ public class ArenaSoundsApiObject  implements IDisposable {
         PreCon.notNull(locationObj);
         PreCon.notNullOrEmpty(soundName);
 
-        playEffect(locationObj, soundName,
-                _arena.getGame().getPlayers().asPlayers(),
-                _arena.getSpectators().getPlayers().asPlayers());
+        _arena.getGame().getPlayers().toBukkit(PLAYERS);
+        _arena.getSpectators().getPlayers().toBukkit(PLAYERS);
+
+        playEffect(locationObj, soundName, PLAYERS);
+        PLAYERS.clear();
     }
 
     /**
@@ -97,9 +104,11 @@ public class ArenaSoundsApiObject  implements IDisposable {
         PreCon.notNull(locationObj);
         PreCon.notNullOrEmpty(soundName);
 
-        playEffect(locationObj, soundName,
-                _arena.getGame().getPlayers().asPlayers(),
-                _arena.getSpectators().getPlayers().asPlayers());
+        _arena.getGame().getPlayers().toBukkit(PLAYERS);
+        _arena.getSpectators().getPlayers().toBukkit(PLAYERS);
+
+        playEffect(locationObj, soundName, PLAYERS);
+        PLAYERS.clear();
     }
 
     /**
@@ -114,11 +123,11 @@ public class ArenaSoundsApiObject  implements IDisposable {
         PreCon.notNull(locationObj);
         PreCon.notNullOrEmpty(soundName);
 
-        playEffect(locationObj, soundName, _arena.getGame().getPlayers().asPlayers());
+        playEffect(locationObj, soundName, _arena.getGame().getPlayers().toBukkit(PLAYERS));
+        PLAYERS.clear();
     }
 
-    @SafeVarargs
-    private final void playEffect(Object locationObj, String soundName, Collection<Player>... playerCollections) {
+    private void playEffect(Object locationObj, String soundName, Collection<Player> players) {
 
         Location location = null;
 
@@ -139,12 +148,7 @@ public class ArenaSoundsApiObject  implements IDisposable {
             throw new IllegalArgumentException("Invalid location object.");
         }
 
-        for (Collection<Player> players : playerCollections) {
-            if (players.isEmpty())
-                continue;
-
-            Sounds.playEffect(soundName, players, location);
-        }
+        Sounds.playEffect(soundName, players, location);
     }
 
     @Override

@@ -41,6 +41,7 @@ import com.jcwhatever.pvs.api.events.ArenaCreatedEvent;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.Arena;
 import com.jcwhatever.pvs.arenas.ArenaTypeInfo;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -25,7 +25,7 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
@@ -58,6 +58,9 @@ public class PvpListener implements Listener {
             return;
 
         IArenaPlayer arenaPlayer = ArenaPlayer.get(event.getPlayer());
+        if (arenaPlayer == null)
+            return;
+
         IArena arena = arenaPlayer.getArena();
         if (arena == null)
             return;
@@ -93,6 +96,9 @@ public class PvpListener implements Listener {
         Player player = (Player)damager;
 
         IArenaPlayer arenaPlayer = ArenaPlayer.get(player);
+        if (arenaPlayer == null)
+            return;
+
         IArena arena = arenaPlayer.getArena();
         if (arena == null)
             return;
@@ -125,6 +131,8 @@ public class PvpListener implements Listener {
         Player p = (Player)entity;
 
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)
@@ -156,6 +164,8 @@ public class PvpListener implements Listener {
         Player p = (Player)entity;
 
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)
@@ -202,18 +212,19 @@ public class PvpListener implements Listener {
                 // check for team pvp
                 else //noinspection ConstantConditions
                     if (!settings.isTeamPvpEnabled()) {  // always true, statement is for readability
-                    IArenaPlayer damagerPlayer = ArenaPlayer.get(p);
+                        IArenaPlayer damagerPlayer = ArenaPlayer.get(p);
+                        if (damagerPlayer != null) {
 
-                    // prevent team pvp
-                    if (damagerPlayer.getTeam() == player.getTeam() &&
-                            damagerPlayer.getTeam() != ArenaTeam.NONE ||
-                            player.getTeam() != ArenaTeam.NONE) {
+                            // prevent team pvp
+                            if (damagerPlayer.getTeam() == player.getTeam() &&
+                                    damagerPlayer.getTeam() != ArenaTeam.NONE ||
+                                    player.getTeam() != ArenaTeam.NONE) {
 
-                        event.setDamage(0.0D);
-                        event.setCancelled(true);
+                                event.setDamage(0.0D);
+                                event.setCancelled(true);
+                            }
+                        }
                     }
-
-                }
             }
         }
     }

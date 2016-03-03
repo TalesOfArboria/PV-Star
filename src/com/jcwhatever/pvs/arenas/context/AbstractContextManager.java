@@ -25,10 +25,8 @@
 package com.jcwhatever.pvs.arenas.context;
 
 import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
-import com.jcwhatever.nucleus.managed.teleport.Teleporter;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.ArenaPlayersCollection;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
@@ -43,6 +41,7 @@ import com.jcwhatever.pvs.api.events.players.PlayerPreRemoveFromContextEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerRemovedFromContextEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import org.bukkit.Location;
 
 import javax.annotation.Nullable;
@@ -114,7 +113,7 @@ public abstract class AbstractContextManager implements IContextManager {
         Location location = contextEvent.getSpawnLocation();
         // teleport player to spawn location from event
         if (contextEvent.getSpawnLocation() != null
-                && Teleporter.teleport(player.getPlayer(), location, teleportMode).isSuccess()) {
+                && player.teleport(location, teleportMode)) {
 
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, player, this, contextEvent.getSpawnLocation());

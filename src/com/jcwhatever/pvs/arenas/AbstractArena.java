@@ -37,7 +37,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
 import com.jcwhatever.pvs.ArenaExtensionManager;
 import com.jcwhatever.pvs.ArenaManager;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.PVEventManager;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
@@ -396,11 +396,11 @@ public abstract class AbstractArena implements IArena, IDisposable, IEventListen
                 if (leaveEvent.isRestoring() &&
                         leaveEvent.getRestoreLocation() != null) {
 
-                    if (player.getPlayer().isDead()) {
+                    if (player.isDead()) {
                         ((ArenaPlayer)player).setDeathRespawnLocation(leaveEvent.getRestoreLocation());
                     }
                     else {
-                        player.getPlayer().teleport(leaveEvent.getRestoreLocation());
+                        player.teleport(leaveEvent.getRestoreLocation());
                     }
                 }
 

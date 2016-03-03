@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
 import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -61,6 +61,8 @@ public class VoteCommand extends AbstractPVCommand implements IExecutableCommand
         Player p = (Player)sender;
 
         IArenaPlayer player = ArenaPlayer.get(p);
+        assert player != null;
+
         IArena arena = player.getArena();
 
         if (arena == null || player.getContext() == ArenaContext.SPECTATOR)

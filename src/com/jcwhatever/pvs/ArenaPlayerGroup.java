@@ -28,9 +28,11 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.IBukkitPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -95,7 +97,11 @@ public class ArenaPlayerGroup implements IArenaPlayerGroup {
         PreCon.notNull(params);
 
         for (IArenaPlayer player : _players) {
-            Msg.tell(player.getPlayer(), message, params);
+
+            if (!(player instanceof IBukkitPlayer))
+                continue;
+
+            Msg.tell(((IBukkitPlayer) player).getPlayer(), message, params);
         }
     }
 

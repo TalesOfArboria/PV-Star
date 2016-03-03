@@ -25,12 +25,13 @@
 package com.jcwhatever.pvs.listeners;
 
 import com.jcwhatever.nucleus.events.manager.BukkitEventForwarder;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.utils.Msg;
-
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -138,13 +139,17 @@ public class ArenaEventForwarder extends BukkitEventForwarder {
 
     private <T extends Event> void callEvent(Player p, T event) {
         IArenaPlayer player = ArenaPlayer.get(p);
-        if (player.getArena() == null)
+        if (player == null || player.getArena() == null)
             return;
 
         player.getArena().getEventManager().call(this, event);
     }
 
     private <T extends Event> void callEvent(Entity entity, T event) {
+
+        if (isInvalidNpc(entity))
+            return;
+
         if (entity instanceof Player) {
             callEvent((Player)entity, event);
         }
@@ -160,5 +165,16 @@ public class ArenaEventForwarder extends BukkitEventForwarder {
             return;
 
         arena.getEventManager().call(this, event);
+    }
+
+    private boolean isInvalidNpc(Entity entity) {
+
+        if (Npcs.hasProvider() && Npcs.isNpc(entity)) {
+
+            INpc npc = Npcs.getNpc(entity);
+            if (npc == null || npc.isDisposed())
+                return true;
+        }
+        return false;
     }
 }

@@ -29,6 +29,8 @@ import com.jcwhatever.nucleus.utils.observer.event.EventSubscriberPriority;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
+import com.jcwhatever.pvs.api.arena.IArenaPlayer;
+import com.jcwhatever.pvs.api.arena.IBukkitPlayer;
 import com.jcwhatever.pvs.api.arena.options.DropsCleanup;
 import com.jcwhatever.pvs.api.arena.options.JoinRejectReason;
 import com.jcwhatever.pvs.api.events.ArenaDisabledEvent;
@@ -66,13 +68,17 @@ public class Arena extends AbstractArena {
     @EventMethod(priority = EventSubscriberPriority.FIRST)
     private void onPlayerPreJoin(PlayerPreJoinArenaEvent event) {
 
-        // check player permission
-        if (!event.getPlayer().getPlayer().hasPermission(getPermission().getName())) {
-            event.rejectJoin(JoinRejectReason.NO_PERMISSION, Lang.get(_JOIN_NO_PERMISSION, getName()));
+        IArenaPlayer arenaPlayer = event.getPlayer();
+
+        if (arenaPlayer instanceof IBukkitPlayer) {
+            // check player permission
+            if (!((IBukkitPlayer) arenaPlayer).getPlayer().hasPermission(getPermission().getName())) {
+                event.rejectJoin(JoinRejectReason.NO_PERMISSION, Lang.get(_JOIN_NO_PERMISSION, getName()));
+            }
         }
 
         // Make sure the player is not already in an arena
-        IArena currentArena = event.getPlayer().getArena();
+        IArena currentArena = arenaPlayer.getArena();
         if (currentArena != null) {
             event.rejectJoin(JoinRejectReason.IN_OTHER_ARENA, Lang.get(_JOIN_LEAVE_CURRENT_FIRST, getName()));
         }

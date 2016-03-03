@@ -32,7 +32,7 @@ import com.jcwhatever.nucleus.managed.signs.ISignContainer;
 import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -94,6 +94,9 @@ public class ClassSignHandler extends SignHandler {
     protected SignClickResult onSignClick(Player p, ISignContainer sign) {
 
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return SignClickResult.IGNORED;
+
         IArena arena = player.getArena();
         if (arena == null)
             return SignClickResult.IGNORED;

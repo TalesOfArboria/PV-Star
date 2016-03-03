@@ -24,7 +24,7 @@
 
 package com.jcwhatever.pvs.listeners;
 
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -59,6 +59,9 @@ public class SharingListener implements Listener {
 
         final Player p = (Player)humanEntity;
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return;
+
         IArena arena = player.getArena();
 
         if (arena == null)
@@ -107,6 +110,8 @@ public class SharingListener implements Listener {
     private void onPlayerDropItem(PlayerDropItemEvent event) {
 
         IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)

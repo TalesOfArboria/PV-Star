@@ -32,6 +32,8 @@ import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.providers.permissions.Permissions;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
@@ -70,6 +72,7 @@ import com.jcwhatever.pvs.listeners.PvpListener;
 import com.jcwhatever.pvs.listeners.SharingListener;
 import com.jcwhatever.pvs.listeners.WorldEventListener;
 import com.jcwhatever.pvs.modules.ModuleLoader;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.points.PointsManager;
 import com.jcwhatever.pvs.scripting.PVStarScriptApi;
 import com.jcwhatever.pvs.signs.ClassSignHandler;
@@ -78,6 +81,7 @@ import com.jcwhatever.pvs.signs.PvpSignHandler;
 import com.jcwhatever.pvs.signs.ReadySignHandler;
 import com.jcwhatever.pvs.stats.StatsManager;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -118,14 +122,32 @@ public class PVStar extends NucleusPlugin implements IPVStar {
     }
 
     @Override
+    @Nullable
     public IArenaPlayer getArenaPlayer(Object player) {
         PreCon.notNull(player);
 
         if (player instanceof IArenaPlayer)
             return (IArenaPlayer) player;
 
+        if (player instanceof INpc) {
+            return ArenaPlayer.get((INpc)player);
+        }
+
         Player p = PlayerUtils.getPlayer(player);
-        PreCon.notNull(p);
+        if (p == null && player instanceof Entity && Npcs.hasProvider() && Npcs.isNpc((Entity)player)) {
+
+            INpc npc = Npcs.getNpc((Entity)player);
+            if (npc == null) {
+                Msg.debug("Npc does not have an INpc instance.");
+                return null;
+            }
+
+            return ArenaPlayer.get(npc);
+        }
+        else if (p == null) {
+            Msg.debug("Invalid player object.");
+            return null;
+        }
 
         return ArenaPlayer.get(p);
     }

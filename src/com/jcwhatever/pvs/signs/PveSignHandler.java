@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.managed.signs.ISignContainer;
 import com.jcwhatever.nucleus.managed.signs.SignHandler;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
@@ -96,7 +96,7 @@ public class PveSignHandler extends SignHandler {
     }
 
     @Override
-    protected SignClickResult onSignClick(final Player p, ISignContainer sign) {
+    protected SignClickResult onSignClick(Player p, ISignContainer sign) {
         String rawName = sign.getRawLine(1);
         Matcher matcher = TextUtils.PATTERN_SPACE.matcher(rawName);
 
@@ -108,13 +108,14 @@ public class PveSignHandler extends SignHandler {
 
         final IArena arena =  arenas.get(0);
 
+        final IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return SignClickResult.IGNORED;
+
         Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
-
-                IArenaPlayer player = ArenaPlayer.get(p);
-
                 // Add player to arena
                 arena.join(player);
             }

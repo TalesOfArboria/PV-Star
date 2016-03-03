@@ -27,7 +27,7 @@ package com.jcwhatever.pvs.arenas.context;
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Result;
-import com.jcwhatever.pvs.ArenaPlayer;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -354,8 +354,10 @@ public class GameContext extends AbstractContextManager implements IGameContext 
         Scheduler.runTaskLater(PVStarAPI.getPlugin(), 1, new Runnable() {
             @Override
             public void run() {
-                if (_players.size() == 0)
+                if (_players.size() == 0 ||
+                        _players.size() == _players.getPlayers().totalNpcPlayers()) {
                     end();
+                }
             }
         });
 
@@ -378,9 +380,6 @@ public class GameContext extends AbstractContextManager implements IGameContext 
 
         // transfer players from lobby
         for (IArenaPlayer player : players) {
-
-            if (!lobbyManager.getPlayers().contains(player))
-                continue;
 
             lobbyManager.removePlayer(player, RemoveFromContextReason.CONTEXT_CHANGE);
 

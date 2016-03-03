@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.pvs;
+package com.jcwhatever.pvs.players;
 
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.events.respacks.MissingRequiredResourcePackEvent;
@@ -30,8 +30,12 @@ import com.jcwhatever.nucleus.events.respacks.MissingRequiredResourcePackEvent.A
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.managed.teleport.TeleportMode;
 import com.jcwhatever.nucleus.managed.teleport.Teleporter;
+import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
+import com.jcwhatever.nucleus.providers.npc.events.NpcDeathEvent;
 import com.jcwhatever.nucleus.utils.MetaStore;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.Rand;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.ArenaRegion;
@@ -39,6 +43,8 @@ import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.IBukkitPlayer;
+import com.jcwhatever.pvs.api.arena.INpcPlayer;
 import com.jcwhatever.pvs.api.arena.context.IContextManager;
 import com.jcwhatever.pvs.api.arena.options.AddToContextReason;
 import com.jcwhatever.pvs.api.arena.options.ArenaContext;
@@ -56,6 +62,8 @@ import com.jcwhatever.pvs.api.events.players.PlayerLivesChangeEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerReadyEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamChangedEvent;
 import com.jcwhatever.pvs.api.events.players.PlayerTeamPreChangeEvent;
+import com.jcwhatever.pvs.api.spawns.Spawnpoint;
+import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.AbstractArena;
 import com.jcwhatever.pvs.arenas.context.AbstractContextManager;
 import com.jcwhatever.pvs.arenas.managers.SpawnManager;
@@ -83,7 +91,7 @@ import java.util.WeakHashMap;
 /**
  * PVStar implementation of {@link IArenaPlayer}.
  */
-public class ArenaPlayer implements IArenaPlayer {
+public abstract class ArenaPlayer implements IArenaPlayer {
 
     private static final Map<UUID, ArenaPlayer> PLAYER_MAP = new HashMap<>(100);
     private static final Map<UUID, MetaStore> META = new HashMap<UUID, MetaStore>(100);
@@ -93,18 +101,52 @@ public class ArenaPlayer implements IArenaPlayer {
     /*
      * Get a singleton wrapper instance.
      */
+    @Nullable
     public static ArenaPlayer get(Player player) {
+
+        if (Npcs.isNpc(player)) {
+            if (!Npcs.hasProvider()) {
+                Msg.debug("Npc provider not installed.");
+                return null;
+            }
+
+            INpc npc = Npcs.getNpc(player);
+            if (npc == null) {
+                Msg.debug("Npc does not have an INpc instance.");
+                return null;
+            }
+
+            return get(npc);
+        }
 
         ArenaPlayer arenaPlayer = PLAYER_MAP.get(player.getUniqueId());
         if (arenaPlayer == null) {
-            arenaPlayer = new ArenaPlayer(player);
+            arenaPlayer = new BukkitPlayer(player);
             PLAYER_MAP.put(player.getUniqueId(), arenaPlayer);
         }
 
-        if (LISTENER == null) {
-            LISTENER = new BukkitPlayerListener();
-            Bukkit.getPluginManager().registerEvents(LISTENER, PVStarAPI.getPlugin());
+        init();
+        return arenaPlayer;
+    }
+
+    /*
+     * Get a singleton wrapper instance.
+     */
+    @Nullable
+    public static ArenaPlayer get(INpc npc) {
+
+        if (npc.isDisposed()) {
+            Msg.debug("Cannot use disposed npc.");
+            return null;
         }
+
+        ArenaPlayer arenaPlayer = PLAYER_MAP.get(npc.getId());
+        if (arenaPlayer == null) {
+            arenaPlayer = new NpcPlayer(npc);
+            PLAYER_MAP.put(npc.getId(), arenaPlayer);
+        }
+
+        init();
 
         return arenaPlayer;
     }
@@ -116,8 +158,19 @@ public class ArenaPlayer implements IArenaPlayer {
         PLAYER_MAP.remove(player.getUniqueId());
     }
 
+    private static void init() {
+        if (LISTENER == null) {
+            LISTENER = new BukkitPlayerListener();
+            Bukkit.getPluginManager().registerEvents(LISTENER, PVStarAPI.getPlugin());
+        }
+
+        if (DEATH_CHECKER == null) {
+            DEATH_CHECKER = new DeathChecker();
+            Scheduler.runTaskRepeat(PVStarAPI.getPlugin(), 1, 1, DEATH_CHECKER);
+        }
+    }
+
     public final Location IMMOBILIZE_LOCATION = new Location(null, 0, 0, 0);
-    private final Player _player;
     private final Location _deathRespawnLocation = new Location(null, 0, 0, 0);
     private final SessionStatTracker _sessionStats = new SessionStatTracker(this);
 
@@ -133,24 +186,10 @@ public class ArenaPlayer implements IArenaPlayer {
     private Date _lastJoin;
     private long _deathTick = -1;
     // player to blame code induced death on
-    private IArenaPlayer _deathBlamePlayer;
+    protected IArenaPlayer _deathBlamePlayer;
     // Meta data object to store extra meta. Disposed when the player starts a new game.
     private MetaStore _sessionMeta = new MetaStore();
     private MetaStore _globalMeta = new MetaStore();
-
-    /**
-     * Private Constructor.
-     *
-     * @param player  The player.
-     */
-    private ArenaPlayer(Player player) {
-        _player = player;
-
-        if (DEATH_CHECKER == null) {
-            DEATH_CHECKER = new DeathChecker();
-            Scheduler.runTaskRepeat(PVStarAPI.getPlugin(), 1, 1, DEATH_CHECKER);
-        }
-    }
 
     /**
      * Set the current arena the player is in.
@@ -301,38 +340,6 @@ public class ArenaPlayer implements IArenaPlayer {
         else {
             LocationUtils.copy(location, _deathRespawnLocation);
         }
-    }
-
-    @Override
-    public Player getPlayer() {
-        return _player;
-    }
-
-    @Override
-    public UUID getUniqueId() {
-        return _player.getUniqueId();
-    }
-
-    @Override
-    public String getName() {
-        return _player.getName();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return _player.getDisplayName() != null
-                ? _player.getDisplayName()
-                : _player.getName();
-    }
-
-    @Override
-    public Location getLocation() {
-        return _player.getLocation();
-    }
-
-    @Override
-    public Location getLocation(Location output) {
-        return _player.getLocation(output);
     }
 
     @Override
@@ -604,17 +611,6 @@ public class ArenaPlayer implements IArenaPlayer {
         return _sessionMeta;
     }
 
-    @Override
-    public void kill() {
-        _player.damage(_player.getMaxHealth());
-    }
-
-    @Override
-    public void kill(@Nullable IArenaPlayer blame) {
-        _deathBlamePlayer = blame;
-        _player.damage(_player.getMaxHealth());
-    }
-
     @Nullable
     @Override
     public Location respawn() {
@@ -634,7 +630,7 @@ public class ArenaPlayer implements IArenaPlayer {
 
         TeleportMode mode = manager.getSettings().getTeleportMode();
 
-        if (Teleporter.teleport(_player, respawnEvent.getRespawnLocation(), mode).isSuccess()) {
+        if (teleport(respawnEvent.getRespawnLocation(), mode)) {
             PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
                     _arena, this, manager, respawnEvent.getRespawnLocation());
             _arena.getEventManager().call(this, spawnEvent);
@@ -663,6 +659,17 @@ public class ArenaPlayer implements IArenaPlayer {
 
         AbstractArena arena = getArena();
         return arena != null && arena.remove(this, PlayerLeaveArenaReason.LOSE);
+    }
+
+    @Override
+    public boolean teleport(Location location) {
+        return teleport(location, TeleportMode.TARGET_ONLY);
+    }
+
+    @Override
+    public boolean teleport(Location location, TeleportMode mode) {
+        Entity entity = getEntity();
+        return entity != null && Teleporter.teleport(entity, location, mode).isSuccess();
     }
 
     /*
@@ -708,7 +715,7 @@ public class ArenaPlayer implements IArenaPlayer {
                     continue;
                 }
 
-                if (!player.getPlayer().isDead()) {
+                if (!player.isDead()) {
                     player._deathTick = -1;
                     iterator.remove();
                     continue;
@@ -749,6 +756,8 @@ public class ArenaPlayer implements IArenaPlayer {
         private void onPlayerDeath(PlayerDeathEvent event) {
 
             final ArenaPlayer player = ArenaPlayer.get(event.getEntity());
+            if (player == null)
+                return;
 
             final AbstractArena arena = player.getArena();
             if (arena == null)
@@ -759,9 +768,99 @@ public class ArenaPlayer implements IArenaPlayer {
             if (health > 0.0D)
                 return;
 
+            handleDeath(player, arena);
+        }
+
+        @EventHandler(priority = EventPriority.MONITOR)
+        private void onNpcDeath(NpcDeathEvent event) {
+
+            final ArenaPlayer player = ArenaPlayer.get(event.getNpc());
+            if (player == null)
+                return;
+
+            final AbstractArena arena = player.getArena();
+            if (arena == null)
+                return;
+
+            handleDeath(player, arena);
+        }
+
+        private void handleDeath(final ArenaPlayer player, final AbstractArena arena) {
+
             // decrement player lives
             player.setLives(player._lives - 1);
+            player._deathBlamePlayer = null;
 
+            // remove player from arena if no more lives
+            if (player.getLives() < 1) {
+                Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        arena.remove(player, PlayerLeaveArenaReason.LOSE);
+                    }
+                });
+            }
+            else if (player instanceof IBukkitPlayer){
+                // add to death checker
+                AbstractContextManager context = player.getContextManager();
+                if (context != null && context.getSettings().getMaxDeathTicks() > 0) {
+                    player._deathTick = DEATH_CHECKER.tickCount;
+                    DEATH_CHECKER.dead.put(player, null);
+                }
+            }
+            else if (player instanceof INpcPlayer){
+                // "respawn" npc
+                Scheduler.runTaskLater(PVStarAPI.getPlugin(), 30, new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // get spawn location
+                        Spawnpoint spawn = Rand.get(arena.getSpawns().getAll(player.getContext()));
+                        if (spawn == null) {
+                            arena.remove(player, PlayerLeaveArenaReason.LOSE);
+                            return;
+                        }
+
+                        final PlayerArenaRespawnEvent respawnEvent = new PlayerArenaRespawnEvent(
+                                arena, player, player.getContextManager(), spawn);
+                        arena.getEventManager().call(this, respawnEvent);
+
+                        // spawn npc
+                        if (((INpcPlayer) player).getNpc().spawn(respawnEvent.getRespawnLocation())) {
+
+                            Scheduler.runTaskLater(PVStarAPI.getPlugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    PlayerArenaSpawnedEvent spawnEvent = new PlayerArenaSpawnedEvent(
+                                            arena, player, player.getContextManager(), respawnEvent.getRespawnLocation());
+                                    arena.getEventManager().call(this, spawnEvent);
+                                }
+                            });
+                        }
+                        else {
+                            arena.remove(player, PlayerLeaveArenaReason.LOSE);
+                        }
+                    }
+                });
+            }
+        }
+
+        /*
+         * Handle player deaths within arenas.
+         */
+        @EventHandler(priority = EventPriority.MONITOR)
+        private void onNpcPlayerDeath(final NpcDeathEvent event) {
+
+            final ArenaPlayer player = ArenaPlayer.get(event.getNpc());
+            if (player == null)
+                return;
+
+            final AbstractArena arena = player.getArena();
+            if (arena == null)
+                return;
+
+            // decrement player lives
+            player.setLives(player._lives - 1);
             player._deathBlamePlayer = null;
 
             // remove player from arena if no more lives
@@ -774,12 +873,8 @@ public class ArenaPlayer implements IArenaPlayer {
                 });
             }
             else {
-                // add to death checker
-                AbstractContextManager context = player.getContextManager();
-                if (context != null && context.getSettings().getMaxDeathTicks() > 0) {
-                    player._deathTick = DEATH_CHECKER.tickCount;
-                    DEATH_CHECKER.dead.put(player, null);
-                }
+
+
             }
         }
 
@@ -794,7 +889,7 @@ public class ArenaPlayer implements IArenaPlayer {
                 return;
 
             IArenaPlayer player = ArenaPlayer.get((Player) entity);
-            if (player.getArena() == null)
+            if (player == null || player.getArena() == null)
                 return;
 
             if (player.isInvulnerable()) {
@@ -811,6 +906,9 @@ public class ArenaPlayer implements IArenaPlayer {
         private void onMissingResourcePack(MissingRequiredResourcePackEvent event) {
 
             IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+            if (player == null)
+                return;
+
             IArena arena = player.getArena();
             if (arena == null) {
 

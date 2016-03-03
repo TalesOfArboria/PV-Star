@@ -32,9 +32,11 @@ import com.jcwhatever.pvs.api.arena.ArenaTeam;
 import com.jcwhatever.pvs.api.arena.IArena;
 import com.jcwhatever.pvs.api.arena.IArenaPlayer;
 import com.jcwhatever.pvs.api.arena.IArenaPlayerGroup;
+import com.jcwhatever.pvs.api.arena.IBukkitPlayer;
 import com.jcwhatever.pvs.api.arena.collections.IArenaPlayerCollection;
 import com.jcwhatever.pvs.api.arena.options.RemoveFromContextReason;
 import com.jcwhatever.pvs.api.utils.ArenaPlayerArrayList;
+import com.jcwhatever.pvs.api.utils.ArenaPlayerHashSet;
 import com.jcwhatever.pvs.api.utils.Msg;
 
 import javax.annotation.Nullable;
@@ -51,7 +53,7 @@ public class ArenaPlayersCollection {
 
     private final IArena _arena;
     private final Set<IArenaPlayerGroup> _groups = new HashSet<>(5);
-    private final Set<IArenaPlayer> _players = new HashSet<>(30);
+    private final ArenaPlayerHashSet _players = new ArenaPlayerHashSet();
     private final EntryCache<Integer, IArenaPlayerCollection> _cachedNextGroup = new EntryCache<>();
 
     private IArenaPlayerCollection _cachedReadyGroup;
@@ -159,7 +161,11 @@ public class ArenaPlayersCollection {
         PreCon.notNullOrEmpty(message);
 
         for (IArenaPlayer player : _players) {
-            Msg.tell(player.getPlayer(), message, params);
+
+            if (!(player instanceof IBukkitPlayer))
+                continue;
+
+            Msg.tell(((IBukkitPlayer) player).getPlayer(), message, params);
         }
     }
 

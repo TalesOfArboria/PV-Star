@@ -28,7 +28,6 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.managed.scheduler.Scheduler;
 import com.jcwhatever.nucleus.utils.Rand;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-import com.jcwhatever.pvs.ArenaPlayer;
 import com.jcwhatever.pvs.Lang;
 import com.jcwhatever.pvs.api.PVStarAPI;
 import com.jcwhatever.pvs.api.arena.IArena;
@@ -41,6 +40,7 @@ import com.jcwhatever.pvs.api.events.players.PlayerCommandEvent;
 import com.jcwhatever.pvs.api.spawns.Spawnpoint;
 import com.jcwhatever.pvs.api.utils.Msg;
 import com.jcwhatever.pvs.arenas.AbstractArena;
+import com.jcwhatever.pvs.players.ArenaPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,6 +75,9 @@ public class PlayerEventListener implements Listener {
     private void onPlayerJoin(PlayerJoinEvent event) {
 
         ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
+
         if (player.getArena() != null) {
             player.getArena().remove(player, PlayerLeaveArenaReason.LOGOUT);
         }
@@ -88,6 +91,9 @@ public class PlayerEventListener implements Listener {
     private void onPlayerKick(PlayerKickEvent event) {
 
         final ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
+
         final AbstractArena arena = player.getArena();
 
         if (arena != null) {
@@ -101,6 +107,8 @@ public class PlayerEventListener implements Listener {
     private void onPlayerQuit(PlayerQuitEvent event) {
 
         ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
 
         AbstractArena arena = player.getArena();
         if (arena == null)
@@ -118,6 +126,9 @@ public class PlayerEventListener implements Listener {
     private void onPlayerRespawn(final PlayerRespawnEvent event) {
 
         final ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
+
         final IArena arena = player.getArena();
 
         // respawn player in appropriate arena area.
@@ -156,6 +167,9 @@ public class PlayerEventListener implements Listener {
     private void onPlayerCommand(PlayerCommandPreprocessEvent event) {
 
         IArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
+
         IArena arena = player.getArena();
 
         if (arena == null)
@@ -193,6 +207,8 @@ public class PlayerEventListener implements Listener {
 
         Player p = (Player)event.getEntity();
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)
@@ -222,6 +238,8 @@ public class PlayerEventListener implements Listener {
 
         Player p = (Player)event.getEntity();
         IArenaPlayer player = ArenaPlayer.get(p);
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)
@@ -250,6 +268,8 @@ public class PlayerEventListener implements Listener {
             return;
 
         IArenaPlayer player = ArenaPlayer.get((Player) event.getEntity());
+        if (player == null)
+            return;
 
         IArena arena = player.getArena();
         if (arena == null)
@@ -272,6 +292,9 @@ public class PlayerEventListener implements Listener {
     private void onPlayerMove(PlayerMoveEvent event) {
 
         ArenaPlayer player = ArenaPlayer.get(event.getPlayer());
+        if (player == null)
+            return;
+
         IArena arena = player.getArena();
         if (arena == null)
             return;
